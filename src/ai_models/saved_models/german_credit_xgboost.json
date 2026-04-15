@@ -1,0 +1,17 @@
+{
+  "feature_names": [
+    "duration",
+    "checking_status",
+    "credit_amount",
+    "savings_status",
+    "property_magnitude"
+  ],
+  "class_labels": [
+    "Bad Credit Risk",
+    "Good Credit Risk"
+  ],
+  "metrics": {
+    "accuracy": 0.8066666666666666,
+    "log_loss": 0.49290134789546
+  }
+}

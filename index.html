@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>xAI visualisation generator</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script src="index.js" defer></script>
+        <link rel="stylesheet" href="index.css" />
+        <link rel="icon" type="image/png" href="thinking-man-logo.png" />
+    </head>
+
+    <body>
+        <div class="container">
+            <h1>xAI visualisation generator</h1>
+            <h3>Input your parameters below:</h3>
+            <div class="selectors">
+                <div>
+                    Dataset
+                    <select id="input_appId" title="appId">
+                        <option value="diabetes">
+                            Diabetes
+                        </option>
+                        <option value="german_credit">
+                            German Credit
+                        </option>
+                    </select>
+                    AI Prediction Model
+                    <select id="input_AIModel" title="AIModel">
+                        <option value="mlp">
+                            MLP
+                        </option>
+                        <option value="xgboost">
+                            XGBoost
+                        </option>
+                    </select>
+
+                XAI Type
+                    <select id="input_xaiType" title="xaiType">
+                        <option value="none">None</option>
+                        <option value="attribution" selected>Attribution</option>
+                        <option value="counterfactuals">Counterfactual</option>
+                    </select>
+
+                    XAI Algorithm
+                    <select id="input_exp_algorithm" title="expAlgorithm">
+                        <option value="shap">
+                            SHAP
+                        </option>
+                    </select>
+
+                    &nbsp; Datapoint
+                    <input
+                        id="input_instanceId"
+                        type="number"
+                        value="0"
+                        min="0"
+                        max="200"
+                        size="5"
+                        maxlength="3"
+                        title="pairId"
+                    />
+
+                    &nbsp; Features to explain/change
+                    <input
+                        id="input_explanationFeatureCount"
+                        type="number"
+                        value="3"
+                        min="1"
+                        max="20"
+                        size="3"
+                        maxlength="2"
+                        title="Number of features shown or changed"
+                    /><br><br>
+
+                    <!-- <input id="input_showTutorial" type="checkbox" />
+                    <label for="input_showTutorial" type="checkbox">Show Tutorial</label> -->
+                    <input id="input_showPrediction" type="checkbox" />
+                    <label for="input_showPrediction" type="checkbox">Show Prediction</label>
+                    <input id="input_counterfactualSimulation" type="checkbox" />
+                    <label for="input_counterfactualSimulation" type="checkbox">Comparable Simulation</label>
+                    <!-- <input id="input_showGroundTruth" type="checkbox" />
+                    <label for="input_showGroundTruth" type="checkbox">Show Ground Truth</label> -->
+                </div>
+            </div>
+
+            <!-- Iframes - retrived through request to iframes.html -->
+            <div class="iframes">
+                <button id="copyButton" class="copy-button">Copy Iframe Link</button>
+                <iframe
+                    id="interactiveIframe"
+                    src=""
+                    width="100%"
+                    height="1000px"
+                    frameBorder="0"
+                ></iframe>
+            </div>
+        </div>
+    </body>
+</html>

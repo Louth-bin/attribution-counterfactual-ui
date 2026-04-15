@@ -1,0 +1,20 @@
+{
+  "feature_names": [
+    "pregnancies",
+    "glucose",
+    "blood_pressure",
+    "skin_thickness",
+    "insulin",
+    "bmi",
+    "diabetes_pedigree_function",
+    "age"
+  ],
+  "class_labels": [
+    "Diabetes",
+    "No Diabetes"
+  ],
+  "metrics": {
+    "accuracy": 0.8260869565217391,
+    "log_loss": 0.39871948358551956
+  }
+}

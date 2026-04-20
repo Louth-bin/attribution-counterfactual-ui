@@ -103,16 +103,20 @@ def create_app() -> Flask:
         xai_type = request.args.get("xaiType", "attribution")
         instance_id = int(request.args.get("instanceId", "0"))
         explanation_feature_count = max(_get_int_arg("k", 3), 0)
+        counterfactual_mode = request.args.get("counterfactualMode", "minimal")
+        controllable_only = _get_bool_arg("controllableOnly")
         force_resplit = _get_bool_arg("forceResplit")
         force_retrain = _get_bool_arg("forceRetrain")
         LOGGER.info(
-            "Building explanation payload: dataset=%s model=%s xai_method=%s xai_type=%s instance_id=%s k=%s force_resplit=%s force_retrain=%s",
+            "Building explanation payload: dataset=%s model=%s xai_method=%s xai_type=%s instance_id=%s k=%s counterfactual_mode=%s controllable_only=%s force_resplit=%s force_retrain=%s",
             dataset_name,
             model_name,
             xai_method_name,
             xai_type,
             instance_id,
             explanation_feature_count,
+            counterfactual_mode,
+            controllable_only,
             force_resplit,
             force_retrain,
         )
@@ -124,6 +128,8 @@ def create_app() -> Flask:
             instance_id=instance_id,
             xai_type=xai_type,
             explanation_feature_count=explanation_feature_count,
+            counterfactual_mode=counterfactual_mode,
+            controllable_only=controllable_only,
             force_resplit=force_resplit,
             force_retrain=force_retrain,
         )
@@ -181,9 +187,10 @@ def log_startup_summary() -> None:
 
     for dataset_name, config in sorted(DATASET_RUNTIME_CONFIGS.items()):
         LOGGER.info(
-            "Runtime config for %s: excluded=%s feature_selection_enabled=%s top_n=%s",
+            "Runtime config for %s: excluded=%s controllable=%s feature_selection_enabled=%s top_n=%s",
             dataset_name,
             list(config.excluded_feature_names),
+            list(config.controllable_feature_names),
             config.feature_selection.enabled,
             config.feature_selection.top_n,
         )

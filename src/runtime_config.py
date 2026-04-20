@@ -21,6 +21,7 @@ class DatasetRuntimeConfig:
     friendly_category_names: dict[str, dict[str, str]] = field(default_factory=dict)
     category_orders: dict[str, tuple[str, ...]] = field(default_factory=dict)
     excluded_feature_names: tuple[str, ...] = ()
+    controllable_feature_names: tuple[str, ...] = ()
     feature_selection: FeatureSelectionConfig = field(default_factory=FeatureSelectionConfig)
 
 
@@ -29,6 +30,7 @@ class DatasetRuntimeConfig:
 # - rename categorical values shown in the UI
 # - set intuitive categorical value ordering
 # - hard-exclude attributes so they are never used downstream
+# - mark which attributes are allowed to change when "controllable only" is enabled
 # - keep only the top-n features based on permutation importance
 DATASET_RUNTIME_CONFIGS: dict[str, DatasetRuntimeConfig] = {
     "diabetes": DatasetRuntimeConfig(
@@ -47,6 +49,12 @@ DATASET_RUNTIME_CONFIGS: dict[str, DatasetRuntimeConfig] = {
         category_orders={},
         excluded_feature_names=(
             # "insulin",
+        ),
+        controllable_feature_names=(
+            "glucose",
+            "blood_pressure",
+            "insulin",
+            "bmi",
         ),
         feature_selection=FeatureSelectionConfig(
             enabled=True,
@@ -184,6 +192,24 @@ DATASET_RUNTIME_CONFIGS: dict[str, DatasetRuntimeConfig] = {
         },
         excluded_feature_names=(
             "purpose",
+        ),
+        controllable_feature_names=(
+            "checking_status",
+            "duration",
+            "credit_history",
+            "credit_amount",
+            "savings_status",
+            "employment",
+            "installment_commitment",
+            "other_parties",
+            "residence_since",
+            "property_magnitude",
+            "other_payment_plans",
+            "housing",
+            "existing_credits",
+            "job",
+            "num_dependents",
+            "own_telephone",
         ),
         feature_selection=FeatureSelectionConfig(
             enabled=True,

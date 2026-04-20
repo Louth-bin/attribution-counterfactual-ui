@@ -48,7 +48,7 @@
       "Bad Credit Risk",
       "Good Credit Risk"
     ],
-    "top_n": 8,
+    "top_n": 6,
     "method": "permutation",
     "n_repeats": 8,
     "scoring": "accuracy",
@@ -60,9 +60,7 @@
     "savings_status",
     "housing",
     "employment",
-    "credit_history",
-    "installment_commitment",
-    "residence_since"
+    "credit_history"
   ],
   "importance_by_feature": {
     "checking_status": 0.08333333333333329,

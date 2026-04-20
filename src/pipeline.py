@@ -114,6 +114,8 @@ class ExplanationPipeline:
         instance_id: int,
         xai_type: str = "attribution",
         explanation_feature_count: int = 3,
+        counterfactual_mode: str = "minimal",
+        controllable_only: bool = False,
         force_resplit: bool = False,
         force_retrain: bool = False,
     ) -> dict[str, Any]:
@@ -125,6 +127,7 @@ class ExplanationPipeline:
         )
         dataset_bundle = prepared_assets.dataset
         estimator = prepared_assets.model_artifact.estimator
+        runtime_config = get_dataset_runtime_config(dataset_name)
 
         if instance_id < 0 or instance_id >= dataset_bundle.available_instance_count:
             raise IndexError(
@@ -149,9 +152,15 @@ class ExplanationPipeline:
         )
         raw_attribution_values = list(attribution.get("values", []))
         attribution["raw_values"] = raw_attribution_values
+        eligible_feature_indices = _eligible_counterfactual_indices(
+            feature_names=dataset_bundle.feature_names,
+            controllable_feature_names=runtime_config.controllable_feature_names,
+            controllable_only=controllable_only,
+        )
         shown_feature_indices = _top_k_indices(
             values=raw_attribution_values,
             top_k=explanation_feature_count,
+            eligible_indices=eligible_feature_indices,
         )
         attribution["values"] = _keep_top_k_values(
             values=raw_attribution_values,
@@ -176,6 +185,9 @@ class ExplanationPipeline:
         counterfactual = generate_counterfactual(
             estimator=estimator,
             reference_frame=feature_frame,
+            target_distribution_frame=dataset_bundle.train_df[
+                dataset_bundle.train_df[dataset_bundle.target_column] == (1 - prediction_value)
+            ][dataset_bundle.feature_names],
             feature_names=dataset_bundle.feature_names,
             feature_types=dataset_bundle.feature_types,
             feature_ranges=dataset_bundle.feature_ranges,
@@ -183,6 +195,7 @@ class ExplanationPipeline:
             shap_values=raw_attribution_values,
             top_k=explanation_feature_count,
             selected_feature_indices=shown_feature_indices,
+            generation_mode=counterfactual_mode,
         )
 
         prediction_probabilities = []
@@ -253,6 +266,22 @@ class ExplanationPipeline:
             },
             "prediction_labels": dataset_bundle.class_labels,
             "feature_importance_by_name": prepared_assets.feature_importance_by_name,
+            "counterfactual_settings": {
+                "mode": _normalize_counterfactual_mode(counterfactual_mode),
+                "controllable_only": controllable_only,
+                "controllable_feature_names": [
+                    dataset_bundle.feature_display_names[
+                        dataset_bundle.feature_names.index(feature_name)
+                    ]
+                    for feature_name in runtime_config.controllable_feature_names
+                    if feature_name in dataset_bundle.feature_names
+                ],
+                "raw_controllable_feature_names": [
+                    feature_name
+                    for feature_name in runtime_config.controllable_feature_names
+                    if feature_name in dataset_bundle.feature_names
+                ],
+            },
             "attribution": attribution,
             "counterfactual": display_counterfactual,
             "model_metrics": prepared_assets.model_artifact.metrics,
@@ -389,15 +418,40 @@ def _cache_safe_value(value: Any) -> Any:
     return str(value)
 
 
+def _normalize_counterfactual_mode(mode: str) -> str:
+    normalized_mode = str(mode or "minimal").strip().lower()
+    if normalized_mode in {"prototype", "prototypical", "distribution"}:
+        return "prototypical"
+    return "minimal"
+
+
+def _eligible_counterfactual_indices(
+    feature_names: list[str],
+    controllable_feature_names: tuple[str, ...],
+    controllable_only: bool,
+) -> list[int] | None:
+    if not controllable_only:
+        return None
+
+    controllable_features = set(controllable_feature_names)
+    return [
+        index
+        for index, feature_name in enumerate(feature_names)
+        if feature_name in controllable_features
+    ]
+
+
 def _top_k_indices(
     values: list[float],
     top_k: int,
+    eligible_indices: list[int] | None = None,
 ) -> list[int]:
     if top_k <= 0:
         return []
 
+    candidate_indices = eligible_indices if eligible_indices is not None else list(range(len(values)))
     ranked_indices = sorted(
-        range(len(values)),
+        candidate_indices,
         key=lambda index: (
             round(abs(values[index]), ATTRIBUTION_RANKING_DECIMALS),
             -index,

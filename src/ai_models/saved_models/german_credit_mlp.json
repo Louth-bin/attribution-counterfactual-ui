@@ -5,16 +5,14 @@
     "savings_status",
     "housing",
     "employment",
-    "credit_history",
-    "installment_commitment",
-    "residence_since"
+    "credit_history"
   ],
   "class_labels": [
     "Bad Credit Risk",
     "Good Credit Risk"
   ],
   "metrics": {
-    "accuracy": 0.6666666666666666,
-    "log_loss": 2.44533631197972
+    "accuracy": 0.6266666666666667,
+    "log_loss": 1.370603799140082
   }
 }

@@ -219,10 +219,19 @@ def _direction_toward_target(
     if range_span <= 0:
         return 0
 
-    original_value = float(reference_frame.iloc[0][feature_name])
-    step = max(range_span * 0.01, 1e-6)
+    reference_value = reference_frame.iloc[0][feature_name]
+    original_value = float(reference_value)
+    integer_feature = _is_integer_feature(reference_frame, feature_name, reference_value)
+    step = (
+        max(round(range_span * 0.01), 1)
+        if integer_feature
+        else max(range_span * 0.01, 1e-6)
+    )
     lower_value = max(original_value - step, min_value)
     upper_value = min(original_value + step, max_value)
+    if integer_feature:
+        lower_value = int(round(lower_value))
+        upper_value = int(round(upper_value))
     if lower_value == upper_value:
         return 0
 
@@ -246,8 +255,12 @@ def _direction_toward_target(
 
     min_frame = reference_frame.copy()
     max_frame = reference_frame.copy()
-    min_frame.loc[min_frame.index[0], feature_name] = min_value
-    max_frame.loc[max_frame.index[0], feature_name] = max_value
+    min_frame.loc[min_frame.index[0], feature_name] = (
+        int(round(min_value)) if integer_feature else min_value
+    )
+    max_frame.loc[max_frame.index[0], feature_name] = (
+        int(round(max_value)) if integer_feature else max_value
+    )
     min_probability = _predict_target_probability(
         estimator,
         min_frame,
@@ -429,4 +442,14 @@ def _json_safe_value(value: Any) -> Any:
 def _is_integer_like(value: Any) -> bool:
     return isinstance(value, (int, np.integer)) or (
         isinstance(value, float) and value.is_integer()
+    )
+
+
+def _is_integer_feature(
+    reference_frame: pd.DataFrame,
+    feature_name: str,
+    reference_value: Any,
+) -> bool:
+    return pd.api.types.is_integer_dtype(reference_frame[feature_name]) or _is_integer_like(
+        reference_value
     )

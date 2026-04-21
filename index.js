@@ -1,12 +1,39 @@
 const urlParams = new URLSearchParams(window.location.search);
 const fallbackApiBaseUrl = "http://127.0.0.1:5000";
-const apiBaseUrl =
-    urlParams.get("apiBaseUrl") ??
-    (window.location.origin && window.location.origin !== "null"
-        ? window.location.origin
-        : fallbackApiBaseUrl);
+const apiBaseUrl = resolveApiBaseUrl(urlParams.get("apiBaseUrl"));
 
 let iframeUrl = "";
+
+console.info("[index] apiBaseUrl:", apiBaseUrl);
+
+function buildApiUrl(path) {
+    const baseUrl = apiBaseUrl.endsWith("/") ? apiBaseUrl : `${apiBaseUrl}/`;
+    return new URL(path, baseUrl);
+}
+
+function appendApiPath(baseUrl) {
+    const url = new URL(baseUrl, window.location.href);
+    const pathParts = url.pathname.split("/").filter(Boolean);
+
+    if (pathParts[pathParts.length - 1] !== "api") {
+        pathParts.push("api");
+    }
+
+    url.pathname = `/${pathParts.join("/")}`;
+    return url.toString();
+}
+
+function resolveApiBaseUrl(configuredApiBaseUrl) {
+    if (configuredApiBaseUrl) {
+        return appendApiPath(configuredApiBaseUrl);
+    }
+
+    if (window.location.origin && window.location.origin !== "null") {
+        return appendApiPath(window.location.origin);
+    }
+
+    return appendApiPath(fallbackApiBaseUrl);
+}
 
 function buildIframeUrl() {
     const dataset = document.querySelector("#input_appId").value;
@@ -63,10 +90,17 @@ async function refreshDatasetMetadata() {
     const instanceInput = document.querySelector("#input_instanceId");
 
     try {
-        const metadataUrl = new URL("/api/metadata", apiBaseUrl);
+        const metadataUrl = buildApiUrl("metadata");
         metadataUrl.searchParams.set("dataset", dataset);
 
+        console.info("[index] metadata request:", metadataUrl.toString());
         const response = await fetch(metadataUrl);
+        console.info("[index] metadata response:", {
+            status: response.status,
+            ok: response.ok,
+            contentType: response.headers.get("content-type"),
+            body: await response.clone().text(),
+        });
         if (!response.ok) {
             throw new Error(`Metadata request failed with ${response.status}`);
         }

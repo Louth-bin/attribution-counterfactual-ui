@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, jsonify, request
 
 if __package__ in {None, ""}:
     import sys
@@ -21,6 +21,8 @@ else:
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_HOST = "127.0.0.1"
+DEFAULT_PORT = 5000
 pipeline = ExplanationPipeline()
 LOGGER = logging.getLogger("counterfactual.server")
 
@@ -43,7 +45,7 @@ def _get_int_arg(name: str, default: int) -> int:
 
 
 def create_app() -> Flask:
-    app = Flask(__name__, static_folder=str(REPO_ROOT), static_url_path="")
+    app = Flask(__name__)
     app.logger.handlers.clear()
     app.logger.propagate = True
 
@@ -69,12 +71,12 @@ def create_app() -> Flask:
         )
         return response
 
-    @app.get("/api/health")
+    @app.get("/health")
     def healthcheck():
         LOGGER.info("Healthcheck requested")
         return jsonify({"status": "ok"})
 
-    @app.get("/api/metadata")
+    @app.get("/metadata")
     def metadata():
         dataset_name = request.args.get("dataset", "diabetes")
         force_resplit = _get_bool_arg("forceResplit")
@@ -95,7 +97,7 @@ def create_app() -> Flask:
         )
         return jsonify(payload)
 
-    @app.get("/api/explanations")
+    @app.get("/explanations")
     def explain_instance():
         dataset_name = request.args.get("dataset", "diabetes")
         model_name = request.args.get("model", "mlp")
@@ -153,17 +155,6 @@ def create_app() -> Flask:
         LOGGER.exception("Request failed with status %s: %s", status_code, error)
         return jsonify({"error": str(error)}), status_code
 
-    @app.get("/")
-    def serve_index():
-        LOGGER.info("Serving index.html")
-        # return jsonify({"message": "Nothing to see here."})
-        return send_from_directory(REPO_ROOT, "index.html")
-
-    @app.get("/<path:asset_path>")
-    def serve_asset(asset_path: str):
-        LOGGER.info("Serving asset: %s", asset_path)
-        return send_from_directory(REPO_ROOT, asset_path)
-
     return app
 
 
@@ -180,7 +171,7 @@ def configure_logging() -> None:
 def log_startup_summary() -> None:
     LOGGER.info("Starting Counterfactual UI backend")
     LOGGER.info("Repo root: %s", REPO_ROOT)
-    LOGGER.info("Open this URL in your browser: http://127.0.0.1:5000/")
+    LOGGER.info("Backend API healthcheck: http://%s:%s/health", DEFAULT_HOST, DEFAULT_PORT)
     LOGGER.info("Available models: %s", ", ".join(list_model_names()))
     LOGGER.info("Available XAI methods: %s", ", ".join(list_xai_methods()))
     LOGGER.info("Configured datasets: %s", ", ".join(sorted(DATASET_RUNTIME_CONFIGS)))
@@ -215,5 +206,9 @@ def log_startup_summary() -> None:
 if __name__ == "__main__":
     configure_logging()
     log_startup_summary()
-    LOGGER.info("Binding Flask server to http://127.0.0.1:5000 with debug=False")
-    app.run(host="127.0.0.1", port=5000, debug=False, use_reloader=False)
+    LOGGER.info(
+        "Binding Flask backend API to http://%s:%s with debug=False",
+        DEFAULT_HOST,
+        DEFAULT_PORT,
+    )
+    app.run(host=DEFAULT_HOST, port=DEFAULT_PORT, debug=False, use_reloader=False)

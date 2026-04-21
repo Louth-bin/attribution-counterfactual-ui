@@ -12,16 +12,35 @@ const noneExplanationTbody = document.querySelector("#none-explanation-tbody");
 let currentExplanation = null;
 let attributionChart = null;
 
+console.info("[iframe] apiBaseUrl:", apiBaseUrl);
+
+function buildApiUrl(path) {
+    const baseUrl = apiBaseUrl.endsWith("/") ? apiBaseUrl : `${apiBaseUrl}/`;
+    return new URL(path, baseUrl);
+}
+
+function appendApiPath(baseUrl) {
+    const url = new URL(baseUrl, window.location.href);
+    const pathParts = url.pathname.split("/").filter(Boolean);
+
+    if (pathParts[pathParts.length - 1] !== "api") {
+        pathParts.push("api");
+    }
+
+    url.pathname = `/${pathParts.join("/")}`;
+    return url.toString();
+}
+
 function resolveApiBaseUrl(configuredApiBaseUrl) {
     if (configuredApiBaseUrl) {
-        return configuredApiBaseUrl;
+        return appendApiPath(configuredApiBaseUrl);
     }
 
     if (window.location.origin && window.location.origin !== "null") {
-        return window.location.origin;
+        return appendApiPath(window.location.origin);
     }
 
-    return "http://127.0.0.1:5000";
+    return appendApiPath("http://127.0.0.1:5000");
 }
 
 function getExplanationType(selectedType) {
@@ -628,7 +647,7 @@ async function loadExplanation() {
     renderStatusRow("Loading explanation data...");
 
     try {
-        const endpoint = new URL("/api/explanations", apiBaseUrl);
+        const endpoint = buildApiUrl("explanations");
         endpoint.searchParams.set("dataset", datasetName);
         endpoint.searchParams.set("model", modelName);
         endpoint.searchParams.set("xaiMethod", xaiMethod);
@@ -636,7 +655,14 @@ async function loadExplanation() {
         endpoint.searchParams.set("xaiType", explanationType);
         endpoint.searchParams.set("k", String(explanationFeatureCount));
 
+        console.log("[iframe] explanation request:", endpoint.toString());
         const response = await fetch(endpoint);
+        console.info("[iframe] explanation response:", {
+            status: response.status,
+            ok: response.ok,
+            contentType: response.headers.get("content-type"),
+            body: await response.clone().text(),
+        });
         const payload = await response.json();
         if (!response.ok) {
             throw new Error(payload.error ?? `Request failed with ${response.status}`);

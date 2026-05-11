@@ -14,5 +14,6 @@
   "metrics": {
     "accuracy": 0.7652173913043478,
     "log_loss": 0.9391791620254547
-  }
+  },
+  "sklearn_version": "1.8.0"
 }

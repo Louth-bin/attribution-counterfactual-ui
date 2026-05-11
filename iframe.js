@@ -1,14 +1,17 @@
 const urlParams = new URLSearchParams(window.location.search);
 const explanationType = getExplanationType(urlParams.get("xaiType") ?? "none");
+const explanationView = getExplanationView(urlParams.get("explanationView") ?? "classic");
 const showPredictionPanel = urlParams.get("showPrediction") !== "0";
 const datasetName = urlParams.get("appId") ?? "diabetes";
 const modelName = urlParams.get("AIModel") ?? "mlp";
 const xaiMethod = urlParams.get("expAlgorithm") ?? "shap";
 const instanceId = Number(urlParams.get("instanceId") ?? "0");
-const explanationFeatureCount = Number(urlParams.get("k") ?? "3");
+const explanationFeatureCount = Number(urlParams.get("k") ?? "2");
 const apiBaseUrl = resolveApiBaseUrl(urlParams.get("apiBaseUrl"));
 
 const noneExplanationTbody = document.querySelector("#none-explanation-tbody");
+const tablesWrapper = document.querySelector("#tables-wrapper");
+const explanationBoxAnchor = document.querySelector("#explanation-box-anchor");
 let currentExplanation = null;
 let attributionChart = null;
 
@@ -55,6 +58,20 @@ function getExplanationType(selectedType) {
     }
 
     return "none";
+}
+
+function getExplanationView(selectedView) {
+    const normalizedView = String(selectedView ?? "classic").toLowerCase();
+
+    if (normalizedView === "inline" || normalizedView === "inline-change") {
+        return "inline";
+    }
+
+    if (normalizedView === "narrative" || normalizedView === "text") {
+        return "narrative";
+    }
+
+    return "classic";
 }
 
 function clamp(value, min, max) {
@@ -125,6 +142,80 @@ function createMeterCell(value, min, max, cellOptions = {}) {
     return meterCell;
 }
 
+function createComparisonMeterCell(attributeIndex, originalValues, updatedValues, cellOptions = {}) {
+    const { muted = false } = cellOptions;
+    const meterCell = document.createElement("td");
+    meterCell.className = "meter-container";
+
+    const [min, max] = currentExplanation.attributeRanges[attributeIndex];
+    const originalValue = Number(originalValues[attributeIndex]);
+    const updatedValue = Number(updatedValues[attributeIndex]);
+    const rangeSpan = max - min || 1;
+    const originalPosition = clamp(((originalValue - min) / rangeSpan) * 100, 0, 100);
+    const updatedPosition = clamp(((updatedValue - min) / rangeSpan) * 100, 0, 100);
+
+    const comparisonMeter = document.createElement("div");
+    comparisonMeter.className = "inline-meter-wrapper";
+    if (muted) {
+        comparisonMeter.style.opacity = "0.45";
+    }
+
+    const meter = document.createElement("meter");
+    meter.min = min;
+    meter.max = max;
+    meter.value = clamp(updatedValue, min, max);
+    meter.title = `${formatValue(updatedValue)} (min: ${formatValue(min)}, max: ${formatValue(max)})`;
+    comparisonMeter.appendChild(meter);
+
+    if (originalPosition !== updatedPosition) {
+        const arrowHeadWidth = 8;
+        const arrowTrack = document.createElement("div");
+        arrowTrack.className = "comparison-arrow-track";
+
+        const origin = document.createElement("div");
+        origin.className = "comparison-arrow-origin";
+        origin.style.left = `${originalPosition}%`;
+        origin.title = `Original: ${formatValue(originalValue)}`;
+        arrowTrack.appendChild(origin);
+
+        const arrowLine = document.createElement("div");
+        arrowLine.className = "comparison-arrow-line";
+        const movesRight = updatedPosition >= originalPosition;
+        const lineStart = movesRight
+            ? originalPosition
+            : updatedPosition;
+        const lineEnd = movesRight
+            ? Math.max(updatedPosition - arrowHeadWidth, originalPosition)
+            : originalPosition;
+        const linePercent = Math.max(lineEnd - lineStart, 0);
+        const startPixelOffset = movesRight ? 1 : arrowHeadWidth;
+        const widthPixelOffset = movesRight ? -1 : -arrowHeadWidth;
+        arrowLine.style.left = `calc(${lineStart}% + ${startPixelOffset}px)`;
+        arrowLine.style.width = linePercent > 0
+            ? `calc(${linePercent}% ${widthPixelOffset < 0 ? "-" : "+"} ${Math.abs(widthPixelOffset)}px)`
+            : "0";
+        if (linePercent > 0) {
+            arrowTrack.appendChild(arrowLine);
+        }
+
+        const arrowHead = document.createElement("div");
+        const movesRightClass = updatedPosition >= originalPosition;
+        arrowHead.className = movesRightClass
+            ? "comparison-arrow-head comparison-arrow-head-right"
+            : "comparison-arrow-head comparison-arrow-head-left";
+        arrowHead.style.left = movesRightClass
+            ? `calc(${updatedPosition}% - ${arrowHeadWidth}px)`
+            : `${updatedPosition}%`;
+        arrowHead.title = `Changed to ${formatValue(updatedValue)}`;
+        arrowTrack.appendChild(arrowHead);
+
+        comparisonMeter.appendChild(arrowTrack);
+    }
+
+    meterCell.appendChild(comparisonMeter);
+    return meterCell;
+}
+
 function getCategoryIndex(attributeIndex, values) {
     const options = currentExplanation.attributeRanges[attributeIndex];
     const rawValue = values[attributeIndex];
@@ -163,6 +254,38 @@ function hasAttributeChanged(attributeIndex, originalValues, updatedValues) {
     }
 
     return String(originalValues[attributeIndex]) !== String(updatedValues[attributeIndex]);
+}
+
+function createComparisonCategoryCell(attributeIndex, originalValues, updatedValues, cellOptions = {}) {
+    const { muted = false } = cellOptions;
+    const options = currentExplanation.attributeRanges[attributeIndex];
+    const originalIndex = getCategoryIndex(attributeIndex, originalValues);
+    const updatedIndex = getCategoryIndex(attributeIndex, updatedValues);
+
+    const dataCell = document.createElement("td");
+    dataCell.className = "icons-container";
+
+    const iconRow = document.createElement("div");
+    iconRow.className = "comparison-icons";
+
+    for (let j = 0; j < options.length; j++) {
+        const icon = document.createElement("span");
+        icon.className = "comparison-icon";
+        if (j === updatedIndex) {
+            icon.classList.add("comparison-icon-current");
+        }
+        if (j === originalIndex && originalIndex !== updatedIndex) {
+            icon.classList.add("comparison-icon-original");
+        }
+        if (muted) {
+            icon.classList.add("comparison-icon-muted");
+        }
+        icon.title = options[j];
+        iconRow.appendChild(icon);
+    }
+
+    dataCell.appendChild(iconRow);
+    return dataCell;
 }
 
 function createDiffCell(attributeIndex, originalValues, updatedValues) {
@@ -216,10 +339,16 @@ function createDiffCell(attributeIndex, originalValues, updatedValues) {
     return diffCell;
 }
 
+function populateValueCell(valueCell, attributeIndex, values, options = {}) {
+    const currentLabel = getAttributeDisplayValue(attributeIndex, values);
+    valueCell.textContent = currentLabel;
+}
+
 function populateAttributeTable(tableBody, values, options = {}) {
     const {
         includeNames = true,
         originalValues = null,
+        comparisonStyle = "classic",
     } = options;
 
     tableBody.innerHTML = "";
@@ -240,7 +369,9 @@ function populateAttributeTable(tableBody, values, options = {}) {
             const options = currentExplanation.attributeRanges[i];
             const categoryIndex = getCategoryIndex(i, values);
 
-            valueCell.textContent = options[categoryIndex] ?? String(values[i]);
+            populateValueCell(valueCell, i, values, {
+                originalValues,
+            });
             if (includeNames) {
                 const nameCell = document.createElement("td");
                 nameCell.className = "attribute";
@@ -248,14 +379,22 @@ function populateAttributeTable(tableBody, values, options = {}) {
                 row.appendChild(nameCell);
             }
             row.appendChild(valueCell);
-            row.appendChild(createCategoryIconsCell(options, categoryIndex, {
-                muted: Boolean(isUnchanged),
-            }));
+            if (originalValues && comparisonStyle === "inline") {
+                row.appendChild(createComparisonCategoryCell(i, originalValues, values, {
+                    muted: Boolean(isUnchanged),
+                }));
+            } else {
+                row.appendChild(createCategoryIconsCell(options, categoryIndex, {
+                    muted: Boolean(isUnchanged),
+                }));
+            }
         } else {
             const [min, max] = currentExplanation.attributeRanges[i];
             const numericValue = Number(values[i]);
 
-            valueCell.textContent = formatValue(values[i]);
+            populateValueCell(valueCell, i, values, {
+                originalValues,
+            });
             if (includeNames) {
                 const nameCell = document.createElement("td");
                 nameCell.className = "attribute";
@@ -263,12 +402,18 @@ function populateAttributeTable(tableBody, values, options = {}) {
                 row.appendChild(nameCell);
             }
             row.appendChild(valueCell);
-            row.appendChild(createMeterCell(numericValue, min, max, {
-                muted: Boolean(isUnchanged),
-            }));
+            if (originalValues && comparisonStyle === "inline") {
+                row.appendChild(createComparisonMeterCell(i, originalValues, values, {
+                    muted: Boolean(isUnchanged),
+                }));
+            } else {
+                row.appendChild(createMeterCell(numericValue, min, max, {
+                    muted: Boolean(isUnchanged),
+                }));
+            }
         }
 
-        if (originalValues) {
+        if (originalValues && comparisonStyle === "classic") {
             row.appendChild(createDiffCell(i, originalValues, values));
         }
 
@@ -387,10 +532,23 @@ function showPrediction(tableBody, prediction, options = {}) {
 
 function clearCounterfactualTable() {
     const table = noneExplanationTbody.closest("table");
-    const wrapper = table?.parentElement;
-    const existingCounterfactualTable = wrapper?.querySelector("#counterfactual-table");
+    const existingCounterfactualTable = tablesWrapper?.querySelector("#counterfactual-table");
     if (existingCounterfactualTable) {
         existingCounterfactualTable.remove();
+    }
+}
+
+function clearNarrativePanel() {
+    const existingNarrativePanel = explanationBoxAnchor?.querySelector("#narrative-panel");
+    if (existingNarrativePanel) {
+        existingNarrativePanel.remove();
+    }
+}
+
+function resetAttributionChart() {
+    if (attributionChart) {
+        attributionChart.destroy();
+        attributionChart = null;
     }
 }
 
@@ -444,7 +602,7 @@ function showAttributionChart(tableBody) {
     firstRow.appendChild(chartPanelCell);
 
     const colors = attribution.values.map((value) =>
-        value >= 0 ? "rgba(60, 136, 232)" : "rgba(234, 51, 53)"
+        value === 0 ? "rgba(0, 0, 0, 0)" : (value >= 0 ? "rgba(60, 136, 232)" : "rgba(234, 51, 53)")
     );
 
     const renderAttributionChart = () => {
@@ -468,6 +626,7 @@ function showAttributionChart(tableBody) {
                             clamp((value / currentExplanation.attributionMax) * 100, -100, 100)
                         ),
                         backgroundColor: colors,
+                        borderWidth: 0,
                         barThickness: 21,
                     },
                 ],
@@ -549,14 +708,16 @@ function shortenClassLabel(label) {
 function showCounterfactualExample(tableBody) {
     const counterfactual = currentExplanation.counterfactual;
     const originalTable = tableBody.closest("table");
-    const wrapper = originalTable?.parentElement;
-    if (!originalTable || !wrapper || !counterfactual) {
+    if (!originalTable || !tablesWrapper || !counterfactual) {
         return;
     }
 
     const counterfactualTable = document.createElement("table");
     counterfactualTable.id = "counterfactual-table";
     counterfactualTable.className = "counterfactual-table";
+    if (explanationView === "inline") {
+        counterfactualTable.classList.add("counterfactual-table-inline");
+    }
 
     const counterfactualHead = document.createElement("thead");
     const headerRow = document.createElement("tr");
@@ -567,14 +728,15 @@ function showCounterfactualExample(tableBody) {
     const controlHeader = document.createElement("th");
     controlHeader.textContent = "";
 
-    const diffHeader = document.createElement("th");
-    diffHeader.className = "tooltip diff-column-header";
-    diffHeader.title = "Difference between the original instance and the counterfactual";
-    diffHeader.textContent = "Diff";
-
     headerRow.appendChild(valueHeader);
     headerRow.appendChild(controlHeader);
-    headerRow.appendChild(diffHeader);
+    if (explanationView === "classic") {
+        const diffHeader = document.createElement("th");
+        diffHeader.className = "tooltip diff-column-header";
+        diffHeader.title = "Difference between the original instance and the counterfactual";
+        diffHeader.textContent = "Diff";
+        headerRow.appendChild(diffHeader);
+    }
     counterfactualHead.appendChild(headerRow);
 
     const counterfactualBody = document.createElement("tbody");
@@ -584,19 +746,143 @@ function showCounterfactualExample(tableBody) {
     counterfactualTable.appendChild(counterfactualBody);
     setCaseLabel(counterfactualTable, "Comparable", {
         startColumn: 0,
-        columnSpan: 3,
+        columnSpan: explanationView === "classic" ? 3 : 2,
     });
-    wrapper.appendChild(counterfactualTable);
+    tablesWrapper.appendChild(counterfactualTable);
 
     populateAttributeTable(counterfactualBody, counterfactual.feature_values, {
         includeNames: false,
         originalValues: currentExplanation.attributeValues,
+        comparisonStyle: explanationView,
     });
     if (showPredictionPanel) {
         showPrediction(counterfactualBody, counterfactual.prediction.value, {
             includeLabel: false,
         });
     }
+}
+
+function joinClauses(clauses) {
+    if (clauses.length === 0) {
+        return "";
+    }
+    if (clauses.length === 1) {
+        return clauses[0];
+    }
+    if (clauses.length === 2) {
+        return `${clauses[0]} and ${clauses[1]}`;
+    }
+    return `${clauses.slice(0, -1).join(", ")}, and ${clauses[clauses.length - 1]}`;
+}
+
+function escapeHtml(value) {
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll("\"", "&quot;")
+        .replaceAll("'", "&#39;");
+}
+
+function summarizeAttributionDirection(entries, label) {
+    if (entries.length === 0) {
+        return "";
+    }
+
+    const total = entries.reduce((sum, entry) => sum + Math.abs(entry.value), 0) || 1;
+    const featureClauses = entries.slice(0, 3).map((entry) => {
+        const share = Math.round((Math.abs(entry.value) / total) * 100);
+        return `${escapeHtml(entry.name)} (<strong>${share}%</strong>)`;
+    });
+    return `${joinClauses(featureClauses)} contributed toward ${escapeHtml(label)}.`;
+}
+
+function buildNarrativeHtml() {
+    if (explanationType === "counterfactual") {
+        const counterfactual = currentExplanation.counterfactual;
+        if (!counterfactual) {
+            return "No counterfactual example was available for this instance.";
+        }
+
+        const changes = currentExplanation.attributeNames
+            .map((name, index) => ({
+                name,
+                index,
+            }))
+            .filter(({ index }) =>
+                hasAttributeChanged(
+                    index,
+                    currentExplanation.attributeValues,
+                    counterfactual.feature_values
+                )
+            )
+            .map(({ name, index }) =>
+                `${escapeHtml(name)} was <strong>${escapeHtml(getAttributeDisplayValue(index, counterfactual.feature_values))}</strong> instead of <strong>${escapeHtml(getAttributeDisplayValue(index, currentExplanation.attributeValues))}</strong>`
+            );
+
+        if (changes.length === 0) {
+            return `No changes were needed because the AI already predicted <strong>${escapeHtml(currentExplanation.prediction.label)}</strong>.`;
+        }
+
+        return `If ${joinClauses(changes)}, then the AI would have predicted <strong>${escapeHtml(counterfactual.prediction.label)}</strong> instead of <strong>${escapeHtml(currentExplanation.prediction.label)}</strong>.`;
+    }
+
+    if (explanationType === "attribution") {
+        const attribution = currentExplanation.attribution;
+        if (!attribution || !Array.isArray(attribution.values)) {
+            return "No attribution data was available for this instance.";
+        }
+
+        const signedEntries = attribution.values
+            .map((value, index) => ({
+                name: currentExplanation.attributeNames[index],
+                value,
+            }))
+            .filter((entry) => Math.abs(entry.value) > 0);
+
+        const towardRight = signedEntries
+            .filter((entry) => entry.value > 0)
+            .sort((a, b) => Math.abs(b.value) - Math.abs(a.value));
+        const towardLeft = signedEntries
+            .filter((entry) => entry.value < 0)
+            .sort((a, b) => Math.abs(b.value) - Math.abs(a.value));
+
+        const rightSummary = summarizeAttributionDirection(
+            towardRight,
+            shortenClassLabel(attribution.directionLabels?.right)
+        );
+        const leftSummary = summarizeAttributionDirection(
+            towardLeft,
+            shortenClassLabel(attribution.directionLabels?.left)
+        );
+
+        return [rightSummary, leftSummary].filter(Boolean).join(" ")
+            || "No features made a measurable contribution in this explanation.";
+    }
+
+    return `The model predicted <strong>${escapeHtml(currentExplanation.prediction.label)}</strong>.`;
+}
+
+function showNarrativePanel() {
+    if (!explanationBoxAnchor) {
+        return;
+    }
+
+    const narrativePanel = document.createElement("div");
+    narrativePanel.id = "narrative-panel";
+    narrativePanel.className = "narrative-panel";
+
+    const title = document.createElement("p");
+    title.className = "narrative-panel-title";
+    title.textContent = "Explanation";
+
+    const text = document.createElement("p");
+    text.className = "narrative-panel-text";
+    text.innerHTML = buildNarrativeHtml();
+
+    narrativePanel.appendChild(title);
+    narrativePanel.appendChild(text);
+    explanationBoxAnchor.appendChild(narrativePanel);
 }
 
 function normalizeExplanationPayload(payload) {
@@ -628,7 +914,14 @@ function normalizeExplanationPayload(payload) {
 
 function renderExplanation() {
     clearCounterfactualTable();
+    clearNarrativePanel();
+    resetAttributionChart();
     showAttributeValues(noneExplanationTbody);
+
+    if (explanationView === "narrative") {
+        showNarrativePanel();
+        return;
+    }
 
     if (explanationType === "attribution") {
         showAttributionChart(noneExplanationTbody);

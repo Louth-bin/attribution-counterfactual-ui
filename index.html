@@ -25,6 +25,7 @@
                             German Credit
                         </option>
                     </select>
+                    <span hidden>
                     AI Prediction Model
                     <select id="input_AIModel" title="AIModel">
                         <option value="mlp">
@@ -34,20 +35,34 @@
                             XGBoost
                         </option>
                     </select>
+                    </span>
 
                 XAI Type
                     <select id="input_xaiType" title="xaiType">
                         <option value="none">None</option>
-                        <option value="attribution" selected>Attribution</option>
-                        <option value="counterfactuals">Counterfactual</option>
+                        <option value="attribution">Attribution</option>
+                        <option value="counterfactuals" selected>Counterfactual</option>
                     </select>
 
+                    Explanation View
+                    <select
+                        id="input_explanationView"
+                        class="explanation-view-select"
+                        title="explanationView"
+                    >
+                        <option value="classic">Comparable with diff column</option>
+                        <option value="inline" selected>Comparable with overlay diff</option>
+                        <option value="narrative">Text explanation</option>
+                    </select>
+
+                    <span hidden>
                     XAI Algorithm
                     <select id="input_exp_algorithm" title="expAlgorithm">
                         <option value="shap">
                             SHAP
                         </option>
                     </select>
+                    </span>
 
                     &nbsp; Datapoint
                     <input
@@ -61,24 +76,28 @@
                         title="pairId"
                     />
 
+                    <span hidden>
                     &nbsp; Features to explain/change
                     <input
                         id="input_explanationFeatureCount"
                         type="number"
-                        value="3"
+                        value="2"
                         min="1"
                         max="20"
                         size="3"
                         maxlength="2"
                         title="Number of features shown or changed"
-                    /><br><br>
+                    />
+                    </span><br><br>
 
                     <!-- <input id="input_showTutorial" type="checkbox" />
                     <label for="input_showTutorial" type="checkbox">Show Tutorial</label> -->
-                    <input id="input_showPrediction" type="checkbox" />
+                    <input id="input_showPrediction" type="checkbox" checked />
                     <label for="input_showPrediction" type="checkbox">Show Prediction</label>
+                    <span hidden>
                     <input id="input_counterfactualSimulation" type="checkbox" />
-                    <label for="input_counterfactualSimulation" type="checkbox">Comparable Simulation</label>
+                    <label for="input_counterfactualSimulation" type="checkbox">Counterfactual Simulation</label>
+                    </span>
                     <!-- <input id="input_showGroundTruth" type="checkbox" />
                     <label for="input_showGroundTruth" type="checkbox">Show Ground Truth</label> -->
                 </div>

@@ -1,6 +1,10 @@
 const urlParams = new URLSearchParams(window.location.search);
 const fallbackApiBaseUrl = "http://127.0.0.1:5000";
 const apiBaseUrl = resolveApiBaseUrl(urlParams.get("apiBaseUrl"));
+const DATASET_DEFAULT_FEATURE_COUNT = {
+    diabetes: 2,
+    german_credit: 2,
+};
 
 let iframeUrl = "";
 
@@ -41,6 +45,7 @@ function buildIframeUrl() {
     const aiModel = document.querySelector("#input_AIModel").value;
     const expAlgorithm = document.querySelector("#input_exp_algorithm").value;
     const xaiType = document.querySelector("#input_xaiType").value;
+    const explanationView = document.querySelector("#input_explanationView").value;
     const explanationFeatureCount = document.querySelector("#input_explanationFeatureCount").value;
     const counterfactualSimulation = document.querySelector("#input_counterfactualSimulation").checked
         ? 1
@@ -51,6 +56,7 @@ function buildIframeUrl() {
         appId: dataset,
         AIModel: aiModel,
         xaiType,
+        explanationView,
         expAlgorithm,
         instanceId,
         k: explanationFeatureCount,
@@ -88,6 +94,12 @@ function clampInstanceId() {
 async function refreshDatasetMetadata() {
     const dataset = document.querySelector("#input_appId").value;
     const instanceInput = document.querySelector("#input_instanceId");
+    const explanationFeatureCountInput = document.querySelector("#input_explanationFeatureCount");
+    const defaultFeatureCount = DATASET_DEFAULT_FEATURE_COUNT[dataset];
+
+    if (defaultFeatureCount) {
+        explanationFeatureCountInput.value = String(defaultFeatureCount);
+    }
 
     try {
         const metadataUrl = buildApiUrl("metadata");
@@ -173,6 +185,7 @@ window.addEventListener("message", function (event) {
 document.querySelector("#input_appId").onchange = syncControlsAndIframe;
 document.querySelector("#input_AIModel").onchange = updateIframeUrl;
 document.querySelector("#input_xaiType").onchange = updateIframeUrl;
+document.querySelector("#input_explanationView").onchange = updateIframeUrl;
 document.querySelector("#input_exp_algorithm").onchange = updateIframeUrl;
 document.querySelector("#input_instanceId").onchange = updateInstanceId;
 document.querySelector("#input_instanceId").onkeypress = updateInstanceIdTyping;

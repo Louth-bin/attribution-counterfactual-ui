@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import logging
+import warnings
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
@@ -8,11 +10,14 @@ from typing import Any
 
 import joblib
 import pandas as pd
+from sklearn import __version__ as sklearn_version
+from sklearn.exceptions import InconsistentVersionWarning
 from sklearn.metrics import accuracy_score, log_loss
 
 
 SAVED_MODELS_DIR = Path(__file__).resolve().parent / "saved_models"
 SAVED_MODELS_DIR.mkdir(parents=True, exist_ok=True)
+LOGGER = logging.getLogger("counterfactual.models")
 
 
 @dataclass
@@ -43,8 +48,27 @@ class BaseModelTrainer(ABC):
         if not artifact_path.exists() or not metadata_path.exists():
             return None
 
-        estimator = joblib.load(artifact_path)
         metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+        try:
+            with warnings.catch_warnings(record=True) as caught_warnings:
+                warnings.simplefilter("always", InconsistentVersionWarning)
+                estimator = joblib.load(artifact_path)
+        except Exception as error:
+            LOGGER.warning(
+                "Failed to load saved model artifact %s; retraining a compatible replacement. Error: %s",
+                artifact_path,
+                error,
+            )
+            return None
+        if any(
+            issubclass(warning.category, InconsistentVersionWarning)
+            for warning in caught_warnings
+        ):
+            LOGGER.warning(
+                "Saved model artifact %s was created with a different scikit-learn version; retraining a compatible replacement.",
+                artifact_path,
+            )
+            return None
         saved_feature_names = metadata.get("feature_names")
         if feature_names is not None and saved_feature_names != feature_names:
             return None
@@ -80,6 +104,7 @@ class BaseModelTrainer(ABC):
                     "feature_names": feature_names,
                     "class_labels": class_labels,
                     "metrics": metrics,
+                    "sklearn_version": sklearn_version,
                 },
                 indent=2,
             ),

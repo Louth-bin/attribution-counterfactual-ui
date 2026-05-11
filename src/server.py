@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
+from typing import Any
 
+import pandas as pd
 from flask import Flask, jsonify, request
 
 if __package__ in {None, ""}:
@@ -44,6 +46,38 @@ def _get_int_arg(name: str, default: int) -> int:
         raise ValueError(f"Query parameter '{name}' must be an integer.") from error
 
 
+def _coerce_feature_value(value: Any, dtype: Any) -> Any:
+    if pd.api.types.is_integer_dtype(dtype):
+        return int(round(float(value)))
+    if pd.api.types.is_float_dtype(dtype):
+        return float(value)
+    return value
+
+
+def _prediction_payload(
+    prediction_value: int,
+    probabilities: list[float] | None,
+    class_labels: list[str],
+) -> dict[str, Any]:
+    return {
+        "prediction": {
+            "value": prediction_value,
+            "label": class_labels[prediction_value]
+            if prediction_value < len(class_labels)
+            else str(prediction_value),
+            "probabilities": [
+                {
+                    "label": class_labels[index]
+                    if index < len(class_labels)
+                    else f"Class {index}",
+                    "value": float(probability),
+                }
+                for index, probability in enumerate(probabilities or [])
+            ],
+        }
+    }
+
+
 def create_app() -> Flask:
     app = Flask(__name__)
     app.logger.handlers.clear()
@@ -62,7 +96,7 @@ def create_app() -> Flask:
     def add_cors_headers(response):
         response.headers["Access-Control-Allow-Origin"] = "*"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
-        response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
         LOGGER.info(
             "Completed request: method=%s path=%s status=%s",
             request.method,
@@ -143,6 +177,77 @@ def create_app() -> Flask:
             payload.get("prediction", {}).get("label"),
         )
         return jsonify(payload)
+
+    @app.route("/predict", methods=["POST", "OPTIONS"])
+    def predict():
+        if request.method == "OPTIONS":
+            return ("", 204)
+
+        payload = request.get_json(silent=True) or {}
+        dataset_name = payload.get("dataset") or payload.get("appId") or "diabetes"
+        model_name = payload.get("model") or payload.get("AIModel") or "mlp"
+        force_resplit = bool(payload.get("forceResplit", False))
+        force_retrain = bool(payload.get("forceRetrain", False))
+        prepared_assets = pipeline.prepare_assets(
+            dataset_name=dataset_name,
+            model_name=model_name,
+            force_resplit=force_resplit,
+            force_retrain=force_retrain,
+        )
+        dataset_bundle = prepared_assets.dataset
+        estimator = prepared_assets.model_artifact.estimator
+
+        feature_payload = (
+            payload.get("raw_feature_values")
+            or payload.get("feature_values")
+            or payload.get("features")
+            or payload.get("instance")
+        )
+        if feature_payload is None:
+            raise ValueError(
+                "Prediction request must include raw_feature_values, feature_values, features, or instance."
+            )
+
+        if isinstance(feature_payload, dict):
+            feature_values = [
+                feature_payload.get(feature_name, feature_payload.get(display_name))
+                for feature_name, display_name in zip(
+                    dataset_bundle.feature_names,
+                    dataset_bundle.feature_display_names,
+                )
+            ]
+        else:
+            feature_values = list(feature_payload)
+
+        if len(feature_values) != len(dataset_bundle.feature_names):
+            raise ValueError(
+                "Prediction request feature count does not match the dataset. "
+                f"Expected {len(dataset_bundle.feature_names)}, got {len(feature_values)}."
+            )
+
+        coerced_feature_values = [
+            _coerce_feature_value(
+                value,
+                dataset_bundle.train_df[feature_name].dtype,
+            )
+            for feature_name, value in zip(dataset_bundle.feature_names, feature_values)
+        ]
+        feature_frame = pd.DataFrame(
+            [coerced_feature_values],
+            columns=dataset_bundle.feature_names,
+        )
+        prediction_value = int(estimator.predict(feature_frame)[0])
+        probabilities = None
+        if hasattr(estimator, "predict_proba"):
+            probabilities = estimator.predict_proba(feature_frame)[0].tolist()
+
+        return jsonify(
+            _prediction_payload(
+                prediction_value=prediction_value,
+                probabilities=probabilities,
+                class_labels=dataset_bundle.class_labels,
+            )
+        )
 
     @app.errorhandler(Exception)
     def handle_error(error):

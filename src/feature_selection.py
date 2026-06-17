@@ -13,6 +13,9 @@ from .data_manager import DatasetBundle
 from .runtime_config import FeatureSelectionConfig
 
 
+FEATURE_SELECTION_CACHE_VERSION = "source_order_v1"
+
+
 @dataclass
 class FeatureSelectionResult:
     selected_feature_names: list[str]
@@ -59,6 +62,7 @@ def select_top_features(
         "n_repeats": selection_config.n_repeats,
         "scoring": selection_config.scoring,
         "random_state": selection_config.random_state,
+        "selection_order": FEATURE_SELECTION_CACHE_VERSION,
     }
 
     if cache_path.exists() and not (selection_config.force_recompute or force_retrain):
@@ -92,9 +96,15 @@ def select_top_features(
         key=lambda item: item[1],
         reverse=True,
     )
-    selected_feature_names = [
+    top_feature_names = [
         feature_name
         for feature_name, _ in ranking[: selection_config.top_n]
+    ]
+    top_feature_name_set = set(top_feature_names)
+    selected_feature_names = [
+        feature_name
+        for feature_name in feature_names
+        if feature_name in top_feature_name_set
     ]
     importance_by_feature = {
         feature_name: float(importance)

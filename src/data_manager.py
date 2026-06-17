@@ -13,7 +13,8 @@ from .runtime_config import get_dataset_runtime_config
 
 DIABETES_SOURCE_VERSION = "kaggle_mathchi_pima_flipped_labels_v1"
 DIABETES_SOURCE_URL = "https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.data.csv"
-GERMAN_CREDIT_SOURCE_VERSION = "openml_credit_g_flipped_labels_v1"
+CERAMIC_SOURCE_VERSION = "synthetic_ceramic_tile_firing_deformation_n2000_v1"
+SAFELIMIT_SOURCE_VERSION = "widmark_synthetic_safelimit_n2000_drunk_zero_v2"
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -114,16 +115,15 @@ def _generate_diabetes_dataset() -> tuple[pd.DataFrame, dict[str, Any]]:
         read_csv_kwargs={
             "header": None,
             "names": [
-                "pregnancies",
                 "glucose",
                 "blood_pressure",
                 "skin_thickness",
                 "insulin",
                 "bmi",
-                "diabetes_pedigree_function",
                 "age",
                 "target",
             ],
+            "usecols": [1, 2, 3, 4, 5, 7, 8],
         },
     ).copy()
     raw_df.insert(0, "row_id", range(len(raw_df)))
@@ -137,80 +137,158 @@ def _generate_diabetes_dataset() -> tuple[pd.DataFrame, dict[str, Any]]:
             "No Diabetes",
         ],
         "feature_types": {
-            "pregnancies": "numerical",
             "glucose": "numerical",
             "blood_pressure": "numerical",
             "skin_thickness": "numerical",
             "insulin": "numerical",
             "bmi": "numerical",
-            "diabetes_pedigree_function": "numerical",
             "age": "numerical",
         },
     }
     return raw_df, metadata
 
 
-def _generate_german_credit_dataset() -> tuple[pd.DataFrame, dict[str, Any]]:
-    source_csv_path = _source_csv_path("german_credit", "openml_source.csv")
-    if source_csv_path.exists():
-        raw_df = pd.read_csv(source_csv_path)
-    else:
-        try:
-            from sklearn.datasets import fetch_openml
+def _generate_ceramic_dataset() -> tuple[pd.DataFrame, dict[str, Any]]:
+    rng = np.random.default_rng(219)
+    row_count = 2000
 
-            raw_df = fetch_openml(
-                name="credit-g",
-                version=1,
-                as_frame=True,
-            ).frame
-        except Exception as error:
-            raise ValueError(
-                "The German credit source file is not available locally and could not be downloaded. "
-                f"Expected a CSV at {source_csv_path}."
-            ) from error
+    body_moisture_pct = np.clip(rng.normal(5.8, 0.85, row_count), 3.0, 8.5)
+    pressing_pressure_mpa = np.clip(rng.normal(31.0, 4.8, row_count), 18.0, 44.0)
+    green_density_g_cm3 = np.clip(
+        1.84
+        + (0.006 * (pressing_pressure_mpa - 31.0))
+        - (0.011 * (body_moisture_pct - 5.8))
+        + rng.normal(0.0, 0.022, row_count),
+        1.65,
+        2.02,
+    )
+    particle_d50_um = np.clip(rng.normal(13.5, 2.8, row_count), 6.0, 23.0)
+    feldspar_pct = np.clip(rng.normal(22.0, 3.2, row_count), 12.0, 32.0)
+    peak_temperature_c = np.clip(rng.normal(1185.0, 24.0, row_count), 1120.0, 1250.0)
+    heating_rate_c_min = np.clip(rng.normal(7.3, 1.7, row_count), 2.5, 12.5)
+    soak_time_min = np.clip(rng.normal(40.0, 10.0, row_count), 15.0, 70.0)
+    cooling_rate_c_min = np.clip(rng.normal(6.2, 1.5, row_count), 2.0, 11.0)
 
-        _write_csv_atomically(raw_df, source_csv_path)
+    deformation_score = (
+        0.048 * (peak_temperature_c - 1185.0)
+        + 0.050 * (soak_time_min - 40.0)
+        + 0.180 * (feldspar_pct - 22.0)
+        + 0.310 * (heating_rate_c_min - 7.3)
+        + 0.240 * (cooling_rate_c_min - 6.2)
+        - 12.0 * (green_density_g_cm3 - 1.84)
+        + 0.090 * (particle_d50_um - 13.5)
+        + 0.150 * (body_moisture_pct - 5.8)
+        + rng.normal(0.0, 0.85, row_count)
+    )
+    target = (deformation_score >= np.median(deformation_score)).astype(int)
 
-    raw_df = raw_df.copy()
-    raw_df.insert(0, "row_id", range(len(raw_df)))
-    raw_df["target"] = raw_df["class"].map({"bad": 0, "good": 1})
-    raw_df = raw_df.drop(columns=["class"])
-
-    feature_type_overrides = {
-        "duration": "numerical",
-        "credit_amount": "numerical",
-        "installment_commitment": "numerical",
-        "residence_since": "numerical",
-        "age": "numerical",
-        "existing_credits": "numerical",
-        "num_dependents": "numerical",
-    }
-    feature_types = {
-        column: feature_type_overrides.get(column, "categorical")
-        for column in raw_df.columns
-        if column not in {"row_id", "target"}
-    }
+    raw_df = pd.DataFrame(
+        {
+            "row_id": range(row_count),
+            "peak_temperature_c": np.round(peak_temperature_c, 1),
+            "heating_rate_c_min": np.round(heating_rate_c_min, 2),
+            "soak_time_min": np.round(soak_time_min, 1),
+            "cooling_rate_c_min": np.round(cooling_rate_c_min, 2),
+            "body_moisture_pct": np.round(body_moisture_pct, 2),
+            "pressing_pressure_mpa": np.round(pressing_pressure_mpa, 1),
+            "green_density_g_cm3": np.round(green_density_g_cm3, 3),
+            "particle_d50_um": np.round(particle_d50_um, 2),
+            "feldspar_pct": np.round(feldspar_pct, 2),
+            "target": target,
+        }
+    )
 
     metadata = {
         "target_column": "target",
-        "source_format": GERMAN_CREDIT_SOURCE_VERSION,
+        "source_format": CERAMIC_SOURCE_VERSION,
+        "source": "Synthetic technical ceramic tile firing batches generated from process and green-body measurements; outcome indicates post-firing dimensional deformation.",
         "class_labels": [
-            "Bad Credit Risk",
-            "Good Credit Risk",
+            "Dimensionally Stable",
+            "Warped After Firing",
         ],
-        "feature_types": feature_types,
+        "feature_types": {
+            "peak_temperature_c": "numerical",
+            "heating_rate_c_min": "numerical",
+            "soak_time_min": "numerical",
+            "cooling_rate_c_min": "numerical",
+            "body_moisture_pct": "numerical",
+            "pressing_pressure_mpa": "numerical",
+            "green_density_g_cm3": "numerical",
+            "particle_d50_um": "numerical",
+            "feldspar_pct": "numerical",
+        },
+    }
+    return raw_df, metadata
+
+
+def _generate_safelimit_dataset() -> tuple[pd.DataFrame, dict[str, Any]]:
+    rng = np.random.default_rng(88)
+    row_count = 2000
+
+    units = np.clip(rng.normal(loc=5.5, scale=2.0, size=row_count), 0.5, 12.0)
+    weight = np.clip(rng.normal(loc=74.0, scale=14.0, size=row_count), 45.0, 120.0)
+    duration = np.clip(rng.normal(loc=150.0, scale=70.0, size=row_count), 15.0, 420.0)
+    gender = rng.choice(["female", "male"], size=row_count, p=[0.5, 0.5])
+    stomach_fullness = rng.choice(["empty", "full"], size=row_count, p=[0.45, 0.55])
+
+    widmark_r = np.where(gender == "male", 0.68, 0.55)
+    stomach_absorption = np.where(stomach_fullness == "full", 0.82, 1.0)
+    alcohol_grams = units * 8.0
+    elapsed_hours = duration / 60.0
+
+    bac_percent = (
+        ((alcohol_grams * stomach_absorption) / (weight * 1000.0 * widmark_r)) * 100.0
+        - (0.015 * elapsed_hours)
+    )
+    bac_percent = np.clip(bac_percent, 0.0, None)
+    target = (bac_percent < 0.08).astype(int)
+
+    raw_df = pd.DataFrame(
+        {
+            "row_id": range(row_count),
+            "units": np.round(units, 1),
+            "weight": np.round(weight, 1),
+            "duration": np.round(duration).astype(int),
+            "gender": gender,
+            "stomach_fullness": stomach_fullness,
+            "target": target,
+        }
+    )
+
+    metadata = {
+        "target_column": "target",
+        "source_format": SAFELIMIT_SOURCE_VERSION,
+        "source": "Synthetic SafeLimit data generated from the Widmark BAC equation described by Warren et al. (IUI 2023 / TiiS 2024).",
+        "bac_threshold": 0.08,
+        "class_labels": [
+            "Drunk",
+            "Not-Drunk",
+        ],
+        "feature_types": {
+            "units": "numerical",
+            "weight": "numerical",
+            "duration": "numerical",
+            "gender": "categorical",
+            "stomach_fullness": "categorical",
+        },
+        "categorical_levels": {
+            "gender": ["female", "male"],
+            "stomach_fullness": ["empty", "full"],
+        },
     }
     return raw_df, metadata
 
 
 BUILTIN_DATASET_GENERATORS = {
     "diabetes": _generate_diabetes_dataset,
-    "german_credit": _generate_german_credit_dataset,
+    "ceramic": _generate_ceramic_dataset,
+    "safelimit": _generate_safelimit_dataset,
 }
 
 BUILTIN_DATASET_SOURCE_VERSIONS = {
     "diabetes": DIABETES_SOURCE_VERSION,
-    "german_credit": GERMAN_CREDIT_SOURCE_VERSION,
+    "ceramic": CERAMIC_SOURCE_VERSION,
+    "safelimit": SAFELIMIT_SOURCE_VERSION,
 }
 
 
@@ -285,8 +363,11 @@ def _infer_feature_types_and_ranges(
             continue
 
         feature_types.append("numerical")
-        min_value = float(np.min(series))
-        max_value = float(np.max(series))
+        min_value = float(series.quantile(0.02))
+        max_value = float(series.quantile(0.98))
+        if min_value == max_value:
+            min_value = float(np.min(series))
+            max_value = float(np.max(series))
         feature_ranges.append([min_value, max_value])
 
     return feature_types, feature_ranges
@@ -295,11 +376,19 @@ def _infer_feature_types_and_ranges(
 def _create_sequential_splits(
     dataframe: pd.DataFrame,
     dataset_name: str,
+    target_column: str | None = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     split_paths = _split_paths(dataset_name)
     total_rows = len(dataframe)
     if total_rows < 3:
         raise ValueError("Dataset must contain at least three rows to build train/dev/test splits.")
+
+    if target_column and target_column in dataframe.columns:
+        train_df, dev_df, test_df = _create_stratified_splits(dataframe, target_column)
+        _write_csv_atomically(train_df, split_paths["train"])
+        _write_csv_atomically(dev_df, split_paths["dev"])
+        _write_csv_atomically(test_df, split_paths["test"])
+        return train_df, dev_df, test_df
 
     train_end = max(int(total_rows * 0.7), 1)
     dev_end = max(train_end + int(total_rows * 0.15), train_end + 1)
@@ -315,6 +404,52 @@ def _create_sequential_splits(
     _write_csv_atomically(train_df, split_paths["train"])
     _write_csv_atomically(dev_df, split_paths["dev"])
     _write_csv_atomically(test_df, split_paths["test"])
+    return train_df, dev_df, test_df
+
+
+def _create_stratified_splits(
+    dataframe: pd.DataFrame,
+    target_column: str,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    split_parts = {
+        "train": [],
+        "dev": [],
+        "test": [],
+    }
+
+    for _, class_df in dataframe.groupby(target_column, sort=True):
+        class_df = class_df.reset_index(drop=True)
+        class_count = len(class_df)
+        if class_count < 3:
+            return _create_sequential_split_frames(dataframe)
+
+        train_end = max(int(class_count * 0.7), 1)
+        dev_end = max(train_end + int(class_count * 0.15), train_end + 1)
+        dev_end = min(dev_end, class_count - 1)
+
+        split_parts["train"].append(class_df.iloc[:train_end])
+        split_parts["dev"].append(class_df.iloc[train_end:dev_end])
+        split_parts["test"].append(class_df.iloc[dev_end:])
+
+    return tuple(
+        pd.concat(split_parts[split_name], ignore_index=True)
+        .sort_values("row_id" if "row_id" in dataframe.columns else dataframe.columns[0])
+        .reset_index(drop=True)
+        for split_name in ("train", "dev", "test")
+    )
+
+
+def _create_sequential_split_frames(
+    dataframe: pd.DataFrame,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    total_rows = len(dataframe)
+    train_end = max(int(total_rows * 0.7), 1)
+    dev_end = max(train_end + int(total_rows * 0.15), train_end + 1)
+    dev_end = min(dev_end, total_rows - 1)
+
+    train_df = dataframe.iloc[:train_end].reset_index(drop=True)
+    dev_df = dataframe.iloc[train_end:dev_end].reset_index(drop=True)
+    test_df = dataframe.iloc[dev_end:].reset_index(drop=True)
     return train_df, dev_df, test_df
 
 
@@ -339,18 +474,29 @@ def ensure_dataset_bundle(
         split_row_count = len(train_df) + len(dev_df) + len(test_df)
         split_columns = set(train_df.columns) | set(dev_df.columns) | set(test_df.columns)
         full_columns = set(full_df.columns)
+        if "row_id" in full_df.columns and "row_id" in combined_split_df.columns:
+            split_rows_match_full = (
+                sorted(combined_split_df["row_id"].tolist())
+                == sorted(full_df["row_id"].tolist())
+            )
+        else:
+            split_rows_match_full = combined_split_df.equals(full_df.reset_index(drop=True))
         should_resplit = (
             split_row_count != len(full_df)
             or split_columns != full_columns
-            or not combined_split_df.equals(full_df.reset_index(drop=True))
+            or not split_rows_match_full
         )
-
-    if should_resplit:
-        train_df, dev_df, test_df = _create_sequential_splits(full_df, dataset_name)
 
     target_column = metadata.get("target_column", "target")
     if target_column not in full_df.columns:
         target_column = full_df.columns[-1]
+
+    if should_resplit:
+        train_df, dev_df, test_df = _create_sequential_splits(
+            full_df,
+            dataset_name,
+            target_column=target_column,
+        )
 
     feature_names = [
         column
@@ -365,7 +511,7 @@ def ensure_dataset_bundle(
         for feature_name in feature_names
     ]
     feature_types, feature_ranges = _infer_feature_types_and_ranges(
-        full_df,
+        train_df,
         feature_names,
         metadata,
         category_orders=category_orders,

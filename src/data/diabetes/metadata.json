@@ -6,13 +6,11 @@
     "No Diabetes"
   ],
   "feature_types": {
-    "pregnancies": "numerical",
     "glucose": "numerical",
     "blood_pressure": "numerical",
     "skin_thickness": "numerical",
     "insulin": "numerical",
     "bmi": "numerical",
-    "diabetes_pedigree_function": "numerical",
     "age": "numerical"
   }
 }

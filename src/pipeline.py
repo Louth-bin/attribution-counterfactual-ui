@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import logging
 from dataclasses import dataclass
 from typing import Any
 
@@ -25,6 +26,7 @@ from .xai_methods import generate_counterfactual, get_xai_method, list_xai_metho
 ATTRIBUTION_CACHE_LIMIT = 256
 ATTRIBUTION_RANKING_DECIMALS = 6
 ATTRIBUTION_CACHE_VERSION = "raw_shap_v2"
+LOGGER = logging.getLogger("counterfactual.pipeline")
 
 
 @dataclass
@@ -85,26 +87,57 @@ class ExplanationPipeline:
     def get_metadata(
         self,
         dataset_name: str,
+        model_name: str | None = None,
         force_resplit: bool = False,
     ) -> dict[str, Any]:
-        dataset_bundle = ensure_dataset_bundle(
-            dataset_name=dataset_name,
-            force_resplit=force_resplit,
-        )
-        runtime_config = get_dataset_runtime_config(dataset_name)
-        dataset_bundle = exclude_features_from_dataset_bundle(
-            dataset_bundle=dataset_bundle,
-            excluded_feature_names=runtime_config.excluded_feature_names,
-        )
-        return {
+        prepared_assets: PreparedAssets | None = None
+        if model_name:
+            prepared_assets = self.prepare_assets(
+                dataset_name=dataset_name,
+                model_name=model_name,
+                force_resplit=force_resplit,
+            )
+            dataset_bundle = prepared_assets.dataset
+        else:
+            dataset_bundle = ensure_dataset_bundle(
+                dataset_name=dataset_name,
+                force_resplit=force_resplit,
+            )
+            runtime_config = get_dataset_runtime_config(dataset_name)
+            dataset_bundle = exclude_features_from_dataset_bundle(
+                dataset_bundle=dataset_bundle,
+                excluded_feature_names=runtime_config.excluded_feature_names,
+            )
+
+        payload = {
             "dataset": dataset_bundle.dataset_name,
             "available_instance_count": dataset_bundle.available_instance_count,
+            "train_instance_count": len(dataset_bundle.train_df),
+            "dev_instance_count": len(dataset_bundle.dev_df),
+            "test_instance_count": len(dataset_bundle.test_df),
             "feature_names": dataset_bundle.feature_display_names,
             "feature_types": dataset_bundle.feature_types,
             "models": list_model_names(),
             "xai_methods": list_xai_methods(),
             "prediction_labels": dataset_bundle.class_labels,
         }
+
+        if prepared_assets:
+            prediction_instance_ids_by_split = _get_prediction_instance_ids_by_split(
+                dataset_bundle=dataset_bundle,
+                estimator=prepared_assets.model_artifact.estimator,
+            )
+            payload["model"] = model_name
+            payload["prediction_instance_ids_by_split"] = prediction_instance_ids_by_split
+            payload["prediction_counts_by_split"] = {
+                split: {
+                    prediction: len(instance_ids)
+                    for prediction, instance_ids in split_groups.items()
+                }
+                for split, split_groups in prediction_instance_ids_by_split.items()
+            }
+
+        return payload
 
     def get_instance_payload(
         self,
@@ -116,6 +149,7 @@ class ExplanationPipeline:
         explanation_feature_count: int = 3,
         counterfactual_mode: str = "minimal",
         controllable_only: bool = False,
+        split: str = "test",
         force_resplit: bool = False,
         force_retrain: bool = False,
     ) -> dict[str, Any]:
@@ -128,14 +162,15 @@ class ExplanationPipeline:
         dataset_bundle = prepared_assets.dataset
         estimator = prepared_assets.model_artifact.estimator
         runtime_config = get_dataset_runtime_config(dataset_name)
+        split_frame = _get_split_frame(dataset_bundle, split)
 
-        if instance_id < 0 or instance_id >= dataset_bundle.available_instance_count:
+        if instance_id < 0 or instance_id >= len(split_frame):
             raise IndexError(
-                f"Instance id {instance_id} is outside the test set range "
-                f"0-{dataset_bundle.available_instance_count - 1}."
+                f"Instance id {instance_id} is outside the {split} split range "
+                f"0-{len(split_frame) - 1}."
             )
 
-        instance_frame = dataset_bundle.test_df.iloc[[instance_id]].copy()
+        instance_frame = split_frame.iloc[[instance_id]].copy()
         feature_frame = instance_frame[dataset_bundle.feature_names]
 
         prediction_value = int(estimator.predict(feature_frame)[0])
@@ -247,9 +282,10 @@ class ExplanationPipeline:
             "model": model_name.lower(),
             "xai_method": xai_method_name.lower(),
             "xai_type": xai_type.lower(),
+            "split": _normalize_split_name(split),
             "explanation_feature_count": explanation_feature_count,
             "instance_id": int(instance_id),
-            "available_instance_count": dataset_bundle.available_instance_count,
+            "available_instance_count": len(split_frame),
             "feature_names": dataset_bundle.feature_display_names,
             "raw_feature_names": dataset_bundle.feature_names,
             "feature_types": dataset_bundle.feature_types,
@@ -328,15 +364,22 @@ class ExplanationPipeline:
             positive_class_index=min(1, len(dataset_bundle.class_labels) - 1),
         )
         self._remember_raw_attribution(cache_key, attribution)
-        disk_cache_path.parent.mkdir(parents=True, exist_ok=True)
-        temporary_cache_path = disk_cache_path.with_suffix(
-            f"{disk_cache_path.suffix}.tmp"
-        )
-        temporary_cache_path.write_text(
-            json.dumps(attribution, indent=2),
-            encoding="utf-8",
-        )
-        temporary_cache_path.replace(disk_cache_path)
+        try:
+            disk_cache_path.parent.mkdir(parents=True, exist_ok=True)
+            temporary_cache_path = disk_cache_path.with_suffix(
+                f"{disk_cache_path.suffix}.tmp"
+            )
+            temporary_cache_path.write_text(
+                json.dumps(attribution, indent=2),
+                encoding="utf-8",
+            )
+            temporary_cache_path.replace(disk_cache_path)
+        except OSError as error:
+            LOGGER.warning(
+                "Skipping attribution disk cache write for %s: %s",
+                disk_cache_path,
+                error,
+            )
 
         return attribution
 
@@ -423,6 +466,42 @@ def _normalize_counterfactual_mode(mode: str) -> str:
     if normalized_mode in {"prototype", "prototypical", "distribution"}:
         return "prototypical"
     return "minimal"
+
+
+def _normalize_split_name(split: str) -> str:
+    normalized_split = str(split or "test").strip().lower()
+    if normalized_split in {"training", "train"}:
+        return "train"
+    if normalized_split in {"development", "validation", "dev"}:
+        return "dev"
+    if normalized_split == "test":
+        return "test"
+    raise ValueError("Split must be one of: train, dev, test.")
+
+
+def _get_split_frame(dataset_bundle: DatasetBundle, split: str) -> pd.DataFrame:
+    normalized_split = _normalize_split_name(split)
+    if normalized_split == "train":
+        return dataset_bundle.train_df
+    if normalized_split == "dev":
+        return dataset_bundle.dev_df
+    return dataset_bundle.test_df
+
+
+def _get_prediction_instance_ids_by_split(
+    dataset_bundle: DatasetBundle,
+    estimator: Any,
+) -> dict[str, dict[str, list[int]]]:
+    prediction_groups_by_split: dict[str, dict[str, list[int]]] = {}
+    for split in ("train", "dev", "test"):
+        split_frame = _get_split_frame(dataset_bundle, split)
+        feature_frame = split_frame[dataset_bundle.feature_names]
+        predictions = estimator.predict(feature_frame)
+        split_groups: dict[str, list[int]] = {}
+        for instance_id, prediction in enumerate(predictions):
+            split_groups.setdefault(str(int(prediction)), []).append(instance_id)
+        prediction_groups_by_split[split] = split_groups
+    return prediction_groups_by_split
 
 
 def _eligible_counterfactual_indices(

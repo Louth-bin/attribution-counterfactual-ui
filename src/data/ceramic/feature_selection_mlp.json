@@ -1,0 +1,59 @@
+{
+  "cache_key": {
+    "dataset_name": "ceramic",
+    "model_name": "mlp",
+    "feature_names": [
+      "peak_temperature_c",
+      "heating_rate_c_min",
+      "soak_time_min",
+      "cooling_rate_c_min",
+      "body_moisture_pct",
+      "pressing_pressure_mpa",
+      "green_density_g_cm3",
+      "particle_d50_um",
+      "feldspar_pct"
+    ],
+    "feature_types": [
+      "numerical",
+      "numerical",
+      "numerical",
+      "numerical",
+      "numerical",
+      "numerical",
+      "numerical",
+      "numerical",
+      "numerical"
+    ],
+    "class_labels": [
+      "Dimensionally Stable",
+      "Warped After Firing"
+    ],
+    "top_n": 8,
+    "method": "permutation",
+    "n_repeats": 8,
+    "scoring": "accuracy",
+    "random_state": 42,
+    "selection_order": "source_order_v1"
+  },
+  "selected_feature_names": [
+    "peak_temperature_c",
+    "heating_rate_c_min",
+    "soak_time_min",
+    "cooling_rate_c_min",
+    "body_moisture_pct",
+    "pressing_pressure_mpa",
+    "green_density_g_cm3",
+    "feldspar_pct"
+  ],
+  "importance_by_feature": {
+    "peak_temperature_c": 0.18583333333333332,
+    "feldspar_pct": 0.06083333333333335,
+    "heating_rate_c_min": 0.04041666666666667,
+    "soak_time_min": 0.03791666666666668,
+    "cooling_rate_c_min": 0.014583333333333337,
+    "green_density_g_cm3": 0.0075000000000000205,
+    "pressing_pressure_mpa": -0.0008333333333333526,
+    "body_moisture_pct": -0.003333333333333327,
+    "particle_d50_um": -0.004583333333333342
+  }
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>Experimental runthrough</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="index.css" />
+        <link rel="stylesheet" href="experimental.css" />
+        <link rel="icon" type="image/png" href="thinking-man-logo.png" />
+        <script src="experimental.js" defer></script>
+    </head>
+    <body class="experimental-body">
+        <main class="experimental-shell">
+            <section class="experiment-toolbar" aria-label="Runthrough setup">
+                <div class="toolbar-field">
+                    <label for="experiment_dataset">Dataset</label>
+                    <select id="experiment_dataset">
+                        <option value="diabetes">Diabetes</option>
+                        <option value="ceramic">Technical Ceramic Firing</option>
+                        <option value="safelimit">SafeLimit</option>
+                    </select>
+                </div>
+                <div class="toolbar-field">
+                    <label for="experiment_explanation">Explanation</label>
+                    <select id="experiment_explanation">
+                        <option value="attribution" selected>Attribution</option>
+                        <option value="counterfactuals">Counterfactual</option>
+                        <option value="none">None</option>
+                    </select>
+                </div>
+                <div class="toolbar-field">
+                    <label for="experiment_model">Model</label>
+                    <select id="experiment_model">
+                        <option value="mlp" selected>MLP</option>
+                        <option value="xgboost">XGBoost</option>
+                    </select>
+                </div>
+                <div class="toolbar-field toolbar-field-number">
+                    <label for="experiment_training_count">Training</label>
+                    <input id="experiment_training_count" type="number" value="10" min="0" max="100" />
+                </div>
+                <div class="toolbar-field toolbar-field-number">
+                    <label for="experiment_test_count">Test</label>
+                    <input id="experiment_test_count" type="number" value="20" min="0" max="100" />
+                </div>
+                <label class="toolbar-checkbox" for="experiment_face_figures">
+                    <input id="experiment_face_figures" type="checkbox" />
+                    Face figures
+                </label>
+                <label class="toolbar-checkbox" for="experiment_randomize_attributes">
+                    <input id="experiment_randomize_attributes" type="checkbox" checked />
+                    Randomize attributes
+                </label>
+                <button id="experiment_start" type="button">Start runthrough</button>
+            </section>
+
+            <section class="experiment-status" aria-live="polite">
+                <div>
+                    <div id="experiment_phase" class="experiment-phase">Ready</div>
+                    <div id="experiment_progress" class="experiment-progress">Choose a setup and start.</div>
+                </div>
+                <div class="experiment-nav">
+                    <button id="experiment_prev" type="button" aria-label="Previous case">&larr;</button>
+                    <button id="experiment_next" type="button" aria-label="Next case">&rarr;</button>
+                </div>
+            </section>
+
+            <section id="experiment_stage" class="experiment-stage" aria-live="polite"></section>
+        </main>
+    </body>
+</html>

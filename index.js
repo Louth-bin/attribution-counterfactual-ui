@@ -3,7 +3,8 @@ const fallbackApiBaseUrl = "http://127.0.0.1:5000";
 const apiBaseUrl = resolveApiBaseUrl(urlParams.get("apiBaseUrl"));
 const DATASET_DEFAULT_FEATURE_COUNT = {
     diabetes: 2,
-    german_credit: 2,
+    ceramic: 2,
+    safelimit: 2,
 };
 
 let iframeUrl = "";
@@ -17,14 +18,24 @@ function buildApiUrl(path) {
 
 function appendApiPath(baseUrl) {
     const url = new URL(baseUrl, window.location.href);
+    const isLocal = isLocalHost(url.hostname);
     const pathParts = url.pathname.split("/").filter(Boolean);
 
-    if (pathParts[pathParts.length - 1] !== "api") {
+    if (isLocal) {
+        url.port = "5000";
+        if (pathParts[pathParts.length - 1] === "api") {
+            pathParts.pop();
+        }
+    } else if (pathParts[pathParts.length - 1] !== "api") {
         pathParts.push("api");
     }
 
     url.pathname = `/${pathParts.join("/")}`;
     return url.toString();
+}
+
+function isLocalHost(hostname) {
+    return hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1";
 }
 
 function resolveApiBaseUrl(configuredApiBaseUrl) {

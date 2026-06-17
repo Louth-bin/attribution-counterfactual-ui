@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any
 
 import pandas as pd
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, redirect, request, send_from_directory
 
 if __package__ in {None, ""}:
     import sys
@@ -110,17 +110,45 @@ def create_app() -> Flask:
         LOGGER.info("Healthcheck requested")
         return jsonify({"status": "ok"})
 
+    @app.get("/")
+    def root():
+        return redirect("/experimental")
+
+    @app.get("/experimental")
+    def experimental():
+        return send_from_directory(REPO_ROOT, "experimental.html")
+
+    @app.get("/<path:asset_path>")
+    def static_assets(asset_path: str):
+        allowed_assets = {
+            "experimental.html",
+            "experimental.js",
+            "experimental.css",
+            "iframe.html",
+            "iframe.js",
+            "index.html",
+            "index.js",
+            "index.css",
+            "thinking-man-logo.png",
+        }
+        if asset_path not in allowed_assets:
+            raise IndexError(f"Asset '{asset_path}' is unavailable.")
+        return send_from_directory(REPO_ROOT, asset_path)
+
     @app.get("/metadata")
     def metadata():
         dataset_name = request.args.get("dataset", "diabetes")
+        model_name = request.args.get("model")
         force_resplit = _get_bool_arg("forceResplit")
         LOGGER.info(
-            "Building metadata payload: dataset=%s force_resplit=%s",
+            "Building metadata payload: dataset=%s model=%s force_resplit=%s",
             dataset_name,
+            model_name,
             force_resplit,
         )
         payload = pipeline.get_metadata(
             dataset_name=dataset_name,
+            model_name=model_name,
             force_resplit=force_resplit,
         )
         LOGGER.info(
@@ -137,6 +165,7 @@ def create_app() -> Flask:
         model_name = request.args.get("model", "mlp")
         xai_method_name = request.args.get("xaiMethod", "shap")
         xai_type = request.args.get("xaiType", "attribution")
+        split = request.args.get("split", "test")
         instance_id = int(request.args.get("instanceId", "0"))
         explanation_feature_count = max(_get_int_arg("k", 3), 0)
         counterfactual_mode = request.args.get("counterfactualMode", "minimal")
@@ -144,11 +173,12 @@ def create_app() -> Flask:
         force_resplit = _get_bool_arg("forceResplit")
         force_retrain = _get_bool_arg("forceRetrain")
         LOGGER.info(
-            "Building explanation payload: dataset=%s model=%s xai_method=%s xai_type=%s instance_id=%s k=%s counterfactual_mode=%s controllable_only=%s force_resplit=%s force_retrain=%s",
+            "Building explanation payload: dataset=%s model=%s xai_method=%s xai_type=%s split=%s instance_id=%s k=%s counterfactual_mode=%s controllable_only=%s force_resplit=%s force_retrain=%s",
             dataset_name,
             model_name,
             xai_method_name,
             xai_type,
+            split,
             instance_id,
             explanation_feature_count,
             counterfactual_mode,
@@ -166,6 +196,7 @@ def create_app() -> Flask:
             explanation_feature_count=explanation_feature_count,
             counterfactual_mode=counterfactual_mode,
             controllable_only=controllable_only,
+            split=split,
             force_resplit=force_resplit,
             force_retrain=force_retrain,
         )

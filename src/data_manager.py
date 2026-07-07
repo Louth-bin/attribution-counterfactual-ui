@@ -261,8 +261,8 @@ def _generate_safelimit_dataset() -> tuple[pd.DataFrame, dict[str, Any]]:
         "source": "Synthetic SafeLimit data generated from the Widmark BAC equation described by Warren et al. (IUI 2023 / TiiS 2024).",
         "bac_threshold": 0.08,
         "class_labels": [
-            "Drunk",
-            "Not-Drunk",
+            "Above Limit",
+            "Below Limit",
         ],
         "feature_types": {
             "units": "numerical",

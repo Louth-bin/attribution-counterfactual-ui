@@ -17,7 +17,7 @@ const DATASET_COPY = {
         simulationTitle: "Counterfactual simulation",
     },
     safelimit: {
-        trainingQuestion: "Do you think this person is drunk or not drunk?",
+        trainingQuestion: "Do you think this person is above or below the safe limit?",
         originalTitle: "Original person case",
         explanationTitle: "Explanation and feedback",
         testOriginalTitle: "Original person case",
@@ -202,17 +202,7 @@ function buildCases(metadata, trainingCount, testCount) {
 }
 
 function buildOrderedSimulationModes(count) {
-    const firstBreak = Math.ceil(count / 3);
-    const secondBreak = Math.ceil((count * 2) / 3);
-    return Array.from({ length: count }, (_, index) => {
-        if (index < firstBreak) {
-            return "any";
-        }
-        if (index < secondBreak) {
-            return "specific";
-        }
-        return "budget";
-    });
+    return Array.from({ length: count }, () => "any");
 }
 
 function caseKey(caseItem, xaiType = getExplanationType()) {
@@ -505,7 +495,7 @@ async function startRunthrough() {
     const trainingInput = document.querySelector("#experiment_training_count");
     const testInput = document.querySelector("#experiment_test_count");
     const trainingCount = clampCount(trainingInput, 10);
-    const testCount = clampCount(testInput, 20);
+    const testCount = clampCount(testInput, 10);
 
     startButton.disabled = true;
     showStageMessage("Preparing random cases...");

@@ -31,6 +31,10 @@ h3 {
     line-height: 0em;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 .selectors {
     margin-bottom: 30px;
 }
@@ -296,9 +300,10 @@ td {
 
 .prediction-panel {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 22px;
+  gap: 6px;
   margin-top: 0;
   margin-bottom: 10px;
   box-sizing: border-box;
@@ -310,6 +315,7 @@ td {
   font-weight: 700;
   color: rgba(0, 0, 0, 0.9);
   white-space: nowrap;
+  text-align: center;
 }
 
 .prediction-choice-group {
@@ -673,6 +679,16 @@ meter::-moz-meter-bar {
   color: rgba(234, 51, 53);
 }
 
+.categorical-old-value-marker {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 1.6px solid #9a9a9a;
+  border-radius: 50%;
+  box-sizing: border-box;
+  vertical-align: -2px;
+}
+
 .value-change-arrow {
   color: rgba(0, 0, 0, 0.55);
 }
@@ -682,8 +698,8 @@ meter::-moz-meter-bar {
 }
 
 .persona-comparison-icons .persona-icon-original {
-  background: rgba(234, 51, 53);
-  border-color: rgba(234, 51, 53);
+  background: transparent;
+  border-color: #9a9a9a;
 }
 
 .persona-comparison-icons .persona-icon-current {
@@ -746,11 +762,9 @@ meter::-moz-meter-bar {
   align-items: center;
   gap: 14px;
   margin-top: 8px;
-  min-height: 64px;
   width: max-content;
 }
 
-.simulation-check-button,
 .simulation-reset-button {
   appearance: none;
   border: 2px solid rgba(0, 0, 0, 0.86);
@@ -766,16 +780,8 @@ meter::-moz-meter-bar {
   font-weight: 600;
 }
 
-.simulation-check-button:hover,
 .simulation-reset-button:hover {
   background: rgba(0, 0, 0, 0.05);
-}
-
-.counterfactual-simulation-result {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 220px;
 }
 
 .simulation-output .prediction-choice {
@@ -829,9 +835,10 @@ meter::-moz-meter-bar {
 
 .counterfactual-simulation-original-prediction {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 6px;
   margin-top: 12px;
 }
 

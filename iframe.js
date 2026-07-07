@@ -15,6 +15,28 @@ const counterfactualSimulationEnabled = urlParams.get("counterfactualSimulation"
 const counterfactualSimulationMode = getCounterfactualSimulationMode(urlParams.get("simulationMode"));
 const SIMULATION_SPECIFIC_ATTRIBUTE_COUNT = 2;
 const SIMULATION_BUDGET_POINTS = 10;
+const PROFILE_SUBJECT_NAMES = [
+    "Mia",
+    "Noah",
+    "Olivia",
+    "Liam",
+    "Emma",
+    "Ava",
+    "Ethan",
+    "Sophia",
+    "Lucas",
+    "Isabella",
+    "Mason",
+    "Amelia",
+    "Elijah",
+    "Harper",
+    "James",
+    "Charlotte",
+    "Benjamin",
+    "Evelyn",
+    "Logan",
+    "Abigail",
+];
 const noneExplanationTbody = document.querySelector("#none-explanation-tbody");
 const tablesWrapper = document.querySelector("#tables-wrapper");
 const explanationBoxAnchor = document.querySelector("#explanation-box-anchor");
@@ -100,10 +122,6 @@ function getExplanationView(selectedView) {
 }
 
 function getCounterfactualSimulationMode(selectedMode) {
-    const normalizedMode = String(selectedMode ?? "any").toLowerCase();
-    if (normalizedMode === "specific" || normalizedMode === "budget") {
-        return normalizedMode;
-    }
     return "any";
 }
 
@@ -604,8 +622,8 @@ function populateValueCell(valueCell, attributeIndex, values, options = {}) {
         }
 
         const oldValue = document.createElement("span");
-        oldValue.className = "value-delta value-delta-decrease";
-        oldValue.textContent = originalLabel;
+        oldValue.className = "categorical-old-value-marker";
+        oldValue.title = `Original: ${originalLabel}`;
 
         const arrow = document.createElement("span");
         arrow.className = "value-change-arrow";
@@ -816,13 +834,20 @@ function copyTableColumnWidths(sourceTable, targetTable) {
         return;
     }
 
+    const columnWidths = Array.from(sourceRow.children).map((cell) =>
+        cell.getBoundingClientRect().width
+    );
+    if (columnWidths.some((width) => width <= 0)) {
+        return;
+    }
+
     targetTable.querySelector("colgroup.instance-column-widths")?.remove();
 
     const colgroup = document.createElement("colgroup");
     colgroup.className = "instance-column-widths";
-    Array.from(sourceRow.children).forEach((cell) => {
+    columnWidths.forEach((width) => {
         const column = document.createElement("col");
-        column.style.width = `${cell.getBoundingClientRect().width}px`;
+        column.style.width = `${width}px`;
         colgroup.appendChild(column);
     });
     targetTable.prepend(colgroup);
@@ -834,7 +859,7 @@ function showAttributeValues(tableBody) {
         includeNames: true,
     });
 
-    if (showPredictionPanel) {
+    if (showPredictionPanel && !counterfactualSimulationEnabled) {
         showPrediction(tableBody, currentExplanation.prediction.value, {
             colorResult: explanationType !== "attribution" && explanationView !== "persona",
             predictionTone: explanationType === "counterfactual" ? "original" : "standard",
@@ -870,7 +895,7 @@ function showPrediction(tableBody, prediction, options = {}) {
         predictionLabel.className = "prediction-panel-label";
         predictionLabel.textContent = "AI prediction";
         predictionLabel.title = "The AI's prediction for this instance";
-        predictionPanel.prepend(predictionLabel);
+        predictionPanel.appendChild(predictionLabel);
     }
 
     const explanationWrapper = document.querySelector("#explanation-wrapper");
@@ -1487,7 +1512,6 @@ function createCounterfactualSimulation() {
         const predictionLabel = document.createElement("div");
         predictionLabel.className = "prediction-panel-label";
         predictionLabel.textContent = "AI prediction";
-        originalPrediction.appendChild(predictionLabel);
         originalPrediction.appendChild(createPredictionChoiceGroup(
             currentExplanation.prediction.value,
             {
@@ -1495,6 +1519,7 @@ function createCounterfactualSimulation() {
                 predictionTone: "original",
             }
         ));
+        originalPrediction.appendChild(predictionLabel);
         originalColumn.appendChild(originalPrediction);
     }
 
@@ -1505,13 +1530,6 @@ function createCounterfactualSimulation() {
     const simulationActions = document.createElement("div");
     simulationActions.className = "counterfactual-simulation-actions";
 
-    const checkButton = document.createElement("button");
-    checkButton.type = "button";
-    checkButton.className = "simulation-check-button";
-    checkButton.textContent = "Check change";
-    checkButton.addEventListener("click", checkCounterfactualSimulation);
-    simulationActions.appendChild(checkButton);
-
     const resetButton = document.createElement("button");
     resetButton.type = "button";
     resetButton.className = "simulation-reset-button";
@@ -1519,17 +1537,11 @@ function createCounterfactualSimulation() {
     resetButton.addEventListener("click", resetCounterfactualSimulation);
     simulationActions.appendChild(resetButton);
 
-    const resultPanel = document.createElement("div");
-    resultPanel.id = "counterfactual-simulation-result";
-    resultPanel.className = "counterfactual-simulation-result";
-    simulationActions.appendChild(resultPanel);
-
     simulationPanel.appendChild(simulationActions);
 
     document.querySelector("#explanation-wrapper")?.appendChild(simulationPanel);
     syncCounterfactualSimulationColumnWidths();
     renderCounterfactualSimulationRows();
-    renderCounterfactualSimulationFeedback();
     updateCounterfactualSimulationQuestionWidth();
     updateCounterfactualSimulationBudget();
     if (counterfactualSimulationMode === "specific") {
@@ -1909,19 +1921,14 @@ function getCounterfactualSimulationQuestion() {
 }
 
 function getProfileCounterfactualQuestion(originalLabel, targetLabel) {
+    const subjectName = getProfileSubjectName();
+
     if (datasetName === "diabetes") {
-        const subjectName = "Mia";
-        const targetText = String(targetLabel).toLowerCase().includes("non")
-            ? "wanted to be"
-            : "were to be";
-        const actionText = String(targetLabel).toLowerCase().includes("non")
-            ? "should she make"
-            : "would cause this change";
-        return `${subjectName} is diagnosed as being ${originalLabel}. If ${subjectName} ${targetText} ${targetLabel}, what minimal changes to her profile ${actionText}?`;
+        return `${subjectName} is diagnosed as being ${originalLabel}. If ${subjectName} was to become ${targetLabel}, what minimal changes to their profile would need to occur?`;
     }
 
     if (datasetName === "safelimit") {
-        return `This person is predicted as being ${originalLabel}. If this person were to be ${targetLabel}, what minimal changes to their profile would cause this change?`;
+        return `${subjectName} is ${formatDrivingLimitQuestionLabel(originalLabel)} for driving. If ${subjectName} was to be ${formatDrivingLimitQuestionLabel(targetLabel)}, what minimal changes to their profile would need to occur?`;
     }
 
     if (datasetName === "ceramic") {
@@ -1929,6 +1936,28 @@ function getProfileCounterfactualQuestion(originalLabel, targetLabel) {
     }
 
     return `This case is predicted as being ${originalLabel}. If it were to be ${targetLabel}, what minimal changes to its profile would cause this change?`;
+}
+
+function getProfileSubjectName() {
+    const key = `${datasetName}:${splitName}:${Number.isFinite(instanceId) ? instanceId : 0}`;
+    const index = positiveHash(key) % PROFILE_SUBJECT_NAMES.length;
+    return PROFILE_SUBJECT_NAMES[index];
+}
+
+function positiveHash(value) {
+    let hash = 0;
+    const text = String(value);
+    for (let i = 0; i < text.length; i++) {
+        hash = ((hash << 5) - hash + text.charCodeAt(i)) | 0;
+    }
+    return Math.abs(hash);
+}
+
+function formatDrivingLimitQuestionLabel(label) {
+    const labelText = String(label ?? "").toLowerCase();
+    return labelText.includes("below")
+        ? "Below the limit"
+        : "Above the limit";
 }
 
 function formatSimulationOutcomeLabel(label) {
@@ -2490,9 +2519,9 @@ function getPatientOutcomePhrase(label) {
     }
 
     if (datasetName === "safelimit") {
-        return labelText.includes("not")
-            ? "the person would likely be not drunk"
-            : "the person would likely be drunk";
+        return labelText.includes("below")
+            ? "the person would likely be below the limit"
+            : "the person would likely be above the limit";
     }
 
     return `the case would likely be ${escapeHtml(label)}`;
@@ -2524,14 +2553,14 @@ function getProfileOutcomePhrase(label, options = {}) {
 
     if (datasetName === "safelimit") {
         if (hypothetical) {
-            return labelText.includes("not")
-                ? "the person would be not drunk"
-                : "the person would be drunk";
+            return labelText.includes("below")
+                ? "the person would be below the limit"
+                : "the person would be above the limit";
         }
 
-        return labelText.includes("not")
-            ? "the person is not drunk"
-            : "the person is drunk";
+        return labelText.includes("below")
+            ? "the person is below the limit"
+            : "the person is above the limit";
     }
 
     return `the case ${verb} ${escapeHtml(label)}`;
@@ -2634,7 +2663,7 @@ function buildCounterfactualChangeText(index, counterfactualValues) {
     const updatedDisplay = getAttributeDisplayValue(index, counterfactualValues);
 
     if (currentExplanation.attributeTypes[index] === "categorical") {
-        return `${name} was <span class="value-delta value-delta-decrease">${escapeHtml(originalDisplay)}</span><span class="value-change-arrow"> -> </span><span class="value-delta value-delta-increase">${escapeHtml(updatedDisplay)}</span>`;
+        return `${name} was <span class="categorical-old-value-marker" title="Original: ${escapeHtml(originalDisplay)}"></span><span class="value-change-arrow"> -> </span><span class="value-delta value-delta-increase">${escapeHtml(updatedDisplay)}</span>`;
     }
 
     const originalValue = Number(currentExplanation.attributeValues[index]);
@@ -3400,7 +3429,14 @@ function renderExplanation() {
     }
     resetAttributionChart();
 
-    showAttributeValues(noneExplanationTbody);
+    if (counterfactualSimulationEnabled) {
+        noneExplanationTbody.innerHTML = "";
+        if (tablesWrapper) {
+            tablesWrapper.hidden = true;
+        }
+    } else {
+        showAttributeValues(noneExplanationTbody);
+    }
 
     if (
         explanationType !== "none" &&

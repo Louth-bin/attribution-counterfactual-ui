@@ -7,8 +7,8 @@
     "stomach_fullness"
   ],
   "class_labels": [
-    "Drunk",
-    "Not-Drunk"
+    "Above Limit",
+    "Below Limit"
   ],
   "metrics": {
     "accuracy": 0.9899665551839465,

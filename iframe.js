@@ -8,8 +8,8 @@ const xaiMethod = urlParams.get("expAlgorithm") ?? "shap";
 const splitName = urlParams.get("split") ?? "test";
 const instanceId = Number(urlParams.get("instanceId") ?? "0");
 const explanationFeatureCount = Number(urlParams.get("k") ?? "2");
-const apiBaseUrl = resolveApiBaseUrl(urlParams.get("apiBaseUrl"));
 const attributeOrderSeed = urlParams.get("attributeOrderSeed");
+const tutorialCalloutMode = urlParams.get("tutorialCallouts") ?? "";
 const faceFiguresEnabled = urlParams.get("faceFigures") === "1";
 const counterfactualSimulationEnabled = urlParams.get("counterfactualSimulation") === "1";
 const counterfactualSimulationMode = getCounterfactualSimulationMode(urlParams.get("simulationMode"));
@@ -48,45 +48,26 @@ let simulationSpecificCandidatePending = false;
 let simulationPrediction = null;
 let simulationFeedback = null;
 
-console.info("[iframe] apiBaseUrl:", apiBaseUrl);
+console.info("[iframe] static data mode:", Boolean(window.EXPERIMENT_DATA));
 
-function buildApiUrl(path) {
-    const baseUrl = apiBaseUrl.endsWith("/") ? apiBaseUrl : `${apiBaseUrl}/`;
-    return new URL(path, baseUrl);
+function getStaticDatasetBundle() {
+    const bundle = window.EXPERIMENT_DATA?.datasets?.[datasetName];
+    if (!bundle) {
+        throw new Error(`Dataset '${datasetName}' is not included in the static experiment data.`);
+    }
+    return bundle;
 }
 
-function appendApiPath(baseUrl) {
-    const url = new URL(baseUrl, window.location.href);
-    const isLocal = isLocalHost(url.hostname);
-    const pathParts = url.pathname.split("/").filter(Boolean);
-
-    if (isLocal) {
-        url.port = "5000";
-        if (pathParts[pathParts.length - 1] === "api") {
-            pathParts.pop();
-        }
-    } else if (pathParts[pathParts.length - 1] !== "api") {
-        pathParts.push("api");
+function getStaticExplanationPayload() {
+    const bundle = getStaticDatasetBundle();
+    const poolName = splitName === "train" ? "training_pool" : "test_pool";
+    const payload = bundle[poolName]?.find((candidate) =>
+        Number(candidate.instance_id) === instanceId
+    );
+    if (!payload) {
+        throw new Error(`Instance ${instanceId} is not included in the static ${splitName} pool.`);
     }
-
-    url.pathname = `/${pathParts.join("/")}`;
-    return url.toString();
-}
-
-function isLocalHost(hostname) {
-    return hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1";
-}
-
-function resolveApiBaseUrl(configuredApiBaseUrl) {
-    if (configuredApiBaseUrl) {
-        return appendApiPath(configuredApiBaseUrl);
-    }
-
-    if (window.location.origin && window.location.origin !== "null") {
-        return appendApiPath(window.location.origin);
-    }
-
-    return appendApiPath("http://127.0.0.1:5000");
+    return payload;
 }
 
 function getExplanationType(selectedType) {
@@ -215,6 +196,69 @@ function updateAttributeControlHeader() {
     if (header) {
         header.textContent = getAttributeControlHeader();
     }
+}
+
+function createTutorialCallout(number, className) {
+    const callout = document.createElement("span");
+    callout.className = `tutorial-callout ${className}`;
+    callout.textContent = String(number);
+    callout.title = `Tutorial point ${number}`;
+    callout.setAttribute("aria-hidden", "true");
+    return callout;
+}
+
+function applyBasicTutorialCallouts() {
+    if (tutorialCalloutMode !== "basic") {
+        return;
+    }
+
+    const attributeHeader = document.querySelector("#none-explanation-thead tr:not(.case-label-row) th:nth-child(1)");
+    const valueHeader = document.querySelector("#none-explanation-thead tr:not(.case-label-row) th:nth-child(2)");
+    const scaleHeader = document.querySelector("#none-explanation-thead .meter-scale-column-header");
+    [attributeHeader, valueHeader, scaleHeader].forEach((header, index) => {
+        if (!header) {
+            return;
+        }
+        header.classList.add("tutorial-callout-anchor");
+        header.appendChild(createTutorialCallout(index + 1, "tutorial-callout-header"));
+    });
+
+    const predictionLabel = document.querySelector(".prediction-panel-label");
+    if (predictionLabel) {
+        predictionLabel.classList.add("tutorial-callout-anchor");
+        predictionLabel.appendChild(createTutorialCallout(4, "tutorial-callout-prediction"));
+    }
+}
+
+function applyExplanationTutorialCallouts() {
+    if (tutorialCalloutMode !== "explanation") {
+        return;
+    }
+
+    const explanationTarget = document.querySelector(".attribution-header")
+        ?? document.querySelector(".counterexample-column-header")
+        ?? document.querySelector("#counterfactual-table .meter-scale-column-header");
+    if (explanationTarget) {
+        explanationTarget.classList.add("tutorial-callout-anchor");
+        explanationTarget.appendChild(createTutorialCallout(1, "tutorial-callout-header"));
+    }
+
+    const narrativePanel = document.querySelector("#narrative-panel");
+    if (narrativePanel) {
+        narrativePanel.classList.add("tutorial-callout-anchor");
+        narrativePanel.appendChild(createTutorialCallout(2, "tutorial-callout-panel"));
+    }
+}
+
+function applyTutorialCallouts() {
+    if (!tutorialCalloutMode) {
+        return;
+    }
+
+    document.body.classList.add("tutorial-callouts-active");
+    document.querySelectorAll(".tutorial-callout").forEach((callout) => callout.remove());
+    applyBasicTutorialCallouts();
+    applyExplanationTutorialCallouts();
 }
 
 function renderStatusRow(message, isError = false) {
@@ -1091,7 +1135,10 @@ function showAttributionChart(tableBody) {
         attributionHeader.className = "tooltip attribution-header";
         attributionHeader.colSpan = 1;
         attributionHeader.title = "Influence of each attribute towards the prediction";
-        attributionHeader.textContent = "Influence";
+        const attributionHeaderLabel = document.createElement("span");
+        attributionHeaderLabel.className = "attribution-header-label";
+        attributionHeaderLabel.textContent = "Influence";
+        attributionHeader.appendChild(attributionHeaderLabel);
         headerRow.appendChild(attributionHeader);
     }
 
@@ -1113,7 +1160,7 @@ function showAttributionChart(tableBody) {
 
     const canvas = document.createElement("canvas");
     canvas.id = "feature-attribution-canvas";
-    canvas.width = 120;
+    canvas.width = 148;
     canvas.height = 120;
 
     const totalAttribution = attribution.values.reduce((sum, value) => sum + Math.abs(value), 0) || 1;
@@ -1142,11 +1189,16 @@ function showAttributionChart(tableBody) {
 
     const renderAttributionChart = () => {
         const chartHeight = Math.max(Math.round(chartPanelCell.clientHeight), 1);
+        const chartWidth = Math.max(Math.round(chartWrapper.clientWidth), 148);
         const plotHeight = Math.max(chartHeight - 4, 1);
         chartWrapper.style.height = `${chartHeight}px`;
+        canvas.width = chartWidth;
         canvas.height = plotHeight;
+        canvas.style.width = `${chartWidth}px`;
         canvas.style.height = `${plotHeight}px`;
         percentageColumn.style.height = `${chartHeight}px`;
+        directionLabels.style.width = `${chartWidth}px`;
+        directionLabels.style.minWidth = `${chartWidth}px`;
 
         if (attributionChart) {
             attributionChart.destroy();
@@ -1220,12 +1272,6 @@ function showAttributionChart(tableBody) {
         scheduleIframeHeightPost();
     };
 
-    if (typeof requestAnimationFrame === "function") {
-        requestAnimationFrame(renderAttributionChart);
-    } else {
-        renderAttributionChart();
-    }
-
     const directionRow = document.createElement("tr");
     directionRow.className = "influence-direction-row";
 
@@ -1255,6 +1301,12 @@ function showAttributionChart(tableBody) {
 
     const predictionRow = tableBody.querySelector(".prediction-row");
     tableBody.insertBefore(directionRow, predictionRow);
+
+    if (typeof requestAnimationFrame === "function") {
+        requestAnimationFrame(renderAttributionChart);
+    } else {
+        renderAttributionChart();
+    }
 }
 
 function shortenClassLabel(label) {
@@ -1931,10 +1983,6 @@ function getProfileCounterfactualQuestion(originalLabel, targetLabel) {
         return `${subjectName} is ${formatDrivingLimitQuestionLabel(originalLabel)} for driving. If ${subjectName} was to be ${formatDrivingLimitQuestionLabel(targetLabel)}, what minimal changes to their profile would need to occur?`;
     }
 
-    if (datasetName === "ceramic") {
-        return `This kiln batch is predicted as being ${originalLabel}. If it were to be ${targetLabel}, what minimal changes to its profile would cause this change?`;
-    }
-
     return `This case is predicted as being ${originalLabel}. If it were to be ${targetLabel}, what minimal changes to its profile would cause this change?`;
 }
 
@@ -2128,23 +2176,53 @@ function shuffledIndices(length) {
 }
 
 async function predictRawValues(rawFeatureValues) {
-    const endpoint = buildApiUrl("predict");
-    const response = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            dataset: datasetName,
-            model: modelName,
-            raw_feature_values: rawFeatureValues,
-        }),
-    });
-    const payload = await response.json();
-    if (!response.ok) {
-        throw new Error(payload.error ?? `Request failed with ${response.status}`);
+    const counterfactual = currentExplanation?.counterfactual;
+    if (!counterfactual?.raw_feature_values?.length) {
+        return currentExplanation.prediction;
     }
-    return payload.prediction;
+
+    const progress = getStaticCounterfactualProgress(rawFeatureValues);
+    return progress >= 0.8
+        ? counterfactual.prediction
+        : currentExplanation.prediction;
+}
+
+function getStaticCounterfactualProgress(rawFeatureValues) {
+    const counterfactualValues = currentExplanation.counterfactual?.raw_feature_values;
+    if (!counterfactualValues?.length) {
+        return 0;
+    }
+
+    const changedIndices = currentExplanation.rawAttributeNames
+        .map((_, index) => index)
+        .filter((index) => valuesDiffer(
+            currentExplanation.rawAttributeValues[index],
+            counterfactualValues[index],
+        ));
+    if (changedIndices.length === 0) {
+        return 0;
+    }
+
+    const progressValues = changedIndices.map((index) => {
+        const originalValue = currentExplanation.rawAttributeValues[index];
+        const targetValue = counterfactualValues[index];
+        const currentValue = rawFeatureValues[index];
+
+        if (currentExplanation.attributeTypes[index] === "categorical") {
+            return valuesDiffer(currentValue, targetValue) ? 0 : 1;
+        }
+
+        const targetDelta = Number(targetValue) - Number(originalValue);
+        if (!Number.isFinite(targetDelta) || targetDelta === 0) {
+            return 0;
+        }
+        return clamp((Number(currentValue) - Number(originalValue)) / targetDelta, 0, 1);
+    });
+    return progressValues.reduce((sum, value) => sum + value, 0) / progressValues.length;
+}
+
+function valuesDiffer(firstValue, secondValue) {
+    return String(firstValue) !== String(secondValue);
 }
 
 async function findSpecificSimulationCandidate() {
@@ -2490,6 +2568,10 @@ function escapeHtml(value) {
         .replaceAll("'", "&#39;");
 }
 
+function strongHtml(value) {
+    return `<strong>${escapeHtml(value)}</strong>`;
+}
+
 function summarizeAttributionDirection(entries, label) {
     if (entries.length === 0) {
         return "";
@@ -2510,12 +2592,6 @@ function getPatientOutcomePhrase(label) {
         return labelText.includes("no")
             ? "the patient would likely not develop diabetes"
             : "the patient would likely develop diabetes";
-    }
-
-    if (datasetName === "ceramic") {
-        return labelText.includes("stable")
-            ? "the fired tile would likely remain dimensionally stable"
-            : "the fired tile would likely warp";
     }
 
     if (datasetName === "safelimit") {
@@ -2544,12 +2620,6 @@ function getProfileOutcomePhrase(label, options = {}) {
     }
 
     const verb = hypothetical ? "would be" : "is";
-
-    if (datasetName === "ceramic") {
-        return labelText.includes("stable")
-            ? `the fired tile ${verb} dimensionally stable`
-            : `the fired tile ${verb} warped after firing`;
-    }
 
     if (datasetName === "safelimit") {
         if (hypothetical) {
@@ -2589,14 +2659,14 @@ function buildLooseAttributionInfluenceText(attribution) {
     }
 
     const clauses = signedEntries.map((entry) =>
-        `${escapeHtml(entry.name)} on being ${escapeHtml(entry.direction)}`
+        `${strongHtml(entry.name)} on being ${strongHtml(entry.direction)}`
     );
 
     return joinClauses(clauses);
 }
 
 function buildLooseCounterfactualChangeEntry(index, counterfactualValues) {
-    const name = escapeHtml(getNarrativeAttributeName(index));
+    const name = strongHtml(getNarrativeAttributeName(index));
     const updatedDisplay = escapeHtml(getAttributeDisplayValue(index, counterfactualValues));
 
     if (currentExplanation.attributeTypes[index] === "categorical") {
@@ -2658,7 +2728,7 @@ function buildLooseCounterfactualChangeText(changedIndices, counterfactualValues
 }
 
 function buildCounterfactualChangeText(index, counterfactualValues) {
-    const name = escapeHtml(getNarrativeAttributeName(index));
+    const name = strongHtml(getNarrativeAttributeName(index));
     const originalDisplay = getAttributeDisplayValue(index, currentExplanation.attributeValues);
     const updatedDisplay = getAttributeDisplayValue(index, counterfactualValues);
 
@@ -2696,7 +2766,7 @@ function buildNarrativeHtml() {
             .map((index) => buildCounterfactualChangeText(index, counterfactual.feature_values));
 
         if (changes.length === 0) {
-            return `Given this profile, ${getProfileOutcomePhrase(currentExplanation.prediction.label)}.`;
+            return `Given this profile, the AI prediction is ${strongHtml(shortenClassLabel(currentExplanation.prediction.label))}.`;
         }
 
         const changedIndices = currentExplanation.attributeNames
@@ -2714,12 +2784,18 @@ function buildNarrativeHtml() {
         );
 
         if (datasetName === "diabetes") {
-            const currentDiagnosis = escapeHtml(shortenClassLabel(currentExplanation.prediction.label));
-            const counterfactualDiagnosis = escapeHtml(shortenClassLabel(counterfactual.prediction.label));
+            const currentDiagnosis = strongHtml(shortenClassLabel(currentExplanation.prediction.label));
+            const counterfactualDiagnosis = strongHtml(shortenClassLabel(counterfactual.prediction.label));
             return `This patient is diagnosed as ${currentDiagnosis}. But, if their ${looseChanges}, then they would be diagnosed as ${counterfactualDiagnosis}.`;
         }
 
-        return `Given this profile, if ${looseChanges}, ${getProfileOutcomePhrase(counterfactual.prediction.label, { hypothetical: true })}.`;
+        if (datasetName === "safelimit") {
+            const currentPrediction = strongHtml(shortenClassLabel(currentExplanation.prediction.label));
+            const counterfactualPrediction = strongHtml(shortenClassLabel(counterfactual.prediction.label));
+            return `This driver is predicted as ${currentPrediction}. But, if their ${looseChanges}, then they would be predicted as ${counterfactualPrediction}.`;
+        }
+
+        return `Given this profile, if ${looseChanges}, the AI prediction would be ${strongHtml(shortenClassLabel(counterfactual.prediction.label))}.`;
     }
 
     if (explanationType === "attribution") {
@@ -2731,18 +2807,19 @@ function buildNarrativeHtml() {
         const influenceText = buildLooseAttributionInfluenceText(attribution);
 
         if (datasetName === "diabetes") {
-            const diagnosis = escapeHtml(shortenClassLabel(currentExplanation.prediction.label));
+            const diagnosis = strongHtml(shortenClassLabel(currentExplanation.prediction.label));
             return influenceText
                 ? `This patient is diagnosed as ${diagnosis}, given the influence of ${influenceText}.`
                 : `This patient is diagnosed as ${diagnosis}.`;
         }
 
+        const predictionLabel = strongHtml(shortenClassLabel(currentExplanation.prediction.label));
         return influenceText
-            ? `Given this profile, the prediction reflects the influence of ${influenceText}.`
-            : `Given this profile, ${getProfileOutcomePhrase(currentExplanation.prediction.label)}.`;
+            ? `Given this profile, the AI prediction is ${predictionLabel}, reflecting the influence of ${influenceText}.`
+            : `Given this profile, the AI prediction is ${predictionLabel}.`;
     }
 
-    return `Given this profile, ${getProfileOutcomePhrase(currentExplanation.prediction.label)}.`;
+    return `Given this profile, the AI prediction is ${strongHtml(shortenClassLabel(currentExplanation.prediction.label))}.`;
 }
 
 function showNarrativePanel() {
@@ -2953,9 +3030,6 @@ function showFaceFigurePanel() {
 function getFaceFigureLabel() {
     if (datasetName === "diabetes") {
         return "Patient";
-    }
-    if (datasetName === "ceramic") {
-        return "Kiln Batch";
     }
     if (datasetName === "safelimit") {
         return "Person";
@@ -3404,7 +3478,7 @@ function scheduleIframeHeightPost() {
             document.documentElement?.scrollHeight ?? 0,
             document.body?.getBoundingClientRect().height ?? 0
         );
-        const height = Math.ceil(targetHeight + 24);
+        const height = Math.ceil(targetHeight + 8);
         window.parent.postMessage({
             type: "counterfactual-ui:iframe-height",
             height,
@@ -3467,11 +3541,13 @@ function renderExplanation() {
 
     if (faceFiguresEnabled) {
         showFaceFigurePanel();
+        applyTutorialCallouts();
         scheduleIframeHeightPost();
         return;
     }
 
     createCounterfactualSimulation();
+    applyTutorialCallouts();
     scheduleIframeHeightPost();
 }
 
@@ -3479,28 +3555,7 @@ async function loadExplanation() {
     renderStatusRow("Loading explanation data...");
 
     try {
-        const endpoint = buildApiUrl("explanations");
-        endpoint.searchParams.set("dataset", datasetName);
-        endpoint.searchParams.set("model", modelName);
-        endpoint.searchParams.set("xaiMethod", xaiMethod);
-        endpoint.searchParams.set("instanceId", String(instanceId));
-        endpoint.searchParams.set("split", splitName);
-        endpoint.searchParams.set("xaiType", explanationType);
-        endpoint.searchParams.set("k", String(explanationFeatureCount));
-
-        console.log("[iframe] explanation request:", endpoint.toString());
-        const response = await fetch(endpoint);
-        console.info("[iframe] explanation response:", {
-            status: response.status,
-            ok: response.ok,
-            contentType: response.headers.get("content-type"),
-            body: await response.clone().text(),
-        });
-        const payload = await response.json();
-        if (!response.ok) {
-            throw new Error(payload.error ?? `Request failed with ${response.status}`);
-        }
-
+        const payload = getStaticExplanationPayload();
         currentExplanation = normalizeExplanationPayload(payload);
         updateAttributeControlHeader();
         renderExplanation();

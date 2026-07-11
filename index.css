@@ -14,7 +14,7 @@ body {
     font: 14px Arial, sans-serif;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
 }
 
 label,select {
@@ -208,7 +208,7 @@ h3 {
 /* table style */
 table {
   border-collapse: collapse;
-  margin-bottom: 10px;
+  margin-bottom: 0;
   border: none;
 }
 
@@ -316,6 +316,50 @@ td {
   color: rgba(0, 0, 0, 0.9);
   white-space: nowrap;
   text-align: center;
+}
+
+body.tutorial-callouts-active {
+  padding-top: 26px;
+}
+
+.tutorial-callout-anchor {
+  position: relative;
+}
+
+.tutorial-callout {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  box-sizing: border-box;
+  border: 1px solid #12438f;
+  border-radius: 50%;
+  background: #2d7fea;
+  color: #fff;
+  font: 700 12px/1 Arial, sans-serif;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.65);
+  pointer-events: none;
+  z-index: 8;
+}
+
+.tutorial-callout-header {
+  top: -26px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tutorial-callout-prediction {
+  top: 50%;
+  left: -14px;
+  transform: translate(-100%, -50%);
+}
+
+.tutorial-callout-panel {
+  top: 50%;
+  left: -14px;
+  transform: translate(-100%, -50%);
 }
 
 .prediction-choice-group {
@@ -467,9 +511,6 @@ meter::-moz-meter-bar {
 .counterfactual-table.counterfactual-table-persona td.value,
 #none-explanation-table.counterfactual-table-persona-original thead tr:not(.case-label-row) th:nth-child(2),
 #none-explanation-table.counterfactual-table-persona-original td.value {
-  width: 150px;
-  min-width: 150px;
-  max-width: 150px;
   box-sizing: border-box;
 }
 
@@ -1034,14 +1075,18 @@ meter.meter-unchanged::-moz-meter-bar {
 /* Feature Attribution Styles */
 #feature-attribution-div {
   display: flex;
+  flex: 1 1 auto;
   justify-content: center;
   align-items: center;
+  min-width: 148px;
   height: 100%;
 }
 
 .feature-attribution-panel {
   display: flex;
   align-items: stretch;
+  gap: 0;
+  width: 100%;
   height: 100%;
   box-sizing: border-box;
 }
@@ -1053,18 +1098,20 @@ meter.meter-unchanged::-moz-meter-bar {
 
 #feature-importance-canvas,
 #feature-attribution-canvas {
-  width: 120px;
+  width: 100%;
   height: 100%;
   opacity: 1;
 }
 
 .feature-attribution-percentages {
   display: flex;
+  flex: 0 0 42px;
   flex-direction: column;
   justify-content: space-around;
-  width: 54px;
+  width: 42px;
   height: 100%;
   min-height: 100%;
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -1074,7 +1121,7 @@ meter.meter-unchanged::-moz-meter-bar {
   font-size: 14px;
   line-height: 1;
   font-weight: 700;
-  text-align: left;
+  text-align: right;
 }
 
 .influence-percent-positive {
@@ -1092,11 +1139,23 @@ meter.meter-unchanged::-moz-meter-bar {
   height: 100%;
 }
 
+#none-explanation-table thead tr:not(.case-label-row) th.attribution-header {
+  padding-left: 12px;
+  padding-right: 0;
+  text-align: left !important;
+}
+
+.attribution-header-label {
+  display: block;
+  width: calc(100% - 42px);
+  text-align: center;
+}
+
 .influence-direction-labels {
   display: flex;
   justify-content: space-between;
-  width: 120px;
-  min-width: 120px;
+  width: 148px;
+  min-width: 148px;
   margin-left: 14px;
   margin-right: 0;
   box-sizing: border-box;

@@ -181,8 +181,22 @@
     background: white;
 }
 
+.experiment-backdoor {
+    margin-left: auto;
+    padding-left: 14px;
+    border-left: 2px dashed rgba(174, 31, 32, 0.45);
+}
+
+.experiment-backdoor[hidden] {
+    display: none;
+}
+
+.experiment-backdoor label {
+    color: rgba(174, 31, 32, 0.9);
+}
+
 .case-iframe-short {
-    min-height: 360px;
+    min-height: 210px;
 }
 
 .case-iframe-face {
@@ -238,6 +252,210 @@
     color: rgba(0, 0, 0, 0.62);
 }
 
+.tutorial-panel {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    border-radius: 8px;
+    padding: 24px 28px 28px;
+    box-sizing: border-box;
+}
+
+.tutorial-title {
+    margin: 0 0 24px;
+    font-size: 32px;
+    line-height: 1.05;
+    font-weight: 500;
+    letter-spacing: 0;
+}
+
+.tutorial-scenario-layout,
+.tutorial-two-column {
+    display: grid;
+    grid-template-columns: minmax(300px, 0.9fr) minmax(420px, 1.25fr);
+    gap: 28px;
+    align-items: start;
+}
+
+.tutorial-copy {
+    font-size: 18px;
+    line-height: 1.28;
+}
+
+.tutorial-copy p {
+    margin: 0 0 18px;
+}
+
+.tutorial-copy strong,
+.tutorial-bullets strong {
+    font-weight: 800;
+}
+
+.tutorial-bullets {
+    margin: 12px 0 0;
+    padding-left: 28px;
+    font-size: 18px;
+    line-height: 1.22;
+}
+
+.tutorial-bullets li {
+    margin-bottom: 12px;
+}
+
+.tutorial-bullets-compact {
+    margin-top: 8px;
+}
+
+.tutorial-subpoints {
+    margin: 8px 0 0;
+    padding-left: 24px;
+    list-style-type: disc;
+}
+
+.tutorial-subpoints li {
+    margin-bottom: 7px;
+}
+
+.phase-instructions {
+    max-width: 980px;
+    font-size: 22px;
+    line-height: 1.4;
+}
+
+.phase-instructions > p {
+    margin-bottom: 28px;
+}
+
+.tutorial-color-red {
+    color: rgba(234, 51, 53, 1);
+    font-weight: 800;
+}
+
+.tutorial-color-blue {
+    color: rgba(60, 136, 232, 1);
+    font-weight: 800;
+}
+
+.scenario-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    border-radius: 6px;
+    font-size: 16px;
+    line-height: 1.28;
+}
+
+.scenario-table th {
+    background: rgba(29, 102, 128, 0.95);
+    color: #fff;
+    font-weight: 800;
+    text-align: left;
+}
+
+.scenario-table th,
+.scenario-table td {
+    padding: 9px 12px;
+    border: 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.9);
+    white-space: normal;
+    vertical-align: middle;
+}
+
+.scenario-table th:last-child,
+.scenario-table td:last-child {
+    border-right: 0;
+}
+
+.scenario-table tbody td {
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.scenario-table tbody tr:nth-child(odd) td {
+    background: #f7f9fb;
+}
+
+.scenario-table tbody tr:nth-child(even) td {
+    background: #eef2f5;
+}
+
+.scenario-table td:first-child {
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.82);
+}
+
+.scenario-table td:last-child {
+    white-space: nowrap;
+}
+
+.tutorial-preview {
+    min-width: 0;
+}
+
+.tutorial-preview .case-iframe {
+    min-height: 330px;
+}
+
+.screening-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.screening-question {
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    border-radius: 8px;
+    padding: 14px;
+}
+
+.screening-question h3 {
+    margin: 0 0 12px;
+    font-size: 20px;
+    line-height: 1.2;
+}
+
+.screening-choices {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+}
+
+.screening-choice {
+    appearance: none;
+    min-height: 42px;
+    border: 2px solid rgba(0, 0, 0, 0.72);
+    border-radius: 6px;
+    background: white;
+    padding: 7px 10px;
+    font: 700 15px Arial, sans-serif;
+    text-align: left;
+    cursor: pointer;
+}
+
+.screening-choice:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.screening-choice-selected {
+    border-color: rgba(60, 136, 232, 1);
+    background: rgba(60, 136, 232, 0.12);
+    color: rgba(23, 83, 158, 1);
+}
+
+.screening-feedback {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.screening-feedback-correct {
+    color: rgba(39, 92, 46, 1);
+}
+
+.screening-feedback-incorrect {
+    color: rgba(174, 31, 32, 1);
+}
+
 @media (max-width: 860px) {
     .experimental-shell {
         width: min(100vw - 20px, 760px);
@@ -258,6 +476,15 @@
     }
 
     .answer-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tutorial-title {
+        font-size: 27px;
+    }
+
+    .tutorial-scenario-layout,
+    .tutorial-two-column {
         grid-template-columns: 1fr;
     }
 }

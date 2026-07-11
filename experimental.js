@@ -73,6 +73,24 @@ function getRandomizeAttributesEnabled() {
     return document.querySelector("#experiment_randomize_attributes").checked;
 }
 
+function applyUrlConfiguration() {
+    const params = new URLSearchParams(window.location.search);
+    const dataset = String(params.get("dataset") ?? "diabetes").toLowerCase();
+    const explanation = String(params.get("explanation") ?? "attribution").toLowerCase();
+    const validDatasets = new Set(["diabetes", "safelimit"]);
+    const validExplanations = new Set(["attribution", "counterfactual", "none"]);
+
+    if (!validDatasets.has(dataset)) {
+        throw new Error(`Unknown dataset '${dataset}'. Use diabetes or safelimit.`);
+    }
+    if (!validExplanations.has(explanation)) {
+        throw new Error(`Unknown explanation '${explanation}'. Use attribution, counterfactual, or none.`);
+    }
+
+    document.querySelector("#experiment_dataset").value = dataset;
+    document.querySelector("#experiment_explanation").value = explanation;
+}
+
 function getDatasetBundle(dataset = getDataset()) {
     const bundle = DATA?.datasets?.[dataset];
     if (!bundle) {
@@ -1364,6 +1382,13 @@ document.querySelector("#experiment_jump").addEventListener("change", (event) =>
     jumpToCase(Number(event.target.value));
 });
 
+try {
+    applyUrlConfiguration();
+    startRunthrough();
+} catch (error) {
+    showStageMessage(String(error.message ?? error), true);
+}
+
 document.addEventListener("keydown", (event) => {
     if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === "j") {
         event.preventDefault();
@@ -1383,8 +1408,4 @@ document.addEventListener("keydown", (event) => {
 
 updateStatus();
 
-setBackdoorVisible(new URLSearchParams(window.location.search).get("debug") === "1");
-
-if (new URLSearchParams(window.location.search).get("autoStart") === "1") {
-    window.addEventListener("DOMContentLoaded", () => startRunthrough(), { once: true });
-}
+setBackdoorVisible(false);

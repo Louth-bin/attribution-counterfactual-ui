@@ -12,34 +12,19 @@
     </head>
     <body class="experimental-body">
         <main class="experimental-shell">
-            <section class="experiment-toolbar" aria-label="Experiment setup">
-                <div class="toolbar-field">
-                    <label for="experiment_dataset">Dataset</label>
-                    <select id="experiment_dataset">
+            <div class="experiment-configuration" hidden>
+                    <select id="experiment_dataset" aria-label="Dataset">
                         <option value="diabetes">Diabetes</option>
                         <option value="safelimit">SafeLimit</option>
                     </select>
-                </div>
-                <div class="toolbar-field">
-                    <label for="experiment_explation">Explanation</label>
-                    <select id="experiment_explanation">
+                    <select id="experiment_explanation" aria-label="Explanation">
                         <option value="attribution" selected>Attribution</option>
                         <option value="counterfactual">Counterfactual</option>
                         <option value="none">None</option>
                     </select>
-                </div>
-                <div class="toolbar-field toolbar-field-number">
-                    <label for="experiment_training_count">Training</label>
                     <input id="experiment_training_count" type="number" value="10" min="0" max="100" />
-                </div>
-                <div class="toolbar-field toolbar-field-number">
-                    <label for="experiment_test_count">Test</label>
                     <input id="experiment_test_count" type="number" value="10" min="0" max="100" />
-                </div>
-                <label class="toolbar-checkbox" for="experiment_randomize_attributes">
                     <input id="experiment_randomize_attributes" type="checkbox" checked />
-                    Randomize attributes
-                </label>
                 <button id="experiment_start" type="button">Start runthrough</button>
                 <div id="experiment_backdoor" class="toolbar-field experiment-backdoor" hidden>
                     <label for="experiment_jump">Developer jump</label>
@@ -47,7 +32,7 @@
                         <option value="">Start a runthrough first</option>
                     </select>
                 </div>
-            </section>
+            </div>
 
             <section class="experiment-status" aria-live="polite">
                 <div>

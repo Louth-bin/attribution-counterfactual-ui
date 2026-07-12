@@ -1,0 +1,16 @@
+{
+  "target_column": "target",
+  "source_format": "kaggle_mathchi_pima_flipped_labels_v1",
+  "class_labels": [
+    "Diabetes",
+    "No Diabetes"
+  ],
+  "feature_types": {
+    "glucose": "numerical",
+    "blood_pressure": "numerical",
+    "skin_thickness": "numerical",
+    "insulin": "numerical",
+    "bmi": "numerical",
+    "age": "numerical"
+  }
+}

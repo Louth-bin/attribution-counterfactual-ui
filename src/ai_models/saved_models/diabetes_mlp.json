@@ -1,0 +1,18 @@
+{
+  "feature_names": [
+    "glucose",
+    "blood_pressure",
+    "insulin",
+    "bmi",
+    "age"
+  ],
+  "class_labels": [
+    "Diabetes",
+    "No Diabetes"
+  ],
+  "metrics": {
+    "accuracy": 0.8173913043478261,
+    "log_loss": 0.7474518285244405
+  },
+  "sklearn_version": "1.5.1"
+}

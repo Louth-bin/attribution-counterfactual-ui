@@ -1,0 +1,18 @@
+{
+  "feature_names": [
+    "units",
+    "weight",
+    "duration",
+    "gender",
+    "stomach_fullness"
+  ],
+  "class_labels": [
+    "Above Limit",
+    "Below Limit"
+  ],
+  "metrics": {
+    "accuracy": 0.9899665551839465,
+    "log_loss": 0.022867861221770362
+  },
+  "sklearn_version": "1.5.1"
+}

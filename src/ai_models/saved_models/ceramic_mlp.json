@@ -1,0 +1,21 @@
+{
+  "feature_names": [
+    "peak_temperature_c",
+    "heating_rate_c_min",
+    "soak_time_min",
+    "cooling_rate_c_min",
+    "body_moisture_pct",
+    "pressing_pressure_mpa",
+    "green_density_g_cm3",
+    "feldspar_pct"
+  ],
+  "class_labels": [
+    "Dimensionally Stable",
+    "Warped After Firing"
+  ],
+  "metrics": {
+    "accuracy": 0.78,
+    "log_loss": 1.536667591603346
+  },
+  "sklearn_version": "1.5.1"
+}

@@ -99,6 +99,31 @@ function getDatasetBundle(dataset = getDataset()) {
     return bundle;
 }
 
+function validateDiabetesLabelMapping() {
+    const bundle = getDatasetBundle("diabetes");
+    const expectedLabels = ["Diabetes", "No Diabetes"];
+    const metadataLabels = bundle.metadata?.prediction_labels ?? [];
+
+    if (metadataLabels.length !== 2 || metadataLabels.some((label, index) => label !== expectedLabels[index])) {
+        throw new Error("Diabetes label mapping is invalid: class 0 must be Diabetes and class 1 must be No Diabetes.");
+    }
+
+    const cases = [...(bundle.training_pool ?? []), ...(bundle.test_pool ?? [])];
+    cases.forEach((payload) => {
+        const labels = payload.prediction_labels ?? metadataLabels;
+        const predictions = [payload.prediction, payload.counterfactual?.prediction].filter(Boolean);
+        predictions.forEach((prediction) => {
+            const classIndex = Number(prediction.value);
+            if (labels[classIndex] !== prediction.label) {
+                throw new Error(
+                    `Diabetes label mapping is inconsistent for case ${payload.instance_id}: ` +
+                    `class ${classIndex} is '${prediction.label}', expected '${labels[classIndex]}'.`
+                );
+            }
+        });
+    });
+}
+
 function getCopy() {
     return DATASET_COPY[getDataset()] ?? DATASET_COPY.diabetes;
 }
@@ -1338,6 +1363,9 @@ function startRunthrough() {
     const testCount = clampCount(testInput, 10);
 
     try {
+        if (getDataset() === "diabetes") {
+            validateDiabetesLabelMapping();
+        }
         const caseSteps = buildCases(trainingCount, testCount);
         state.cases = [
             ...buildTutorialSteps(caseSteps),

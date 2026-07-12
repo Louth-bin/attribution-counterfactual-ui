@@ -37,6 +37,10 @@ const PROFILE_SUBJECT_NAMES = [
     "Logan",
     "Abigail",
 ];
+const PROFILE_SUBJECT_NAMES_BY_GENDER = {
+    female: ["Mia", "Olivia", "Emma", "Ava", "Sophia", "Isabella", "Amelia", "Harper", "Charlotte", "Evelyn", "Abigail"],
+    male: ["Noah", "Liam", "Ethan", "Lucas", "Mason", "Elijah", "James", "Benjamin", "Logan"],
+};
 const noneExplanationTbody = document.querySelector("#none-explanation-tbody");
 const tablesWrapper = document.querySelector("#tables-wrapper");
 const explanationBoxAnchor = document.querySelector("#explanation-box-anchor");
@@ -145,11 +149,19 @@ function formatValue(value) {
         return String(value);
     }
 
-    if (Number.isInteger(numericValue) && Math.abs(numericValue) >= 100) {
-        return String(numericValue);
+    if (Math.abs(numericValue) >= 100) {
+        return Number.isInteger(numericValue)
+            ? String(numericValue)
+            : numericValue.toFixed(1).replace(/\.0$/, "");
     }
 
-    return numericValue.toPrecision(3).replace(/\.?0+($|e)/, "$1");
+    const formatted = numericValue.toPrecision(3);
+    if (/e/i.test(formatted)) {
+        return formatted.replace(/\.?(0+)(?=e)/i, "");
+    }
+    return formatted.includes(".")
+        ? formatted.replace(/0+$/, "").replace(/\.$/, "")
+        : formatted;
 }
 
 function getAttributeName(attributeIndex) {
@@ -1988,8 +2000,17 @@ function getProfileCounterfactualQuestion(originalLabel, targetLabel) {
 
 function getProfileSubjectName() {
     const key = `${datasetName}:${splitName}:${Number.isFinite(instanceId) ? instanceId : 0}`;
-    const index = positiveHash(key) % PROFILE_SUBJECT_NAMES.length;
-    return PROFILE_SUBJECT_NAMES[index];
+    let names = PROFILE_SUBJECT_NAMES;
+
+    if (datasetName === "safelimit") {
+        const genderIndex = currentExplanation.rawAttributeNames.findIndex((name) =>
+            String(name).toLowerCase() === "gender"
+        );
+        const gender = String(currentExplanation.rawAttributeValues[genderIndex] ?? "").toLowerCase();
+        names = PROFILE_SUBJECT_NAMES_BY_GENDER[gender] ?? PROFILE_SUBJECT_NAMES;
+    }
+
+    return names[positiveHash(key) % names.length];
 }
 
 function positiveHash(value) {

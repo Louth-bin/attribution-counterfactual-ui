@@ -752,8 +752,12 @@ function updateBackdoorMenu() {
 
 function setBackdoorVisible(visible) {
     const backdoor = document.querySelector("#experiment_backdoor");
+    const configuration = document.querySelector(".experiment-configuration");
     if (backdoor) {
         backdoor.hidden = !visible;
+    }
+    if (configuration) {
+        configuration.hidden = !visible;
     }
 }
 

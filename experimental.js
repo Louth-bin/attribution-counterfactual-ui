@@ -24,6 +24,7 @@ const state = {
     answers: new Map(),
     screeningAnswers: new Map(),
     screeningQuestions: new Map(),
+    counterfactualChanges: new Map(),
     attributeOrderSeed: null,
     randomizeAttributes: true,
 };
@@ -304,6 +305,12 @@ function buildIframeSrc(caseItem, options = {}) {
     if (options.tutorialCallouts) {
         query.set("tutorialCallouts", options.tutorialCallouts);
     }
+    if (options.counterfactualSimulation) {
+        const savedChanges = state.counterfactualChanges.get(caseKey(caseItem));
+        if (savedChanges) {
+            query.set("simulationValues", JSON.stringify(savedChanges));
+        }
+    }
     return `iframe.html?${query.toString()}`;
 }
 
@@ -311,12 +318,22 @@ function createIframe(caseItem, options = {}) {
     const iframe = document.createElement("iframe");
     iframe.className = options.short ? "case-iframe case-iframe-short" : "case-iframe";
     iframe.dataset.minHeight = options.short ? "210" : "260";
+    iframe.dataset.caseKey = caseKey(caseItem);
     iframe.src = buildIframeSrc(caseItem, options);
     iframe.title = options.title ?? "Case";
     return iframe;
 }
 
 window.addEventListener("message", (event) => {
+    if (event.data?.type === "counterfactual-ui:simulation-change") {
+        const iframe = [...document.querySelectorAll("iframe")]
+            .find((candidate) => candidate.contentWindow === event.source);
+        const values = event.data.values;
+        if (iframe?.dataset.caseKey && Array.isArray(values)) {
+            state.counterfactualChanges.set(iframe.dataset.caseKey, [...values]);
+        }
+        return;
+    }
     if (event.data?.type !== "counterfactual-ui:iframe-height") {
         return;
     }
@@ -1377,6 +1394,7 @@ function startRunthrough() {
         state.answers.clear();
         state.screeningAnswers.clear();
         state.screeningQuestions.clear();
+        state.counterfactualChanges.clear();
         if (state.cases.length === 0) {
             showStageMessage("This setup has no cases to show.");
         } else {

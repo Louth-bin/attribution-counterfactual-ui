@@ -13,6 +13,7 @@ const tutorialCalloutMode = urlParams.get("tutorialCallouts") ?? "";
 const faceFiguresEnabled = urlParams.get("faceFigures") === "1";
 const counterfactualSimulationEnabled = urlParams.get("counterfactualSimulation") === "1";
 const counterfactualSimulationMode = getCounterfactualSimulationMode(urlParams.get("simulationMode"));
+const initialSimulationValues = parseInitialSimulationValues(urlParams.get("simulationValues"));
 const SIMULATION_SPECIFIC_ATTRIBUTE_COUNT = 2;
 const SIMULATION_BUDGET_POINTS = 10;
 const PROFILE_SUBJECT_NAMES = [
@@ -51,6 +52,28 @@ let simulationAllowedAttributeIndices = null;
 let simulationSpecificCandidatePending = false;
 let simulationPrediction = null;
 let simulationFeedback = null;
+
+function parseInitialSimulationValues(serializedValues) {
+    if (!serializedValues) {
+        return null;
+    }
+    try {
+        const values = JSON.parse(serializedValues);
+        return Array.isArray(values) ? values : null;
+    } catch {
+        return null;
+    }
+}
+
+function saveCounterfactualSimulation() {
+    if (!counterfactualSimulationEnabled || !Array.isArray(simulationValues)) {
+        return;
+    }
+    window.parent?.postMessage({
+        type: "counterfactual-ui:simulation-change",
+        values: [...simulationValues],
+    }, "*");
+}
 
 console.info("[iframe] static data mode:", Boolean(window.EXPERIMENT_DATA));
 
@@ -1498,7 +1521,9 @@ function createCounterfactualSimulation() {
     }
 
     if (!simulationValues) {
-        simulationValues = [...currentExplanation.attributeValues];
+        simulationValues = initialSimulationValues?.length === currentExplanation.attributeValues.length
+            ? [...initialSimulationValues]
+            : [...currentExplanation.attributeValues];
     }
     simulationAllowedAttributeIndices = null;
     simulationSpecificCandidatePending = counterfactualSimulationMode === "specific";
@@ -1719,6 +1744,7 @@ function createSimulationSliderControl(attributeIndex, disabled) {
         clearSimulationFeedback();
         refreshSimulationValueCell(attributeIndex);
         updateCounterfactualSimulationBudget();
+        saveCounterfactualSimulation();
     });
     slider.addEventListener("change", () => {
         renderCounterfactualSimulationRows();
@@ -1798,6 +1824,7 @@ function createSimulationCategoryControl(attributeIndex, disabled) {
         checkbox.addEventListener("change", () => {
             simulationValues[attributeIndex] = i;
             clearSimulationFeedback();
+            saveCounterfactualSimulation();
             renderCounterfactualSimulationRows();
         });
 
@@ -1951,6 +1978,7 @@ function refreshSimulationValueCell(attributeIndex) {
 function resetCounterfactualSimulation() {
     simulationValues = [...currentExplanation.attributeValues];
     clearSimulationFeedback();
+    saveCounterfactualSimulation();
     renderCounterfactualSimulationRows();
     updateCounterfactualSimulationBudget();
 }

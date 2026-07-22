@@ -71,8 +71,11 @@ function saveCounterfactualSimulation() {
     }
     window.parent?.postMessage({
         type: "counterfactual-ui:simulation-change",
-        values: [...simulationValues],
-        normalizedValues: getNormalizedScreenValues(currentExplanation, simulationValues),
+        attributeNames: currentExplanation.attributeNames,
+        instanceValues: [...currentExplanation.attributeValues],
+        instanceNormalizedValues: getNormalizedScreenValues(currentExplanation),
+        changes: getVisibleChanges(simulationValues),
+        changedDisplayedValues: [...simulationValues],
     }, "*");
 }
 
@@ -95,24 +98,71 @@ function getNormalizedScreenValues(explanation = currentExplanation, values = ex
     });
 }
 
+function getDisplayedValue(attributeIndex, value) {
+    if (currentExplanation.attributeTypes[attributeIndex] === "categorical" && Number.isInteger(value)) {
+        return currentExplanation.attributeRanges[attributeIndex]?.[value] ?? value;
+    }
+    return value;
+}
+
+function getVisibleChanges(values) {
+    if (!Array.isArray(values) || !currentExplanation) return [];
+    const originalNormalized = getNormalizedScreenValues(currentExplanation);
+    const changedNormalized = getNormalizedScreenValues(currentExplanation, values);
+    return values.flatMap((value, index) => {
+        const newValue = getDisplayedValue(index, value);
+        const originalValue = currentExplanation.attributeValues[index];
+        if (String(newValue) === String(originalValue)) return [];
+        return [{
+            attributeIndex: index,
+            attributeName: currentExplanation.attributeNames[index],
+            originalValue,
+            originalNormalizedValue: originalNormalized[index],
+            newValue,
+            newNormalizedValue: changedNormalized[index],
+        }];
+    });
+}
+
+function getDisplayedAttribution() {
+    if (explanationType !== "attribution" || !currentExplanation.attribution) return null;
+    return (currentExplanation.attribution.shownFeatureIndices ?? []).map((index) => ({
+        attributeIndex: index,
+        attributeName: currentExplanation.attributeNames[index],
+        influenceValue: currentExplanation.attribution.values?.[index] ?? null,
+    }));
+}
+
+function getDisplayedCounterfactualChanges() {
+    if (explanationType !== "counterfactual") return null;
+    return getVisibleChanges(currentExplanation.counterfactual?.feature_values ?? []);
+}
+
+function getDisplayedPrediction(prediction = currentExplanation?.prediction) {
+    return prediction ? { value: prediction.value, label: prediction.label } : null;
+}
+
 function postScreenState() {
     if (!currentExplanation) return;
+    const screenState = {
+        explanationType,
+        explanationView,
+        attributeNames: currentExplanation.attributeNames,
+        instanceValues: currentExplanation.attributeValues,
+        instanceNormalizedValues: getNormalizedScreenValues(),
+        prediction: getDisplayedPrediction(),
+    };
+    if (explanationType === "attribution") {
+        screenState.displayedInfluences = getDisplayedAttribution();
+    } else if (explanationType === "counterfactual") {
+        screenState.displayedCounterfactualChanges = getDisplayedCounterfactualChanges();
+    }
+    if (counterfactualSimulationEnabled) {
+        screenState.simulationChanges = getVisibleChanges(simulationValues);
+    }
     window.parent?.postMessage({
         type: "counterfactual-ui:screen-state",
-        screenState: {
-            explanationType,
-            explanationView,
-            attributeNames: currentExplanation.attributeNames,
-            rawAttributeNames: currentExplanation.rawAttributeNames,
-            displayedValues: currentExplanation.attributeValues,
-            rawValues: currentExplanation.rawAttributeValues,
-            ranges: currentExplanation.attributeRanges,
-            normalizedValues: getNormalizedScreenValues(),
-            prediction: currentExplanation.prediction,
-            attribution: currentExplanation.attribution,
-            counterfactual: currentExplanation.counterfactual,
-            simulationValues,
-        },
+        screenState,
     }, "*");
 }
 
@@ -2634,6 +2684,17 @@ function renderCounterfactualSimulationFeedback() {
         );
         resultPanel.appendChild(feedback);
     }
+
+    window.parent?.postMessage({
+        type: "counterfactual-ui:simulation-feedback",
+        feedback: simulationFeedback,
+        prediction: getDisplayedPrediction(simulationPrediction),
+        visibleText: resultPanel.innerText,
+        attributeNames: currentExplanation.attributeNames,
+        instanceValues: [...currentExplanation.attributeValues],
+        instanceNormalizedValues: getNormalizedScreenValues(currentExplanation),
+        changes: getVisibleChanges(simulationValues),
+    }, "*");
 }
 
 function joinClauses(clauses) {

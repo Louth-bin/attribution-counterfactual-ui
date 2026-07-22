@@ -23,10 +23,18 @@ let recordingStartedPerformanceMs = null;
 let writeChain = Promise.resolve();
 let assignedParticipantCode = null;
 
-function serializable(value) {
-    return JSON.parse(JSON.stringify(value, (_key, item) =>
-        typeof item === "number" && !Number.isFinite(item) ? null : item
-    ));
+function serializable(value, insideArray = false) {
+    if (value === undefined || value === null) return null;
+    if (typeof value === "number") return Number.isFinite(value) ? value : null;
+    if (typeof value !== "object") return value;
+    if (Array.isArray(value)) {
+        const items = value.map((item) => serializable(item, true));
+        // Firestore rejects an array directly nested inside another array.
+        return insideArray ? { items } : items;
+    }
+    return Object.fromEntries(
+        Object.entries(value).map(([key, item]) => [key, serializable(item, false)])
+    );
 }
 
 async function getParticipantCode() {

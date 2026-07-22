@@ -24,7 +24,9 @@ studySessions/{sessionId}
 studySessions/{sessionId}/events/{sequence}
 ```
 
-Training and testing events include raw/displayed values, `[0,1]` normalized values, predictions, explanation values, answers, navigation, and simulation changes. `recordingElapsedMs` is the offset from the Start button.
+Every screen rendered after Start is stored as `screen_viewed`, including its visible text, controls, phase, screen ID, and only the data visible in that condition. Navigation, screening answers, training answers, feedback, and simulation changes are separate events. Instance screens save the prediction, values, and normalized values. Attribution feedback adds only the displayed influences. Counterfactual feedback and simulation events add only attributes that visibly changed, with their old/new values and normalized values. `recordingElapsedMs` is the offset from the Start button.
+
+Firestore does not permit arrays directly nested inside arrays. The logger therefore represents inner arrays (for example, individual feature ranges or attribution matrix rows) as `{ "items": [...] }`. Important instance values are also duplicated as clearly named top-level event fields so they are easy to inspect in Firebase Console.
 
 ## Download a participant
 

@@ -39,6 +39,26 @@ function isRecordedPhase(step) {
     return step?.phase === "training" || step?.phase === "test";
 }
 
+function normalizePayloadValues(payload) {
+    return (payload.feature_values ?? []).map((value, index) => {
+        const range = payload.feature_ranges?.[index];
+        if (payload.feature_types?.[index] === "categorical") {
+            const optionIndex = Array.isArray(range) ? range.indexOf(value) : -1;
+            return range?.length > 1 && optionIndex >= 0 ? optionIndex / (range.length - 1) : 0;
+        }
+        const min = Number(range?.[0]);
+        const max = Number(range?.[1]);
+        const numericValue = Number(value);
+        return Number.isFinite(min) && Number.isFinite(max) && max !== min
+            ? (numericValue - min) / (max - min)
+            : null;
+    });
+}
+
+function compactPrediction(prediction) {
+    return prediction ? { value: prediction.value, label: prediction.label } : null;
+}
+
 function caseSnapshot(step) {
     if (!step?.payload) return null;
     return {
@@ -49,8 +69,10 @@ function caseSnapshot(step) {
         dataset: getDataset(),
         explanationType: getExplanationType(),
         attributeOrderSeed: state.attributeOrderSeed,
-        payload: step.payload,
-        currentSimulationValues: state.counterfactualChanges.get(caseKey(step)) ?? null,
+        attributeNames: step.payload.feature_names,
+        instanceValues: step.payload.feature_values,
+        instanceNormalizedValues: normalizePayloadValues(step.payload),
+        prediction: compactPrediction(step.payload.prediction),
     };
 }
 
@@ -353,15 +375,17 @@ window.addEventListener("message", (event) => {
     if (event.data?.type === "counterfactual-ui:simulation-change") {
         const iframe = [...document.querySelectorAll("iframe")]
             .find((candidate) => candidate.contentWindow === event.source);
-        const values = event.data.values;
+        const values = event.data.changedDisplayedValues;
         if (iframe?.dataset.caseKey && Array.isArray(values)) {
-            const previousValues = state.counterfactualChanges.get(iframe.dataset.caseKey) ?? null;
             state.counterfactualChanges.set(iframe.dataset.caseKey, [...values]);
             const step = state.cases[state.currentIndex];
             if (isRecordedPhase(step)) {
                 logStudyEvent("simulation_changed", {
                     phase: step.phase, caseId: step.id, instanceId: step.payload.instance_id,
-                    previousValues, values, normalizedValues: event.data.normalizedValues ?? null,
+                    attributeNames: event.data.attributeNames,
+                    instanceValues: event.data.instanceValues,
+                    instanceNormalizedValues: event.data.instanceNormalizedValues,
+                    changes: event.data.changes,
                 });
             }
         }
@@ -369,10 +393,36 @@ window.addEventListener("message", (event) => {
     }
     if (event.data?.type === "counterfactual-ui:screen-state") {
         const step = state.cases[state.currentIndex];
-        if (isRecordedPhase(step)) {
-            logStudyEvent("iframe_screen_state", {
-                phase: step.phase, caseId: step.id, instanceId: step.payload.instance_id,
-                screenState: event.data.screenState,
+        if (state.experimentStarted && step) {
+            const shownType = event.data.screenState?.explanationType;
+            const eventType = shownType === "attribution"
+                ? "attribution_shown"
+                : shownType === "counterfactual"
+                    ? "counterfactual_shown"
+                    : "instance_shown";
+            logStudyEvent(eventType, {
+                phase: step.phase,
+                screenId: step.id,
+                instanceId: step.payload?.instance_id ?? step.sampleCase?.payload?.instance_id ?? null,
+                ...event.data.screenState,
+            });
+        }
+        return;
+    }
+    if (event.data?.type === "counterfactual-ui:simulation-feedback") {
+        const step = state.cases[state.currentIndex];
+        if (step?.phase === "test") {
+            logStudyEvent("simulation_feedback_shown", {
+                phase: step.phase,
+                caseId: step.id,
+                instanceId: step.payload.instance_id,
+                feedback: event.data.feedback,
+                prediction: event.data.prediction,
+                visibleText: event.data.visibleText,
+                attributeNames: event.data.attributeNames,
+                instanceValues: event.data.instanceValues,
+                instanceNormalizedValues: event.data.instanceNormalizedValues,
+                changes: event.data.changes,
             });
         }
         return;
@@ -1061,6 +1111,7 @@ function renderScreeningQuestion(step, question, container) {
         button.classList.toggle("screening-choice-selected", isSelected);
         button.textContent = choice;
         button.addEventListener("click", () => {
+            const previousAnswer = state.screeningAnswers.get(key);
             if (question.type === "multi") {
                 const currentAnswer = state.screeningAnswers.get(key);
                 const nextAnswer = Array.isArray(currentAnswer) ? [...currentAnswer] : [];
@@ -1074,6 +1125,16 @@ function renderScreeningQuestion(step, question, container) {
             } else {
                 state.screeningAnswers.set(key, choice);
             }
+            logStudyEvent("screening_answer_changed", {
+                screenIndex: state.currentIndex,
+                phase: step.phase,
+                screenId: step.id,
+                questionId: question.id,
+                question: question.prompt,
+                clickedChoice: choice,
+                previousAnswer,
+                answer: state.screeningAnswers.get(key),
+            });
             renderCurrentCase();
         });
         answers.appendChild(button);
@@ -1269,12 +1330,33 @@ function renderCurrentCase() {
     }
 
     const caseItem = state.cases[state.currentIndex];
-    if (isRecordedPhase(caseItem)) {
-        const shownKey = `${caseKey(caseItem)}:${state.currentIndex}`;
-        if (state.lastShownStepKey !== shownKey) {
-            state.lastShownStepKey = shownKey;
-            logStudyEvent("case_shown", caseSnapshot(caseItem));
-        }
+    if (state.experimentStarted) {
+        requestAnimationFrame(() => {
+            const stage = document.querySelector("#experiment_stage");
+            const controls = [...stage.querySelectorAll("button, input, select")].map((control) => ({
+                tag: control.tagName.toLowerCase(),
+                type: control.type ?? null,
+                text: control.textContent?.trim() || null,
+                value: control.value ?? null,
+                checked: control.checked ?? null,
+                disabled: control.disabled,
+                selected: control.classList.contains("answer-choice-selected") ||
+                    control.classList.contains("screening-choice-selected"),
+            }));
+            logStudyEvent("screen_viewed", {
+                screenIndex: state.currentIndex,
+                phase: caseItem.phase,
+                screenId: caseItem.id,
+                title: caseItem.title ?? getPhaseLabel(caseItem),
+                visibleText: stage.innerText,
+                controls,
+                iframes: [...stage.querySelectorAll("iframe")].map((iframe) => ({
+                    title: iframe.title,
+                    source: iframe.getAttribute("src"),
+                    caseKey: iframe.dataset.caseKey ?? null,
+                })),
+            });
+        });
     }
     if (caseItem.phase === "tutorial-scenario") {
         renderScenarioPage(caseItem);
@@ -1363,9 +1445,7 @@ function renderAnswerChoices(caseItem, answerArea, explanationPanel) {
             const previousAnswer = state.answers.get(caseKey(caseItem));
             state.answers.set(caseKey(caseItem), index);
             logStudyEvent("answer_selected", {
-                phase: caseItem.phase,
-                caseId: caseItem.id,
-                instanceId: payload.instance_id,
+                ...caseSnapshot(caseItem),
                 previousAnswer,
                 selectedAnswer: index,
                 selectedLabel: label,
@@ -1401,6 +1481,14 @@ function renderAnswerChoices(caseItem, answerArea, explanationPanel) {
         showPrediction: 1,
         title: "Explanation",
     }));
+    logStudyEvent("feedback_shown", {
+        ...caseSnapshot(caseItem),
+        selectedAnswer,
+        correctAnswer,
+        isCorrect,
+        feedbackText: feedback.textContent,
+        explanationVisible: true,
+    });
 }
 
 function formatPredictionLabel(label) {
@@ -1482,8 +1570,16 @@ function goToCase(delta) {
     );
     if (nextIndex !== state.currentIndex) {
         const previousStep = state.cases[state.currentIndex];
-        if (isRecordedPhase(previousStep)) {
-            logStudyEvent(delta > 0 ? "next_clicked" : "previous_clicked", caseSnapshot(previousStep));
+        if (state.experimentStarted) {
+            logStudyEvent(delta > 0 ? "next_clicked" : "previous_clicked", {
+                fromIndex: state.currentIndex,
+                toIndex: nextIndex,
+                fromPhase: previousStep.phase,
+                fromScreenId: previousStep.id,
+                fromScreen: caseSnapshot(previousStep),
+                toPhase: state.cases[nextIndex]?.phase,
+                toScreenId: state.cases[nextIndex]?.id,
+            });
         }
         state.currentIndex = nextIndex;
         state.lastShownStepKey = null;

@@ -3,3 +3,5 @@ __pycache__/
 src/data/*/explanation_cache/
 *.tmp
 *.log
+service-account*.json
+*-interactions.json

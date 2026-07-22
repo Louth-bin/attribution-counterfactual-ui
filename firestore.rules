@@ -1,0 +1,31 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /studyMetadata/participantCounter {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+                    && request.resource.data.nextNumber == 1;
+      allow update: if request.auth != null
+                    && request.resource.data.nextNumber == resource.data.nextNumber + 1;
+      allow delete: if false;
+    }
+
+    match /studySessions/{sessionId} {
+      allow create: if request.auth != null
+                    && request.resource.data.uid == request.auth.uid;
+      allow update: if request.auth != null
+                    && resource.data.uid == request.auth.uid
+                    && request.resource.data.uid == resource.data.uid;
+      allow read, delete: if false;
+
+      match /events/{eventId} {
+        allow create: if request.auth != null
+                      && request.resource.data.uid == request.auth.uid
+                      && request.resource.data.sessionId == sessionId
+                      && request.resource.data.serverAt == request.time;
+        allow read, update, delete: if false;
+      }
+    }
+  }
+}

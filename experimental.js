@@ -27,7 +27,32 @@ const state = {
     counterfactualChanges: new Map(),
     attributeOrderSeed: null,
     randomizeAttributes: true,
+    experimentStarted: false,
+    lastShownStepKey: null,
 };
+
+function logStudyEvent(eventType, details = {}) {
+    return window.ExperimentLogger?.log(eventType, details) ?? Promise.resolve(false);
+}
+
+function isRecordedPhase(step) {
+    return step?.phase === "training" || step?.phase === "test";
+}
+
+function caseSnapshot(step) {
+    if (!step?.payload) return null;
+    return {
+        phase: step.phase,
+        caseId: step.id,
+        instanceId: step.payload.instance_id,
+        split: step.split,
+        dataset: getDataset(),
+        explanationType: getExplanationType(),
+        attributeOrderSeed: state.attributeOrderSeed,
+        payload: step.payload,
+        currentSimulationValues: state.counterfactualChanges.get(caseKey(step)) ?? null,
+    };
+}
 
 const DATASET_SCENARIOS = {
     diabetes: {
@@ -330,7 +355,25 @@ window.addEventListener("message", (event) => {
             .find((candidate) => candidate.contentWindow === event.source);
         const values = event.data.values;
         if (iframe?.dataset.caseKey && Array.isArray(values)) {
+            const previousValues = state.counterfactualChanges.get(iframe.dataset.caseKey) ?? null;
             state.counterfactualChanges.set(iframe.dataset.caseKey, [...values]);
+            const step = state.cases[state.currentIndex];
+            if (isRecordedPhase(step)) {
+                logStudyEvent("simulation_changed", {
+                    phase: step.phase, caseId: step.id, instanceId: step.payload.instance_id,
+                    previousValues, values, normalizedValues: event.data.normalizedValues ?? null,
+                });
+            }
+        }
+        return;
+    }
+    if (event.data?.type === "counterfactual-ui:screen-state") {
+        const step = state.cases[state.currentIndex];
+        if (isRecordedPhase(step)) {
+            logStudyEvent("iframe_screen_state", {
+                phase: step.phase, caseId: step.id, instanceId: step.payload.instance_id,
+                screenState: event.data.screenState,
+            });
         }
         return;
     }
@@ -693,9 +736,9 @@ function updateStatus() {
     const prevButton = document.querySelector("#experiment_prev");
     const nextButton = document.querySelector("#experiment_next");
 
-    if (state.cases.length === 0) {
-        phase.textContent = "Ready";
-        progress.textContent = "Choose a setup and start.";
+    if (!state.experimentStarted) {
+        phase.textContent = "Overview";
+        progress.textContent = "Domain introduction";
         prevButton.disabled = true;
         nextButton.disabled = true;
         updateBackdoorMenu();
@@ -1226,6 +1269,13 @@ function renderCurrentCase() {
     }
 
     const caseItem = state.cases[state.currentIndex];
+    if (isRecordedPhase(caseItem)) {
+        const shownKey = `${caseKey(caseItem)}:${state.currentIndex}`;
+        if (state.lastShownStepKey !== shownKey) {
+            state.lastShownStepKey = shownKey;
+            logStudyEvent("case_shown", caseSnapshot(caseItem));
+        }
+    }
     if (caseItem.phase === "tutorial-scenario") {
         renderScenarioPage(caseItem);
         return;
@@ -1310,7 +1360,18 @@ function renderAnswerChoices(caseItem, answerArea, explanationPanel) {
         button.classList.toggle("answer-choice-selected", selectedAnswer === index);
         button.textContent = formatPredictionLabel(label);
         button.addEventListener("click", () => {
+            const previousAnswer = state.answers.get(caseKey(caseItem));
             state.answers.set(caseKey(caseItem), index);
+            logStudyEvent("answer_selected", {
+                phase: caseItem.phase,
+                caseId: caseItem.id,
+                instanceId: payload.instance_id,
+                previousAnswer,
+                selectedAnswer: index,
+                selectedLabel: label,
+                correctAnswer: Number(payload.prediction?.value),
+                isCorrect: index === Number(payload.prediction?.value),
+            });
             renderAnswerChoices(caseItem, answerArea, explanationPanel);
         });
         choices.appendChild(button);
@@ -1420,12 +1481,40 @@ function goToCase(delta) {
         state.cases.length - 1
     );
     if (nextIndex !== state.currentIndex) {
+        const previousStep = state.cases[state.currentIndex];
+        if (isRecordedPhase(previousStep)) {
+            logStudyEvent(delta > 0 ? "next_clicked" : "previous_clicked", caseSnapshot(previousStep));
+        }
         state.currentIndex = nextIndex;
+        state.lastShownStepKey = null;
         renderCurrentCase();
     }
 }
 
-document.querySelector("#experiment_start").addEventListener("click", startRunthrough);
+document.querySelector("#experiment_start").addEventListener("click", async (event) => {
+    const button = event.currentTarget;
+    button.disabled = true;
+    button.textContent = "Starting…";
+    try {
+        await window.ExperimentLogger.startSession({
+            dataset: getDataset(),
+            explanationType: getExplanationType(),
+            trainingCount: Number(document.querySelector("#experiment_training_count").value),
+            testCount: Number(document.querySelector("#experiment_test_count").value),
+        });
+        state.experimentStarted = true;
+        button.hidden = true;
+        document.querySelector("#experiment_prev").hidden = false;
+        document.querySelector("#experiment_next").hidden = false;
+        state.currentIndex = Math.min(1, state.cases.length - 1);
+        state.lastShownStepKey = null;
+        renderCurrentCase();
+    } catch (error) {
+        button.disabled = false;
+        button.textContent = "Start";
+        showStageMessage(`The study logger could not start: ${error.message ?? error}`, true);
+    }
+});
 document.querySelector("#experiment_prev").addEventListener("click", () => goToCase(-1));
 document.querySelector("#experiment_next").addEventListener("click", () => goToCase(1));
 document.querySelector("#experiment_jump").addEventListener("change", (event) => {

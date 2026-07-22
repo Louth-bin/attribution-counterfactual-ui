@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="index.css" />
         <link rel="stylesheet" href="experimental.css" />
         <link rel="icon" type="image/png" href="thinking-man-logo.png" />
+        <script type="module" src="experiment-logger.js"></script>
         <script src="static/experiment-data.js" defer></script>
         <script src="experimental.js" defer></script>
     </head>
@@ -25,7 +26,6 @@
                     <input id="experiment_training_count" type="number" value="10" min="0" max="100" />
                     <input id="experiment_test_count" type="number" value="10" min="0" max="100" />
                     <input id="experiment_randomize_attributes" type="checkbox" checked />
-                <button id="experiment_start" type="button">Start runthrough</button>
                 <div id="experiment_backdoor" class="toolbar-field experiment-backdoor" hidden>
                     <label for="experiment_jump">Developer jump</label>
                     <select id="experiment_jump" disabled>
@@ -40,8 +40,9 @@
                     <div id="experiment_progress" class="experiment-progress">Choose a setup and start.</div>
                 </div>
                 <div class="experiment-nav">
-                    <button id="experiment_prev" type="button" aria-label="Previous case">&larr;</button>
-                    <button id="experiment_next" type="button" aria-label="Next case">&rarr;</button>
+                    <button id="experiment_start" class="experiment-start-button" type="button">Start</button>
+                    <button id="experiment_prev" type="button" aria-label="Previous case" hidden>&larr;</button>
+                    <button id="experiment_next" type="button" aria-label="Next case" hidden>&rarr;</button>
                 </div>
             </section>
 

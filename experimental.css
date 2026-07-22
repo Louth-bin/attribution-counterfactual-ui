@@ -456,6 +456,22 @@
     color: rgba(174, 31, 32, 1);
 }
 
+.experiment-start-button {
+    min-width: 260px;
+    padding: 12px 18px;
+    border: 0;
+    border-radius: 7px;
+    background: #1769aa;
+    color: #fff;
+    font: 700 16px Arial, sans-serif;
+    cursor: pointer;
+}
+
+.experiment-start-button:disabled {
+    opacity: 0.65;
+    cursor: wait;
+}
+
 @media (max-width: 860px) {
     .experimental-shell {
         width: min(100vw - 20px, 760px);

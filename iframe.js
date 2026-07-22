@@ -72,6 +72,47 @@ function saveCounterfactualSimulation() {
     window.parent?.postMessage({
         type: "counterfactual-ui:simulation-change",
         values: [...simulationValues],
+        normalizedValues: getNormalizedScreenValues(currentExplanation, simulationValues),
+    }, "*");
+}
+
+function getNormalizedScreenValues(explanation = currentExplanation, values = explanation?.attributeValues) {
+    if (!explanation) return [];
+    return values.map((value, index) => {
+        const range = explanation.attributeRanges[index];
+        if (explanation.attributeTypes[index] === "categorical") {
+            const optionIndex = Number.isInteger(value)
+                ? value
+                : (Array.isArray(range) ? range.indexOf(value) : -1);
+            return range?.length > 1 && optionIndex >= 0 ? optionIndex / (range.length - 1) : 0;
+        }
+        const min = Number(range?.[0]);
+        const max = Number(range?.[1]);
+        const numericValue = Number(value);
+        return Number.isFinite(min) && Number.isFinite(max) && max !== min
+            ? (numericValue - min) / (max - min)
+            : null;
+    });
+}
+
+function postScreenState() {
+    if (!currentExplanation) return;
+    window.parent?.postMessage({
+        type: "counterfactual-ui:screen-state",
+        screenState: {
+            explanationType,
+            explanationView,
+            attributeNames: currentExplanation.attributeNames,
+            rawAttributeNames: currentExplanation.rawAttributeNames,
+            displayedValues: currentExplanation.attributeValues,
+            rawValues: currentExplanation.rawAttributeValues,
+            ranges: currentExplanation.attributeRanges,
+            normalizedValues: getNormalizedScreenValues(),
+            prediction: currentExplanation.prediction,
+            attribution: currentExplanation.attribution,
+            counterfactual: currentExplanation.counterfactual,
+            simulationValues,
+        },
     }, "*");
 }
 
@@ -3608,6 +3649,7 @@ async function loadExplanation() {
         currentExplanation = normalizeExplanationPayload(payload);
         updateAttributeControlHeader();
         renderExplanation();
+        postScreenState();
     } catch (error) {
         console.error("Failed to load explanation:", error);
         renderStatusRow(String(error.message ?? error), true);

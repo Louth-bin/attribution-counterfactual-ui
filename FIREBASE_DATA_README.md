@@ -24,13 +24,13 @@ studySessions/{sessionId}
 studySessions/{sessionId}/events/{sequence}
 ```
 
-Every screen rendered after Start is stored as `screen_viewed`, including its visible text, controls, phase, screen ID, and only the data visible in that condition. Navigation, screening answers, training answers, feedback, and simulation changes are separate events. Instance screens save the prediction, values, and normalized values. Attribution feedback adds only the displayed influences. Counterfactual feedback and simulation events add only attributes that visibly changed, with their old/new values and normalized values. `recordingElapsedMs` is the offset from the Start button.
+Every screen rendered after Start is stored as a compact `screen_viewed` event containing its phase, screen ID, title, and index. Navigation, screening answers, training answers, and simulation changes are separate events. Answer events already contain correctness, so the immediately rendered answer feedback is not stored again. Instance screens save the prediction, values, and normalized values. Attribution feedback adds only the displayed influences. Counterfactual feedback and simulation events add only attributes that visibly changed, with their old/new values and normalized values. Rapid simulation updates are coalesced after 400 ms of inactivity, and identical render events repeated within one second are ignored. `recordingElapsedMs` is the offset from the Start button.
 
-Firestore does not permit arrays directly nested inside arrays. The logger therefore represents inner arrays (for example, individual feature ranges or attribution matrix rows) as `{ "items": [...] }`. Important instance values are also duplicated as clearly named top-level event fields so they are easy to inspect in Firebase Console.
+Firestore does not permit arrays directly nested inside arrays. The logger therefore represents inner arrays as `{ "items": [...] }`.
 
 ## Download a participant
 
-The Firebase Console is suitable for inspection, but not a convenient one-session JSON export. Install the Admin SDK once:
+Install the Admin SDK once:
 
 ```powershell
 npm install firebase-admin
@@ -38,16 +38,10 @@ $env:GOOGLE_APPLICATION_CREDENTIALS = "C:\secure-location\service-account.json"
 node scripts/export-study-session.mjs P001 P001-interactions.json
 ```
 
-Create the service-account JSON from **Firebase Console > Project settings > Service accounts > Generate new private key**. The exporter accepts either a participant code or exact session ID, orders events by sequence, and converts timestamps to ISO-8601.
-
-Alternatively, use Google Cloud's managed Firestore export for a full database backup. Never put a Firebase Admin service-account key in this repository or browser code. Keep it outside the project on the researcher's computer.
+Create the service-account JSON from **Firebase Console > Project settings > Service accounts > Generate new private key**. The exporter accepts either a participant code or exact session ID, orders events by sequence, and converts timestamps to ISO-8601. Never put a service-account key in this repository or browser code.
 
 ## Transcript-agent handoff
 
-Give the next agent the transcript, exported interaction JSON, and this prompt:
-
-```text
-Align interactions using event.recordingElapsedMs (milliseconds from transcript time zero). Insert concise annotations at the nearest transcript timestamp, while preserving the transcript verbatim. Include phase, caseId, eventType, answer or changed attribute, displayed/raw/normalized values, prediction, and explanation values when relevant. If the spoken “sync now” marker differs from zero, calculate one offset and apply it consistently. Flag ambiguous matches rather than guessing.
-```
+Use [TRANSCRIPT_SYNC_PROMPT.md](TRANSCRIPT_SYNC_PROMPT.md) with one or more transcripts and interaction JSON exports.
 
 Keep participant codes pseudonymous. Do not store names, emails, or transcript text unless this is covered by consent and the study data-management plan.

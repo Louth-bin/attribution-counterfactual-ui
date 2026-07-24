@@ -35,6 +35,26 @@ function logStudyEvent(eventType, details = {}) {
     return window.ExperimentLogger?.log(eventType, details) ?? Promise.resolve(false);
 }
 
+let pendingSimulationEvent = null;
+let pendingSimulationTimer = null;
+
+function flushPendingSimulationEvent() {
+    if (pendingSimulationTimer !== null) {
+        clearTimeout(pendingSimulationTimer);
+        pendingSimulationTimer = null;
+    }
+    if (!pendingSimulationEvent) return Promise.resolve(false);
+    const details = pendingSimulationEvent;
+    pendingSimulationEvent = null;
+    return logStudyEvent("simulation_changed", details);
+}
+
+function queueSimulationEvent(details) {
+    pendingSimulationEvent = details;
+    if (pendingSimulationTimer !== null) clearTimeout(pendingSimulationTimer);
+    pendingSimulationTimer = setTimeout(flushPendingSimulationEvent, 400);
+}
+
 function isRecordedPhase(step) {
     return step?.phase === "training" || step?.phase === "test";
 }
@@ -380,11 +400,8 @@ window.addEventListener("message", (event) => {
             state.counterfactualChanges.set(iframe.dataset.caseKey, [...values]);
             const step = state.cases[state.currentIndex];
             if (isRecordedPhase(step)) {
-                logStudyEvent("simulation_changed", {
+                queueSimulationEvent({
                     phase: step.phase, caseId: step.id, instanceId: step.payload.instance_id,
-                    attributeNames: event.data.attributeNames,
-                    instanceValues: event.data.instanceValues,
-                    instanceNormalizedValues: event.data.instanceNormalizedValues,
                     changes: event.data.changes,
                 });
             }
@@ -1332,29 +1349,11 @@ function renderCurrentCase() {
     const caseItem = state.cases[state.currentIndex];
     if (state.experimentStarted) {
         requestAnimationFrame(() => {
-            const stage = document.querySelector("#experiment_stage");
-            const controls = [...stage.querySelectorAll("button, input, select")].map((control) => ({
-                tag: control.tagName.toLowerCase(),
-                type: control.type ?? null,
-                text: control.textContent?.trim() || null,
-                value: control.value ?? null,
-                checked: control.checked ?? null,
-                disabled: control.disabled,
-                selected: control.classList.contains("answer-choice-selected") ||
-                    control.classList.contains("screening-choice-selected"),
-            }));
             logStudyEvent("screen_viewed", {
                 screenIndex: state.currentIndex,
                 phase: caseItem.phase,
                 screenId: caseItem.id,
                 title: caseItem.title ?? getPhaseLabel(caseItem),
-                visibleText: stage.innerText,
-                controls,
-                iframes: [...stage.querySelectorAll("iframe")].map((iframe) => ({
-                    title: iframe.title,
-                    source: iframe.getAttribute("src"),
-                    caseKey: iframe.dataset.caseKey ?? null,
-                })),
             });
         });
     }
@@ -1481,14 +1480,6 @@ function renderAnswerChoices(caseItem, answerArea, explanationPanel) {
         showPrediction: 1,
         title: "Explanation",
     }));
-    logStudyEvent("feedback_shown", {
-        ...caseSnapshot(caseItem),
-        selectedAnswer,
-        correctAnswer,
-        isCorrect,
-        feedbackText: feedback.textContent,
-        explanationVisible: true,
-    });
 }
 
 function formatPredictionLabel(label) {
@@ -1571,12 +1562,12 @@ function goToCase(delta) {
     if (nextIndex !== state.currentIndex) {
         const previousStep = state.cases[state.currentIndex];
         if (state.experimentStarted) {
+            flushPendingSimulationEvent();
             logStudyEvent(delta > 0 ? "next_clicked" : "previous_clicked", {
                 fromIndex: state.currentIndex,
                 toIndex: nextIndex,
                 fromPhase: previousStep.phase,
                 fromScreenId: previousStep.id,
-                fromScreen: caseSnapshot(previousStep),
                 toPhase: state.cases[nextIndex]?.phase,
                 toScreenId: state.cases[nextIndex]?.id,
             });

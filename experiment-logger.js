@@ -22,6 +22,14 @@ let recordingStartedClientMs = null;
 let recordingStartedPerformanceMs = null;
 let writeChain = Promise.resolve();
 let assignedParticipantCode = null;
+const recentEvents = new Map();
+const DEDUPLICATED_EVENT_TYPES = new Set([
+    "screen_viewed",
+    "instance_shown",
+    "attribution_shown",
+    "counterfactual_shown",
+    "simulation_feedback_shown",
+]);
 
 function serializable(value, insideArray = false) {
     if (value === undefined || value === null) return null;
@@ -85,6 +93,16 @@ async function startSession(metadata = {}) {
 
 function log(eventType, details = {}) {
     if (!sessionRef) return Promise.resolve(false);
+    const cleanDetails = serializable(details);
+    if (DEDUPLICATED_EVENT_TYPES.has(eventType)) {
+        const fingerprint = JSON.stringify(cleanDetails);
+        const previous = recentEvents.get(eventType);
+        const currentPerformanceMs = performance.now();
+        if (previous?.fingerprint === fingerprint && currentPerformanceMs - previous.atMs < 1000) {
+            return Promise.resolve(false);
+        }
+        recentEvents.set(eventType, { fingerprint, atMs: currentPerformanceMs });
+    }
     const eventSequence = ++sequence;
     const isSyncEvent = eventType === "recording_started";
     const now = isSyncEvent ? recordingStartedClientMs : Date.now();
@@ -98,7 +116,7 @@ function log(eventType, details = {}) {
         recordingElapsedMs: isSyncEvent ? 0 : now - recordingStartedClientMs,
         elapsedMs: isSyncEvent ? 0 : Math.round(performance.now() - recordingStartedPerformanceMs),
         serverAt: serverTimestamp(),
-        ...serializable(details),
+        ...cleanDetails,
     };
     let saved = true;
     writeChain = writeChain.then(() => setDoc(eventRef, event)).catch((error) => {

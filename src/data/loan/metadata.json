@@ -1,0 +1,16 @@
+{
+  "target_column": "target",
+  "source_format": "loan_approval_five_numeric_complete_cases_v1",
+  "source": "Public loan application approval dataset; complete cases and five numerical attributes retained.",
+  "class_labels": [
+    "Rejected",
+    "Approved"
+  ],
+  "feature_types": {
+    "applicant_income": "numerical",
+    "coapplicant_income": "numerical",
+    "loan_amount": "numerical",
+    "loan_term": "numerical",
+    "credit_history": "numerical"
+  }
+}

@@ -776,7 +776,7 @@ meter::-moz-meter-bar {
   max-width: 520px;
   font-size: 17px;
   line-height: 1.35;
-  font-weight: 700;
+  font-weight: 400;
   text-align: left;
   color: rgba(0, 0, 0, 0.86);
 }

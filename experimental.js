@@ -2,20 +2,73 @@ const DATA = window.EXPERIMENT_DATA;
 const DEFAULT_MODEL = DATA?.default_model ?? "mlp";
 
 const DATASET_COPY = {
-    diabetes: {
-        label: "Diabetes",
-        trainingQuestion: "Is a patient with this profile diabetic or non-diabetic?",
-        originalTitle: "Original patient case",
+    housing: {
+        label: "Housing",
+        subject: "house",
+        trainingQuestion: "Is this profile Cheap or Expensive?",
         explanationTitle: "Explanation and feedback",
-        simulationTitle: "Counterfactual simulation",
+        simulationTitle: "Make changes",
     },
-    safelimit: {
-        label: "SafeLimit",
-        trainingQuestion: "Do you think this person is above or below the safe limit?",
-        originalTitle: "Original person case",
+    loan: {
+        label: "Loan Application",
+        subject: "loan application",
+        trainingQuestion: "Is this profile Approved or Rejected?",
         explanationTitle: "Explanation and feedback",
-        simulationTitle: "Counterfactual simulation",
+        simulationTitle: "Make changes",
     },
+};
+
+const TEST_SESSIONS = {
+    housing: [
+        {
+            id: "homeowner",
+            title: "Buyer Testing Session",
+            intro: [
+                ["You will now see 6 ", { strong: "expensive" }, " house profiles."],
+                ["For each, a person wants to buy the house, but they want it to be ", { strong: "cheap" }, "."],
+                ["As a compromise, they will look for a similar cheap house. For each ", { strong: "buyer" }, ", what house profile should they look for?"],
+            ],
+            blocks: [
+                { id: "expensive-to-cheap", sourcePrediction: 1, targetPrediction: 0 },
+            ],
+        },
+        {
+            id: "developer",
+            title: "Housing Developer Testing Session",
+            intro: [
+                ["You will now see 6 ", { strong: "cheap" }, " house profiles."],
+                ["As a ", { strong: "housing developer" }, ", you want to make small changes so each house can be listed as expensive. What changes would you make?"],
+            ],
+            blocks: [
+                { id: "cheap-to-expensive", sourcePrediction: 0, targetPrediction: 1 },
+            ],
+        },
+    ],
+    loan: [
+        {
+            id: "applicant",
+            title: "Loan Applicant Testing Session",
+            intro: [
+                ["You will now see 6 ", { strong: "rejected" }, " loan applications."],
+                ["Each ", { strong: "applicant" }, " wants their loan to be approved. What should they change?"],
+            ],
+            blocks: [
+                { id: "rejected-to-approved", sourcePrediction: 0, targetPrediction: 1 },
+            ],
+        },
+        {
+            id: "financial-advisor",
+            title: "Financial Advisor Testing Session",
+            intro: [
+                ["You will now see 6 loan applications: 3 ", { strong: "rejected" }, " and 3 ", { strong: "approved" }, "."],
+                ["As a ", { strong: "financial advisor" }, ", you will suggest small changes that could reverse each decision."],
+            ],
+            blocks: [
+                { id: "advice", sourcePrediction: 0, targetPrediction: 1, fraction: 0.5 },
+                { id: "warning", sourcePrediction: 1, targetPrediction: 0, fraction: 0.5 },
+            ],
+        },
+    ],
 };
 
 const state = {
@@ -25,6 +78,7 @@ const state = {
     screeningAnswers: new Map(),
     screeningQuestions: new Map(),
     counterfactualChanges: new Map(),
+    counterfactualRawValues: new Map(),
     attributeOrderSeed: null,
     randomizeAttributes: true,
     experimentStarted: false,
@@ -93,38 +147,39 @@ function caseSnapshot(step) {
         instanceValues: step.payload.feature_values,
         instanceNormalizedValues: normalizePayloadValues(step.payload),
         prediction: compactPrediction(step.payload.prediction),
+        stakeholderSession: step.sessionId ?? null,
+        direction: step.direction ?? null,
+        profileName: step.profileName ?? null,
     };
 }
 
 const DATASET_SCENARIOS = {
-    diabetes: {
-        title: "Patient profiles",
+    housing: {
+        title: "House profiles",
         intro: [
-            ["In the following pages, you will see patient profiles described by ", { strong: "five attributes" }, ". ",
-            "The patients are either ", { strong: "Diabetic" }, " or ", { strong: "Non-diabetic" }, "."],
+            ["In the following pages, you will see house profiles described by ", { strong: "five attributes" }, ". ",
+            "Each house is either ", { strong: "Cheap" }, " or ", { strong: "Expensive" }, ". An AI can provide the correct prediction for each profile."],
         ],
-        aiLabel: "diagnosis",
         attributes: {
-            glucose: "Concentration of glucose in blood",
-            blood_pressure: "Diastolic blood pressure of patient",
-            insulin: "Insulin level 2 hours after glucose intake",
-            bmi: "Body Mass Index",
-            age: "Age in years",
+            sqft_living: "Interior living area in square feet",
+            bedrooms: "Number of bedrooms",
+            bathrooms: "Bathroom equivalent; 1.75 means 1 full and 1 three-quarter bathroom",
+            floors: "Number of floors",
+            grade: "Construction and design quality from 1 to 13",
         },
     },
-    safelimit: {
-        title: "Driver profiles",
+    loan: {
+        title: "Loan application profiles",
         intro: [
-            ["In the following pages, you will see driver profiles described by ", { strong: "five attributes" }, ".",
-            "They are either ", { strong: "above "}, "the alcohol limit for driving", " or ", { strong: "below "}, "that limit."],
+            ["In the following pages, you will see loan application profiles described by ", { strong: "five attributes" }, ". ",
+            "Each application is either ", { strong: "Approved" }, " or ", { strong: "Rejected" }, ". An AI can provide the correct decision for each profile."],
         ],
-        aiLabel: "prediction",
         attributes: {
-            units: "Amount of alcohol consumed",
-            weight: "Weight of the driver in kilograms",
-            duration: "Length of time spent drinking in minutes",
-            gender: "Gender of the driver",
-            stomach_fullness: "Whether the driver ate before or while drinking",
+            applicant_income: "Income reported by the applicant",
+            coapplicant_income: "Income reported by the co-applicant",
+            loan_amount: "Requested loan amount in thousands",
+            loan_term: "Requested repayment term in months",
+            credit_history: "Whether the applicant has a good or bad credit history",
         },
     },
 };
@@ -143,13 +198,13 @@ function getRandomizeAttributesEnabled() {
 
 function applyUrlConfiguration() {
     const params = new URLSearchParams(window.location.search);
-    const dataset = String(params.get("dataset") ?? "diabetes").toLowerCase();
+    const dataset = String(params.get("dataset") ?? "housing").toLowerCase();
     const explanation = String(params.get("explanation") ?? "attribution").toLowerCase();
-    const validDatasets = new Set(["diabetes", "safelimit"]);
+    const validDatasets = new Set(["housing", "loan"]);
     const validExplanations = new Set(["attribution", "counterfactual", "none"]);
 
     if (!validDatasets.has(dataset)) {
-        throw new Error(`Unknown dataset '${dataset}'. Use diabetes or safelimit.`);
+        throw new Error(`Unknown dataset '${dataset}'. Use housing or loan.`);
     }
     if (!validExplanations.has(explanation)) {
         throw new Error(`Unknown explanation '${explanation}'. Use attribution, counterfactual, or none.`);
@@ -167,13 +222,16 @@ function getDatasetBundle(dataset = getDataset()) {
     return bundle;
 }
 
-function validateDiabetesLabelMapping() {
-    const bundle = getDatasetBundle("diabetes");
-    const expectedLabels = ["Diabetes", "No Diabetes"];
+function validateDatasetLabelMapping() {
+    const dataset = getDataset();
+    const bundle = getDatasetBundle(dataset);
+    const expectedLabels = dataset === "housing"
+        ? ["Cheap", "Expensive"]
+        : ["Rejected", "Approved"];
     const metadataLabels = bundle.metadata?.prediction_labels ?? [];
 
     if (metadataLabels.length !== 2 || metadataLabels.some((label, index) => label !== expectedLabels[index])) {
-        throw new Error("Diabetes label mapping is invalid: class 0 must be Diabetes and class 1 must be No Diabetes.");
+        throw new Error(`${dataset} label mapping is invalid.`);
     }
 
     const cases = [...(bundle.training_pool ?? []), ...(bundle.test_pool ?? [])];
@@ -184,7 +242,7 @@ function validateDiabetesLabelMapping() {
             const classIndex = Number(prediction.value);
             if (labels[classIndex] !== prediction.label) {
                 throw new Error(
-                    `Diabetes label mapping is inconsistent for case ${payload.instance_id}: ` +
+                    `${dataset} label mapping is inconsistent for case ${payload.instance_id}: ` +
                     `class ${classIndex} is '${prediction.label}', expected '${labels[classIndex]}'.`
                 );
             }
@@ -193,7 +251,7 @@ function validateDiabetesLabelMapping() {
 }
 
 function getCopy() {
-    return DATASET_COPY[getDataset()] ?? DATASET_COPY.diabetes;
+    return DATASET_COPY[getDataset()] ?? DATASET_COPY.housing;
 }
 
 function clampCount(input, fallback) {
@@ -318,6 +376,81 @@ function sampleBalancedTrainingPool(pool, requestedCount, pairKeys) {
     return selected;
 }
 
+const PROFILE_NAMES = [
+    "Mia", "Noah", "Olivia", "Liam", "Emma", "Ava", "Ethan", "Sophia", "Lucas", "Isabella",
+    "Mason", "Amelia", "Elijah", "Harper", "James", "Charlotte", "Benjamin", "Evelyn", "Logan", "Abigail",
+];
+
+function positiveHash(value) {
+    let hash = 0;
+    const text = String(value);
+    for (let index = 0; index < text.length; index += 1) {
+        hash = ((hash << 5) - hash + text.charCodeAt(index)) | 0;
+    }
+    return Math.abs(hash);
+}
+
+function getProfileName(payload, split) {
+    const key = `${getDataset()}:${split}:${payload.instance_id}`;
+    return PROFILE_NAMES[positiveHash(key) % PROFILE_NAMES.length];
+}
+
+function hasDirectionalCounterfactual(payload, targetPrediction) {
+    return Number(payload.counterfactual?.prediction?.value) === Number(targetPrediction);
+}
+
+function sampleDirectionBlock(pool, count, block, usedInstanceIds, session) {
+    const eligible = shuffleArray(pool.filter((payload) =>
+        Number(payload.prediction?.value) === Number(block.sourcePrediction) &&
+        hasDirectionalCounterfactual(payload, block.targetPrediction) &&
+        !usedInstanceIds.has(Number(payload.instance_id))
+    ));
+    if (eligible.length < count) {
+        throw new Error(
+            `${session.title} needs ${count} unused ${block.id} cases, but only ${eligible.length} are available.`
+        );
+    }
+    return eligible.slice(0, count).map((payload, index) => {
+        usedInstanceIds.add(Number(payload.instance_id));
+        return {
+            phase: "test",
+            id: `${session.id}-${block.id}-${index + 1}`,
+            split: "test",
+            payload,
+            sessionId: session.id,
+            sessionTitle: session.title,
+            sessionIntro: session.intro,
+            direction: block.id,
+            sourcePrediction: block.sourcePrediction,
+            targetPrediction: block.targetPrediction,
+            profileName: getProfileName(payload, "test"),
+        };
+    });
+}
+
+function buildStakeholderTestCases(pool, requestedCount) {
+    const sessions = shuffleArray([...(TEST_SESSIONS[getDataset()] ?? [])]);
+    const usedInstanceIds = new Set();
+    const cases = [];
+
+    sessions.forEach((session) => {
+        const fractionalBlocks = session.blocks.filter((block) => block.fraction !== undefined);
+        session.blocks.forEach((block) => {
+            const blockCount = fractionalBlocks.length > 0
+                ? Math.round(requestedCount * block.fraction)
+                : requestedCount;
+            cases.push(...sampleDirectionBlock(
+                pool,
+                blockCount,
+                block,
+                usedInstanceIds,
+                session
+            ));
+        });
+    });
+    return cases;
+}
+
 function buildCases(trainingCount, testCount) {
     const bundle = getDatasetBundle();
     const pairKeys = bundle.metadata.all_feature_pair_keys ?? [];
@@ -326,19 +459,13 @@ function buildCases(trainingCount, testCount) {
         Math.min(trainingCount, bundle.training_pool.length),
         pairKeys
     );
-    const testPayloads = shuffleArray([...bundle.test_pool])
-        .slice(0, Math.min(testCount, bundle.test_pool.length));
-
     const trainingCases = trainingPayloads.map((payload) => ({
         phase: "training",
         split: "train",
         payload,
+        profileName: getProfileName(payload, "train"),
     }));
-    const testCases = testPayloads.map((payload) => ({
-        phase: "test",
-        split: "test",
-        payload,
-    }));
+    const testCases = buildStakeholderTestCases(bundle.test_pool, testCount);
     return [...trainingCases, ...testCases];
 }
 
@@ -366,6 +493,15 @@ function buildIframeSrc(caseItem, options = {}) {
         simulationMode: "any",
         faceFigures: "0",
     });
+    if (caseItem.profileName) {
+        query.set("profileName", caseItem.profileName);
+    }
+    if (caseItem.sessionId) {
+        query.set("stakeholder", caseItem.sessionId);
+    }
+    if (caseItem.direction) {
+        query.set("direction", caseItem.direction);
+    }
     if (state.randomizeAttributes && state.attributeOrderSeed) {
         query.set("attributeOrderSeed", state.attributeOrderSeed);
     }
@@ -398,6 +534,12 @@ window.addEventListener("message", (event) => {
         const values = event.data.changedDisplayedValues;
         if (iframe?.dataset.caseKey && Array.isArray(values)) {
             state.counterfactualChanges.set(iframe.dataset.caseKey, [...values]);
+            if (event.data.changedRawFeatureValues) {
+                state.counterfactualRawValues.set(
+                    iframe.dataset.caseKey,
+                    { ...event.data.changedRawFeatureValues }
+                );
+            }
             const step = state.cases[state.currentIndex];
             if (isRecordedPhase(step)) {
                 queueSimulationEvent({
@@ -483,7 +625,7 @@ function appendFormattedText(container, parts) {
 }
 
 function getScenario(dataset = getDataset()) {
-    return DATASET_SCENARIOS[dataset] ?? DATASET_SCENARIOS.diabetes;
+    return DATASET_SCENARIOS[dataset] ?? DATASET_SCENARIOS.housing;
 }
 
 function getSampleCase(cases) {
@@ -531,20 +673,22 @@ function getExplanationTutorialSampleCase(cases) {
             return deltas.some((value) => value > 0) && deltas.some((value) => value < 0);
         };
 
-        payload = pool.find((candidate) => getDataset() === "diabetes" && hasNumericIncreaseAndDecrease(candidate));
-        payload ??= pool.find((candidate) => {
-            const names = candidate.counterfactual?.selected_feature_names ?? [];
-            if (getDataset() !== "safelimit" || !names.includes("Alcohol Units") || !names.includes("Gender")) {
-                return false;
-            }
-            const unitsIndex = getFeatureIndex(candidate, "Alcohol Units");
-            return Number(candidate.counterfactual?.feature_values?.[unitsIndex]) <
-                Number(candidate.feature_values?.[unitsIndex]);
-        });
+        payload = pool.find(hasNumericIncreaseAndDecrease);
+        payload ??= pool.find((candidate) =>
+            Number(candidate.counterfactual?.prediction?.value) !== Number(candidate.prediction?.value)
+        );
     }
 
     return getPoolCase(payload ?? pool[0])
         ?? getSampleCase(cases);
+}
+
+function getSimulationTutorialSampleCase(cases) {
+    const bundle = getDatasetBundle();
+    const payload = (bundle.training_pool ?? []).find((candidate) =>
+        Number(candidate.prediction?.value) === 0
+    );
+    return getPoolCase(payload) ?? getBasicTutorialSampleCase(cases);
 }
 
 function getFeatureDescription(dataset, rawFeatureName) {
@@ -683,6 +827,7 @@ function getScenarioRows(dataset) {
 function buildTutorialSteps(cases) {
     const basicSampleCase = getBasicTutorialSampleCase(cases);
     const explanationSampleCase = getExplanationTutorialSampleCase(cases);
+    const simulationSampleCase = getSimulationTutorialSampleCase(cases);
     if (!basicSampleCase) {
         return [];
     }
@@ -698,7 +843,7 @@ function buildTutorialSteps(cases) {
         {
             phase: "tutorial-basic",
             id: "basic-ui",
-            title: "Basic interface",
+            title: "Basic Interface",
             sampleCase: basicSampleCase,
         },
         {
@@ -726,23 +871,46 @@ function buildTutorialSteps(cases) {
         );
     }
 
+    steps.push({
+        phase: "tutorial-simulation",
+        id: "counterfactual-simulation-practice",
+        title: "Practice for Final Task",
+        sampleCase: simulationSampleCase,
+    });
+
     return steps;
 }
 
 function buildPhaseSteps(caseSteps) {
     const steps = [];
-    let previousPhase = null;
+    let previousSection = null;
     caseSteps.forEach((caseItem) => {
-        if (caseItem.phase !== previousPhase) {
+        const section = caseItem.phase === "training"
+            ? "training"
+            : `test:${caseItem.sessionId}`;
+        if (section !== previousSection) {
             steps.push({
                 phase: `${caseItem.phase}-instructions`,
-                id: `${caseItem.phase}-instructions`,
-                title: caseItem.phase === "training" ? "Training Session Instructions" : "Testing Session Instructions",
+                id: caseItem.phase === "training"
+                    ? "training-instructions"
+                    : `${caseItem.sessionId}-instructions`,
+                title: caseItem.phase === "training"
+                    ? "Training Session"
+                    : caseItem.sessionTitle,
+                sessionId: caseItem.sessionId,
+                sessionIntro: caseItem.sessionIntro,
             });
-            previousPhase = caseItem.phase;
+            previousSection = section;
         }
         steps.push(caseItem);
     });
+    if (caseSteps.some((caseItem) => caseItem.phase === "test")) {
+        steps.push({
+            phase: "results",
+            id: "testing-results",
+            title: "Testing Results",
+        });
+    }
     return steps;
 }
 
@@ -755,7 +923,11 @@ function getStepProgressLabel(step) {
     if (!step) {
         return "Choose a setup and start.";
     }
-    if (isTutorialStep(step) || String(step.phase).endsWith("-instructions")) {
+    if (
+        isTutorialStep(step) ||
+        String(step.phase).endsWith("-instructions") ||
+        step.phase === "results"
+    ) {
         return `${state.currentIndex + 1} of ${state.cases.length} - ${step.title}`;
     }
     return `${state.currentIndex + 1} of ${state.cases.length} - ${getCopy().label} - instance ${step.payload.instance_id}`;
@@ -768,14 +940,21 @@ function getPhaseLabel(step) {
     if (step.phase === "tutorial-scenario") {
         return "Overview";
     }
-    if (step.phase === "tutorial-basic" || step.phase === "tutorial-explanation") {
+    if (
+        step.phase === "tutorial-basic" ||
+        step.phase === "tutorial-explanation" ||
+        step.phase === "tutorial-simulation"
+    ) {
         return "Tutorial";
     }
     if (step.phase === "screening-basic" || step.phase === "screening-explanation") {
         return "Screening questions";
     }
-    if (step.phase === "training-instructions" || step.phase === "test-instructions") {
+    if (String(step.phase).endsWith("-instructions")) {
         return "Instructions";
+    }
+    if (step.phase === "results") {
+        return "Results";
     }
     return step.phase === "training" ? "Training case" : "Test case";
 }
@@ -827,36 +1006,54 @@ const BACKDOOR_LABELS = {
     "screening-basic": "Basic screening questions",
     "tutorial-explanation": "Explanation tutorial",
     "screening-explanation": "Explanation screening questions",
+    "tutorial-simulation": "Final task practice",
     "training-instructions": "Training session instructions",
     training: "First training case",
-    "test-instructions": "Testing session instructions",
-    test: "First testing case",
+    results: "Testing results",
 };
+
+function getBackdoorStepKey(step) {
+    if (step?.phase === "test-instructions" || step?.phase === "test") {
+        return `${step.phase}:${step.sessionId ?? step.id}`;
+    }
+    return step?.phase;
+}
+
+function getBackdoorStepLabel(step) {
+    if (step.phase === "test-instructions") {
+        return `${step.title ?? "Testing session"} - instructions`;
+    }
+    if (step.phase === "test") {
+        return `${step.sessionTitle ?? "Testing session"} - first case`;
+    }
+    return BACKDOOR_LABELS[step.phase] ?? step.title ?? step.phase;
+}
 
 function updateBackdoorMenu() {
     const select = document.querySelector("#experiment_jump");
     if (!select) {
         return;
     }
-    const firstIndexByPhase = new Map();
+    const firstIndexByStepKey = new Map();
     state.cases.forEach((step, index) => {
-        if (!firstIndexByPhase.has(step.phase)) {
-            firstIndexByPhase.set(step.phase, index);
+        const key = getBackdoorStepKey(step);
+        if (key && !firstIndexByStepKey.has(key)) {
+            firstIndexByStepKey.set(key, index);
         }
     });
     select.innerHTML = "";
-    if (firstIndexByPhase.size === 0) {
+    if (firstIndexByStepKey.size === 0) {
         select.appendChild(new Option("Start a runthrough first", ""));
         select.disabled = true;
         return;
     }
-    Object.entries(BACKDOOR_LABELS).forEach(([phase, label]) => {
-        if (firstIndexByPhase.has(phase)) {
-            select.appendChild(new Option(label, String(firstIndexByPhase.get(phase))));
-        }
+    firstIndexByStepKey.forEach((index) => {
+        const step = state.cases[index];
+        select.appendChild(new Option(getBackdoorStepLabel(step), String(index)));
     });
-    const currentPhaseIndex = firstIndexByPhase.get(state.cases[state.currentIndex]?.phase);
-    select.value = String(currentPhaseIndex ?? state.currentIndex);
+    const currentStepKey = getBackdoorStepKey(state.cases[state.currentIndex]);
+    const currentStepIndex = firstIndexByStepKey.get(currentStepKey);
+    select.value = String(currentStepIndex ?? state.currentIndex);
     select.disabled = false;
 }
 
@@ -912,15 +1109,12 @@ function renderScenarioPage(step) {
         appendFormattedText(text, paragraph);
         intro.appendChild(text);
     });
-    const aiParagraph = createElement("p");
-    aiParagraph.textContent = `An AI can provide the correct ${scenario.aiLabel} for each profile based on these attributes.`;
-    intro.appendChild(aiParagraph);
     body.appendChild(intro);
 
     const table = createElement("table", "scenario-table");
     const thead = document.createElement("thead");
     const headerRow = document.createElement("tr");
-    ["Attribute", "Description", dataset === "safelimit" ? "Range / Options" : "Value range"].forEach((header) => {
+    ["Attribute", "Description", "Value range"].forEach((header) => {
         headerRow.appendChild(createElement("th", "", header));
     });
     thead.appendChild(headerRow);
@@ -962,23 +1156,24 @@ function appendTutorialList(container, items, options = {}) {
 
 function renderBasicTutorialPage(step) {
     const dataset = getDataset();
-    const scenario = getScenario(dataset);
     const body = createElement("div", "tutorial-two-column");
     const copyPanel = createElement("div", "tutorial-copy");
     copyPanel.appendChild(createElement(
         "p",
         "",
-        dataset === "diabetes"
-            ? "Each patient profile is shown using the same basic interface."
-            : "Each driver profile is shown using the same basic interface."
+        `Each ${getCopy().subject} profile is shown using the following interface.`
     ));
+    const exampleFeature = getDataset() === "housing"
+        ? "Living Area"
+        : "Amount";
+    const predictionText = getDataset() === "housing"
+        ? `The selected box shows the AI's price ${strongText("prediction")}.`
+        : `The selected box shows the AI's loan ${strongText("decision")}.`;
     appendTutorialBullets(copyPanel, [
-        `The five <strong>Attributes</strong> describing the ${dataset === "diabetes" ? "patient" : "driver"}.`,
-        "The <strong>Values</strong> of each attribute.",
-        dataset === "safelimit"
-            ? `Bars indicating how ${strongText("low/high")} a given value is for an attribute (${getFeatureRangeExample(step.sampleCase.payload, "Alcohol Units")}). Other attribute values are just ${strongText("checked")} (${getCategoricalExample(step.sampleCase.payload, "Gender")}).`
-            : `Bars indicating how ${strongText("low/high")} a given value is for that attribute (${getFeatureRangeExample(step.sampleCase.payload, "Blood Pressure")}).`,
-        `The selected box shows the <strong>AI ${scenario.aiLabel}</strong>.`,
+        `The five <strong>attributes</strong> describing the ${getCopy().subject}.`,
+        "The <strong>values</strong> of each attribute.",
+        `Bars indicating how ${strongText("low/high")} the value is for that attribute (${getFeatureRangeExample(step.sampleCase.payload, exampleFeature)}).`,
+        predictionText,
     ]);
     body.appendChild(copyPanel);
 
@@ -1020,10 +1215,8 @@ function getBasicScreeningQuestions(step) {
             id: "basic-ui",
             type: "single",
             prompt: "Which part of the basic interface helps you judge whether a numeric value is relatively low or high?",
-            choices: getDataset() === "safelimit"
-                ? ["Range / Options", "Attribute", "AI prediction", "Value"]
-                : ["Low / High", "Attribute", "AI prediction", "Value"],
-            correct: getDataset() === "safelimit" ? "Range / Options" : "Low / High",
+            choices: ["Low / High", "Attribute", "AI prediction", "Value"],
+            correct: "Low / High",
         },
     ];
 }
@@ -1048,14 +1241,14 @@ function getExplanationScreeningQuestions(step) {
             {
                 id: "attribution-purpose",
                 type: "single",
-                prompt: "What does the attribution explanation show?",
+                prompt: "What does this explanation show?",
                 choices: [
-                    "Which attributes most influenced the AI prediction",
+                    "The two attributes that most influenced the AI's decision",
                     "The original source of the dataset",
                     "A random list of unused attributes",
                     "The participant's final answer",
                 ],
-                correct: "Which attributes most influenced the AI prediction",
+                correct: "The two attributes that most influenced the AI's decision",
             },
             {
                 id: "attribution-attributes",
@@ -1073,14 +1266,14 @@ function getExplanationScreeningQuestions(step) {
         {
             id: "counterfactual-purpose",
             type: "single",
-            prompt: "What does the counterfactual explanation show?",
+            prompt: "What does this explanation show?",
             choices: [
-                "How some attribute values could change to get an alternative AI prediction",
+                "How two attribute values could change the AI's decision",
                 "How each attribute contributes to the current prediction",
                 "How accurate the participant's answer was",
                 "The order in which profiles are sampled",
             ],
-            correct: "How some attribute values could change to get an alternative AI prediction",
+            correct: "How two attribute values could change the AI's decision",
         },
         {
             id: "counterfactual-attributes",
@@ -1197,21 +1390,6 @@ function renderScreeningPage(step) {
     updateStatus();
 }
 
-function getAiOutcomeNoun() {
-    return getDataset() === "diabetes" ? "diagnosis" : "prediction";
-}
-
-function getSubjectNoun() {
-    return getDataset() === "diabetes" ? "patient" : "driver";
-}
-
-function getOutcomePhrase(label) {
-    if (getDataset() === "diabetes") {
-        return `diagnosed as ${escapeHtml(String(label ?? "").replace("No Diabetes", "Non-Diabetic").replace("Diabetes", "Diabetic"))}`;
-    }
-    return `predicted as ${escapeHtml(label)}`;
-}
-
 function joinHtmlClauses(clauses) {
     if (clauses.length <= 1) {
         return clauses[0] ?? "";
@@ -1220,71 +1398,52 @@ function joinHtmlClauses(clauses) {
 }
 
 function buildAttributionTutorialCopy(payload) {
-    const outcomeNoun = getAiOutcomeNoun();
-    const subjectNoun = getSubjectNoun();
+    const decision = getDataset() === "housing" ? "price prediction" : "loan decision";
     const entries = getShownAttributionEntries(payload);
-    const featureNames = joinHtmlClauses(entries.map((entry) => strongText(entry.name)));
     const redLabel = payload.attribution?.direction_labels?.left;
     const blueLabel = payload.attribution?.direction_labels?.right;
-    const examples = entries.map((entry) => {
-        const strength = entry.percent >= 50 ? "strong" : "low";
+    const influenceExamples = entries.map((entry) => {
         const sign = entry.value < 0 ? "-" : "+";
-        return `${strongText(entry.name)} shows a ${strength} influence for ${getOutcomePhrase(entry.label)} (${colorText(`${sign}${entry.percent}%`, entry.colorClass)})`;
+        return `${escapeHtml(entry.name)}, ${colorText(`${sign}${entry.percent}%`, entry.colorClass)}`;
     });
-
     const intro = createElement("div");
-    intro.appendChild(createElement(
-        "p",
-        "",
-        `You will be shown an explanation for the AI's ${outcomeNoun}. The explanation will show the two attributes that had the strongest influence on the AI's ${outcomeNoun}.`
-    ));
-    intro.appendChild(createElement("p", "", "Here the explanation shows:"));
+    const opening = createElement("p");
+    opening.innerHTML = `To learn how the AI predicts, you will sometimes see an explanation for the AI's ${decision}. This explanation shows the ${strongText("two most important attributes")} for that profile.`;
+    intro.appendChild(opening);
+    intro.appendChild(createElement("p", "", "The explanation will show:"));
     appendTutorialList(intro, [
-        `The influence of the two most important attributes (${featureNames}).<ul class="tutorial-subpoints"><li>${colorText("Red bars", "tutorial-color-red")} show the attribute(s) that contribute to the ${subjectNoun} being ${getOutcomePhrase(redLabel)}.</li><li>${colorText("Blue bars", "tutorial-color-blue")} show the attribute(s) that contribute to the ${subjectNoun} being ${getOutcomePhrase(blueLabel)}.</li></ul>`,
-        `A short sentence describing the ${outcomeNoun} and influences.`,
+        `The influence of the two most important attributes (${joinHtmlClauses(influenceExamples)}). The higher the number, the stronger the influence.<ul class="tutorial-subpoints"><li>${colorText("Red bars", "tutorial-color-red")} show the attribute(s) that contribute to a ${strongText(String(redLabel).toLowerCase())} decision.</li><li>${colorText("Blue bars", "tutorial-color-blue")} show the attribute(s) that contribute to an ${strongText(String(blueLabel).toLowerCase())} decision.</li></ul>`,
+        `A sentence describing the ${decision} and the influences.`,
     ], { className: "tutorial-bullets tutorial-bullets-compact", ordered: true });
-    intro.appendChild(createElement("p"));
-    intro.lastChild.innerHTML = `Here, ${joinHtmlClauses(examples)}. The higher the number, the stronger the influence.`;
     return intro;
 }
 
 function buildCounterfactualTutorialCopy(payload) {
-    const outcomeNoun = getAiOutcomeNoun();
+    const decision = getDataset() === "housing" ? "price prediction" : "loan decision";
     const entries = getCounterfactualChangeEntries(payload);
-    const targetLabel = payload.counterfactual?.prediction?.label;
-    const featureNames = joinHtmlClauses(entries.map((entry) => strongText(entry.name)));
     const numericDecrease = entries.find((entry) => entry.isNumeric && entry.delta < 0);
     const numericIncrease = entries.find((entry) => entry.isNumeric && entry.delta > 0);
     const categoricalChange = entries.find((entry) => !entry.isNumeric);
-    const changeExamples = entries.map((entry) => {
-        if (entry.isNumeric) {
-            const amount = formatTutorialValue(Math.abs(entry.delta));
-            return `${strongText(entry.name)} ${entry.direction} by ${colorText(amount, entry.colorClass)}`;
-        }
-        return `${strongText(entry.name)} changes to ${colorText(formatTutorialValue(entry.updatedValue), entry.colorClass)}`;
-    });
 
     const intro = createElement("div");
-    intro.appendChild(createElement(
-        "p",
-        "",
-        `You will be shown an explanation for the AI's ${outcomeNoun}. The explanation shows a counter-example in which changes to two attributes alter the ${outcomeNoun}.`
-    ));
-    intro.appendChild(createElement("p", "", "Here the explanation shows:"));
+    const opening = createElement("p");
+    opening.innerHTML = `To learn how the AI predicts, you will sometimes see an explanation for the AI's ${decision}. This explanation shows a ${strongText("counter-example")}, where ${strongText("two attributes are changed")} to alter the ${decision}.`;
+    intro.appendChild(opening);
+    intro.appendChild(createElement("p", "", "The explanation will show:"));
     const changeDetails = [];
     if (numericDecrease) {
-        changeDetails.push(`${colorText("Red bars", "tutorial-color-red")} show the decrease in attribute value(s) that changes the ${outcomeNoun} to be ${escapeHtml(targetLabel)} (${colorText(`-${formatTutorialValue(Math.abs(numericDecrease.delta))}`, "tutorial-color-red")}).`);
+        changeDetails.push(`${colorText("Red bars", "tutorial-color-red")} show decreases in value.`);
     }
     if (numericIncrease) {
-        changeDetails.push(`${colorText("Blue bars", "tutorial-color-blue")} show the increase in attribute value(s) that changes the ${outcomeNoun} to be ${escapeHtml(targetLabel)} (${colorText(`+${formatTutorialValue(Math.abs(numericIncrease.delta))}`, "tutorial-color-blue")}).`);
+        changeDetails.push(`${colorText("Blue bars", "tutorial-color-blue")} show increases in value.`);
     }
     if (categoricalChange) {
-        changeDetails.push(`${colorText("Blue markers", "tutorial-color-blue")} show changed categorical value(s) that alter the ${outcomeNoun} to be ${escapeHtml(targetLabel)} (${colorText(formatTutorialValue(categoricalChange.updatedValue), "tutorial-color-blue")}).`);
+        changeDetails.push(`${colorText("Blue markers", "tutorial-color-blue")} show changed options.`);
     }
     const subpoints = (items) => `<ul class="tutorial-subpoints">${items.map((item) => `<li>${item}</li>`).join("")}</ul>`;
     appendTutorialList(intro, [
-        `The two attributes (${featureNames}) in the counter-example that alter the ${outcomeNoun} when they change.${subpoints(changeDetails)}`,
-        `A sentence describing the ${outcomeNoun} and counter-example.${subpoints([`Here, when ${joinHtmlClauses(changeExamples)}, the ${outcomeNoun} for the counter-example changes to be ${strongText(targetLabel)}.`])}`,
+        `The ${strongText("change in the two attributes")} in the counter-example.${subpoints(changeDetails)}`,
+        `A sentence describing the ${decision} and the effect of the changes.`,
     ], { className: "tutorial-bullets tutorial-bullets-compact", ordered: true });
     return intro;
 }
@@ -1312,29 +1471,59 @@ function renderExplanationTutorialPage(step) {
     renderTutorialPage(step.title, body);
 }
 
+function renderSimulationPracticePage(step) {
+    const body = createElement("div", "tutorial-two-column");
+    const copyPanel = createElement("div", "tutorial-copy");
+    copyPanel.appendChild(createElement("p", "", "Congratulations on passing the screening questions!"));
+    const previewText = createElement("p");
+    previewText.innerHTML = `Before the main experiment, here is a ${strongText("preview of the main testing task")}.`;
+    copyPanel.appendChild(previewText);
+    const task = createElement("p");
+    task.innerHTML = getDataset() === "housing"
+        ? `You will be asked to ${strongText("change Cheap houses to Expensive ones or vice versa")}. Make changes in the Changes column.`
+        : `You will be asked to ${strongText("change Rejected loan applications to Approved ones or vice versa")}. Make changes in the Changes column.`;
+    copyPanel.appendChild(task);
+    copyPanel.appendChild(createElement(
+        "p",
+        "",
+        "Click “Reset changes” to start again. You will not be told whether your practice changes are correct or wrong."
+    ));
+    body.appendChild(copyPanel);
+
+    const preview = createElement("div", "tutorial-preview");
+    preview.appendChild(createIframe(step.sampleCase, {
+        xaiType: "none",
+        showPrediction: 1,
+        counterfactualSimulation: 1,
+        title: "Practice for Final Task",
+    }));
+    body.appendChild(preview);
+    renderTutorialPage(step.title, body);
+}
+
 function renderPhaseInstructions(step) {
-    const dataset = getDataset();
     const isTraining = step.phase === "training-instructions";
-    const subject = dataset === "diabetes" ? "patient" : "driver";
-    const outcome = dataset === "diabetes" ? "diagnosis" : "prediction";
     const body = createElement("div", "tutorial-copy phase-instructions");
 
     if (isTraining) {
         const opening = createElement("p");
-        opening.innerHTML = `Congratulations on passing the screening questions. Your task now is to learn how to make the correct ${outcome} for each ${subject}.`;
+        opening.innerHTML = getDataset() === "housing"
+            ? `You will now try to ${strongText("learn which profiles")} are cheap and expensive.`
+            : `You will now try to ${strongText("learn which profiles")} are approved and rejected.`;
         body.appendChild(opening);
-        body.appendChild(createElement("p", "", `You will see 10 ${subject} profiles, and for each you will:`));
+        const profileCount = createElement("p");
+        profileCount.innerHTML = `You will see ${strongText("10 profiles")}. For each, you will:`;
+        body.appendChild(profileCount);
         appendTutorialList(body, [
-            `Provide your ${outcome} of the ${subject}.`,
-            `Review the correct ${outcome} made by the AI${getExplanationType() === "none" ? "." : " and its explanation."}`,
+            `${strongText("Predict")} whether the profile is ${getDataset() === "housing" ? "cheap or expensive" : "approved or rejected"}.`,
+            `${strongText("Review")} the correct answer${getExplanationType() === "none" ? "." : " and the explanation."}`,
         ], { ordered: true, className: "tutorial-bullets" });
     } else {
-        body.appendChild(createElement("p", "", "Congratulations on passing the training phase!"));
-        body.appendChild(createElement(
-            "p",
-            "",
-            `Now, you will see 10 ${subject} profiles and their ${outcome}, and for each you will suggest the smallest possible (minimal) change to their profile to change their ${outcome}.`
-        ));
+        (Array.isArray(step.sessionIntro) ? step.sessionIntro : [step.sessionIntro]).forEach((paragraph) => {
+            const text = createElement("p");
+            appendFormattedText(text, paragraph);
+            body.appendChild(text);
+        });
     }
     renderTutorialPage(step.title, body);
 }
@@ -1373,12 +1562,20 @@ function renderCurrentCase() {
         renderExplanationTutorialPage(caseItem);
         return;
     }
+    if (caseItem.phase === "tutorial-simulation") {
+        renderSimulationPracticePage(caseItem);
+        return;
+    }
     if (caseItem.phase === "training-instructions" || caseItem.phase === "test-instructions") {
         renderPhaseInstructions(caseItem);
         return;
     }
     if (caseItem.phase === "training") {
         renderTrainingCase(caseItem);
+        return;
+    }
+    if (caseItem.phase === "results") {
+        renderTestingResults(caseItem);
         return;
     }
     renderTestCase(caseItem);
@@ -1394,20 +1591,18 @@ function renderTrainingCase(caseItem) {
 
     const originalPanel = document.createElement("section");
     originalPanel.className = "case-panel";
-    const originalTitle = document.createElement("h2");
-    originalTitle.textContent = copy.originalTitle;
-    originalPanel.appendChild(originalTitle);
     originalPanel.appendChild(createIframe(caseItem, {
         xaiType: "none",
         showPrediction: 0,
         short: true,
-        title: copy.originalTitle,
+        title: `${copy.subject} profile`,
     }));
     layout.appendChild(originalPanel);
 
     const answerPanel = document.createElement("section");
     answerPanel.className = "case-panel";
-    const answerTitle = document.createElement("h2");
+    const answerTitle = document.createElement("p");
+    answerTitle.className = "training-question";
     answerTitle.textContent = copy.trainingQuestion;
     answerPanel.appendChild(answerTitle);
     const answerArea = document.createElement("div");
@@ -1483,19 +1678,11 @@ function renderAnswerChoices(caseItem, answerArea, explanationPanel) {
 }
 
 function formatPredictionLabel(label) {
-    const labelText = String(label ?? "");
-    if (getDataset() === "diabetes") {
-        return labelText.toLowerCase().includes("no") ? "Non-Diabetic" : "Diabetic";
-    }
-    return labelText;
+    return String(label ?? "");
 }
 
 function formatPredictionLabelForDataset(dataset, label) {
-    const labelText = String(label ?? "");
-    if (dataset === "diabetes") {
-        return labelText.toLowerCase().includes("no") ? "Non-Diabetic" : "Diabetic";
-    }
-    return labelText;
+    return String(label ?? "");
 }
 
 function renderTestCase(caseItem) {
@@ -1517,16 +1704,106 @@ function renderTestCase(caseItem) {
     stage.appendChild(simulationPanel);
 }
 
+function rawValuesDiffer(firstValue, secondValue) {
+    const firstNumber = Number(firstValue);
+    const secondNumber = Number(secondValue);
+    if (Number.isFinite(firstNumber) && Number.isFinite(secondNumber)) {
+        return Math.abs(firstNumber - secondNumber) > 1e-9;
+    }
+    return String(firstValue) !== String(secondValue);
+}
+
+function calculateTestingResults() {
+    const testCases = state.cases.filter((step) => step.phase === "test");
+    const attempts = [];
+
+    testCases.forEach((step) => {
+        const rawValues = state.counterfactualRawValues.get(caseKey(step));
+        if (!rawValues) {
+            return;
+        }
+        const changedFeatureCount = (step.payload.raw_feature_names ?? [])
+            .filter((featureName, index) => rawValuesDiffer(
+                rawValues[featureName],
+                step.payload.raw_feature_values[index]
+            )).length;
+        if (changedFeatureCount === 0) {
+            return;
+        }
+
+        const prediction = window.StaticModel.predictDataset(
+            DATA,
+            getDataset(),
+            rawValues
+        );
+        attempts.push({
+            caseId: step.id,
+            instanceId: step.payload.instance_id,
+            sessionId: step.sessionId,
+            direction: step.direction,
+            changedFeatureCount,
+            prediction: compactPrediction(prediction),
+            targetPrediction: Number(step.targetPrediction),
+            valid: Number(prediction.value) === Number(step.targetPrediction),
+        });
+    });
+
+    const validCount = attempts.filter((attempt) => attempt.valid).length;
+    return {
+        totalTestCount: testCases.length,
+        attemptedCount: attempts.length,
+        validCount,
+        successRate: attempts.length > 0
+            ? Math.round((validCount / attempts.length) * 100)
+            : null,
+        attempts,
+    };
+}
+
+function appendResultMetric(container, value, label) {
+    const metric = createElement("div", "results-metric");
+    metric.appendChild(createElement("div", "results-metric-value", value));
+    metric.appendChild(createElement("div", "results-metric-label", label));
+    container.appendChild(metric);
+}
+
+function renderTestingResults(step) {
+    const results = calculateTestingResults();
+    const body = createElement("div", "testing-results");
+    const explanation = results.attemptedCount > 0
+        ? `You made changes in ${results.attemptedCount} of ${results.totalTestCount} test instances. Untouched instances are not included in the success rate.`
+        : `You did not make changes in any of the ${results.totalTestCount} test instances, so no success rate was calculated.`;
+    body.appendChild(createElement("p", "results-intro", explanation));
+
+    const metrics = createElement("div", "results-metrics");
+    appendResultMetric(metrics, String(results.attemptedCount), "Attempted instances");
+    appendResultMetric(metrics, String(results.validCount), "Valid counterfactuals");
+    appendResultMetric(
+        metrics,
+        results.successRate === null ? "—" : `${results.successRate}%`,
+        "Success rate"
+    );
+    body.appendChild(metrics);
+    body.appendChild(createElement(
+        "p",
+        "results-note",
+        "A counterfactual is valid when the edited profile makes the AI reach the required target prediction for that instance."
+    ));
+    renderTutorialPage(step.title, body);
+
+    if (state.experimentStarted) {
+        logStudyEvent("testing_results_shown", results);
+    }
+}
+
 function startRunthrough() {
     const trainingInput = document.querySelector("#experiment_training_count");
     const testInput = document.querySelector("#experiment_test_count");
     const trainingCount = clampCount(trainingInput, 10);
-    const testCount = clampCount(testInput, 10);
+    const testCount = clampCount(testInput, 6);
 
     try {
-        if (getDataset() === "diabetes") {
-            validateDiabetesLabelMapping();
-        }
+        validateDatasetLabelMapping();
         const caseSteps = buildCases(trainingCount, testCount);
         state.cases = [
             ...buildTutorialSteps(caseSteps),
@@ -1539,6 +1816,7 @@ function startRunthrough() {
         state.screeningAnswers.clear();
         state.screeningQuestions.clear();
         state.counterfactualChanges.clear();
+        state.counterfactualRawValues.clear();
         if (state.cases.length === 0) {
             showStageMessage("This setup has no cases to show.");
         } else {

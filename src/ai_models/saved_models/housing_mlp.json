@@ -1,0 +1,18 @@
+{
+  "feature_names": [
+    "sqft_living",
+    "bedrooms",
+    "bathrooms",
+    "floors",
+    "grade"
+  ],
+  "class_labels": [
+    "Cheap",
+    "Expensive"
+  ],
+  "metrics": {
+    "accuracy": 0.7660891089108911,
+    "log_loss": 0.49139408082222413
+  },
+  "sklearn_version": "1.5.1"
+}

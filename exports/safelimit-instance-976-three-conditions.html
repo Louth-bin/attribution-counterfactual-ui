@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>SafeLimit instance 976 across three conditions</title>
+    <style>
+        @page { size: 420mm 125mm; margin: 8mm; }
+        * { box-sizing: border-box; }
+        html, body { margin: 0; background: #fff; font-family: Arial, sans-serif; }
+        main { width: 404mm; height: 109mm; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5mm; }
+        figure { min-width: 0; height: 104mm; margin: 0; display: grid; grid-template-rows: 90mm 12mm; gap: 2mm; align-self: start; }
+        .viewport { min-width: 0; overflow: hidden; }
+        img { display: block; width: 140%; height: auto; margin-left: -20%; }
+        .counterfactual img { width: 130%; margin-left: -15%; }
+        figcaption { align-self: center; text-align: center; color: #17212b; font-size: 15pt; font-weight: 700; letter-spacing: 0; }
+    </style>
+</head>
+<body>
+    <main>
+        <figure>
+            <div class="viewport"><img src="safelimit-none.png" alt="SafeLimit instance under the none condition" /></div>
+            <figcaption>None</figcaption>
+        </figure>
+        <figure>
+            <div class="viewport"><img src="safelimit-attribution.png" alt="SafeLimit instance under the attribution condition" /></div>
+            <figcaption>Attribution</figcaption>
+        </figure>
+        <figure class="counterfactual">
+            <div class="viewport"><img src="safelimit-counterfactual.png" alt="SafeLimit instance under the counterfactual condition" /></div>
+            <figcaption>Counterfactual</figcaption>
+        </figure>
+    </main>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "target_column": "target",
+  "source_format": "king_county_house_sales_five_numeric_v1",
+  "source": "King County house sales data; five property attributes retained.",
+  "price_threshold": 450000.0,
+  "class_labels": [
+    "Cheap",
+    "Expensive"
+  ],
+  "feature_types": {
+    "sqft_living": "numerical",
+    "bedrooms": "numerical",
+    "bathrooms": "numerical",
+    "floors": "numerical",
+    "grade": "numerical"
+  }
+}

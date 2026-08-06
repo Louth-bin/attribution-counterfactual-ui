@@ -15,6 +15,16 @@ DIABETES_SOURCE_VERSION = "kaggle_mathchi_pima_flipped_labels_v1"
 DIABETES_SOURCE_URL = "https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.data.csv"
 CERAMIC_SOURCE_VERSION = "synthetic_ceramic_tile_firing_deformation_n2000_v1"
 SAFELIMIT_SOURCE_VERSION = "widmark_synthetic_safelimit_n2000_drunk_zero_v2"
+HOUSING_SOURCE_VERSION = "king_county_house_sales_five_numeric_v1"
+HOUSING_SOURCE_URL = (
+    "https://gist.githubusercontent.com/guilhermesilveira/"
+    "eb03c2f0d0fc52d4df2528b330f50914/raw/kc_house_data.csv"
+)
+LOAN_SOURCE_VERSION = "loan_approval_five_numeric_complete_cases_v1"
+LOAN_SOURCE_URL = (
+    "https://gist.githubusercontent.com/Nwaneto/"
+    "44c4743cd97b8fb44fed5330cfb637a4/raw/loan-prediction-dataset.csv"
+)
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -33,6 +43,7 @@ class DatasetBundle:
     feature_names: list[str]
     feature_display_names: list[str]
     feature_types: list[str]
+    display_feature_types: list[str]
     feature_ranges: list[list[Any]]
     display_feature_ranges: list[list[Any]]
     friendly_category_names: dict[str, dict[str, str]]
@@ -279,16 +290,144 @@ def _generate_safelimit_dataset() -> tuple[pd.DataFrame, dict[str, Any]]:
     return raw_df, metadata
 
 
+def _generate_housing_dataset() -> tuple[pd.DataFrame, dict[str, Any]]:
+    source_df = _load_csv_from_local_or_remote(
+        dataset_name="housing",
+        source_url=HOUSING_SOURCE_URL,
+        filename="king_county_source.csv",
+    ).copy()
+    selected_columns = [
+        "sqft_living",
+        "bedrooms",
+        "bathrooms",
+        "floors",
+        "grade",
+        "price",
+    ]
+    missing_columns = [column for column in selected_columns if column not in source_df]
+    if missing_columns:
+        raise ValueError(
+            "King County housing source is missing columns: "
+            + ", ".join(missing_columns)
+        )
+
+    cleaned = source_df[selected_columns].apply(pd.to_numeric, errors="coerce").dropna()
+    cleaned = cleaned[
+        cleaned["sqft_living"].between(500, 7000)
+        & cleaned["bedrooms"].between(1, 10)
+        & cleaned["bathrooms"].between(0.5, 8)
+        & cleaned["floors"].between(1, 3.5)
+        & cleaned["grade"].between(1, 13)
+        & (cleaned["price"] > 0)
+    ].reset_index(drop=True)
+    if cleaned.empty:
+        raise ValueError("King County housing source has no usable complete rows.")
+
+    price_threshold = float(cleaned["price"].median())
+    raw_df = cleaned.drop(columns=["price"]).copy()
+    raw_df.insert(0, "row_id", range(len(raw_df)))
+    raw_df["bedrooms"] = raw_df["bedrooms"].round().astype(int)
+    raw_df["grade"] = raw_df["grade"].round().astype(int)
+    raw_df["target"] = (cleaned["price"] > price_threshold).astype(int)
+
+    metadata = {
+        "target_column": "target",
+        "source_format": HOUSING_SOURCE_VERSION,
+        "source": "King County house sales data; five property attributes retained.",
+        "price_threshold": price_threshold,
+        "class_labels": ["Cheap", "Expensive"],
+        "feature_types": {
+            "sqft_living": "numerical",
+            "bedrooms": "numerical",
+            "bathrooms": "numerical",
+            "floors": "numerical",
+            "grade": "numerical",
+        },
+    }
+    return raw_df, metadata
+
+
+def _generate_loan_dataset() -> tuple[pd.DataFrame, dict[str, Any]]:
+    source_df = _load_csv_from_local_or_remote(
+        dataset_name="loan",
+        source_url=LOAN_SOURCE_URL,
+        filename="loan_approval_source.csv",
+    ).copy()
+    source_columns = [
+        "ApplicantIncome",
+        "CoapplicantIncome",
+        "LoanAmount",
+        "Loan_Amount_Term",
+        "Credit_History",
+        "Loan_Status",
+    ]
+    missing_columns = [column for column in source_columns if column not in source_df]
+    if missing_columns:
+        raise ValueError(
+            "Loan approval source is missing columns: "
+            + ", ".join(missing_columns)
+        )
+
+    cleaned = source_df[source_columns].copy()
+    numeric_columns = source_columns[:-1]
+    cleaned[numeric_columns] = cleaned[numeric_columns].apply(
+        pd.to_numeric,
+        errors="coerce",
+    )
+    cleaned["Loan_Status"] = cleaned["Loan_Status"].astype(str).str.strip().str.upper()
+    cleaned = cleaned.dropna()
+    cleaned = cleaned[
+        cleaned["Loan_Status"].isin(["N", "Y"])
+        & cleaned["Credit_History"].isin([0, 1])
+        & (cleaned["ApplicantIncome"] >= 0)
+        & (cleaned["CoapplicantIncome"] >= 0)
+        & (cleaned["LoanAmount"] > 0)
+        & (cleaned["Loan_Amount_Term"] > 0)
+    ].reset_index(drop=True)
+    if cleaned.empty:
+        raise ValueError("Loan approval source has no usable complete rows.")
+
+    raw_df = pd.DataFrame(
+        {
+            "row_id": range(len(cleaned)),
+            "applicant_income": cleaned["ApplicantIncome"].round().astype(int),
+            "coapplicant_income": cleaned["CoapplicantIncome"].round().astype(int),
+            "loan_amount": cleaned["LoanAmount"].round().astype(int),
+            "loan_term": cleaned["Loan_Amount_Term"].round().astype(int),
+            "credit_history": cleaned["Credit_History"].round().astype(int),
+            "target": cleaned["Loan_Status"].map({"N": 0, "Y": 1}).astype(int),
+        }
+    )
+    metadata = {
+        "target_column": "target",
+        "source_format": LOAN_SOURCE_VERSION,
+        "source": "Public loan application approval dataset; complete cases and five numerical attributes retained.",
+        "class_labels": ["Rejected", "Approved"],
+        "feature_types": {
+            "applicant_income": "numerical",
+            "coapplicant_income": "numerical",
+            "loan_amount": "numerical",
+            "loan_term": "numerical",
+            "credit_history": "numerical",
+        },
+    }
+    return raw_df, metadata
+
+
 BUILTIN_DATASET_GENERATORS = {
     "diabetes": _generate_diabetes_dataset,
     "ceramic": _generate_ceramic_dataset,
     "safelimit": _generate_safelimit_dataset,
+    "housing": _generate_housing_dataset,
+    "loan": _generate_loan_dataset,
 }
 
 BUILTIN_DATASET_SOURCE_VERSIONS = {
     "diabetes": DIABETES_SOURCE_VERSION,
     "ceramic": CERAMIC_SOURCE_VERSION,
     "safelimit": SAFELIMIT_SOURCE_VERSION,
+    "housing": HOUSING_SOURCE_VERSION,
+    "loan": LOAN_SOURCE_VERSION,
 }
 
 
@@ -368,6 +507,9 @@ def _infer_feature_types_and_ranges(
         if min_value == max_value:
             min_value = float(np.min(series))
             max_value = float(np.max(series))
+        if pd.api.types.is_integer_dtype(series):
+            min_value = int(round(min_value))
+            max_value = int(round(max_value))
         feature_ranges.append([min_value, max_value])
 
     return feature_types, feature_ranges
@@ -517,16 +659,20 @@ def ensure_dataset_bundle(
         category_orders=category_orders,
     )
     friendly_category_names = runtime_config.friendly_category_names
+    display_feature_types = [
+        "categorical" if feature_name in friendly_category_names else feature_type
+        for feature_name, feature_type in zip(feature_names, feature_types)
+    ]
     display_feature_ranges = [
         _get_display_feature_range(
             feature_name=feature_name,
-            feature_type=feature_type,
+            feature_type=display_feature_type,
             feature_range=feature_range,
             friendly_category_names=friendly_category_names,
         )
-        for feature_name, feature_type, feature_range in zip(
+        for feature_name, display_feature_type, feature_range in zip(
             feature_names,
-            feature_types,
+            display_feature_types,
             feature_ranges,
         )
     ]
@@ -546,6 +692,7 @@ def ensure_dataset_bundle(
         feature_names=feature_names,
         feature_display_names=feature_display_names,
         feature_types=feature_types,
+        display_feature_types=display_feature_types,
         feature_ranges=feature_ranges,
         display_feature_ranges=display_feature_ranges,
         friendly_category_names=friendly_category_names,
@@ -560,6 +707,9 @@ def subset_dataset_bundle(
     selected_feature_names: list[str],
 ) -> DatasetBundle:
     feature_type_by_name = dict(zip(dataset_bundle.feature_names, dataset_bundle.feature_types))
+    display_feature_type_by_name = dict(
+        zip(dataset_bundle.feature_names, dataset_bundle.display_feature_types)
+    )
     feature_range_by_name = dict(zip(dataset_bundle.feature_names, dataset_bundle.feature_ranges))
     display_feature_range_by_name = dict(
         zip(dataset_bundle.feature_names, dataset_bundle.display_feature_ranges)
@@ -577,6 +727,10 @@ def subset_dataset_bundle(
         ],
         feature_types=[
             feature_type_by_name[feature_name]
+            for feature_name in selected_feature_names
+        ],
+        display_feature_types=[
+            display_feature_type_by_name[feature_name]
             for feature_name in selected_feature_names
         ],
         feature_ranges=[

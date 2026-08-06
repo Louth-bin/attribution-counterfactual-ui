@@ -14,6 +14,9 @@ const faceFiguresEnabled = urlParams.get("faceFigures") === "1";
 const counterfactualSimulationEnabled = urlParams.get("counterfactualSimulation") === "1";
 const counterfactualSimulationMode = getCounterfactualSimulationMode(urlParams.get("simulationMode"));
 const initialSimulationValues = parseInitialSimulationValues(urlParams.get("simulationValues"));
+const explicitProfileName = urlParams.get("profileName");
+const stakeholder = urlParams.get("stakeholder") ?? "";
+const counterfactualDirection = urlParams.get("direction") ?? "";
 const SIMULATION_SPECIFIC_ATTRIBUTE_COUNT = 2;
 const SIMULATION_BUDGET_POINTS = 10;
 const PROFILE_SUBJECT_NAMES = [
@@ -76,6 +79,7 @@ function saveCounterfactualSimulation() {
         instanceNormalizedValues: getNormalizedScreenValues(currentExplanation),
         changes: getVisibleChanges(simulationValues),
         changedDisplayedValues: [...simulationValues],
+        changedRawFeatureValues: getSimulationRawValues(),
     }, "*");
 }
 
@@ -1492,7 +1496,7 @@ function showCounterfactualExample(tableBody) {
     if (explanationView === "classic") {
         const diffHeader = document.createElement("th");
         diffHeader.className = "tooltip diff-column-header";
-        diffHeader.title = "Difference between the original instance and the counterfactual";
+        diffHeader.title = "Difference between the original profile and the counter-example";
         diffHeader.textContent = "Diff";
         headerRow.appendChild(diffHeader);
     }
@@ -1626,7 +1630,7 @@ function createCounterfactualSimulation() {
     const simulationQuestion = document.createElement("p");
     simulationQuestion.className = "counterfactual-simulation-question";
     simulationQuestion.id = "counterfactual-simulation-question";
-    simulationQuestion.textContent = getCounterfactualSimulationQuestion();
+    simulationQuestion.innerHTML = getCounterfactualSimulationQuestion();
     simulationPanel.appendChild(simulationQuestion);
 
     if (counterfactualSimulationMode === "budget") {
@@ -2106,6 +2110,33 @@ function getCounterfactualSimulationQuestion() {
 function getProfileCounterfactualQuestion(originalLabel, targetLabel) {
     const subjectName = getProfileSubjectName();
 
+    if (datasetName === "housing" && stakeholder === "homeowner") {
+        return `${subjectName} wants this house but wants it to be cheap. If you were ${subjectName}, what changes would you make to find a cheap house instead?`;
+    }
+
+    if (datasetName === "housing" && stakeholder === "developer") {
+        return `If you were ${subjectName}, a housing developer, what small changes would you make so this cheap house could be listed as expensive?`;
+    }
+
+    if (datasetName === "housing") {
+        return `This is a ${strongHtml(originalLabel)} house. What are the minimal (smallest possible) changes to make this house ${strongHtml(targetLabel)}?`;
+    }
+
+    if (datasetName === "loan" && stakeholder === "applicant") {
+        return `${subjectName}'s loan was rejected. If you were ${subjectName}, what changes would you make to get it approved?`;
+    }
+
+    if (datasetName === "loan" && stakeholder === "financial-advisor") {
+        if (counterfactualDirection === "warning") {
+            return `If you were ${subjectName}, a financial advisor, what small changes could cause this approved loan to be rejected?`;
+        }
+        return `If you were ${subjectName}, a financial advisor, what small changes would you recommend to get this rejected loan approved?`;
+    }
+
+    if (datasetName === "loan") {
+        return `This is a ${strongHtml(originalLabel)} loan application. What are the minimal (smallest possible) changes to make it ${strongHtml(targetLabel)}?`;
+    }
+
     if (datasetName === "diabetes") {
         return `${subjectName} is diagnosed as being ${originalLabel}. If ${subjectName} was to become ${targetLabel}, what minimal changes to their profile would need to occur?`;
     }
@@ -2118,6 +2149,9 @@ function getProfileCounterfactualQuestion(originalLabel, targetLabel) {
 }
 
 function getProfileSubjectName() {
+    if (explicitProfileName) {
+        return explicitProfileName;
+    }
     const key = `${datasetName}:${splitName}:${Number.isFinite(instanceId) ? instanceId : 0}`;
     let names = PROFILE_SUBJECT_NAMES;
 
@@ -2155,7 +2189,7 @@ function formatSimulationOutcomeLabel(label) {
 function updateCounterfactualSimulationQuestion() {
     const question = document.querySelector("#counterfactual-simulation-question");
     if (question) {
-        question.textContent = getCounterfactualSimulationQuestion();
+        question.innerHTML = getCounterfactualSimulationQuestion();
     }
     updateCounterfactualSimulationQuestionWidth();
 }
@@ -2316,49 +2350,14 @@ function shuffledIndices(length) {
 }
 
 async function predictRawValues(rawFeatureValues) {
-    const counterfactual = currentExplanation?.counterfactual;
-    if (!counterfactual?.raw_feature_values?.length) {
-        return currentExplanation.prediction;
+    if (!window.StaticModel) {
+        throw new Error("The browser model evaluator did not load.");
     }
-
-    const progress = getStaticCounterfactualProgress(rawFeatureValues);
-    return progress >= 0.8
-        ? counterfactual.prediction
-        : currentExplanation.prediction;
-}
-
-function getStaticCounterfactualProgress(rawFeatureValues) {
-    const counterfactualValues = currentExplanation.counterfactual?.raw_feature_values;
-    if (!counterfactualValues?.length) {
-        return 0;
-    }
-
-    const changedIndices = currentExplanation.rawAttributeNames
-        .map((_, index) => index)
-        .filter((index) => valuesDiffer(
-            currentExplanation.rawAttributeValues[index],
-            counterfactualValues[index],
-        ));
-    if (changedIndices.length === 0) {
-        return 0;
-    }
-
-    const progressValues = changedIndices.map((index) => {
-        const originalValue = currentExplanation.rawAttributeValues[index];
-        const targetValue = counterfactualValues[index];
-        const currentValue = rawFeatureValues[index];
-
-        if (currentExplanation.attributeTypes[index] === "categorical") {
-            return valuesDiffer(currentValue, targetValue) ? 0 : 1;
-        }
-
-        const targetDelta = Number(targetValue) - Number(originalValue);
-        if (!Number.isFinite(targetDelta) || targetDelta === 0) {
-            return 0;
-        }
-        return clamp((Number(currentValue) - Number(originalValue)) / targetDelta, 0, 1);
-    });
-    return progressValues.reduce((sum, value) => sum + value, 0) / progressValues.length;
+    return window.StaticModel.predictDataset(
+        window.EXPERIMENT_DATA,
+        datasetName,
+        rawFeatureValues
+    );
 }
 
 function valuesDiffer(firstValue, secondValue) {
@@ -2694,6 +2693,7 @@ function renderCounterfactualSimulationFeedback() {
         instanceValues: [...currentExplanation.attributeValues],
         instanceNormalizedValues: getNormalizedScreenValues(currentExplanation),
         changes: getVisibleChanges(simulationValues),
+        changedRawFeatureValues: getSimulationRawValues(),
     }, "*");
 }
 
@@ -2751,6 +2751,14 @@ function getPatientOutcomePhrase(label) {
             : "the person would likely be above the limit";
     }
 
+    if (datasetName === "housing") {
+        return `the house would likely be ${escapeHtml(label)}`;
+    }
+
+    if (datasetName === "loan") {
+        return `the loan application would likely be ${escapeHtml(label)}`;
+    }
+
     return `the case would likely be ${escapeHtml(label)}`;
 }
 
@@ -2784,6 +2792,14 @@ function getProfileOutcomePhrase(label, options = {}) {
             : "the person is above the limit";
     }
 
+    if (datasetName === "housing") {
+        return `the house ${verb} ${escapeHtml(label)}`;
+    }
+
+    if (datasetName === "loan") {
+        return `the loan application ${verb} ${escapeHtml(label)}`;
+    }
+
     return `the case ${verb} ${escapeHtml(label)}`;
 }
 
@@ -2795,23 +2811,30 @@ function getInfluenceDirectionLabel(value, attribution) {
 }
 
 function buildLooseAttributionInfluenceText(attribution) {
-    const signedEntries = attribution.values
-        .map((value, index) => ({
+    const shownIndices = Array.isArray(attribution.shownFeatureIndices) && attribution.shownFeatureIndices.length > 0
+        ? attribution.shownFeatureIndices.slice(0, 2)
+        : attribution.values
+            .map((value, index) => ({ value, index }))
+            .sort((a, b) => Math.abs(b.value) - Math.abs(a.value))
+            .slice(0, 2)
+            .map((entry) => entry.index);
+    const signedEntries = shownIndices
+        .map((index) => ({
             name: getNarrativeAttributeName(index),
-            value,
-            direction: getInfluenceDirectionLabel(value, attribution),
+            value: attribution.values[index],
+            direction: getInfluenceDirectionLabel(attribution.values[index], attribution),
         }))
-        .filter((entry) => Math.abs(entry.value) > 0)
-        .sort((a, b) => Math.abs(b.value) - Math.abs(a.value))
-        .slice(0, 3);
+        .filter((entry) => Math.abs(entry.value) > 0);
 
     if (signedEntries.length === 0) {
         return "";
     }
 
-    const clauses = signedEntries.map((entry) =>
-        `${strongHtml(entry.name)} on being ${strongHtml(entry.direction)}`
-    );
+    const clauses = signedEntries.map((entry, index) => {
+        const name = index === 0 ? strongHtml(entry.name) : escapeHtml(entry.name);
+        const prefix = index === 0 ? `${name} had an influence` : name;
+        return `${prefix} towards ${strongHtml(entry.direction)}`;
+    });
 
     return joinClauses(clauses);
 }
@@ -2902,7 +2925,7 @@ function buildNarrativeHtml() {
     if (explanationType === "counterfactual") {
         const counterfactual = currentExplanation.counterfactual;
         if (!counterfactual) {
-            return "No counterfactual example was available for this instance.";
+            return "No counter-example was available for this profile.";
         }
 
         const changes = currentExplanation.attributeNames
@@ -2934,6 +2957,16 @@ function buildNarrativeHtml() {
             counterfactual.feature_values
         );
 
+        if (datasetName === "housing" || datasetName === "loan") {
+            const originalPrediction = strongHtml(shortenClassLabel(currentExplanation.prediction.label));
+            const changedPrediction = strongHtml(shortenClassLabel(counterfactual.prediction.label));
+            const profileChanges = buildProfileCounterfactualChangeText(
+                changedIndices,
+                counterfactual.feature_values
+            );
+            return `This profile was predicted as ${originalPrediction}. If ${profileChanges}, it would be ${changedPrediction}.`;
+        }
+
         if (datasetName === "diabetes") {
             const currentDiagnosis = strongHtml(shortenClassLabel(currentExplanation.prediction.label));
             const counterfactualDiagnosis = strongHtml(shortenClassLabel(counterfactual.prediction.label));
@@ -2952,7 +2985,7 @@ function buildNarrativeHtml() {
     if (explanationType === "attribution") {
         const attribution = currentExplanation.attribution;
         if (!attribution || !Array.isArray(attribution.values)) {
-            return "No attribution data was available for this instance.";
+            return "No explanation was available for this profile.";
         }
 
         const influenceText = buildLooseAttributionInfluenceText(attribution);
@@ -2964,13 +2997,35 @@ function buildNarrativeHtml() {
                 : `This patient is diagnosed as ${diagnosis}.`;
         }
 
-        const predictionLabel = strongHtml(shortenClassLabel(currentExplanation.prediction.label));
+        const predictionLabel = strongHtml(`${shortenClassLabel(currentExplanation.prediction.label)}.`);
+        if (datasetName === "housing" || datasetName === "loan") {
+            return influenceText
+                ? `This profile was predicted as ${predictionLabel} The ${influenceText}.`
+                : `This profile was predicted as ${predictionLabel}`;
+        }
         return influenceText
             ? `Given this profile, the AI prediction is ${predictionLabel}, reflecting the influence of ${influenceText}.`
             : `Given this profile, the AI prediction is ${predictionLabel}.`;
     }
 
     return `Given this profile, the AI prediction is ${strongHtml(shortenClassLabel(currentExplanation.prediction.label))}.`;
+}
+
+function buildProfileCounterfactualChangeText(changedIndices, counterfactualValues) {
+    return joinClauses(changedIndices.map((index) => {
+        const name = strongHtml(getNarrativeAttributeName(index));
+        const updatedDisplay = escapeHtml(getAttributeDisplayValue(index, counterfactualValues));
+        if (currentExplanation.attributeTypes[index] === "categorical") {
+            return `${name} was ${updatedDisplay}`;
+        }
+        const originalValue = Number(currentExplanation.attributeValues[index]);
+        const updatedValue = Number(counterfactualValues[index]);
+        if (Number.isFinite(originalValue) && Number.isFinite(updatedValue)) {
+            if (updatedValue > originalValue) return `${name} was higher`;
+            if (updatedValue < originalValue) return `${name} was lower`;
+        }
+        return `${name} was ${updatedDisplay}`;
+    }));
 }
 
 function showNarrativePanel() {

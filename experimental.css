@@ -2,6 +2,7 @@
     display: block;
     min-height: 100vh;
     margin: 0;
+    font-family: Arial, sans-serif;
     background: #f6f7f9;
     color: #171717;
 }
@@ -172,6 +173,12 @@
     line-height: 1.45;
 }
 
+.case-panel .training-question {
+    font-size: 18px;
+    line-height: 1.25;
+    font-weight: 400;
+}
+
 .case-iframe {
     display: block;
     width: 100%;
@@ -264,7 +271,7 @@
     margin: 0 0 24px;
     font-size: 32px;
     line-height: 1.05;
-    font-weight: 500;
+    font-weight: 700;
     letter-spacing: 0;
 }
 
@@ -287,7 +294,7 @@
 
 .tutorial-copy strong,
 .tutorial-bullets strong {
-    font-weight: 800;
+    font-weight: 700;
 }
 
 .tutorial-bullets {
@@ -317,22 +324,22 @@
 
 .phase-instructions {
     max-width: 980px;
-    font-size: 22px;
+    font-size: 18px;
     line-height: 1.4;
 }
 
 .phase-instructions > p {
-    margin-bottom: 28px;
+    margin-bottom: 18px;
 }
 
 .tutorial-color-red {
     color: rgba(234, 51, 53, 1);
-    font-weight: 800;
+    font-weight: inherit;
 }
 
 .tutorial-color-blue {
     color: rgba(60, 136, 232, 1);
-    font-weight: 800;
+    font-weight: inherit;
 }
 
 .scenario-table {
@@ -472,6 +479,45 @@
     cursor: wait;
 }
 
+.testing-results {
+    display: grid;
+    gap: 20px;
+}
+
+.results-intro,
+.results-note {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.results-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.results-metric {
+    padding: 20px 14px;
+    border: 1px solid rgba(29, 102, 128, 0.35);
+    border-radius: 8px;
+    background: rgba(29, 102, 128, 0.08);
+    text-align: center;
+}
+
+.results-metric-value {
+    color: #1769aa;
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.results-metric-label {
+    margin-top: 9px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
 @media (max-width: 860px) {
     .experimental-shell {
         width: min(100vw - 20px, 760px);
@@ -501,6 +547,10 @@
 
     .tutorial-scenario-layout,
     .tutorial-two-column {
+        grid-template-columns: 1fr;
+    }
+
+    .results-metrics {
         grid-template-columns: 1fr;
     }
 }

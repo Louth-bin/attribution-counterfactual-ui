@@ -1,0 +1,18 @@
+{
+  "feature_names": [
+    "applicant_income",
+    "coapplicant_income",
+    "loan_amount",
+    "loan_term",
+    "credit_history"
+  ],
+  "class_labels": [
+    "Rejected",
+    "Approved"
+  ],
+  "metrics": {
+    "accuracy": 0.8076923076923077,
+    "log_loss": 0.8145435091242254
+  },
+  "sklearn_version": "1.5.1"
+}

@@ -33,6 +33,48 @@ class DatasetRuntimeConfig:
 # - mark which attributes are allowed to change when "controllable only" is enabled
 # - keep only the top-n features based on permutation importance
 DATASET_RUNTIME_CONFIGS: dict[str, DatasetRuntimeConfig] = {
+    "housing": DatasetRuntimeConfig(
+        label="Housing Price",
+        friendly_feature_names={
+            "sqft_living": "Living Area",
+            "bedrooms": "Bedrooms",
+            "bathrooms": "Bathrooms",
+            "floors": "Floors",
+            "grade": "Construction Grade",
+        },
+        controllable_feature_names=(
+            "sqft_living",
+            "bedrooms",
+            "bathrooms",
+            "floors",
+            "grade",
+        ),
+        feature_selection=FeatureSelectionConfig(enabled=False, top_n=None),
+    ),
+    "loan": DatasetRuntimeConfig(
+        label="Loan Application",
+        friendly_feature_names={
+            "applicant_income": "Income",
+            "coapplicant_income": "Co-applicant Income",
+            "loan_amount": "Amount",
+            "loan_term": "Duration",
+            "credit_history": "Credit History",
+        },
+        friendly_category_names={
+            "credit_history": {
+                "0": "Bad",
+                "1": "Good",
+            },
+        },
+        controllable_feature_names=(
+            "applicant_income",
+            "coapplicant_income",
+            "loan_amount",
+            "loan_term",
+            "credit_history",
+        ),
+        feature_selection=FeatureSelectionConfig(enabled=False, top_n=None),
+    ),
     "diabetes": DatasetRuntimeConfig(
         label="Diabetes",
         friendly_feature_names={

@@ -9,14 +9,15 @@
         <link rel="icon" type="image/png" href="thinking-man-logo.png" />
         <script type="module" src="experiment-logger.js"></script>
         <script src="static/experiment-data.js" defer></script>
+        <script src="static-model.js" defer></script>
         <script src="experimental.js" defer></script>
     </head>
     <body class="experimental-body">
         <main class="experimental-shell">
             <div class="experiment-configuration" hidden>
                     <select id="experiment_dataset" aria-label="Dataset">
-                        <option value="diabetes">Diabetes</option>
-                        <option value="safelimit">SafeLimit</option>
+                        <option value="housing">Housing</option>
+                        <option value="loan">Loan Application</option>
                     </select>
                     <select id="experiment_explanation" aria-label="Explanation">
                         <option value="attribution" selected>Attribution</option>
@@ -24,7 +25,7 @@
                         <option value="none">None</option>
                     </select>
                     <input id="experiment_training_count" type="number" value="10" min="0" max="100" />
-                    <input id="experiment_test_count" type="number" value="10" min="0" max="100" />
+                    <input id="experiment_test_count" type="number" value="6" min="2" max="100" step="2" />
                     <input id="experiment_randomize_attributes" type="checkbox" checked />
                 <div id="experiment_backdoor" class="toolbar-field experiment-backdoor" hidden>
                     <label for="experiment_jump">Developer jump</label>

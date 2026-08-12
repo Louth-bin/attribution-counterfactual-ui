@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Experiment instance browser</title>
+  <style>
+    :root { color-scheme: light; font-family: Arial, sans-serif; color:#1d2733; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#f3f6f9; }
+    header { padding:18px 24px; background:#243447; color:#fff; }
+    h1 { margin:0 0 6px; font-size:24px; }
+    header p { margin:0; color:#dce6ef; }
+    .toolbar { display:flex; flex-wrap:wrap; gap:12px; padding:16px 24px; background:#fff; border-bottom:1px solid #d8e0e8; }
+    label { display:grid; gap:5px; font-size:13px; font-weight:700; }
+    select,button,a.button { min-height:38px; padding:7px 11px; border:1px solid #aeb9c5; border-radius:5px; background:#fff; color:#1d2733; font:inherit; }
+    button,a.button { align-self:end; cursor:pointer; text-decoration:none; }
+    button:hover,a.button:hover { background:#edf4fa; }
+    main { display:grid; grid-template-columns:minmax(260px,340px) minmax(520px,1fr); gap:18px; padding:18px 24px; }
+    .panel { background:#fff; border:1px solid #d8e0e8; border-radius:8px; overflow:hidden; }
+    .summary { padding:15px; border-bottom:1px solid #d8e0e8; line-height:1.6; }
+    .summary strong { display:inline-block; min-width:92px; }
+    table { width:100%; border-collapse:collapse; font-size:14px; }
+    th,td { text-align:left; padding:9px 10px; border-bottom:1px solid #edf0f3; }
+    th { position:sticky; top:0; background:#f7f9fb; }
+    tbody tr { cursor:pointer; }
+    tbody tr:hover { background:#eef5fb; }
+    tbody tr.selected { background:#dfeefb; font-weight:700; }
+    .table-scroll { max-height:650px; overflow:auto; }
+    iframe { display:block; width:100%; height:680px; border:0; background:#fff; }
+    .empty { padding:24px; color:#9c2f2f; }
+    @media (max-width:900px) { main { grid-template-columns:1fr; padding:12px; } }
+  </style>
+  <script src="../static/experiment-data.js" defer></script>
+  <script src="instance-browser.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>Experiment instance browser</h1>
+    <p>Inspect the exact 10 training and 10 testing profiles used by Qualtrics.</p>
+  </header>
+  <section class="toolbar">
+    <label>Domain
+      <select id="dataset"><option value="housing">Housing</option><option value="safelimit">Drink Driving</option></select>
+    </label>
+    <label>Phase
+      <select id="split"><option value="train">Training</option><option value="test">Testing</option></select>
+    </label>
+    <label>View
+      <select id="explanation"><option value="attribution">Attribution</option><option value="counterfactual">Counterfactual</option><option value="none">No explanation</option></select>
+    </label>
+    <button id="previous" type="button">Previous</button>
+    <button id="next" type="button">Next</button>
+    <a id="open-case" class="button" target="_blank" rel="noopener">Open case in new tab</a>
+  </section>
+  <main>
+    <section class="panel">
+      <div id="summary" class="summary"></div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>#</th><th>ID</th><th>AI label</th><th>Top feature pair</th></tr></thead>
+          <tbody id="cases"></tbody>
+        </table>
+      </div>
+    </section>
+    <section class="panel">
+      <iframe id="preview" title="Selected experiment case"></iframe>
+    </section>
+  </main>
+</body>
+</html>

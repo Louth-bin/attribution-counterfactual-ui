@@ -1,0 +1,111 @@
+{
+  "dataset": "housing",
+  "surrogate_for_model": "mlp",
+  "surrogate_type": "DecisionTreeClassifier",
+  "training_target": "AI model predictions",
+  "max_depth": 3,
+  "fitted_depth": 3,
+  "leaf_count": 8,
+  "feature_names": [
+    "sqft_living",
+    "bedrooms",
+    "bathrooms",
+    "floors",
+    "grade"
+  ],
+  "features_used": [
+    "sqft_living",
+    "floors",
+    "grade"
+  ],
+  "class_labels": [
+    "Cheap",
+    "Expensive"
+  ],
+  "split_metrics": {
+    "train": {
+      "count": 15086,
+      "fidelity": 0.891621370807371,
+      "cohen_kappa": 0.7826563779307422,
+      "ai_by_surrogate_confusion_matrix": [
+        [
+          7129,
+          721
+        ],
+        [
+          914,
+          6322
+        ]
+      ],
+      "surrogate_label_accuracy": 0.7506297229219143,
+      "ai_label_accuracy": 0.7788015378496619
+    },
+    "dev": {
+      "count": 3232,
+      "fidelity": 0.8913985148514851,
+      "cohen_kappa": 0.7819765162429063,
+      "ai_by_surrogate_confusion_matrix": [
+        [
+          1540,
+          167
+        ],
+        [
+          184,
+          1341
+        ]
+      ],
+      "surrogate_label_accuracy": 0.7410272277227723,
+      "ai_label_accuracy": 0.7660891089108911
+    },
+    "test": {
+      "count": 3235,
+      "fidelity": 0.8831530139103555,
+      "cohen_kappa": 0.7618854749419235,
+      "ai_by_surrogate_confusion_matrix": [
+        [
+          1193,
+          272
+        ],
+        [
+          106,
+          1664
+        ]
+      ],
+      "surrogate_label_accuracy": 0.753323029366306,
+      "ai_label_accuracy": 0.7768160741885626,
+      "fidelity_bootstrap_95_interval": [
+        0.8720247295208655,
+        0.8942812982998455
+      ]
+    }
+  },
+  "static_training_pool": {
+    "count": 20,
+    "fidelity": 0.7,
+    "ai_by_surrogate_confusion_matrix": [
+      [
+        6,
+        0
+      ],
+      [
+        6,
+        8
+      ]
+    ]
+  },
+  "static_test_pool": {
+    "count": 36,
+    "fidelity": 0.8333333333333334,
+    "ai_by_surrogate_confusion_matrix": [
+      [
+        13,
+        5
+      ],
+      [
+        1,
+        17
+      ]
+    ]
+  },
+  "rules": "|--- grade <= 7.50\n|   |--- sqft_living <= 2205.00\n|   |   |--- floors <= 1.25\n|   |   |   |--- class: 0\n|   |   |--- floors >  1.25\n|   |   |   |--- class: 0\n|   |--- sqft_living >  2205.00\n|   |   |--- sqft_living <= 2456.00\n|   |   |   |--- class: 0\n|   |   |--- sqft_living >  2456.00\n|   |   |   |--- class: 1\n|--- grade >  7.50\n|   |--- sqft_living <= 1775.00\n|   |   |--- sqft_living <= 1375.00\n|   |   |   |--- class: 0\n|   |   |--- sqft_living >  1375.00\n|   |   |   |--- class: 1\n|   |--- sqft_living >  1775.00\n|   |   |--- sqft_living <= 2386.00\n|   |   |   |--- class: 1\n|   |   |--- sqft_living >  2386.00\n|   |   |   |--- class: 1\n"
+}

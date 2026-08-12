@@ -1,0 +1,40 @@
+{
+  "selection_rule": {
+    "training": "Exactly 10 fixed profiles: 5 per predicted label and one per possible top-two-feature pair.",
+    "test": "Exactly 10 fixed profiles: 5 per predicted label, split into two direction-specific phases.",
+    "ordering": "Cases 1-5 have label 0 and cases 6-10 have label 1. Qualtrics presents both five-case blocks and randomizes their block order."
+  },
+  "housing": {
+    "labels": ["Cheap", "Expensive"],
+    "training": [
+      {"instance_id": 14693, "label": "Cheap", "feature_pair": "sqft_living|bedrooms"},
+      {"instance_id": 13350, "label": "Expensive", "feature_pair": "sqft_living|bathrooms"},
+      {"instance_id": 2968, "label": "Expensive", "feature_pair": "sqft_living|floors"},
+      {"instance_id": 15034, "label": "Expensive", "feature_pair": "sqft_living|grade"},
+      {"instance_id": 4666, "label": "Expensive", "feature_pair": "bedrooms|bathrooms"},
+      {"instance_id": 8187, "label": "Expensive", "feature_pair": "bedrooms|floors"},
+      {"instance_id": 6557, "label": "Cheap", "feature_pair": "bedrooms|grade"},
+      {"instance_id": 2898, "label": "Cheap", "feature_pair": "bathrooms|floors"},
+      {"instance_id": 2864, "label": "Cheap", "feature_pair": "bathrooms|grade"},
+      {"instance_id": 12633, "label": "Cheap", "feature_pair": "floors|grade"}
+    ],
+    "test": [3174, 2275, 675, 102, 577, 2447, 1751, 553, 172, 2728]
+  },
+  "safelimit": {
+    "display_name": "Drink Driving",
+    "labels": ["Above Limit", "Below Limit"],
+    "training": [
+      {"instance_id": 610, "label": "Above Limit", "feature_pair": "units|weight"},
+      {"instance_id": 1025, "label": "Below Limit", "feature_pair": "units|duration"},
+      {"instance_id": 1230, "label": "Below Limit", "feature_pair": "units|gender"},
+      {"instance_id": 960, "label": "Below Limit", "feature_pair": "units|stomach_fullness"},
+      {"instance_id": 239, "label": "Above Limit", "feature_pair": "weight|duration"},
+      {"instance_id": 124, "label": "Below Limit", "feature_pair": "weight|gender"},
+      {"instance_id": 143, "label": "Above Limit", "feature_pair": "weight|stomach_fullness"},
+      {"instance_id": 131, "label": "Above Limit", "feature_pair": "duration|gender"},
+      {"instance_id": 213, "label": "Above Limit", "feature_pair": "duration|stomach_fullness"},
+      {"instance_id": 322, "label": "Below Limit", "feature_pair": "gender|stomach_fullness"}
+    ],
+    "test": [87, 203, 106, 143, 300, 98, 261, 4, 209, 245]
+  }
+}

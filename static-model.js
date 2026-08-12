@@ -18,13 +18,46 @@
                 `Model expected ${model.feature_names.length} features, got ${values.length}.`
             );
         }
-        return values.map((value, index) => {
-            const numericValue = Number(value);
-            if (!Number.isFinite(numericValue)) {
-                throw new Error(`Feature '${model.feature_names[index]}' is not numerical.`);
+        return values;
+    }
+
+    function preprocessValues(model, rawValues) {
+        const preprocessing = model.preprocessing ?? {};
+        if (preprocessing.type === "standard-scaler") {
+            return rawValues.map((value, index) => {
+                const numericValue = Number(value);
+                if (!Number.isFinite(numericValue)) {
+                    throw new Error(`Feature '${model.feature_names[index]}' is not numerical.`);
+                }
+                return (numericValue - Number(preprocessing.mean[index])) /
+                    Number(preprocessing.scale[index]);
+            });
+        }
+        if (preprocessing.type !== "column-transformer-v1") {
+            throw new Error(`Unsupported preprocessing '${preprocessing.type}'.`);
+        }
+
+        const valueByName = Object.fromEntries(
+            model.feature_names.map((name, index) => [name, rawValues[index]])
+        );
+        const numeric = preprocessing.numeric ?? {};
+        const transformed = (numeric.feature_names ?? []).map((name, index) => {
+            const value = Number(valueByName[name]);
+            if (!Number.isFinite(value)) {
+                throw new Error(`Feature '${name}' is not numerical.`);
             }
-            return numericValue;
+            return (value - Number(numeric.mean[index])) / Number(numeric.scale[index]);
         });
+
+        const categorical = preprocessing.categorical ?? {};
+        (categorical.feature_names ?? []).forEach((name, featureIndex) => {
+            const value = String(valueByName[name]);
+            const categories = categorical.categories?.[featureIndex] ?? [];
+            categories.forEach((category) => {
+                transformed.push(String(category) === value ? 1 : 0);
+            });
+        });
+        return transformed;
     }
 
     function applyDenseLayer(inputs, layer, activation) {
@@ -50,10 +83,7 @@
         }
 
         const rawValues = getOrderedFeatureValues(model, rawFeatureValues);
-        let values = rawValues.map((value, index) =>
-            (value - Number(model.preprocessing.mean[index])) /
-            Number(model.preprocessing.scale[index])
-        );
+        let values = preprocessValues(model, rawValues);
 
         model.layers.forEach((layer, index) => {
             const isOutputLayer = index === model.layers.length - 1;

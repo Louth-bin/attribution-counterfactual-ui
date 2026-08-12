@@ -1,8 +1,9 @@
-"""Build the static housing and loan experiment bundle.
+"""Build the static housing and drink-driving experiment bundle.
 
 Only profiles with successful two-attribute counterfactuals are retained. The
-training source pool is balanced across every possible pair of most influential
-features, while the test pool is balanced in both prediction directions.
+ten training profiles contain every possible pair of most influential features
+exactly once and are balanced 5/5 by predicted label. The ten test profiles are
+also balanced 5/5 by predicted label.
 """
 
 from __future__ import annotations
@@ -29,24 +30,50 @@ from src.pipeline import ExplanationPipeline
 STATIC_JSON = REPO_ROOT / "static" / "experiment-data.json"
 STATIC_JS = REPO_ROOT / "static" / "experiment-data.js"
 PAIR_SEPARATOR = "|"
-DATASETS = ("housing", "loan")
-TRAINING_TARGET_PER_PAIR = 2
+DATASETS = ("housing", "safelimit")
+TRAINING_TARGET_PER_PAIR = 1
 TRAINING_CANDIDATE_RESERVE_PER_PAIR = 6
 TRAINING_PAIR_SCAN_BATCH_SIZE = 500
-TEST_TARGET_PER_PREDICTION = 18
+TEST_TARGET_PER_PREDICTION = 5
 
 
 def feature_pair_key(payload: dict[str, Any]) -> str:
-    selected = payload["counterfactual"]["raw_selected_feature_names"]
+    selected = actual_changed_raw_feature_names(payload)
     order = {name: index for index, name in enumerate(payload["raw_feature_names"])}
     return PAIR_SEPARATOR.join(sorted(selected, key=order.get))
 
 
+def actual_changed_raw_feature_names(payload: dict[str, Any]) -> list[str]:
+    counterfactual = payload.get("counterfactual") or {}
+    original_values = payload.get("raw_feature_values", [])
+    changed_values = counterfactual.get("raw_feature_values", [])
+    changed: list[str] = []
+    for feature_name, feature_type, original, updated in zip(
+        payload.get("raw_feature_names", []),
+        payload.get("feature_types", []),
+        original_values,
+        changed_values,
+    ):
+        if feature_type == "categorical":
+            is_changed = str(original) != str(updated)
+        else:
+            is_changed = not np.isclose(
+                float(original), float(updated), rtol=0.0, atol=1e-9
+            )
+        if is_changed:
+            changed.append(feature_name)
+    return changed
+
+
 def is_successful_counterfactual(payload: dict[str, Any]) -> bool:
     counterfactual = payload.get("counterfactual")
+    changed_features = actual_changed_raw_feature_names(payload)
+    selected_features = counterfactual.get("raw_selected_feature_names", []) if counterfactual else []
     return bool(
         counterfactual
-        and len(counterfactual.get("raw_selected_feature_names", [])) == 2
+        and len(selected_features) == 2
+        and len(changed_features) == 2
+        and set(changed_features) == set(selected_features)
         and int(counterfactual["prediction"]["value"])
         != int(payload["prediction"]["value"])
     )
@@ -101,10 +128,33 @@ def index_training_candidates_by_pair(
     pair_keys = all_feature_pair_keys(feature_names)
     candidates_by_pair = {pair_key: [] for pair_key in pair_keys}
     feature_frame = dataset.train_df[feature_names]
-    background = feature_frame.sample(n=min(len(feature_frame), 50), random_state=42)
+    encoded_frame = feature_frame.copy()
+    category_maps: dict[str, dict[int, str]] = {}
+    for feature_name in feature_names:
+        if pd.api.types.is_numeric_dtype(feature_frame[feature_name]):
+            encoded_frame[feature_name] = feature_frame[feature_name].astype(float)
+            continue
+        categories = feature_frame[feature_name].astype(str).drop_duplicates().tolist()
+        forward = {category: index for index, category in enumerate(categories)}
+        category_maps[feature_name] = {
+            index: category for category, index in forward.items()
+        }
+        encoded_frame[feature_name] = (
+            feature_frame[feature_name].astype(str).map(forward).astype(float)
+        )
+    background = encoded_frame.sample(n=min(len(encoded_frame), 50), random_state=42)
 
     def wrapped_predict(encoded_rows: np.ndarray) -> np.ndarray:
         rows = pd.DataFrame(encoded_rows, columns=feature_names)
+        for feature_name, inverse in category_maps.items():
+            rows[feature_name] = (
+                rows[feature_name]
+                .round()
+                .clip(0, len(inverse) - 1)
+                .astype(int)
+                .map(inverse)
+            )
+        rows = rows.astype(feature_frame.dtypes.to_dict())
         return assets.model_artifact.estimator.predict_proba(rows)
 
     explainer = shap.KernelExplainer(
@@ -118,7 +168,7 @@ def index_training_candidates_by_pair(
 
     for start in range(0, len(candidate_ids), TRAINING_PAIR_SCAN_BATCH_SIZE):
         batch_ids = candidate_ids[start:start + TRAINING_PAIR_SCAN_BATCH_SIZE]
-        batch = feature_frame.iloc[batch_ids]
+        batch = encoded_frame.iloc[batch_ids]
         random_state = np.random.get_state()
         np.random.seed(42)
         try:
@@ -153,6 +203,56 @@ def index_training_candidates_by_pair(
     return candidates_by_pair, dict(stats)
 
 
+def _select_label_balanced_pair_cases(
+    candidates_by_pair: dict[str, list[dict[str, Any]]],
+    target_per_label: int,
+) -> list[dict[str, Any]]:
+    pair_keys = list(candidates_by_pair)
+
+    def search(
+        pair_index: int,
+        label_counts: dict[int, int],
+        selected: list[dict[str, Any]],
+    ) -> list[dict[str, Any]] | None:
+        if pair_index == len(pair_keys):
+            return list(selected) if all(
+                label_counts[label] == target_per_label for label in (0, 1)
+            ) else None
+
+        remaining = len(pair_keys) - pair_index
+        if any(label_counts[label] > target_per_label for label in (0, 1)):
+            return None
+        if any(
+            label_counts[label] + remaining < target_per_label
+            for label in (0, 1)
+        ):
+            return None
+
+        pair_key = pair_keys[pair_index]
+        for candidate in candidates_by_pair[pair_key]:
+            label = int(candidate["prediction"]["value"])
+            label_counts[label] += 1
+            selected.append(candidate)
+            result = search(pair_index + 1, label_counts, selected)
+            if result is not None:
+                return result
+            selected.pop()
+            label_counts[label] -= 1
+        return None
+
+    result = search(0, {0: 0, 1: 0}, [])
+    if result is None:
+        candidate_labels = {
+            pair_key: [int(payload["prediction"]["value"]) for payload in candidates]
+            for pair_key, candidates in candidates_by_pair.items()
+        }
+        raise RuntimeError(
+            "Could not choose one case per feature pair with a 5/5 label balance; "
+            f"candidate labels={candidate_labels}"
+        )
+    return result
+
+
 def generate_balanced_training_pool(
     pipeline: ExplanationPipeline,
     dataset_name: str,
@@ -162,11 +262,12 @@ def generate_balanced_training_pool(
         pipeline,
         dataset_name,
     )
-    generated: list[dict[str, Any]] = []
+    successful_by_pair: dict[str, list[dict[str, Any]]] = {
+        pair_key: [] for pair_key in candidates_by_pair
+    }
     stats: Counter[str] = Counter(index_stats)
 
     for required_pair, candidate_ids in candidates_by_pair.items():
-        accepted_for_pair = 0
         for instance_id in candidate_ids:
             payload = pipeline.get_instance_payload(
                 dataset_name=dataset_name,
@@ -190,20 +291,34 @@ def generate_balanced_training_pool(
                 continue
 
             payload["feature_pair_key"] = actual_pair
-            payload["feature_pair_names"] = payload["counterfactual"]["selected_feature_names"]
-            generated.append(payload)
-            accepted_for_pair += 1
+            changed_raw_names = actual_changed_raw_feature_names(payload)
+            payload["feature_pair_names"] = [
+                payload["feature_names"][payload["raw_feature_names"].index(name)]
+                for name in changed_raw_names
+            ]
+            successful_by_pair[required_pair].append(payload)
             stats[f"included_{required_pair}"] += 1
-            if accepted_for_pair >= target_per_pair:
+            if len(successful_by_pair[required_pair]) >= TRAINING_CANDIDATE_RESERVE_PER_PAIR:
                 break
 
-        if accepted_for_pair < target_per_pair:
+        if len(successful_by_pair[required_pair]) < target_per_pair:
             raise RuntimeError(
                 f"{dataset_name} training pool needs {target_per_pair} successful "
-                f"profiles for {required_pair}, but found {accepted_for_pair}; "
+                f"profiles for {required_pair}, but found "
+                f"{len(successful_by_pair[required_pair])}; "
                 f"indexed candidates={len(candidate_ids)}"
             )
 
+    generated = _select_label_balanced_pair_cases(
+        successful_by_pair,
+        target_per_label=len(successful_by_pair) // 2,
+    )
+    stats["selected_prediction_0"] = sum(
+        int(payload["prediction"]["value"]) == 0 for payload in generated
+    )
+    stats["selected_prediction_1"] = sum(
+        int(payload["prediction"]["value"]) == 1 for payload in generated
+    )
     return generated, dict(stats)
 
 
@@ -262,7 +377,11 @@ def generate_pool(
             continue
 
         payload["feature_pair_key"] = feature_pair_key(payload)
-        payload["feature_pair_names"] = payload["counterfactual"]["selected_feature_names"]
+        changed_raw_names = actual_changed_raw_feature_names(payload)
+        payload["feature_pair_names"] = [
+            payload["feature_names"][payload["raw_feature_names"].index(name)]
+            for name in changed_raw_names
+        ]
         generated.append(payload)
         accepted_counts[prediction_key] += 1
         stats[f"included_{prediction_key}"] += 1
@@ -277,6 +396,8 @@ def generate_pool(
             f"{dataset_name} {split} pool lacks successful counterfactuals: "
             f"{missing}; stats={dict(stats)}"
         )
+    if split == "test":
+        generated.sort(key=lambda payload: int(payload["prediction"]["value"]))
     return generated, dict(stats)
 
 
@@ -310,13 +431,12 @@ def build_browser_model(
     mlp = estimator.named_steps["model"]
     feature_names = list(assets.dataset.feature_names)
     numeric_features = list(preprocessor.transformers_[0][2])
-    if numeric_features != feature_names or len(preprocessor.transformers_) != 2:
-        raise RuntimeError(
-            f"{dataset_name} browser export currently requires all five features "
-            "to be numerical and in model input order."
-        )
+    categorical_features = list(preprocessor.transformers_[1][2])
+    if sorted(numeric_features + categorical_features) != sorted(feature_names):
+        raise RuntimeError(f"{dataset_name} browser export has unsupported preprocessing.")
 
     scaler = preprocessor.named_transformers_["numeric"]
+    one_hot_encoder = preprocessor.named_transformers_["categorical"]
     if mlp.out_activation_ != "logistic" or len(mlp.classes_) != 2:
         raise RuntimeError(
             f"{dataset_name} browser export requires a binary logistic MLP."
@@ -328,9 +448,19 @@ def build_browser_model(
         "class_labels": list(assets.dataset.class_labels),
         "classes": [int(value) for value in mlp.classes_.tolist()],
         "preprocessing": {
-            "type": "standard-scaler",
-            "mean": [float(value) for value in scaler.mean_.tolist()],
-            "scale": [float(value) for value in scaler.scale_.tolist()],
+            "type": "column-transformer-v1",
+            "numeric": {
+                "feature_names": numeric_features,
+                "mean": [float(value) for value in scaler.mean_.tolist()],
+                "scale": [float(value) for value in scaler.scale_.tolist()],
+            },
+            "categorical": {
+                "feature_names": categorical_features,
+                "categories": [
+                    [_json_safe_category(value) for value in categories.tolist()]
+                    for categories in getattr(one_hot_encoder, "categories_", [])
+                ],
+            },
         },
         "hidden_activation": str(mlp.activation),
         "output_activation": str(mlp.out_activation_),
@@ -345,6 +475,10 @@ def build_browser_model(
             for weights, biases in zip(mlp.coefs_, mlp.intercepts_)
         ],
     }
+
+
+def _json_safe_category(value: Any) -> Any:
+    return value.item() if isinstance(value, (np.floating, np.integer)) else value
 
 
 def main() -> None:
@@ -378,7 +512,7 @@ def main() -> None:
         }
 
     bundle = {
-        "version": "static-experiment-v5-browser-model-results",
+        "version": "static-experiment-v7-grouped-test-directions",
         "generated_at": date.today().isoformat(),
         "default_model": "mlp",
         "datasets": datasets,

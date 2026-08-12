@@ -17,15 +17,15 @@
             <div class="experiment-configuration" hidden>
                     <select id="experiment_dataset" aria-label="Dataset">
                         <option value="housing">Housing</option>
-                        <option value="loan">Loan Application</option>
+                        <option value="safelimit">Drink Driving</option>
                     </select>
                     <select id="experiment_explanation" aria-label="Explanation">
                         <option value="attribution" selected>Attribution</option>
                         <option value="counterfactual">Counterfactual</option>
                         <option value="none">None</option>
                     </select>
-                    <input id="experiment_training_count" type="number" value="10" min="0" max="100" />
-                    <input id="experiment_test_count" type="number" value="6" min="2" max="100" step="2" />
+                    <input id="experiment_training_count" type="number" value="10" min="10" max="10" readonly />
+                    <input id="experiment_test_count" type="number" value="10" min="10" max="10" readonly />
                     <input id="experiment_randomize_attributes" type="checkbox" checked />
                 <div id="experiment_backdoor" class="toolbar-field experiment-backdoor" hidden>
                     <label for="experiment_jump">Developer jump</label>

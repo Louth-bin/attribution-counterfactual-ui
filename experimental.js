@@ -9,10 +9,10 @@ const DATASET_COPY = {
         explanationTitle: "Explanation and feedback",
         simulationTitle: "Make changes",
     },
-    loan: {
-        label: "Loan Application",
-        subject: "loan application",
-        trainingQuestion: "Is this profile Approved or Rejected?",
+    safelimit: {
+        label: "Drink Driving",
+        subject: "driver",
+        trainingQuestion: "Is this driver Above Limit or Below Limit?",
         explanationTitle: "Explanation and feedback",
         simulationTitle: "Make changes",
     },
@@ -24,7 +24,7 @@ const TEST_SESSIONS = {
             id: "homeowner",
             title: "Buyer Testing Session",
             intro: [
-                ["You will now see 6 ", { strong: "expensive" }, " house profiles."],
+                ["You will now see 5 ", { strong: "expensive" }, " house profiles."],
                 ["For each, a person wants to buy the house, but they want it to be ", { strong: "cheap" }, "."],
                 ["As a compromise, they will look for a similar cheap house. For each ", { strong: "buyer" }, ", what house profile should they look for?"],
             ],
@@ -36,7 +36,7 @@ const TEST_SESSIONS = {
             id: "developer",
             title: "Housing Developer Testing Session",
             intro: [
-                ["You will now see 6 ", { strong: "cheap" }, " house profiles."],
+                ["You will now see 5 ", { strong: "cheap" }, " house profiles."],
                 ["As a ", { strong: "housing developer" }, ", you want to make small changes so each house can be listed as expensive. What changes would you make?"],
             ],
             blocks: [
@@ -44,28 +44,27 @@ const TEST_SESSIONS = {
             ],
         },
     ],
-    loan: [
+    safelimit: [
         {
-            id: "applicant",
-            title: "Loan Applicant Testing Session",
+            id: "driver",
+            title: "Driver Safety Testing Session",
             intro: [
-                ["You will now see 6 ", { strong: "rejected" }, " loan applications."],
-                ["Each ", { strong: "applicant" }, " wants their loan to be approved. What should they change?"],
+                ["You will now see 5 driver profiles predicted to be ", { strong: "Above Limit" }, "."],
+                ["For each driver, make the smallest changes that would make the prediction ", { strong: "Below Limit" }, "."],
             ],
             blocks: [
-                { id: "rejected-to-approved", sourcePrediction: 0, targetPrediction: 1 },
+                { id: "above-to-below", sourcePrediction: 0, targetPrediction: 1 },
             ],
         },
         {
-            id: "financial-advisor",
-            title: "Financial Advisor Testing Session",
+            id: "risk-reviewer",
+            title: "Drink-Driving Risk Testing Session",
             intro: [
-                ["You will now see 6 loan applications: 3 ", { strong: "rejected" }, " and 3 ", { strong: "approved" }, "."],
-                ["As a ", { strong: "financial advisor" }, ", you will suggest small changes that could reverse each decision."],
+                ["You will now see 5 driver profiles predicted to be ", { strong: "Below Limit" }, "."],
+                ["For each profile, identify the smallest changes that would make the prediction ", { strong: "Above Limit" }, "."],
             ],
             blocks: [
-                { id: "advice", sourcePrediction: 0, targetPrediction: 1, fraction: 0.5 },
-                { id: "warning", sourcePrediction: 1, targetPrediction: 0, fraction: 0.5 },
+                { id: "below-to-above", sourcePrediction: 1, targetPrediction: 0 },
             ],
         },
     ],
@@ -168,18 +167,18 @@ const DATASET_SCENARIOS = {
             grade: "Construction and design quality from 1 to 13",
         },
     },
-    loan: {
-        title: "Loan application profiles",
+    safelimit: {
+        title: "Drink-driving profiles",
         intro: [
-            ["In the following pages, you will see loan application profiles described by ", { strong: "five attributes" }, ". ",
-            "Each application is either ", { strong: "Approved" }, " or ", { strong: "Rejected" }, ". An AI can provide the correct decision for each profile."],
+            ["In the following pages, you will see driver profiles described by ", { strong: "five attributes" }, ". ",
+            "Each driver is predicted to be ", { strong: "Above Limit" }, " or ", { strong: "Below Limit" }, " for a 0.08 blood-alcohol limit."],
         ],
         attributes: {
-            applicant_income: "Income reported by the applicant",
-            coapplicant_income: "Income reported by the co-applicant",
-            loan_amount: "Requested loan amount in thousands",
-            loan_term: "Requested repayment term in months",
-            credit_history: "Whether the applicant has a good or bad credit history",
+            units: "Number of standard alcohol units consumed",
+            weight: "Body weight in kilograms",
+            duration: "Time spent drinking in minutes",
+            gender: "Gender used by the blood-alcohol calculation",
+            stomach_fullness: "Whether the person drank on an empty or full stomach",
         },
     },
 };
@@ -200,11 +199,11 @@ function applyUrlConfiguration() {
     const params = new URLSearchParams(window.location.search);
     const dataset = String(params.get("dataset") ?? "housing").toLowerCase();
     const explanation = String(params.get("explanation") ?? "attribution").toLowerCase();
-    const validDatasets = new Set(["housing", "loan"]);
+    const validDatasets = new Set(["housing", "safelimit"]);
     const validExplanations = new Set(["attribution", "counterfactual", "none"]);
 
     if (!validDatasets.has(dataset)) {
-        throw new Error(`Unknown dataset '${dataset}'. Use housing or loan.`);
+        throw new Error(`Unknown dataset '${dataset}'. Use housing or safelimit.`);
     }
     if (!validExplanations.has(explanation)) {
         throw new Error(`Unknown explanation '${explanation}'. Use attribution, counterfactual, or none.`);
@@ -227,7 +226,7 @@ function validateDatasetLabelMapping() {
     const bundle = getDatasetBundle(dataset);
     const expectedLabels = dataset === "housing"
         ? ["Cheap", "Expensive"]
-        : ["Rejected", "Approved"];
+        : ["Above Limit", "Below Limit"];
     const metadataLabels = bundle.metadata?.prediction_labels ?? [];
 
     if (metadataLabels.length !== 2 || metadataLabels.some((label, index) => label !== expectedLabels[index])) {
@@ -432,13 +431,17 @@ function buildStakeholderTestCases(pool, requestedCount) {
     const sessions = shuffleArray([...(TEST_SESSIONS[getDataset()] ?? [])]);
     const usedInstanceIds = new Set();
     const cases = [];
+    const baseSessionCount = Math.floor(requestedCount / sessions.length);
+    const extraSessionCount = requestedCount % sessions.length;
 
-    sessions.forEach((session) => {
+    sessions.forEach((session, sessionIndex) => {
+        const sessionCount = baseSessionCount + (sessionIndex < extraSessionCount ? 1 : 0);
         const fractionalBlocks = session.blocks.filter((block) => block.fraction !== undefined);
-        session.blocks.forEach((block) => {
+        session.blocks.forEach((block, blockIndex) => {
             const blockCount = fractionalBlocks.length > 0
-                ? Math.round(requestedCount * block.fraction)
-                : requestedCount;
+                ? Math.round(sessionCount * block.fraction)
+                : Math.floor(sessionCount / session.blocks.length) +
+                    (blockIndex < sessionCount % session.blocks.length ? 1 : 0);
             cases.push(...sampleDirectionBlock(
                 pool,
                 blockCount,
@@ -484,7 +487,6 @@ function buildIframeSrc(caseItem, options = {}) {
         AIModel: DEFAULT_MODEL,
         expAlgorithm: "shap",
         xaiType: options.xaiType ?? "none",
-        explanationView: "persona",
         split: caseItem.split,
         instanceId: String(caseItem.payload.instance_id),
         k: "2",
@@ -1114,7 +1116,7 @@ function renderScenarioPage(step) {
     const table = createElement("table", "scenario-table");
     const thead = document.createElement("thead");
     const headerRow = document.createElement("tr");
-    ["Attribute", "Description", "Value range"].forEach((header) => {
+    ["Attribute", "Description", "Typical value range"].forEach((header) => {
         headerRow.appendChild(createElement("th", "", header));
     });
     thead.appendChild(headerRow);
@@ -1165,10 +1167,10 @@ function renderBasicTutorialPage(step) {
     ));
     const exampleFeature = getDataset() === "housing"
         ? "Living Area"
-        : "Amount";
+        : "Alcohol Units";
     const predictionText = getDataset() === "housing"
         ? `The selected box shows the AI's price ${strongText("prediction")}.`
-        : `The selected box shows the AI's loan ${strongText("decision")}.`;
+        : `The selected box shows the AI's blood-alcohol-limit ${strongText("prediction")}.`;
     appendTutorialBullets(copyPanel, [
         `The five <strong>attributes</strong> describing the ${getCopy().subject}.`,
         "The <strong>values</strong> of each attribute.",
@@ -1398,7 +1400,7 @@ function joinHtmlClauses(clauses) {
 }
 
 function buildAttributionTutorialCopy(payload) {
-    const decision = getDataset() === "housing" ? "price prediction" : "loan decision";
+    const decision = getDataset() === "housing" ? "price prediction" : "blood-alcohol-limit prediction";
     const entries = getShownAttributionEntries(payload);
     const redLabel = payload.attribution?.direction_labels?.left;
     const blueLabel = payload.attribution?.direction_labels?.right;
@@ -1419,7 +1421,7 @@ function buildAttributionTutorialCopy(payload) {
 }
 
 function buildCounterfactualTutorialCopy(payload) {
-    const decision = getDataset() === "housing" ? "price prediction" : "loan decision";
+    const decision = getDataset() === "housing" ? "price prediction" : "blood-alcohol-limit prediction";
     const entries = getCounterfactualChangeEntries(payload);
     const numericDecrease = entries.find((entry) => entry.isNumeric && entry.delta < 0);
     const numericIncrease = entries.find((entry) => entry.isNumeric && entry.delta > 0);
@@ -1481,7 +1483,7 @@ function renderSimulationPracticePage(step) {
     const task = createElement("p");
     task.innerHTML = getDataset() === "housing"
         ? `You will be asked to ${strongText("change Cheap houses to Expensive ones or vice versa")}. Make changes in the Changes column.`
-        : `You will be asked to ${strongText("change Rejected loan applications to Approved ones or vice versa")}. Make changes in the Changes column.`;
+        : `You will be asked to ${strongText("change Above Limit driver profiles to Below Limit or vice versa")}. Make changes in the Changes column.`;
     copyPanel.appendChild(task);
     copyPanel.appendChild(createElement(
         "p",
@@ -1509,13 +1511,13 @@ function renderPhaseInstructions(step) {
         const opening = createElement("p");
         opening.innerHTML = getDataset() === "housing"
             ? `You will now try to ${strongText("learn which profiles")} are cheap and expensive.`
-            : `You will now try to ${strongText("learn which profiles")} are approved and rejected.`;
+            : `You will now try to ${strongText("learn which profiles")} are above and below the legal limit.`;
         body.appendChild(opening);
         const profileCount = createElement("p");
         profileCount.innerHTML = `You will see ${strongText("10 profiles")}. For each, you will:`;
         body.appendChild(profileCount);
         appendTutorialList(body, [
-            `${strongText("Predict")} whether the profile is ${getDataset() === "housing" ? "cheap or expensive" : "approved or rejected"}.`,
+            `${strongText("Predict")} whether the profile is ${getDataset() === "housing" ? "cheap or expensive" : "above or below the legal limit"}.`,
             `${strongText("Review")} the correct answer${getExplanationType() === "none" ? "." : " and the explanation."}`,
         ], { ordered: true, className: "tutorial-bullets" });
     } else {
@@ -1800,7 +1802,7 @@ function startRunthrough() {
     const trainingInput = document.querySelector("#experiment_training_count");
     const testInput = document.querySelector("#experiment_test_count");
     const trainingCount = clampCount(trainingInput, 10);
-    const testCount = clampCount(testInput, 6);
+    const testCount = clampCount(testInput, 10);
 
     try {
         validateDatasetLabelMapping();

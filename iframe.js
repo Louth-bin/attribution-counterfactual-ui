@@ -1,6 +1,8 @@
 const urlParams = new URLSearchParams(window.location.search);
 const explanationType = getExplanationType(urlParams.get("xaiType") ?? "none");
-const explanationView = getExplanationView(urlParams.get("explanationView") ?? "classic");
+// Use one canonical explanation layout everywhere. Keeping this internal means
+// Qualtrics, the instance browser, and the full experiment cannot drift apart.
+const explanationView = "persona";
 const showPredictionPanel = urlParams.get("showPrediction") !== "0";
 const datasetName = urlParams.get("appId") ?? "diabetes";
 const modelName = urlParams.get("AIModel") ?? "mlp";
@@ -204,24 +206,6 @@ function getExplanationType(selectedType) {
     }
 
     return "none";
-}
-
-function getExplanationView(selectedView) {
-    const normalizedView = String(selectedView ?? "classic").toLowerCase();
-
-    if (normalizedView === "inline" || normalizedView === "inline-change") {
-        return "inline";
-    }
-
-    if (normalizedView === "narrative" || normalizedView === "text") {
-        return "narrative";
-    }
-
-    if (normalizedView === "persona" || normalizedView === "direct") {
-        return "persona";
-    }
-
-    return "classic";
 }
 
 function getCounterfactualSimulationMode(selectedMode) {
@@ -1626,12 +1610,6 @@ function createCounterfactualSimulation() {
     const simulationPanel = document.createElement("div");
     simulationPanel.id = "counterfactual-simulation";
     simulationPanel.className = "counterfactual-simulation";
-
-    const simulationQuestion = document.createElement("p");
-    simulationQuestion.className = "counterfactual-simulation-question";
-    simulationQuestion.id = "counterfactual-simulation-question";
-    simulationQuestion.innerHTML = getCounterfactualSimulationQuestion();
-    simulationPanel.appendChild(simulationQuestion);
 
     if (counterfactualSimulationMode === "budget") {
         const budgetPanel = document.createElement("div");
@@ -3714,9 +3692,12 @@ function renderExplanation() {
         if (tablesWrapper) {
             tablesWrapper.hidden = true;
         }
-    } else {
-        showAttributeValues(noneExplanationTbody);
+        createCounterfactualSimulation();
+        scheduleIframeHeightPost();
+        return;
     }
+
+    showAttributeValues(noneExplanationTbody);
 
     if (
         explanationType !== "none" &&

@@ -1,8 +1,8 @@
 {
   "selection_rule": {
     "training": "Exactly 10 fixed profiles: 5 per predicted label and one per possible top-two-feature pair.",
-    "test": "Exactly 10 fixed profiles: 5 per predicted label, split into two direction-specific phases.",
-    "ordering": "Cases 1-5 have label 0 and cases 6-10 have label 1. Qualtrics presents both five-case blocks and randomizes their block order."
+    "test": "Exactly 20 fixed profiles: 10 per predicted label, split into two direction-specific phases.",
+    "ordering": "Cases 1-10 have label 0 and cases 11-20 have label 1. Qualtrics presents both ten-case blocks and randomizes their block order."
   },
   "housing": {
     "labels": ["Cheap", "Expensive"],
@@ -18,7 +18,7 @@
       {"instance_id": 2864, "label": "Cheap", "feature_pair": "bathrooms|grade"},
       {"instance_id": 12633, "label": "Cheap", "feature_pair": "floors|grade"}
     ],
-    "test": [3174, 2275, 675, 102, 577, 2447, 1751, 553, 172, 2728]
+    "test": [3174, 2275, 675, 102, 577, 2255, 2987, 614, 1760, 692, 2447, 1751, 553, 172, 2728, 2462, 1155, 456, 2767, 1657]
   },
   "safelimit": {
     "display_name": "Drink Driving",
@@ -35,6 +35,6 @@
       {"instance_id": 213, "label": "Above Limit", "feature_pair": "duration|stomach_fullness"},
       {"instance_id": 322, "label": "Below Limit", "feature_pair": "gender|stomach_fullness"}
     ],
-    "test": [87, 203, 106, 143, 300, 98, 261, 4, 209, 245]
+    "test": [87, 203, 106, 143, 300, 211, 262, 69, 251, 177, 98, 261, 4, 209, 245, 281, 148, 265, 25, 117]
   }
 }

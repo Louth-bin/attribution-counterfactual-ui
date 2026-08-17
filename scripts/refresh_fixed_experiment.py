@@ -1,4 +1,4 @@
-"""Recompute explanations for the already selected fixed 10+10 case IDs."""
+"""Recompute explanations for the already selected fixed 10+20 case IDs."""
 
 from __future__ import annotations
 
@@ -74,7 +74,7 @@ def main() -> None:
         training_pairs = Counter(
             payload["feature_pair_key"] for payload in pools["training_pool"]
         )
-        if training_labels != {0: 5, 1: 5} or test_labels != {0: 5, 1: 5}:
+        if training_labels != {0: 5, 1: 5} or test_labels != {0: 10, 1: 10}:
             raise RuntimeError(
                 f"{dataset_name} label balance changed: "
                 f"training={training_labels}, test={test_labels}"

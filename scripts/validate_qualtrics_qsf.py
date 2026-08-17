@@ -126,9 +126,10 @@ def validate(qsf_path: Path) -> dict[str, Any]:
     ]
     assert len(looped) == 3, "Expected one training loop and two testing loops"
     loop_row_counts = []
+    loop_randomizations = []
     for loop_block in looped:
         loop_options = loop_block["Options"]["LoopingOptions"]
-        assert loop_options.get("Randomization") == "None"
+        loop_randomizations.append(loop_options.get("Randomization"))
         rows = loop_options.get("Static")
         row_count = len(rows)
         loop_row_counts.append(row_count)
@@ -136,7 +137,8 @@ def validate(qsf_path: Path) -> dict[str, Any]:
         assert [rows[str(index)]["1"] for index in range(1, row_count + 1)] == [
             str(index) for index in range(row_count)
         ]
-    assert sorted(loop_row_counts) == [5, 5, 10]
+    assert sorted(loop_row_counts) == [10, 10, 10]
+    assert Counter(loop_randomizations) == {"None": 1, "All": 2}
 
     flow = next(element["Payload"] for element in elements if element.get("Element") == "FL")
     assert flow.get("Type") == "Root" and isinstance(flow.get("Flow"), list)
@@ -207,6 +209,18 @@ def validate(qsf_path: Path) -> dict[str, Any]:
     assert 'data-domain="housing"' in questions["QID280"]["QuestionText"]
     assert 'data-domain="safelimit"' in questions["QID280"]["QuestionText"]
     assert "What you will do" in questions["QID280"]["QuestionText"]
+    assert "AI prediction 0" not in questions["QID280"]["QuestionText"]
+    assert "AI prediction 1" not in questions["QID280"]["QuestionText"]
+    assert 'data-explanation="attribution"' in questions["QID280"]["QuestionText"]
+    assert 'data-explanation="counterfactual"' in questions["QID280"]["QuestionText"]
+    assert 'data-explanation="none"' in questions["QID280"]["QuestionText"]
+    assert 'id="cf-basic-tutorial-root"' in questions["QID271"]["QuestionText"]
+    assert "tutorialCallouts: 'basic'" in questions["QID271"]["QuestionJS"]
+    assert 'id="cf-explanation-tutorial-root"' in questions["QID9"]["QuestionText"]
+    assert 'data-explanation="attribution"' in questions["QID9"]["QuestionText"]
+    assert 'data-explanation="counterfactual"' in questions["QID9"]["QuestionText"]
+    assert "tutorialCallouts: 'explanation'" in questions["QID9"]["QuestionJS"]
+    assert "getQuestionContainer().style.display = 'none'" in questions["QID9"]["QuestionJS"]
     assert 'data-phase="test"' in questions["QID376"]["QuestionText"]
     assert 'data-test-label="0"' in questions["QID376"]["QuestionText"]
     assert 'data-test-label="1"' in questions["QID379"]["QuestionText"]
@@ -239,14 +253,14 @@ def validate(qsf_path: Path) -> dict[str, Any]:
         bundle = data["datasets"][domain]
         training = bundle["training_pool"]
         testing = bundle["test_pool"]
-        assert len(training) == 10 and len(testing) == 10
+        assert len(training) == 10 and len(testing) == 20
         training_labels = Counter(int(case["prediction"]["value"]) for case in training)
         testing_labels = Counter(int(case["prediction"]["value"]) for case in testing)
         training_pairs = Counter(case["feature_pair_key"] for case in training)
         assert training_labels == {0: 5, 1: 5}
-        assert testing_labels == {0: 5, 1: 5}
+        assert testing_labels == {0: 10, 1: 10}
         assert [int(case["prediction"]["value"]) for case in testing] == [
-            0, 0, 0, 0, 0, 1, 1, 1, 1, 1
+            *([0] * 10), *([1] * 10)
         ]
         assert len(training_pairs) == 10 and set(training_pairs.values()) == {1}
         for case in training + testing:
@@ -275,8 +289,8 @@ def validate(qsf_path: Path) -> dict[str, Any]:
         training_ids = [case["instance_id"] for case in training]
         test_ids = [case["instance_id"] for case in testing]
         assert json.dumps(training_ids) in frame_source
-        assert json.dumps(test_ids[:5]) in frame_source
-        assert json.dumps(test_ids[5:]) in frame_source
+        assert json.dumps(test_ids[:10]) in frame_source
+        assert json.dumps(test_ids[10:]) in frame_source
         domain_report[domain] = {
             "training_cases": len(training),
             "test_cases": len(testing),

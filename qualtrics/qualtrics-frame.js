@@ -5,7 +5,7 @@
  *   Training: <div id="cf-study-root" data-phase="training">
  *   Testing:  <div id="cf-study-root" data-phase="test" data-test-label="0|1">
  *
- * Loop & Merge field 1 is 0-9 for training and 0-4 for each testing block.
+ * Loop & Merge field 1 is 0-9 for training and each testing block.
  */
 Qualtrics.SurveyEngine.addOnload(function () {
     "use strict";
@@ -18,15 +18,15 @@ Qualtrics.SurveyEngine.addOnload(function () {
         housing: {
             training: [14693, 13350, 2968, 15034, 4666, 8187, 6557, 2898, 2864, 12633],
             test: {
-                0: [3174, 2275, 675, 102, 577],
-                1: [2447, 1751, 553, 172, 2728]
+                0: [3174, 2275, 675, 102, 577, 2255, 2987, 614, 1760, 692],
+                1: [2447, 1751, 553, 172, 2728, 2462, 1155, 456, 2767, 1657]
             }
         },
         safelimit: {
             training: [610, 1025, 1230, 960, 239, 124, 143, 131, 213, 322],
             test: {
-                0: [87, 203, 106, 143, 300],
-                1: [98, 261, 4, 209, 245]
+                0: [87, 203, 106, 143, 300, 211, 262, 69, 251, 177],
+                1: [98, 261, 4, 209, 245, 281, 148, 265, 25, 117]
             }
         }
     };
@@ -204,7 +204,7 @@ Qualtrics.SurveyEngine.addOnload(function () {
         iframe.src = makeIframeUrl("none", false, false);
     } else {
         title.textContent = LABELS[domain][testLabel] + " to " +
-            LABELS[domain][1 - testLabel] + ": case " + (loopIndex + 1) + " of 5";
+            LABELS[domain][1 - testLabel] + ": case " + (loopIndex + 1) + " of 10";
         status.textContent = "Make at least one change before continuing.";
         iframe.src = makeIframeUrl("none", true, true);
     }

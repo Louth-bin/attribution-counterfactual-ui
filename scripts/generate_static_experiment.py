@@ -2,8 +2,8 @@
 
 Only profiles with successful two-attribute counterfactuals are retained. The
 ten training profiles contain every possible pair of most influential features
-exactly once and are balanced 5/5 by predicted label. The ten test profiles are
-also balanced 5/5 by predicted label.
+exactly once and are balanced 5/5 by predicted label. The twenty test profiles
+are balanced 10/10 by predicted label.
 """
 
 from __future__ import annotations
@@ -34,7 +34,7 @@ DATASETS = ("housing", "safelimit")
 TRAINING_TARGET_PER_PAIR = 1
 TRAINING_CANDIDATE_RESERVE_PER_PAIR = 6
 TRAINING_PAIR_SCAN_BATCH_SIZE = 500
-TEST_TARGET_PER_PREDICTION = 5
+TEST_TARGET_PER_PREDICTION = 10
 
 
 def feature_pair_key(payload: dict[str, Any]) -> str:
@@ -485,15 +485,45 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output-json", type=Path, default=STATIC_JSON)
     parser.add_argument("--output-js", type=Path, default=STATIC_JS)
+    parser.add_argument(
+        "--preserve-training",
+        action="store_true",
+        help="Keep the existing fixed training pools while regenerating testing pools.",
+    )
     args = parser.parse_args()
 
     pipeline = ExplanationPipeline()
+    previous = (
+        json.loads(args.output_json.read_text(encoding="utf-8"))
+        if args.preserve_training and args.output_json.exists()
+        else None
+    )
     datasets: dict[str, Any] = {}
     report: dict[str, Any] = {}
     for dataset_name in DATASETS:
-        training_pool, training_stats = generate_balanced_training_pool(
-            pipeline, dataset_name, TRAINING_TARGET_PER_PAIR
-        )
+        if previous is not None:
+            training_pool = previous["datasets"][dataset_name]["training_pool"]
+            training_labels = Counter(
+                int(payload["prediction"]["value"]) for payload in training_pool
+            )
+            training_pairs = Counter(
+                payload["feature_pair_key"] for payload in training_pool
+            )
+            if (
+                len(training_pool) != 10
+                or training_labels != {0: 5, 1: 5}
+                or len(training_pairs) != 10
+                or set(training_pairs.values()) != {1}
+            ):
+                raise RuntimeError(
+                    f"{dataset_name} existing training pool is not the fixed "
+                    "balanced ten-case design"
+                )
+            training_stats = {"preserved": len(training_pool)}
+        else:
+            training_pool, training_stats = generate_balanced_training_pool(
+                pipeline, dataset_name, TRAINING_TARGET_PER_PAIR
+            )
         test_pool, test_stats = generate_pool(
             pipeline, dataset_name, "test", TEST_TARGET_PER_PREDICTION
         )

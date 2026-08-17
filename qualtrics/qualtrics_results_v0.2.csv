@@ -1,0 +1,301 @@
+participant,domain,xai,direction,case,instance,valid,margin_pp,boundary_progress_pp,change_l1,n_changed
+R_5DSzaEugkyhB8He,housing,none,Expensive to Cheap,1,2447,0,-44.8116,-14.6328,1.000000,2
+R_5DSzaEugkyhB8He,housing,none,Expensive to Cheap,2,1751,0,-46.7547,-2.0044,0.666667,1
+R_5DSzaEugkyhB8He,housing,none,Expensive to Cheap,3,553,0,-40.5025,0.1957,0.666667,1
+R_5DSzaEugkyhB8He,housing,none,Expensive to Cheap,4,172,1,36.8594,61.2026,1.333333,1
+R_5DSzaEugkyhB8He,housing,none,Expensive to Cheap,5,2728,0,-14.8272,25.0101,1.333333,1
+R_5DSzaEugkyhB8He,housing,none,Cheap to Expensive,1,3174,1,30.9168,40.3672,1.000000,1
+R_5DSzaEugkyhB8He,housing,none,Cheap to Expensive,2,2275,1,29.1162,30.4698,0.132102,1
+R_5DSzaEugkyhB8He,housing,none,Cheap to Expensive,3,675,0,-41.8153,1.6813,1.000000,2
+R_5DSzaEugkyhB8He,housing,none,Cheap to Expensive,4,102,0,-16.4951,5.9216,0.666667,1
+R_5DSzaEugkyhB8He,housing,none,Cheap to Expensive,5,577,0,-16.8392,-1.4954,0.666667,1
+R_3FJQV7viaHYDHi3,housing,none,Expensive to Cheap,1,2447,1,21.6851,51.8639,1.871856,5
+R_3FJQV7viaHYDHi3,housing,none,Expensive to Cheap,2,1751,0,-39.5690,5.1812,1.427841,4
+R_3FJQV7viaHYDHi3,housing,none,Expensive to Cheap,3,553,0,-15.1471,25.5510,1.676364,4
+R_3FJQV7viaHYDHi3,housing,none,Expensive to Cheap,4,172,1,36.8594,61.2026,1.333333,1
+R_3FJQV7viaHYDHi3,housing,none,Expensive to Cheap,5,2728,1,22.3003,62.1375,1.618561,3
+R_3FJQV7viaHYDHi3,housing,none,Cheap to Expensive,1,3174,1,49.1270,58.5774,1.172633,3
+R_3FJQV7viaHYDHi3,housing,none,Cheap to Expensive,2,2275,1,16.3978,17.7514,0.617424,2
+R_3FJQV7viaHYDHi3,housing,none,Cheap to Expensive,3,675,1,45.9857,89.4823,2.497254,5
+R_3FJQV7viaHYDHi3,housing,none,Cheap to Expensive,4,102,0,-8.0771,14.3396,1.233939,3
+R_3FJQV7viaHYDHi3,housing,none,Cheap to Expensive,5,577,1,25.9643,41.3081,1.037121,3
+R_3OLJbpwtIN5r62B,safelimit,attribution,Above Limit to Below Limit,1,87,0,-49.9990,0.0010,1.202319,3
+R_3OLJbpwtIN5r62B,safelimit,attribution,Above Limit to Below Limit,2,203,1,49.9999,99.9999,0.312045,2
+R_3OLJbpwtIN5r62B,safelimit,attribution,Above Limit to Below Limit,3,106,1,46.0333,96.0333,1.518225,4
+R_3OLJbpwtIN5r62B,safelimit,attribution,Above Limit to Below Limit,4,143,1,50.0000,100.0000,1.214203,3
+R_3OLJbpwtIN5r62B,safelimit,attribution,Above Limit to Below Limit,5,300,1,50.0000,100.0000,0.372899,2
+R_3OLJbpwtIN5r62B,safelimit,attribution,Below Limit to Above Limit,1,98,0,-48.3344,1.6656,0.412891,3
+R_3OLJbpwtIN5r62B,safelimit,attribution,Below Limit to Above Limit,2,261,0,-50.0000,0.0000,1.434563,3
+R_3OLJbpwtIN5r62B,safelimit,attribution,Below Limit to Above Limit,3,4,1,50.0000,100.0000,1.149725,2
+R_3OLJbpwtIN5r62B,safelimit,attribution,Below Limit to Above Limit,4,209,0,-50.0000,0.0000,1.332402,3
+R_3OLJbpwtIN5r62B,safelimit,attribution,Below Limit to Above Limit,5,245,0,-49.9971,0.0029,1.493511,3
+R_5JrAewWP4QfNMDy,housing,attribution,Cheap to Expensive,1,3174,1,22.9596,32.4100,0.259091,1
+R_5JrAewWP4QfNMDy,housing,attribution,Cheap to Expensive,2,2275,1,17.7985,19.1521,0.333333,1
+R_5JrAewWP4QfNMDy,housing,attribution,Cheap to Expensive,3,675,0,-22.4276,21.0689,2.107197,5
+R_5JrAewWP4QfNMDy,housing,attribution,Cheap to Expensive,4,102,1,36.6770,59.0937,0.866667,2
+R_5JrAewWP4QfNMDy,housing,attribution,Cheap to Expensive,5,577,1,45.9456,61.2894,1.066667,2
+R_5JrAewWP4QfNMDy,housing,attribution,Expensive to Cheap,1,2447,0,-39.0949,-8.9161,1.489091,3
+R_5JrAewWP4QfNMDy,housing,attribution,Expensive to Cheap,2,1751,0,-38.4032,6.3471,0.866667,2
+R_5JrAewWP4QfNMDy,housing,attribution,Expensive to Cheap,3,553,1,0.1310,40.8292,1.066667,2
+R_5JrAewWP4QfNMDy,housing,attribution,Expensive to Cheap,4,172,1,25.2696,49.6127,1.042121,3
+R_5JrAewWP4QfNMDy,housing,attribution,Expensive to Cheap,5,2728,1,28.6594,68.4966,0.866667,2
+R_1J8ShU0r192gzAd,safelimit,none,Above Limit to Below Limit,1,87,1,50.0000,100.0000,0.580025,1
+R_1J8ShU0r192gzAd,safelimit,none,Above Limit to Below Limit,2,203,0,-49.9941,0.0059,0.125187,1
+R_1J8ShU0r192gzAd,safelimit,none,Above Limit to Below Limit,3,106,0,-50.0000,0.0000,0.249875,1
+R_1J8ShU0r192gzAd,safelimit,none,Above Limit to Below Limit,4,143,1,50.0000,100.0000,0.345112,1
+R_1J8ShU0r192gzAd,safelimit,none,Above Limit to Below Limit,5,300,1,47.5962,97.5962,0.249875,1
+R_1J8ShU0r192gzAd,safelimit,none,Below Limit to Above Limit,1,98,0,-50.0000,0.0000,0.169650,1
+R_1J8ShU0r192gzAd,safelimit,none,Below Limit to Above Limit,2,261,0,-50.0000,0.0000,0.314563,1
+R_1J8ShU0r192gzAd,safelimit,none,Below Limit to Above Limit,3,4,0,-50.0000,0.0000,0.059725,1
+R_1J8ShU0r192gzAd,safelimit,none,Below Limit to Above Limit,4,209,0,-50.0000,0.0000,0.119675,1
+R_1J8ShU0r192gzAd,safelimit,none,Below Limit to Above Limit,5,245,0,-50.0000,0.0000,0.124938,1
+R_7CymkLq1W5EbO9c,housing,attribution,Cheap to Expensive,1,3174,1,48.4491,57.8995,1.213636,2
+R_7CymkLq1W5EbO9c,housing,attribution,Cheap to Expensive,2,2275,1,37.7233,39.0769,0.257955,1
+R_7CymkLq1W5EbO9c,housing,attribution,Cheap to Expensive,3,675,0,-19.4170,24.0795,1.780682,5
+R_7CymkLq1W5EbO9c,housing,attribution,Cheap to Expensive,4,102,0,-26.4972,-4.0806,1.167121,3
+R_7CymkLq1W5EbO9c,housing,attribution,Cheap to Expensive,5,577,0,-25.2270,-9.8832,1.030303,2
+R_7CymkLq1W5EbO9c,housing,attribution,Expensive to Cheap,1,2447,0,-1.9766,28.2022,1.320701,4
+R_7CymkLq1W5EbO9c,housing,attribution,Expensive to Cheap,2,1751,0,-8.5887,36.1616,1.006345,3
+R_7CymkLq1W5EbO9c,housing,attribution,Expensive to Cheap,3,553,0,-22.4834,18.2147,1.171061,4
+R_7CymkLq1W5EbO9c,housing,attribution,Expensive to Cheap,4,172,1,25.2696,49.6127,1.042121,3
+R_7CymkLq1W5EbO9c,housing,attribution,Expensive to Cheap,5,2728,0,-7.1020,32.7352,1.510682,5
+R_1eUSbs1pQPimBTZ,housing,attribution,Cheap to Expensive,1,3174,1,39.9990,49.4494,0.479091,2
+R_1eUSbs1pQPimBTZ,housing,attribution,Cheap to Expensive,2,2275,1,38.8921,40.2457,0.350852,2
+R_1eUSbs1pQPimBTZ,housing,attribution,Cheap to Expensive,3,675,0,-23.2182,20.2784,1.066667,2
+R_1eUSbs1pQPimBTZ,housing,attribution,Cheap to Expensive,4,102,0,-15.0564,7.3603,1.233939,2
+R_1eUSbs1pQPimBTZ,housing,attribution,Cheap to Expensive,5,577,0,-16.8392,-1.4954,0.666667,1
+R_1eUSbs1pQPimBTZ,housing,attribution,Expensive to Cheap,1,2447,1,12.0322,42.2110,0.968371,2
+R_1eUSbs1pQPimBTZ,housing,attribution,Expensive to Cheap,2,1751,0,-44.6336,0.1167,0.605455,2
+R_1eUSbs1pQPimBTZ,housing,attribution,Expensive to Cheap,3,553,0,-42.1563,-1.4582,0.636364,1
+R_1eUSbs1pQPimBTZ,housing,attribution,Expensive to Cheap,4,172,1,15.3448,39.6880,0.545455,1
+R_1eUSbs1pQPimBTZ,housing,attribution,Expensive to Cheap,5,2728,0,-28.9799,10.8573,1.212121,2
+R_12bqooCAAJESsRr,safelimit,attribution,Above Limit to Below Limit,1,87,1,50.0000,100.0000,0.780025,1
+R_12bqooCAAJESsRr,safelimit,attribution,Above Limit to Below Limit,2,203,1,49.9980,99.9980,0.225187,1
+R_12bqooCAAJESsRr,safelimit,attribution,Above Limit to Below Limit,3,106,0,-49.9966,0.0034,0.374813,1
+R_12bqooCAAJESsRr,safelimit,attribution,Above Limit to Below Limit,4,143,1,50.0000,100.0000,0.305112,1
+R_12bqooCAAJESsRr,safelimit,attribution,Above Limit to Below Limit,5,300,1,50.0000,100.0000,0.374813,1
+R_12bqooCAAJESsRr,safelimit,attribution,Below Limit to Above Limit,1,98,0,-6.4238,43.5762,0.569604,1
+R_12bqooCAAJESsRr,safelimit,attribution,Below Limit to Above Limit,2,261,0,-50.0000,0.0000,0.705455,1
+R_12bqooCAAJESsRr,safelimit,attribution,Below Limit to Above Limit,3,4,1,49.9593,99.9593,0.249725,1
+R_12bqooCAAJESsRr,safelimit,attribution,Below Limit to Above Limit,4,209,0,-50.0000,0.0000,0.723636,1
+R_12bqooCAAJESsRr,safelimit,attribution,Below Limit to Above Limit,5,245,0,-50.0000,0.0000,0.516364,1
+R_1knCAqvmyTwFTer,safelimit,counterfactual,Below Limit to Above Limit,1,98,0,-50.0000,-0.0000,1.000000,1
+R_1knCAqvmyTwFTer,safelimit,counterfactual,Below Limit to Above Limit,2,261,0,-49.9988,0.0012,0.644563,1
+R_1knCAqvmyTwFTer,safelimit,counterfactual,Below Limit to Above Limit,3,4,0,-50.0000,-0.0000,0.360000,1
+R_1knCAqvmyTwFTer,safelimit,counterfactual,Below Limit to Above Limit,4,209,0,-49.4661,0.5339,1.379675,2
+R_1knCAqvmyTwFTer,safelimit,counterfactual,Below Limit to Above Limit,5,245,0,-50.0000,0.0000,2.000000,2
+R_1knCAqvmyTwFTer,safelimit,counterfactual,Above Limit to Below Limit,1,87,1,49.9888,99.9888,0.460025,1
+R_1knCAqvmyTwFTer,safelimit,counterfactual,Above Limit to Below Limit,2,203,1,50.0000,100.0000,0.662045,2
+R_1knCAqvmyTwFTer,safelimit,counterfactual,Above Limit to Below Limit,3,106,0,-49.9999,0.0001,0.469526,2
+R_1knCAqvmyTwFTer,safelimit,counterfactual,Above Limit to Below Limit,4,143,1,50.0000,100.0000,1.315112,2
+R_1knCAqvmyTwFTer,safelimit,counterfactual,Above Limit to Below Limit,5,300,1,47.5962,97.5962,0.249875,1
+R_7oigZfUmLeZhBs7,safelimit,attribution,Above Limit to Below Limit,1,87,0,-50.0000,0.0000,1.000000,1
+R_7oigZfUmLeZhBs7,safelimit,attribution,Above Limit to Below Limit,2,203,0,-50.0000,0.0000,0.106857,1
+R_7oigZfUmLeZhBs7,safelimit,attribution,Above Limit to Below Limit,3,106,0,-50.0000,0.0000,0.600000,1
+R_7oigZfUmLeZhBs7,safelimit,attribution,Above Limit to Below Limit,4,143,0,-45.3240,4.6760,0.341818,1
+R_7oigZfUmLeZhBs7,safelimit,attribution,Above Limit to Below Limit,5,300,0,-50.0000,0.0000,0.372210,2
+R_7oigZfUmLeZhBs7,safelimit,attribution,Below Limit to Above Limit,1,98,0,-50.0000,-0.0000,0.170350,1
+R_7oigZfUmLeZhBs7,safelimit,attribution,Below Limit to Above Limit,2,261,0,-50.0000,0.0000,0.694545,1
+R_7oigZfUmLeZhBs7,safelimit,attribution,Below Limit to Above Limit,3,4,0,-50.0000,-0.0000,0.380275,1
+R_7oigZfUmLeZhBs7,safelimit,attribution,Below Limit to Above Limit,4,209,0,-50.0000,0.0000,0.796364,1
+R_7oigZfUmLeZhBs7,safelimit,attribution,Below Limit to Above Limit,5,245,0,-50.0000,0.0000,0.374813,1
+R_5rPkDbCA9RBiFjd,safelimit,counterfactual,Above Limit to Below Limit,1,87,0,-43.6671,6.3329,1.582319,3
+R_5rPkDbCA9RBiFjd,safelimit,counterfactual,Above Limit to Below Limit,2,203,1,50.0000,100.0000,0.881136,3
+R_5rPkDbCA9RBiFjd,safelimit,counterfactual,Above Limit to Below Limit,3,106,1,50.0000,100.0000,2.624464,4
+R_5rPkDbCA9RBiFjd,safelimit,counterfactual,Above Limit to Below Limit,4,143,1,50.0000,100.0000,1.618687,3
+R_5rPkDbCA9RBiFjd,safelimit,counterfactual,Above Limit to Below Limit,5,300,1,50.0000,100.0000,0.943291,3
+R_5rPkDbCA9RBiFjd,safelimit,counterfactual,Below Limit to Above Limit,1,98,1,50.0000,100.0000,1.009255,2
+R_5rPkDbCA9RBiFjd,safelimit,counterfactual,Below Limit to Above Limit,2,261,0,-50.0000,0.0000,0.095437,1
+R_5rPkDbCA9RBiFjd,safelimit,counterfactual,Below Limit to Above Limit,3,4,0,-50.0000,-0.0000,0.180275,1
+R_5rPkDbCA9RBiFjd,safelimit,counterfactual,Below Limit to Above Limit,4,209,0,-50.0000,0.0000,0.160325,1
+R_5rPkDbCA9RBiFjd,safelimit,counterfactual,Below Limit to Above Limit,5,245,0,-50.0000,0.0000,0.160896,2
+R_6DZbalJ8TCZtARb,safelimit,counterfactual,Above Limit to Below Limit,1,87,1,50.0000,100.0000,1.690025,2
+R_6DZbalJ8TCZtARb,safelimit,counterfactual,Above Limit to Below Limit,2,203,0,-49.3729,0.6271,1.000000,1
+R_6DZbalJ8TCZtARb,safelimit,counterfactual,Above Limit to Below Limit,3,106,0,-50.0000,0.0000,2.000000,2
+R_6DZbalJ8TCZtARb,safelimit,counterfactual,Above Limit to Below Limit,4,143,1,50.0000,100.0000,1.545112,2
+R_6DZbalJ8TCZtARb,safelimit,counterfactual,Above Limit to Below Limit,5,300,1,49.7383,99.7383,1.124938,2
+R_6DZbalJ8TCZtARb,safelimit,counterfactual,Below Limit to Above Limit,1,98,1,49.9623,99.9623,0.681423,2
+R_6DZbalJ8TCZtARb,safelimit,counterfactual,Below Limit to Above Limit,2,261,0,-50.0000,0.0000,0.970017,2
+R_6DZbalJ8TCZtARb,safelimit,counterfactual,Below Limit to Above Limit,3,4,0,-49.9992,0.0008,1.000000,1
+R_6DZbalJ8TCZtARb,safelimit,counterfactual,Below Limit to Above Limit,4,209,0,-50.0000,0.0000,0.643636,1
+R_6DZbalJ8TCZtARb,safelimit,counterfactual,Below Limit to Above Limit,5,245,0,-50.0000,0.0000,1.494545,2
+R_3da8jwTxaAuNxsI,housing,none,Expensive to Cheap,1,2447,1,22.5004,52.6792,2.688163,5
+R_3da8jwTxaAuNxsI,housing,none,Expensive to Cheap,2,1751,1,33.6086,78.3588,2.396080,5
+R_3da8jwTxaAuNxsI,housing,none,Expensive to Cheap,3,553,0,-1.9422,38.7560,2.004261,5
+R_3da8jwTxaAuNxsI,housing,none,Expensive to Cheap,4,172,0,-10.6160,13.7271,1.758788,2
+R_3da8jwTxaAuNxsI,housing,none,Expensive to Cheap,5,2728,0,-15.3479,24.4894,1.628788,2
+R_3da8jwTxaAuNxsI,housing,none,Cheap to Expensive,1,3174,1,49.4991,58.9496,2.221705,3
+R_3da8jwTxaAuNxsI,housing,none,Cheap to Expensive,2,2275,1,35.4649,36.8185,0.837595,2
+R_3da8jwTxaAuNxsI,housing,none,Cheap to Expensive,3,675,0,-16.9287,26.5679,2.180777,5
+R_3da8jwTxaAuNxsI,housing,none,Cheap to Expensive,4,102,0,-16.4951,5.9216,0.666667,1
+R_3da8jwTxaAuNxsI,housing,none,Cheap to Expensive,5,577,0,-16.8392,-1.4954,0.666667,1
+R_5aFAlypirbiSy54,housing,counterfactual,Expensive to Cheap,1,2447,1,45.4659,75.6447,2.262424,4
+R_5aFAlypirbiSy54,housing,counterfactual,Expensive to Cheap,2,1751,1,22.3003,67.0505,1.894318,4
+R_5aFAlypirbiSy54,housing,counterfactual,Expensive to Cheap,3,553,1,8.3016,48.9998,2.043182,5
+R_5aFAlypirbiSy54,housing,counterfactual,Expensive to Cheap,4,172,1,21.2259,45.5690,1.588788,2
+R_5aFAlypirbiSy54,housing,counterfactual,Expensive to Cheap,5,2728,0,-12.7019,27.1354,1.578788,2
+R_5aFAlypirbiSy54,housing,counterfactual,Cheap to Expensive,1,3174,1,49.6322,59.0826,2.049545,3
+R_5aFAlypirbiSy54,housing,counterfactual,Cheap to Expensive,2,2275,0,-44.5664,-43.2127,1.632235,4
+R_5aFAlypirbiSy54,housing,counterfactual,Cheap to Expensive,3,675,1,35.3633,78.8599,2.497159,5
+R_5aFAlypirbiSy54,housing,counterfactual,Cheap to Expensive,4,102,0,-43.0335,-20.6168,0.786061,3
+R_5aFAlypirbiSy54,housing,counterfactual,Cheap to Expensive,5,577,1,46.5187,61.8625,1.810417,4
+R_5g60ppMS88e6WxS,housing,none,Expensive to Cheap,1,2447,0,-20.2086,9.9702,0.328068,2
+R_5g60ppMS88e6WxS,housing,none,Expensive to Cheap,2,1751,1,11.8655,56.6157,0.610227,2
+R_5g60ppMS88e6WxS,housing,none,Expensive to Cheap,3,553,1,29.7197,70.4179,1.052652,3
+R_5g60ppMS88e6WxS,housing,none,Expensive to Cheap,4,172,1,36.8594,61.2026,1.333333,1
+R_5g60ppMS88e6WxS,housing,none,Expensive to Cheap,5,2728,0,-14.8272,25.0101,1.333333,1
+R_5g60ppMS88e6WxS,housing,none,Cheap to Expensive,1,3174,1,49.0576,58.5080,1.480644,3
+R_5g60ppMS88e6WxS,housing,none,Cheap to Expensive,2,2275,1,41.6874,43.0410,0.338352,1
+R_5g60ppMS88e6WxS,housing,none,Cheap to Expensive,3,675,1,41.8247,85.3213,2.342898,5
+R_5g60ppMS88e6WxS,housing,none,Cheap to Expensive,4,102,1,31.7292,54.1459,0.698977,3
+R_5g60ppMS88e6WxS,housing,none,Cheap to Expensive,5,577,1,40.6864,56.0302,0.559091,2
+R_5g6goAxW0POnfXS,housing,counterfactual,Cheap to Expensive,1,3174,0,-28.4469,-18.9965,1.333333,1
+R_5g6goAxW0POnfXS,housing,counterfactual,Cheap to Expensive,2,2275,0,-9.1164,-7.7628,0.711515,2
+R_5g6goAxW0POnfXS,housing,counterfactual,Cheap to Expensive,3,675,0,-41.3387,2.1579,0.432386,1
+R_5g6goAxW0POnfXS,housing,counterfactual,Cheap to Expensive,4,102,0,-9.8274,12.5893,0.500227,2
+R_5g6goAxW0POnfXS,housing,counterfactual,Cheap to Expensive,5,577,1,27.6485,42.9923,0.864962,2
+R_5g6goAxW0POnfXS,housing,counterfactual,Expensive to Cheap,1,2447,0,-39.4959,-9.3171,0.960985,2
+R_5g6goAxW0POnfXS,housing,counterfactual,Expensive to Cheap,2,1751,0,-38.4441,6.3062,1.084848,2
+R_5g6goAxW0POnfXS,housing,counterfactual,Expensive to Cheap,3,553,0,-36.5695,4.1287,0.625095,2
+R_5g6goAxW0POnfXS,housing,counterfactual,Expensive to Cheap,4,172,1,18.5895,42.9326,1.012121,2
+R_5g6goAxW0POnfXS,housing,counterfactual,Expensive to Cheap,5,2728,0,-28.6522,11.1850,0.551231,2
+R_12qUeHEbPUo2PTn,housing,none,Expensive to Cheap,1,2447,1,25.2349,55.4137,2.906061,5
+R_12qUeHEbPUo2PTn,housing,none,Expensive to Cheap,2,1751,1,11.4055,56.1557,2.870833,5
+R_12qUeHEbPUo2PTn,housing,none,Expensive to Cheap,3,553,1,4.4179,45.1161,1.969223,4
+R_12qUeHEbPUo2PTn,housing,none,Expensive to Cheap,4,172,1,10.8500,35.1931,1.898788,3
+R_12qUeHEbPUo2PTn,housing,none,Expensive to Cheap,5,2728,0,-26.1348,13.7025,2.062121,4
+R_12qUeHEbPUo2PTn,housing,none,Cheap to Expensive,1,3174,1,49.3272,58.7776,1.257462,3
+R_12qUeHEbPUo2PTn,housing,none,Cheap to Expensive,2,2275,1,39.6146,40.9682,0.362784,2
+R_12qUeHEbPUo2PTn,housing,none,Cheap to Expensive,3,675,1,36.4222,79.9188,1.716288,4
+R_12qUeHEbPUo2PTn,housing,none,Cheap to Expensive,4,102,1,40.2938,62.7105,1.263939,3
+R_12qUeHEbPUo2PTn,housing,none,Cheap to Expensive,5,577,1,36.7394,52.0832,0.400000,1
+R_5qAk52BxKeKkOOJ,safelimit,attribution,Below Limit to Above Limit,1,98,0,-50.0000,0.0000,0.089650,1
+R_5qAk52BxKeKkOOJ,safelimit,attribution,Below Limit to Above Limit,2,261,0,-50.0000,0.0000,0.064563,1
+R_5qAk52BxKeKkOOJ,safelimit,attribution,Below Limit to Above Limit,3,4,0,-50.0000,0.0000,0.089725,1
+R_5qAk52BxKeKkOOJ,safelimit,attribution,Below Limit to Above Limit,4,209,0,-50.0000,0.0000,0.079675,1
+R_5qAk52BxKeKkOOJ,safelimit,attribution,Below Limit to Above Limit,5,245,0,-50.0000,0.0000,0.124938,1
+R_5qAk52BxKeKkOOJ,safelimit,attribution,Above Limit to Below Limit,1,87,0,-50.0000,0.0000,0.090025,1
+R_5qAk52BxKeKkOOJ,safelimit,attribution,Above Limit to Below Limit,2,203,0,-50.0000,0.0000,0.075187,1
+R_5qAk52BxKeKkOOJ,safelimit,attribution,Above Limit to Below Limit,3,106,0,-50.0000,0.0000,0.124938,1
+R_5qAk52BxKeKkOOJ,safelimit,attribution,Above Limit to Below Limit,4,143,0,-49.9999,0.0001,0.095112,1
+R_5qAk52BxKeKkOOJ,safelimit,attribution,Above Limit to Below Limit,5,300,0,-50.0000,0.0000,0.124938,1
+R_6vdUndtY54RqpVv,housing,counterfactual,Expensive to Cheap,1,2447,0,-36.2192,-6.0404,0.333333,1
+R_6vdUndtY54RqpVv,housing,counterfactual,Expensive to Cheap,2,1751,0,-36.7019,8.0484,0.200000,1
+R_6vdUndtY54RqpVv,housing,counterfactual,Expensive to Cheap,3,553,0,-26.4401,14.2580,0.200000,1
+R_6vdUndtY54RqpVv,housing,counterfactual,Expensive to Cheap,4,172,1,36.8594,61.2026,1.333333,1
+R_6vdUndtY54RqpVv,housing,counterfactual,Expensive to Cheap,5,2728,0,-4.9365,34.9007,0.666667,1
+R_6vdUndtY54RqpVv,housing,counterfactual,Cheap to Expensive,1,3174,0,-28.4469,-18.9965,1.333333,1
+R_6vdUndtY54RqpVv,housing,counterfactual,Cheap to Expensive,2,2275,1,17.7985,19.1521,0.333333,1
+R_6vdUndtY54RqpVv,housing,counterfactual,Cheap to Expensive,3,675,0,-41.0754,2.4211,0.415341,1
+R_6vdUndtY54RqpVv,housing,counterfactual,Cheap to Expensive,4,102,0,-16.4951,5.9216,0.666667,1
+R_6vdUndtY54RqpVv,housing,counterfactual,Cheap to Expensive,5,577,0,-16.8392,-1.4954,0.666667,1
+R_67vRcoYqomc0aH9,housing,attribution,Cheap to Expensive,1,3174,0,-14.3383,-4.8879,0.400000,1
+R_67vRcoYqomc0aH9,housing,attribution,Cheap to Expensive,2,2275,1,49.8888,51.2425,0.940057,3
+R_67vRcoYqomc0aH9,housing,attribution,Cheap to Expensive,3,675,1,20.4678,63.9644,2.510227,5
+R_67vRcoYqomc0aH9,housing,attribution,Cheap to Expensive,4,102,1,28.5874,51.0040,1.682917,4
+R_67vRcoYqomc0aH9,housing,attribution,Cheap to Expensive,5,577,0,-6.2803,9.0635,1.318939,3
+R_67vRcoYqomc0aH9,housing,attribution,Expensive to Cheap,1,2447,0,-42.8350,-12.6562,1.105758,2
+R_67vRcoYqomc0aH9,housing,attribution,Expensive to Cheap,2,1751,0,-45.6816,-0.9313,0.558788,2
+R_67vRcoYqomc0aH9,housing,attribution,Expensive to Cheap,3,553,0,-29.1849,11.5132,1.697841,4
+R_67vRcoYqomc0aH9,housing,attribution,Expensive to Cheap,4,172,1,22.9300,47.2732,0.666667,1
+R_67vRcoYqomc0aH9,housing,attribution,Expensive to Cheap,5,2728,0,-4.9365,34.9007,0.666667,1
+R_71opu9CilxP5KrN,safelimit,none,Below Limit to Above Limit,1,98,1,50.0000,100.0000,0.629255,2
+R_71opu9CilxP5KrN,safelimit,none,Below Limit to Above Limit,2,261,0,-50.0000,0.0000,1.859755,3
+R_71opu9CilxP5KrN,safelimit,none,Below Limit to Above Limit,3,4,0,-50.0000,0.0000,0.248236,3
+R_71opu9CilxP5KrN,safelimit,none,Below Limit to Above Limit,4,209,0,-50.0000,0.0000,1.762402,3
+R_71opu9CilxP5KrN,safelimit,none,Below Limit to Above Limit,5,245,0,-50.0000,0.0000,0.333309,3
+R_71opu9CilxP5KrN,safelimit,none,Above Limit to Below Limit,1,87,0,-47.8199,2.1801,0.672319,2
+R_71opu9CilxP5KrN,safelimit,none,Above Limit to Below Limit,2,203,1,50.0000,100.0000,1.336857,2
+R_71opu9CilxP5KrN,safelimit,none,Above Limit to Below Limit,3,106,0,-50.0000,0.0000,0.009651,1
+R_71opu9CilxP5KrN,safelimit,none,Above Limit to Below Limit,4,143,0,-50.0000,-0.0000,1.235392,3
+R_71opu9CilxP5KrN,safelimit,none,Above Limit to Below Limit,5,300,1,50.0000,100.0000,1.353024,2
+R_3fTrP1eNSLr6OFA,housing,attribution,Cheap to Expensive,1,3174,1,18.4960,27.9464,0.666667,1
+R_3fTrP1eNSLr6OFA,housing,attribution,Cheap to Expensive,2,2275,1,2.2866,3.6403,0.019886,1
+R_3fTrP1eNSLr6OFA,housing,attribution,Cheap to Expensive,3,675,0,-40.0117,3.4849,0.735322,3
+R_3fTrP1eNSLr6OFA,housing,attribution,Cheap to Expensive,4,102,0,-16.4951,5.9216,0.666667,1
+R_3fTrP1eNSLr6OFA,housing,attribution,Cheap to Expensive,5,577,0,-16.8392,-1.4954,0.666667,1
+R_3fTrP1eNSLr6OFA,housing,attribution,Expensive to Cheap,1,2447,0,-42.0683,-11.8894,0.666667,1
+R_3fTrP1eNSLr6OFA,housing,attribution,Expensive to Cheap,2,1751,0,-49.2049,-4.4547,1.000000,2
+R_3fTrP1eNSLr6OFA,housing,attribution,Expensive to Cheap,3,553,0,-48.7246,-8.0265,0.666667,1
+R_3fTrP1eNSLr6OFA,housing,attribution,Expensive to Cheap,4,172,1,36.8594,61.2026,1.333333,1
+R_3fTrP1eNSLr6OFA,housing,attribution,Expensive to Cheap,5,2728,0,-4.9365,34.9007,0.666667,1
+R_322vaHesZ9mABo8,housing,attribution,Expensive to Cheap,1,2447,0,-41.1921,-11.0133,0.666667,1
+R_322vaHesZ9mABo8,housing,attribution,Expensive to Cheap,2,1751,0,-48.4656,-3.7154,0.666667,1
+R_322vaHesZ9mABo8,housing,attribution,Expensive to Cheap,3,553,0,-49.6091,-8.9109,0.666667,1
+R_322vaHesZ9mABo8,housing,attribution,Expensive to Cheap,4,172,1,22.9300,47.2732,0.666667,1
+R_322vaHesZ9mABo8,housing,attribution,Expensive to Cheap,5,2728,0,-4.9365,34.9007,0.666667,1
+R_322vaHesZ9mABo8,housing,attribution,Cheap to Expensive,1,3174,1,18.4960,27.9464,0.666667,1
+R_322vaHesZ9mABo8,housing,attribution,Cheap to Expensive,2,2275,1,7.2289,8.5825,0.039773,1
+R_322vaHesZ9mABo8,housing,attribution,Cheap to Expensive,3,675,0,-21.1324,22.3642,0.200000,1
+R_322vaHesZ9mABo8,housing,attribution,Cheap to Expensive,4,102,0,-16.4951,5.9216,0.666667,1
+R_322vaHesZ9mABo8,housing,attribution,Cheap to Expensive,5,577,0,-16.8392,-1.4954,0.666667,1
+R_5fiJADPk00t6Se9,safelimit,counterfactual,Below Limit to Above Limit,1,98,0,-50.0000,-0.0000,1.404382,4
+R_5fiJADPk00t6Se9,safelimit,counterfactual,Below Limit to Above Limit,2,261,0,-50.0000,0.0000,0.254545,1
+R_5fiJADPk00t6Se9,safelimit,counterfactual,Below Limit to Above Limit,3,4,0,-50.0000,-0.0000,0.273911,2
+R_5fiJADPk00t6Se9,safelimit,counterfactual,Below Limit to Above Limit,4,209,0,-50.0000,0.0000,0.614545,1
+R_5fiJADPk00t6Se9,safelimit,counterfactual,Below Limit to Above Limit,5,245,0,-50.0000,0.0000,0.693511,2
+R_5fiJADPk00t6Se9,safelimit,counterfactual,Above Limit to Below Limit,1,87,1,50.0000,100.0000,1.700025,2
+R_5fiJADPk00t6Se9,safelimit,counterfactual,Above Limit to Below Limit,2,203,1,50.0000,100.0000,0.754278,2
+R_5fiJADPk00t6Se9,safelimit,counterfactual,Above Limit to Below Limit,3,106,1,50.0000,100.0000,0.499750,1
+R_5fiJADPk00t6Se9,safelimit,counterfactual,Above Limit to Below Limit,4,143,1,50.0000,100.0000,0.766022,2
+R_5fiJADPk00t6Se9,safelimit,counterfactual,Above Limit to Below Limit,5,300,1,50.0000,100.0000,0.374813,1
+R_6t07wdUJUABPKIE,safelimit,none,Above Limit to Below Limit,1,87,1,50.0000,100.0000,3.084570,4
+R_6t07wdUJUABPKIE,safelimit,none,Above Limit to Below Limit,2,203,1,50.0000,100.0000,0.355187,1
+R_6t07wdUJUABPKIE,safelimit,none,Above Limit to Below Limit,3,106,0,-49.9564,0.0436,1.484938,3
+R_6t07wdUJUABPKIE,safelimit,none,Above Limit to Below Limit,4,143,1,50.0000,100.0000,1.539658,3
+R_6t07wdUJUABPKIE,safelimit,none,Above Limit to Below Limit,5,300,1,50.0000,100.0000,0.467837,2
+R_6t07wdUJUABPKIE,safelimit,none,Below Limit to Above Limit,1,98,0,-50.0000,-0.0000,1.000000,1
+R_6t07wdUJUABPKIE,safelimit,none,Below Limit to Above Limit,2,261,0,-50.0000,0.0000,0.058182,1
+R_6t07wdUJUABPKIE,safelimit,none,Below Limit to Above Limit,3,4,0,-50.0000,-0.0000,0.614545,1
+R_6t07wdUJUABPKIE,safelimit,none,Below Limit to Above Limit,4,209,0,-50.0000,0.0000,0.070325,1
+R_6t07wdUJUABPKIE,safelimit,none,Below Limit to Above Limit,5,245,0,-50.0000,0.0000,0.054545,1
+R_7m6pHZPK4Sqdz6p,housing,counterfactual,Cheap to Expensive,1,3174,1,13.0486,22.4990,0.855758,2
+R_7m6pHZPK4Sqdz6p,housing,counterfactual,Cheap to Expensive,2,2275,1,40.9113,42.2650,0.317614,1
+R_7m6pHZPK4Sqdz6p,housing,counterfactual,Cheap to Expensive,3,675,0,-44.4284,-0.9318,1.137121,3
+R_7m6pHZPK4Sqdz6p,housing,counterfactual,Cheap to Expensive,4,102,0,-35.2518,-12.8351,1.033939,2
+R_7m6pHZPK4Sqdz6p,housing,counterfactual,Cheap to Expensive,5,577,0,-3.0861,12.2577,1.230303,3
+R_7m6pHZPK4Sqdz6p,housing,counterfactual,Expensive to Cheap,1,2447,0,-20.1802,9.9986,0.638504,3
+R_7m6pHZPK4Sqdz6p,housing,counterfactual,Expensive to Cheap,2,1751,0,-32.4979,12.2523,1.104167,3
+R_7m6pHZPK4Sqdz6p,housing,counterfactual,Expensive to Cheap,3,553,0,-3.3642,37.3339,0.883049,3
+R_7m6pHZPK4Sqdz6p,housing,counterfactual,Expensive to Cheap,4,172,1,30.7120,55.0552,0.866667,2
+R_7m6pHZPK4Sqdz6p,housing,counterfactual,Expensive to Cheap,5,2728,1,36.3526,76.1899,0.962973,3
+R_7ouaHYEFOkTbFrn,housing,counterfactual,Cheap to Expensive,1,3174,1,38.9808,48.4313,0.380114,1
+R_7ouaHYEFOkTbFrn,housing,counterfactual,Cheap to Expensive,2,2275,1,40.9113,42.2650,0.317614,1
+R_7ouaHYEFOkTbFrn,housing,counterfactual,Cheap to Expensive,3,675,1,41.2003,84.6969,0.867045,2
+R_7ouaHYEFOkTbFrn,housing,counterfactual,Cheap to Expensive,4,102,1,9.3559,31.7726,0.316761,1
+R_7ouaHYEFOkTbFrn,housing,counterfactual,Cheap to Expensive,5,577,1,27.7301,43.0739,1.106155,3
+R_7ouaHYEFOkTbFrn,housing,counterfactual,Expensive to Cheap,1,2447,0,-6.5669,23.6119,1.654072,3
+R_7ouaHYEFOkTbFrn,housing,counterfactual,Expensive to Cheap,2,1751,1,38.0316,82.7819,1.670644,3
+R_7ouaHYEFOkTbFrn,housing,counterfactual,Expensive to Cheap,3,553,0,-24.4575,16.2406,1.061553,3
+R_7ouaHYEFOkTbFrn,housing,counterfactual,Expensive to Cheap,4,172,1,36.8594,61.2026,1.333333,1
+R_7ouaHYEFOkTbFrn,housing,counterfactual,Expensive to Cheap,5,2728,1,5.7868,45.6240,1.533333,2
+R_6N8hq2tClpLxNP1,housing,none,Cheap to Expensive,1,3174,1,43.7097,53.1601,0.482481,2
+R_6N8hq2tClpLxNP1,housing,none,Cheap to Expensive,2,2275,1,16.6038,17.9574,0.598390,2
+R_6N8hq2tClpLxNP1,housing,none,Cheap to Expensive,3,675,0,-2.1306,41.3659,1.173390,4
+R_6N8hq2tClpLxNP1,housing,none,Cheap to Expensive,4,102,1,46.3750,68.7917,1.361136,3
+R_6N8hq2tClpLxNP1,housing,none,Cheap to Expensive,5,577,1,31.7265,47.0703,0.857955,3
+R_6N8hq2tClpLxNP1,housing,none,Expensive to Cheap,1,2447,0,-49.4515,-19.2727,0.484375,3
+R_6N8hq2tClpLxNP1,housing,none,Expensive to Cheap,2,1751,0,-44.6616,0.0886,1.078788,3
+R_6N8hq2tClpLxNP1,housing,none,Expensive to Cheap,3,553,0,-46.2182,-5.5201,0.758352,2
+R_6N8hq2tClpLxNP1,housing,none,Expensive to Cheap,4,172,1,25.0551,49.3983,0.792121,2
+R_6N8hq2tClpLxNP1,housing,none,Expensive to Cheap,5,2728,0,-11.1150,28.7222,0.495455,2
+R_5ARKBiJcbeCMbPI,housing,none,Cheap to Expensive,1,3174,1,47.6361,57.0865,0.469091,2
+R_5ARKBiJcbeCMbPI,housing,none,Cheap to Expensive,2,2275,1,36.6314,37.9850,0.227273,1
+R_5ARKBiJcbeCMbPI,housing,none,Cheap to Expensive,3,675,1,27.0831,70.5797,1.520360,4
+R_5ARKBiJcbeCMbPI,housing,none,Cheap to Expensive,4,102,0,-16.2256,6.1911,0.868201,3
+R_5ARKBiJcbeCMbPI,housing,none,Cheap to Expensive,5,577,0,-11.0549,4.2889,0.744223,2
+R_5ARKBiJcbeCMbPI,housing,none,Expensive to Cheap,1,2447,0,-19.8304,10.3484,1.709148,4
+R_5ARKBiJcbeCMbPI,housing,none,Expensive to Cheap,2,1751,0,-26.1032,18.6471,1.406951,4
+R_5ARKBiJcbeCMbPI,housing,none,Expensive to Cheap,3,553,0,-24.4550,16.2432,1.275758,4
+R_5ARKBiJcbeCMbPI,housing,none,Expensive to Cheap,4,172,1,36.8594,61.2026,1.333333,1
+R_5ARKBiJcbeCMbPI,housing,none,Expensive to Cheap,5,2728,0,-3.5377,36.2996,1.593902,3
+R_31GpbVwSgVHpLam,safelimit,counterfactual,Above Limit to Below Limit,1,87,0,-50.0000,0.0000,1.000000,1
+R_31GpbVwSgVHpLam,safelimit,counterfactual,Above Limit to Below Limit,2,203,1,50.0000,100.0000,0.716857,1
+R_31GpbVwSgVHpLam,safelimit,counterfactual,Above Limit to Below Limit,3,106,1,50.0000,100.0000,0.888100,3
+R_31GpbVwSgVHpLam,safelimit,counterfactual,Above Limit to Below Limit,4,143,0,-50.0000,0.0000,0.085112,1
+R_31GpbVwSgVHpLam,safelimit,counterfactual,Above Limit to Below Limit,5,300,1,49.9994,99.9994,0.493024,1
+R_31GpbVwSgVHpLam,safelimit,counterfactual,Below Limit to Above Limit,1,98,0,-50.0000,-0.0000,0.509091,1
+R_31GpbVwSgVHpLam,safelimit,counterfactual,Below Limit to Above Limit,2,261,0,-50.0000,0.0000,0.345455,1
+R_31GpbVwSgVHpLam,safelimit,counterfactual,Below Limit to Above Limit,3,4,0,-50.0000,-0.0000,0.887273,1
+R_31GpbVwSgVHpLam,safelimit,counterfactual,Below Limit to Above Limit,4,209,0,-50.0000,0.0000,1.000000,1
+R_31GpbVwSgVHpLam,safelimit,counterfactual,Below Limit to Above Limit,5,245,0,-50.0000,0.0000,0.301818,1

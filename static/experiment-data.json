@@ -44103,8 +44103,8 @@
         "test_instance_count": 60,
         "feature_names": [
           "Blood Glucose",
-          "Diastolic Blood Pressure",
-          "Serum Insulin",
+          "Blood Pressure",
+          "Insulin",
           "BMI",
           "Age"
         ],
@@ -47373,8 +47373,8 @@
           "available_instance_count": 274,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -47480,8 +47480,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -47562,7 +47562,7 @@
             },
             "selected_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure"
+              "Blood Pressure"
             ],
             "target_probability": 0.5328571755274785,
             "optimization": {
@@ -47603,7 +47603,7 @@
           "feature_pair_key": "glucose|blood_pressure",
           "feature_pair_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure"
+            "Blood Pressure"
           ]
         },
         {
@@ -47617,8 +47617,8 @@
           "available_instance_count": 274,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -47724,8 +47724,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -47806,7 +47806,7 @@
             },
             "selected_feature_names": [
               "Blood Glucose",
-              "Serum Insulin"
+              "Insulin"
             ],
             "target_probability": 0.5075437367471457,
             "optimization": {
@@ -47847,7 +47847,7 @@
           "feature_pair_key": "glucose|insulin",
           "feature_pair_names": [
             "Blood Glucose",
-            "Serum Insulin"
+            "Insulin"
           ]
         },
         {
@@ -47861,8 +47861,8 @@
           "available_instance_count": 274,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -47968,8 +47968,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -48105,8 +48105,8 @@
           "available_instance_count": 274,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -48212,8 +48212,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -48349,8 +48349,8 @@
           "available_instance_count": 274,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -48456,8 +48456,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -48537,8 +48537,8 @@
               "label": "No Diabetes"
             },
             "selected_feature_names": [
-              "Diastolic Blood Pressure",
-              "Serum Insulin"
+              "Blood Pressure",
+              "Insulin"
             ],
             "target_probability": 0.510235794128949,
             "optimization": {
@@ -48578,8 +48578,8 @@
           },
           "feature_pair_key": "blood_pressure|insulin",
           "feature_pair_names": [
-            "Diastolic Blood Pressure",
-            "Serum Insulin"
+            "Blood Pressure",
+            "Insulin"
           ]
         },
         {
@@ -48593,8 +48593,8 @@
           "available_instance_count": 274,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -48700,8 +48700,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -48781,7 +48781,7 @@
               "label": "No Diabetes"
             },
             "selected_feature_names": [
-              "Diastolic Blood Pressure",
+              "Blood Pressure",
               "BMI"
             ],
             "target_probability": 0.529775710536121,
@@ -48822,7 +48822,7 @@
           },
           "feature_pair_key": "blood_pressure|bmi",
           "feature_pair_names": [
-            "Diastolic Blood Pressure",
+            "Blood Pressure",
             "BMI"
           ]
         },
@@ -48837,8 +48837,8 @@
           "available_instance_count": 274,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -48944,8 +48944,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -49025,7 +49025,7 @@
               "label": "Diabetes"
             },
             "selected_feature_names": [
-              "Diastolic Blood Pressure",
+              "Blood Pressure",
               "Age"
             ],
             "target_probability": 0.7055687167128621,
@@ -49066,7 +49066,7 @@
           },
           "feature_pair_key": "blood_pressure|age",
           "feature_pair_names": [
-            "Diastolic Blood Pressure",
+            "Blood Pressure",
             "Age"
           ]
         },
@@ -49081,8 +49081,8 @@
           "available_instance_count": 274,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -49188,8 +49188,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -49270,7 +49270,7 @@
             },
             "selected_feature_names": [
               "BMI",
-              "Serum Insulin"
+              "Insulin"
             ],
             "target_probability": 0.5266195238158344,
             "optimization": {
@@ -49310,7 +49310,7 @@
           },
           "feature_pair_key": "insulin|bmi",
           "feature_pair_names": [
-            "Serum Insulin",
+            "Insulin",
             "BMI"
           ]
         },
@@ -49325,8 +49325,8 @@
           "available_instance_count": 274,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -49432,8 +49432,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -49514,7 +49514,7 @@
             },
             "selected_feature_names": [
               "Age",
-              "Serum Insulin"
+              "Insulin"
             ],
             "target_probability": 0.5093448304088263,
             "optimization": {
@@ -49554,7 +49554,7 @@
           },
           "feature_pair_key": "insulin|age",
           "feature_pair_names": [
-            "Serum Insulin",
+            "Insulin",
             "Age"
           ]
         },
@@ -49569,8 +49569,8 @@
           "available_instance_count": 274,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -49676,8 +49676,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -49815,8 +49815,8 @@
           "available_instance_count": 60,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -49922,8 +49922,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -50004,7 +50004,7 @@
             },
             "selected_feature_names": [
               "Blood Glucose",
-              "Serum Insulin"
+              "Insulin"
             ],
             "target_probability": 0.5136174504706003,
             "optimization": {
@@ -50045,7 +50045,7 @@
           "feature_pair_key": "glucose|insulin",
           "feature_pair_names": [
             "Blood Glucose",
-            "Serum Insulin"
+            "Insulin"
           ]
         },
         {
@@ -50059,8 +50059,8 @@
           "available_instance_count": 60,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -50166,8 +50166,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -50247,8 +50247,8 @@
               "label": "No Diabetes"
             },
             "selected_feature_names": [
-              "Diastolic Blood Pressure",
-              "Serum Insulin"
+              "Blood Pressure",
+              "Insulin"
             ],
             "target_probability": 0.7169986123042613,
             "optimization": {
@@ -50288,8 +50288,8 @@
           },
           "feature_pair_key": "blood_pressure|insulin",
           "feature_pair_names": [
-            "Diastolic Blood Pressure",
-            "Serum Insulin"
+            "Blood Pressure",
+            "Insulin"
           ]
         },
         {
@@ -50303,8 +50303,8 @@
           "available_instance_count": 60,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -50410,8 +50410,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -50492,7 +50492,7 @@
             },
             "selected_feature_names": [
               "Blood Glucose",
-              "Serum Insulin"
+              "Insulin"
             ],
             "target_probability": 0.5472760877205891,
             "optimization": {
@@ -50533,7 +50533,7 @@
           "feature_pair_key": "glucose|insulin",
           "feature_pair_names": [
             "Blood Glucose",
-            "Serum Insulin"
+            "Insulin"
           ]
         },
         {
@@ -50547,8 +50547,8 @@
           "available_instance_count": 60,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -50654,8 +50654,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -50736,7 +50736,7 @@
             },
             "selected_feature_names": [
               "Blood Glucose",
-              "Serum Insulin"
+              "Insulin"
             ],
             "target_probability": 0.5333020086700079,
             "optimization": {
@@ -50777,7 +50777,7 @@
           "feature_pair_key": "glucose|insulin",
           "feature_pair_names": [
             "Blood Glucose",
-            "Serum Insulin"
+            "Insulin"
           ]
         },
         {
@@ -50791,8 +50791,8 @@
           "available_instance_count": 60,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -50898,8 +50898,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -50979,7 +50979,7 @@
               "label": "No Diabetes"
             },
             "selected_feature_names": [
-              "Serum Insulin",
+              "Insulin",
               "Blood Glucose"
             ],
             "target_probability": 0.5494934137095289,
@@ -51021,7 +51021,7 @@
           "feature_pair_key": "glucose|insulin",
           "feature_pair_names": [
             "Blood Glucose",
-            "Serum Insulin"
+            "Insulin"
           ]
         },
         {
@@ -51035,8 +51035,8 @@
           "available_instance_count": 60,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -51142,8 +51142,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -51224,7 +51224,7 @@
             },
             "selected_feature_names": [
               "Age",
-              "Diastolic Blood Pressure"
+              "Blood Pressure"
             ],
             "target_probability": 0.5981289184267621,
             "optimization": {
@@ -51264,7 +51264,7 @@
           },
           "feature_pair_key": "blood_pressure|age",
           "feature_pair_names": [
-            "Diastolic Blood Pressure",
+            "Blood Pressure",
             "Age"
           ]
         },
@@ -51279,8 +51279,8 @@
           "available_instance_count": 60,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -51386,8 +51386,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -51468,7 +51468,7 @@
             },
             "selected_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure"
+              "Blood Pressure"
             ],
             "target_probability": 0.8158759186320774,
             "optimization": {
@@ -51509,7 +51509,7 @@
           "feature_pair_key": "glucose|blood_pressure",
           "feature_pair_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure"
+            "Blood Pressure"
           ]
         },
         {
@@ -51523,8 +51523,8 @@
           "available_instance_count": 60,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -51630,8 +51630,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -51712,7 +51712,7 @@
             },
             "selected_feature_names": [
               "Age",
-              "Serum Insulin"
+              "Insulin"
             ],
             "target_probability": 0.5029377967703024,
             "optimization": {
@@ -51752,7 +51752,7 @@
           },
           "feature_pair_key": "insulin|age",
           "feature_pair_names": [
-            "Serum Insulin",
+            "Insulin",
             "Age"
           ]
         },
@@ -51767,8 +51767,8 @@
           "available_instance_count": 60,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -51874,8 +51874,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -51956,7 +51956,7 @@
             },
             "selected_feature_names": [
               "Age",
-              "Diastolic Blood Pressure"
+              "Blood Pressure"
             ],
             "target_probability": 0.7574721943416354,
             "optimization": {
@@ -51996,7 +51996,7 @@
           },
           "feature_pair_key": "blood_pressure|age",
           "feature_pair_names": [
-            "Diastolic Blood Pressure",
+            "Blood Pressure",
             "Age"
           ]
         },
@@ -52011,8 +52011,8 @@
           "available_instance_count": 60,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -52118,8 +52118,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -52255,8 +52255,8 @@
           "available_instance_count": 60,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -52362,8 +52362,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -52499,8 +52499,8 @@
           "available_instance_count": 60,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -52606,8 +52606,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -52688,7 +52688,7 @@
             },
             "selected_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure"
+              "Blood Pressure"
             ],
             "target_probability": 0.5004062559876594,
             "optimization": {
@@ -52729,7 +52729,7 @@
           "feature_pair_key": "glucose|blood_pressure",
           "feature_pair_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure"
+            "Blood Pressure"
           ]
         },
         {
@@ -52743,8 +52743,8 @@
           "available_instance_count": 60,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -52850,8 +52850,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -52931,7 +52931,7 @@
               "label": "Diabetes"
             },
             "selected_feature_names": [
-              "Diastolic Blood Pressure",
+              "Blood Pressure",
               "Blood Glucose"
             ],
             "target_probability": 0.5390376460430295,
@@ -52973,7 +52973,7 @@
           "feature_pair_key": "glucose|blood_pressure",
           "feature_pair_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure"
+            "Blood Pressure"
           ]
         },
         {
@@ -52987,8 +52987,8 @@
           "available_instance_count": 60,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -53094,8 +53094,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -53176,7 +53176,7 @@
             },
             "selected_feature_names": [
               "Age",
-              "Diastolic Blood Pressure"
+              "Blood Pressure"
             ],
             "target_probability": 0.7178203036299817,
             "optimization": {
@@ -53216,7 +53216,7 @@
           },
           "feature_pair_key": "blood_pressure|age",
           "feature_pair_names": [
-            "Diastolic Blood Pressure",
+            "Blood Pressure",
             "Age"
           ]
         },
@@ -53231,8 +53231,8 @@
           "available_instance_count": 60,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -53338,8 +53338,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -53420,7 +53420,7 @@
             },
             "selected_feature_names": [
               "Blood Glucose",
-              "Serum Insulin"
+              "Insulin"
             ],
             "target_probability": 0.5317307707969849,
             "optimization": {
@@ -53461,7 +53461,7 @@
           "feature_pair_key": "glucose|insulin",
           "feature_pair_names": [
             "Blood Glucose",
-            "Serum Insulin"
+            "Insulin"
           ]
         },
         {
@@ -53475,8 +53475,8 @@
           "available_instance_count": 60,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -53582,8 +53582,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -53664,7 +53664,7 @@
             },
             "selected_feature_names": [
               "Blood Glucose",
-              "Serum Insulin"
+              "Insulin"
             ],
             "target_probability": 0.5455868196613225,
             "optimization": {
@@ -53705,7 +53705,7 @@
           "feature_pair_key": "glucose|insulin",
           "feature_pair_names": [
             "Blood Glucose",
-            "Serum Insulin"
+            "Insulin"
           ]
         },
         {
@@ -53719,8 +53719,8 @@
           "available_instance_count": 60,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -53826,8 +53826,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -53963,8 +53963,8 @@
           "available_instance_count": 60,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -54070,8 +54070,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -54207,8 +54207,8 @@
           "available_instance_count": 60,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -54314,8 +54314,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -54451,8 +54451,8 @@
           "available_instance_count": 60,
           "feature_names": [
             "Blood Glucose",
-            "Diastolic Blood Pressure",
-            "Serum Insulin",
+            "Blood Pressure",
+            "Insulin",
             "BMI",
             "Age"
           ],
@@ -54558,8 +54558,8 @@
             "controllable_only": false,
             "controllable_feature_names": [
               "Blood Glucose",
-              "Diastolic Blood Pressure",
-              "Serum Insulin",
+              "Blood Pressure",
+              "Insulin",
               "BMI"
             ],
             "raw_controllable_feature_names": [
@@ -54639,7 +54639,7 @@
               "label": "Diabetes"
             },
             "selected_feature_names": [
-              "Serum Insulin",
+              "Insulin",
               "Blood Glucose"
             ],
             "target_probability": 0.5053229073004754,
@@ -54681,7 +54681,7 @@
           "feature_pair_key": "glucose|insulin",
           "feature_pair_names": [
             "Blood Glucose",
-            "Serum Insulin"
+            "Insulin"
           ]
         }
       ]

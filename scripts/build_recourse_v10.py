@@ -74,8 +74,8 @@ def update_scenario(payload: dict[str, Any]) -> None:
     <h2>Information available to the AI</h2>
     <table class="domain-table"><tr><th>Attribute</th><th>Description</th><th>Typical range</th></tr>
       <tr><td>Blood Glucose</td><td>Blood glucose concentration</td><td>74–192 mg/dL</td></tr>
-      <tr><td>Diastolic Blood Pressure</td><td>Diastolic blood pressure</td><td>48–94 mmHg</td></tr>
-      <tr><td>Serum Insulin</td><td>Two-hour serum insulin</td><td>36–521 µU/mL</td></tr>
+      <tr><td>Blood Pressure</td><td>Blood pressure</td><td>48–94 mmHg</td></tr>
+      <tr><td>Insulin</td><td>Insulin measurement</td><td>36–521 µU/mL</td></tr>
       <tr><td>BMI</td><td>Body mass index</td><td>20.4–48.9 kg/m²</td></tr>
       <tr><td>Age</td><td>Age in years</td><td>21–58 years</td></tr>
     </table>

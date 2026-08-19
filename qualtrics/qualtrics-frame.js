@@ -28,11 +28,19 @@ Qualtrics.SurveyEngine.addOnload(function () {
                 0: [87, 203, 106, 143, 300, 211, 262, 69, 251, 177],
                 1: [98, 261, 4, 209, 245, 281, 148, 265, 25, 117]
             }
+        },
+        diabetes: {
+            training: [36, 190, 225, 115, 1, 2, 118, 7, 74, 60],
+            test: {
+                0: [32, 30, 14, 53, 35, 42, 26, 7, 56, 33],
+                1: [59, 0, 12, 20, 15, 52, 58, 11, 31, 51]
+            }
         }
     };
     var LABELS = {
         housing: ["Cheap", "Expensive"],
-        safelimit: ["Above Limit", "Below Limit"]
+        safelimit: ["Above Limit", "Below Limit"],
+        diabetes: ["Diabetes", "No Diabetes"]
     };
 
     function getEmbeddedData(name) {
@@ -72,6 +80,8 @@ Qualtrics.SurveyEngine.addOnload(function () {
     var testLabel = Number(root.getAttribute("data-test-label"));
     var loopIndex = parseInt("${lm://Field/1}", 10);
     if (!Number.isFinite(loopIndex)) loopIndex = 0;
+    var presentationPosition = parseInt("${lm://CurrentLoopNumber}", 10);
+    if (!Number.isFinite(presentationPosition)) presentationPosition = loopIndex + 1;
 
     var caseList = phase === "training"
         ? CASE_IDS[domain].training
@@ -112,7 +122,8 @@ Qualtrics.SurveyEngine.addOnload(function () {
     function trainingRecord() {
         return {
             domain: domain,
-            caseNumber: loopIndex + 1,
+            caseNumber: presentationPosition,
+            casePoolPosition: loopIndex + 1,
             instanceId: instanceId,
             explanation: explanation,
             selectedPrediction: selectedPrediction,
@@ -128,7 +139,8 @@ Qualtrics.SurveyEngine.addOnload(function () {
         return {
             domain: domain,
             direction: LABELS[domain][testLabel] + " to " + LABELS[domain][1 - testLabel],
-            caseNumberWithinDirection: loopIndex + 1,
+            caseNumberWithinDirection: presentationPosition,
+            casePoolPositionWithinDirection: loopIndex + 1,
             instanceId: instanceId,
             explanation: explanation,
             originalPrediction: prediction,
@@ -199,12 +211,12 @@ Qualtrics.SurveyEngine.addOnload(function () {
     });
 
     if (phase === "training") {
-        title.textContent = "Training case " + (loopIndex + 1) + " of 10";
+        title.textContent = "Training case " + presentationPosition + " of 10";
         status.textContent = "Loading the profile...";
         iframe.src = makeIframeUrl("none", false, false);
     } else {
         title.textContent = LABELS[domain][testLabel] + " to " +
-            LABELS[domain][1 - testLabel] + ": case " + (loopIndex + 1) + " of 10";
+            LABELS[domain][1 - testLabel] + ": case " + presentationPosition + " of 10";
         status.textContent = "Make at least one change before continuing.";
         iframe.src = makeIframeUrl("none", true, true);
     }

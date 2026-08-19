@@ -78,10 +78,10 @@ DATASET_RUNTIME_CONFIGS: dict[str, DatasetRuntimeConfig] = {
     "diabetes": DatasetRuntimeConfig(
         label="Diabetes",
         friendly_feature_names={
-            "glucose": "Glucose",
-            "blood_pressure": "Blood Pressure",
+            "glucose": "Blood Glucose",
+            "blood_pressure": "Diastolic Blood Pressure",
             "skin_thickness": "Skin Thickness",
-            "insulin": "Insulin",
+            "insulin": "Serum Insulin",
             "bmi": "BMI",
             "age": "Age",
         },

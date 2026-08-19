@@ -30,7 +30,7 @@ def main() -> None:
     datasets = {}
     report = {}
 
-    for dataset_name in ("housing", "safelimit"):
+    for dataset_name in ("housing", "safelimit", "diabetes"):
         old_bundle = previous["datasets"][dataset_name]
         pools = {}
         for pool_name, split in (("training_pool", "train"), ("test_pool", "test")):
@@ -103,7 +103,7 @@ def main() -> None:
         }
 
     bundle = {
-        "version": "static-experiment-v7-grouped-test-directions",
+        "version": "static-experiment-v10-three-domains",
         "generated_at": date.today().isoformat(),
         "default_model": "mlp",
         "datasets": datasets,

@@ -26,7 +26,7 @@ for (const [datasetName, bundle] of Object.entries(EXPERIMENT_DATA.datasets)) {
 }
 
 const qsf = JSON.parse(
-    fs.readFileSync("qualtrics/UPLOAD_THIS_Qualtrics_Starter.qsf", "utf8")
+    fs.readFileSync("qualtrics/Recourse_v10.qsf", "utf8")
 );
 let scriptCount = 0;
 for (const element of qsf.SurveyElements) {

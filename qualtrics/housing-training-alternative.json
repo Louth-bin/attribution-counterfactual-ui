@@ -1,0 +1,2738 @@
+{
+  "selection_rule": {
+    "cases": 10,
+    "labels": {
+      "Cheap": 5,
+      "Expensive": 5
+    },
+    "feature_pairs": "Every possible pair exactly once",
+    "counterfactual": "Successful and changes exactly two attributes",
+    "overlap_with_current_training_ids": 0,
+    "clarity_metric": "Number of changed attributes whose direction agrees with larger/more -> Expensive"
+  },
+  "comparison": {
+    "current_consistent_changes": 16,
+    "current_total_changes": 20,
+    "alternative_consistent_changes": 17,
+    "alternative_total_changes": 20,
+    "feasible_alternative_scores": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18
+    ],
+    "alternative_total_normalized_change": 3.90842803030303
+  },
+  "summary": [
+    {
+      "instance_id": 4757,
+      "prediction": "Cheap",
+      "counterfactual_prediction": "Expensive",
+      "feature_pair": "sqft_living|bedrooms",
+      "consistent_changes": 2,
+      "changes": [
+        {
+          "feature": "Living Area",
+          "from": 1210.0,
+          "to": 1223.0,
+          "direction_consistent": true
+        },
+        {
+          "feature": "Bedrooms",
+          "from": 2.0,
+          "to": 3.0,
+          "direction_consistent": true
+        }
+      ]
+    },
+    {
+      "instance_id": 4609,
+      "prediction": "Cheap",
+      "counterfactual_prediction": "Expensive",
+      "feature_pair": "sqft_living|floors",
+      "consistent_changes": 2,
+      "changes": [
+        {
+          "feature": "Living Area",
+          "from": 2140.0,
+          "to": 2141.0,
+          "direction_consistent": true
+        },
+        {
+          "feature": "Floors",
+          "from": 1.0,
+          "to": 1.5,
+          "direction_consistent": true
+        }
+      ]
+    },
+    {
+      "instance_id": 848,
+      "prediction": "Expensive",
+      "counterfactual_prediction": "Cheap",
+      "feature_pair": "sqft_living|bathrooms",
+      "consistent_changes": 2,
+      "changes": [
+        {
+          "feature": "Living Area",
+          "from": 2070.0,
+          "to": 2069.0,
+          "direction_consistent": true
+        },
+        {
+          "feature": "Bathrooms",
+          "from": 2.0,
+          "to": 1.75,
+          "direction_consistent": true
+        }
+      ]
+    },
+    {
+      "instance_id": 143,
+      "prediction": "Cheap",
+      "counterfactual_prediction": "Expensive",
+      "feature_pair": "sqft_living|grade",
+      "consistent_changes": 2,
+      "changes": [
+        {
+          "feature": "Living Area",
+          "from": 1060.0,
+          "to": 1320.0,
+          "direction_consistent": true
+        },
+        {
+          "feature": "Construction Grade",
+          "from": 7.0,
+          "to": 8.0,
+          "direction_consistent": true
+        }
+      ]
+    },
+    {
+      "instance_id": 165,
+      "prediction": "Cheap",
+      "counterfactual_prediction": "Expensive",
+      "feature_pair": "floors|grade",
+      "consistent_changes": 2,
+      "changes": [
+        {
+          "feature": "Floors",
+          "from": 1.0,
+          "to": 1.5,
+          "direction_consistent": true
+        },
+        {
+          "feature": "Construction Grade",
+          "from": 7.0,
+          "to": 8.0,
+          "direction_consistent": true
+        }
+      ]
+    },
+    {
+      "instance_id": 3081,
+      "prediction": "Expensive",
+      "counterfactual_prediction": "Cheap",
+      "feature_pair": "bedrooms|floors",
+      "consistent_changes": 0,
+      "changes": [
+        {
+          "feature": "Bedrooms",
+          "from": 2.0,
+          "to": 3.0,
+          "direction_consistent": false
+        },
+        {
+          "feature": "Floors",
+          "from": 1.5,
+          "to": 2.0,
+          "direction_consistent": false
+        }
+      ]
+    },
+    {
+      "instance_id": 289,
+      "prediction": "Cheap",
+      "counterfactual_prediction": "Expensive",
+      "feature_pair": "bedrooms|grade",
+      "consistent_changes": 2,
+      "changes": [
+        {
+          "feature": "Bedrooms",
+          "from": 2.0,
+          "to": 3.0,
+          "direction_consistent": true
+        },
+        {
+          "feature": "Construction Grade",
+          "from": 7.0,
+          "to": 8.0,
+          "direction_consistent": true
+        }
+      ]
+    },
+    {
+      "instance_id": 1143,
+      "prediction": "Expensive",
+      "counterfactual_prediction": "Cheap",
+      "feature_pair": "bathrooms|grade",
+      "consistent_changes": 2,
+      "changes": [
+        {
+          "feature": "Bathrooms",
+          "from": 2.5,
+          "to": 2.25,
+          "direction_consistent": true
+        },
+        {
+          "feature": "Construction Grade",
+          "from": 8.0,
+          "to": 7.0,
+          "direction_consistent": true
+        }
+      ]
+    },
+    {
+      "instance_id": 939,
+      "prediction": "Expensive",
+      "counterfactual_prediction": "Cheap",
+      "feature_pair": "bathrooms|floors",
+      "consistent_changes": 2,
+      "changes": [
+        {
+          "feature": "Bathrooms",
+          "from": 3.0,
+          "to": 2.75,
+          "direction_consistent": true
+        },
+        {
+          "feature": "Floors",
+          "from": 1.5,
+          "to": 1.0,
+          "direction_consistent": true
+        }
+      ]
+    },
+    {
+      "instance_id": 1044,
+      "prediction": "Expensive",
+      "counterfactual_prediction": "Cheap",
+      "feature_pair": "bedrooms|bathrooms",
+      "consistent_changes": 1,
+      "changes": [
+        {
+          "feature": "Bedrooms",
+          "from": 2.0,
+          "to": 3.0,
+          "direction_consistent": false
+        },
+        {
+          "feature": "Bathrooms",
+          "from": 1.75,
+          "to": 1.5,
+          "direction_consistent": true
+        }
+      ]
+    }
+  ],
+  "training_pool": [
+    {
+      "dataset": "housing",
+      "model": "mlp",
+      "xai_method": "shap",
+      "xai_type": "attribution",
+      "split": "train",
+      "explanation_feature_count": 2,
+      "instance_id": 4757,
+      "available_instance_count": 15086,
+      "feature_names": [
+        "Living Area",
+        "Bedrooms",
+        "Bathrooms",
+        "Floors",
+        "Construction Grade"
+      ],
+      "raw_feature_names": [
+        "sqft_living",
+        "bedrooms",
+        "bathrooms",
+        "floors",
+        "grade"
+      ],
+      "feature_types": [
+        "numerical",
+        "numerical",
+        "numerical",
+        "numerical",
+        "numerical"
+      ],
+      "feature_ranges": [
+        [
+          800,
+          4320
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          1.0,
+          3.75
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          6,
+          11
+        ]
+      ],
+      "raw_feature_ranges": [
+        [
+          800,
+          4320
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          1.0,
+          3.75
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          6,
+          11
+        ]
+      ],
+      "feature_values": [
+        1210.0,
+        2.0,
+        1.75,
+        2.0,
+        8.0
+      ],
+      "raw_feature_values": [
+        1210.0,
+        2.0,
+        1.75,
+        2.0,
+        8.0
+      ],
+      "prediction": {
+        "value": 0,
+        "label": "Cheap",
+        "probabilities": [
+          {
+            "label": "Cheap",
+            "value": 0.8114606237632208
+          },
+          {
+            "label": "Expensive",
+            "value": 0.18853937623677916
+          }
+        ]
+      },
+      "prediction_labels": [
+        "Cheap",
+        "Expensive"
+      ],
+      "feature_importance_by_name": {
+        "sqft_living": 0.0,
+        "bedrooms": 0.0,
+        "bathrooms": 0.0,
+        "floors": 0.0,
+        "grade": 0.0
+      },
+      "counterfactual_settings": {
+        "mode": "minimal",
+        "controllable_only": false,
+        "controllable_feature_names": [
+          "Living Area",
+          "Bedrooms",
+          "Bathrooms",
+          "Floors",
+          "Construction Grade"
+        ],
+        "raw_controllable_feature_names": [
+          "sqft_living",
+          "bedrooms",
+          "bathrooms",
+          "floors",
+          "grade"
+        ]
+      },
+      "attribution": {
+        "method": "shap",
+        "values": [
+          -0.20799432566334763,
+          -0.07539494531128907,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "class_values": [
+          [
+            0.20799432566334763,
+            0.07539494531128899,
+            0.03485005431472371,
+            0.0421626761931127,
+            -0.07072095503322295
+          ],
+          [
+            -0.20799432566334763,
+            -0.07539494531128907,
+            -0.034850054314723655,
+            -0.04216267619311259,
+            0.0707209550332229
+          ]
+        ],
+        "ranking_values": [
+          0.20799432566334763,
+          0.07539494531128907,
+          0.03485005431472371,
+          0.0421626761931127,
+          0.07072095503322295
+        ],
+        "base_value": 0.47822042268602927,
+        "max_abs_value": 0.20799432566334763,
+        "raw_values": [
+          -0.20799432566334763,
+          -0.07539494531128907,
+          -0.034850054314723655,
+          -0.04216267619311259,
+          0.0707209550332229
+        ],
+        "shown_feature_count": 2,
+        "shown_feature_indices": [
+          0,
+          1
+        ],
+        "direction_labels": {
+          "left": "Cheap",
+          "right": "Expensive"
+        }
+      },
+      "counterfactual": {
+        "feature_values": [
+          1223.0,
+          3.0,
+          1.75,
+          2.0,
+          8.0
+        ],
+        "prediction": {
+          "value": 1,
+          "label": "Expensive"
+        },
+        "source": "shap_proportional_direction_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 1,
+          "label": "Expensive"
+        },
+        "selected_feature_names": [
+          "Living Area",
+          "Bedrooms"
+        ],
+        "target_probability": 0.5006294123666531,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.33702651515151516,
+          "proportionality_error": 0.9158836094577896,
+          "scale": 0.0034090909090924533,
+          "directions": {
+            "sqft_living": "increase",
+            "bedrooms": "increase"
+          },
+          "attribution_weights": {
+            "sqft_living": 1.0,
+            "bedrooms": 0.3624855873872285
+          },
+          "normalized_changes": {
+            "sqft_living": 0.003693181818181818,
+            "bedrooms": 0.3333333333333333
+          },
+          "direction_assignments_evaluated": 2
+        },
+        "raw_feature_values": [
+          1223.0,
+          3.0,
+          1.75,
+          2.0,
+          8.0
+        ],
+        "raw_selected_feature_names": [
+          "sqft_living",
+          "bedrooms"
+        ]
+      },
+      "model_metrics": {
+        "accuracy": 0.7660891089108911,
+        "log_loss": 0.49139408082222413
+      },
+      "feature_pair_key": "sqft_living|bedrooms",
+      "feature_pair_names": [
+        "Living Area",
+        "Bedrooms"
+      ]
+    },
+    {
+      "dataset": "housing",
+      "model": "mlp",
+      "xai_method": "shap",
+      "xai_type": "attribution",
+      "split": "train",
+      "explanation_feature_count": 2,
+      "instance_id": 4609,
+      "available_instance_count": 15086,
+      "feature_names": [
+        "Living Area",
+        "Bedrooms",
+        "Bathrooms",
+        "Floors",
+        "Construction Grade"
+      ],
+      "raw_feature_names": [
+        "sqft_living",
+        "bedrooms",
+        "bathrooms",
+        "floors",
+        "grade"
+      ],
+      "feature_types": [
+        "numerical",
+        "numerical",
+        "numerical",
+        "numerical",
+        "numerical"
+      ],
+      "feature_ranges": [
+        [
+          800,
+          4320
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          1.0,
+          3.75
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          6,
+          11
+        ]
+      ],
+      "raw_feature_ranges": [
+        [
+          800,
+          4320
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          1.0,
+          3.75
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          6,
+          11
+        ]
+      ],
+      "feature_values": [
+        2140.0,
+        3.0,
+        1.75,
+        1.0,
+        7.0
+      ],
+      "raw_feature_values": [
+        2140.0,
+        3.0,
+        1.75,
+        1.0,
+        7.0
+      ],
+      "prediction": {
+        "value": 0,
+        "label": "Cheap",
+        "probabilities": [
+          {
+            "label": "Cheap",
+            "value": 0.5770930041704492
+          },
+          {
+            "label": "Expensive",
+            "value": 0.42290699582955077
+          }
+        ]
+      },
+      "prediction_labels": [
+        "Cheap",
+        "Expensive"
+      ],
+      "feature_importance_by_name": {
+        "sqft_living": 0.0,
+        "bedrooms": 0.0,
+        "bathrooms": 0.0,
+        "floors": 0.0,
+        "grade": 0.0
+      },
+      "counterfactual_settings": {
+        "mode": "minimal",
+        "controllable_only": false,
+        "controllable_feature_names": [
+          "Living Area",
+          "Bedrooms",
+          "Bathrooms",
+          "Floors",
+          "Construction Grade"
+        ],
+        "raw_controllable_feature_names": [
+          "sqft_living",
+          "bedrooms",
+          "bathrooms",
+          "floors",
+          "grade"
+        ]
+      },
+      "attribution": {
+        "method": "shap",
+        "values": [
+          0.09619232477672846,
+          0.0,
+          0.0,
+          -0.10203621758772488,
+          0.0
+        ],
+        "class_values": [
+          [
+            -0.09619232477672854,
+            0.006455292932042368,
+            -0.05017182040628122,
+            0.10203621758772485,
+            0.09318606151972098
+          ],
+          [
+            0.09619232477672846,
+            -0.006455292932042285,
+            0.05017182040628133,
+            -0.10203621758772488,
+            -0.09318606151972111
+          ]
+        ],
+        "ranking_values": [
+          0.09619232477672854,
+          0.006455292932042368,
+          0.05017182040628133,
+          0.10203621758772488,
+          0.09318606151972111
+        ],
+        "base_value": 0.47822042268602927,
+        "max_abs_value": 0.10203621758772488,
+        "raw_values": [
+          0.09619232477672846,
+          -0.006455292932042285,
+          0.05017182040628133,
+          -0.10203621758772488,
+          -0.09318606151972111
+        ],
+        "shown_feature_count": 2,
+        "shown_feature_indices": [
+          3,
+          0
+        ],
+        "direction_labels": {
+          "left": "Cheap",
+          "right": "Expensive"
+        }
+      },
+      "counterfactual": {
+        "feature_values": [
+          2141.0,
+          3.0,
+          1.75,
+          1.5,
+          7.0
+        ],
+        "prediction": {
+          "value": 1,
+          "label": "Expensive"
+        },
+        "source": "shap_proportional_direction_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 1,
+          "label": "Expensive"
+        },
+        "selected_feature_names": [
+          "Floors",
+          "Living Area"
+        ],
+        "target_probability": 0.769767899629198,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.33361742424242424,
+          "proportionality_error": 0.3330319832840235,
+          "scale": 3.7197589144488206e-14,
+          "directions": {
+            "floors": "increase",
+            "sqft_living": "increase"
+          },
+          "attribution_weights": {
+            "floors": 1.0,
+            "sqft_living": 0.9427272693054093
+          },
+          "normalized_changes": {
+            "floors": 0.3333333333333333,
+            "sqft_living": 0.0002840909090909091
+          },
+          "direction_assignments_evaluated": 2
+        },
+        "raw_feature_values": [
+          2141.0,
+          3.0,
+          1.75,
+          1.5,
+          7.0
+        ],
+        "raw_selected_feature_names": [
+          "floors",
+          "sqft_living"
+        ]
+      },
+      "model_metrics": {
+        "accuracy": 0.7660891089108911,
+        "log_loss": 0.49139408082222413
+      },
+      "feature_pair_key": "sqft_living|floors",
+      "feature_pair_names": [
+        "Living Area",
+        "Floors"
+      ]
+    },
+    {
+      "dataset": "housing",
+      "model": "mlp",
+      "xai_method": "shap",
+      "xai_type": "attribution",
+      "split": "train",
+      "explanation_feature_count": 2,
+      "instance_id": 848,
+      "available_instance_count": 15086,
+      "feature_names": [
+        "Living Area",
+        "Bedrooms",
+        "Bathrooms",
+        "Floors",
+        "Construction Grade"
+      ],
+      "raw_feature_names": [
+        "sqft_living",
+        "bedrooms",
+        "bathrooms",
+        "floors",
+        "grade"
+      ],
+      "feature_types": [
+        "numerical",
+        "numerical",
+        "numerical",
+        "numerical",
+        "numerical"
+      ],
+      "feature_ranges": [
+        [
+          800,
+          4320
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          1.0,
+          3.75
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          6,
+          11
+        ]
+      ],
+      "raw_feature_ranges": [
+        [
+          800,
+          4320
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          1.0,
+          3.75
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          6,
+          11
+        ]
+      ],
+      "feature_values": [
+        2070.0,
+        3.0,
+        2.0,
+        1.0,
+        7.0
+      ],
+      "raw_feature_values": [
+        2070.0,
+        3.0,
+        2.0,
+        1.0,
+        7.0
+      ],
+      "prediction": {
+        "value": 1,
+        "label": "Expensive",
+        "probabilities": [
+          {
+            "label": "Cheap",
+            "value": 0.4854464898385893
+          },
+          {
+            "label": "Expensive",
+            "value": 0.5145535101614107
+          }
+        ]
+      },
+      "prediction_labels": [
+        "Cheap",
+        "Expensive"
+      ],
+      "feature_importance_by_name": {
+        "sqft_living": 0.0,
+        "bedrooms": 0.0,
+        "bathrooms": 0.0,
+        "floors": 0.0,
+        "grade": 0.0
+      },
+      "counterfactual_settings": {
+        "mode": "minimal",
+        "controllable_only": false,
+        "controllable_feature_names": [
+          "Living Area",
+          "Bedrooms",
+          "Bathrooms",
+          "Floors",
+          "Construction Grade"
+        ],
+        "raw_controllable_feature_names": [
+          "sqft_living",
+          "bedrooms",
+          "bathrooms",
+          "floors",
+          "grade"
+        ]
+      },
+      "attribution": {
+        "method": "shap",
+        "values": [
+          0.10251511045095785,
+          0.0,
+          0.0826912613243455,
+          0.0,
+          0.0
+        ],
+        "class_values": [
+          [
+            -0.10251511045095765,
+            -0.005771517005336041,
+            -0.0826912613243456,
+            0.08031683875180287,
+            0.07432796255345497
+          ],
+          [
+            0.10251511045095785,
+            0.005771517005336041,
+            0.0826912613243455,
+            -0.08031683875180287,
+            -0.07432796255345506
+          ]
+        ],
+        "ranking_values": [
+          0.10251511045095785,
+          0.005771517005336041,
+          0.0826912613243456,
+          0.08031683875180287,
+          0.07432796255345506
+        ],
+        "base_value": 0.47822042268602927,
+        "max_abs_value": 0.10251511045095785,
+        "raw_values": [
+          0.10251511045095785,
+          0.005771517005336041,
+          0.0826912613243455,
+          -0.08031683875180287,
+          -0.07432796255345506
+        ],
+        "shown_feature_count": 2,
+        "shown_feature_indices": [
+          0,
+          2
+        ],
+        "direction_labels": {
+          "left": "Cheap",
+          "right": "Expensive"
+        }
+      },
+      "counterfactual": {
+        "feature_values": [
+          2069.0,
+          3.0,
+          1.75,
+          1.0,
+          7.0
+        ],
+        "prediction": {
+          "value": 0,
+          "label": "Cheap"
+        },
+        "source": "shap_proportional_direction_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 0,
+          "label": "Cheap"
+        },
+        "selected_feature_names": [
+          "Living Area",
+          "Bathrooms"
+        ],
+        "target_probability": 0.5946843462681604,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.09119318181818183,
+          "proportionality_error": 0.11241893654851313,
+          "scale": 2.042904618414607e-14,
+          "directions": {
+            "sqft_living": "decrease",
+            "bathrooms": "decrease"
+          },
+          "attribution_weights": {
+            "sqft_living": 1.0,
+            "bathrooms": 0.806625101027464
+          },
+          "normalized_changes": {
+            "sqft_living": 0.0002840909090909091,
+            "bathrooms": 0.09090909090909091
+          },
+          "direction_assignments_evaluated": 4
+        },
+        "raw_feature_values": [
+          2069.0,
+          3.0,
+          1.75,
+          1.0,
+          7.0
+        ],
+        "raw_selected_feature_names": [
+          "sqft_living",
+          "bathrooms"
+        ]
+      },
+      "model_metrics": {
+        "accuracy": 0.7660891089108911,
+        "log_loss": 0.49139408082222413
+      },
+      "feature_pair_key": "sqft_living|bathrooms",
+      "feature_pair_names": [
+        "Living Area",
+        "Bathrooms"
+      ]
+    },
+    {
+      "dataset": "housing",
+      "model": "mlp",
+      "xai_method": "shap",
+      "xai_type": "attribution",
+      "split": "train",
+      "explanation_feature_count": 2,
+      "instance_id": 143,
+      "available_instance_count": 15086,
+      "feature_names": [
+        "Living Area",
+        "Bedrooms",
+        "Bathrooms",
+        "Floors",
+        "Construction Grade"
+      ],
+      "raw_feature_names": [
+        "sqft_living",
+        "bedrooms",
+        "bathrooms",
+        "floors",
+        "grade"
+      ],
+      "feature_types": [
+        "numerical",
+        "numerical",
+        "numerical",
+        "numerical",
+        "numerical"
+      ],
+      "feature_ranges": [
+        [
+          800,
+          4320
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          1.0,
+          3.75
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          6,
+          11
+        ]
+      ],
+      "raw_feature_ranges": [
+        [
+          800,
+          4320
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          1.0,
+          3.75
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          6,
+          11
+        ]
+      ],
+      "feature_values": [
+        1060.0,
+        3.0,
+        1.0,
+        1.0,
+        7.0
+      ],
+      "raw_feature_values": [
+        1060.0,
+        3.0,
+        1.0,
+        1.0,
+        7.0
+      ],
+      "prediction": {
+        "value": 0,
+        "label": "Cheap",
+        "probabilities": [
+          {
+            "label": "Cheap",
+            "value": 0.874602441022446
+          },
+          {
+            "label": "Expensive",
+            "value": 0.12539755897755397
+          }
+        ]
+      },
+      "prediction_labels": [
+        "Cheap",
+        "Expensive"
+      ],
+      "feature_importance_by_name": {
+        "sqft_living": 0.0,
+        "bedrooms": 0.0,
+        "bathrooms": 0.0,
+        "floors": 0.0,
+        "grade": 0.0
+      },
+      "counterfactual_settings": {
+        "mode": "minimal",
+        "controllable_only": false,
+        "controllable_feature_names": [
+          "Living Area",
+          "Bedrooms",
+          "Bathrooms",
+          "Floors",
+          "Construction Grade"
+        ],
+        "raw_controllable_feature_names": [
+          "sqft_living",
+          "bedrooms",
+          "bathrooms",
+          "floors",
+          "grade"
+        ]
+      },
+      "attribution": {
+        "method": "shap",
+        "values": [
+          -0.13738873899080792,
+          0.0,
+          0.0,
+          0.0,
+          -0.14000151730854637
+        ],
+        "class_values": [
+          [
+            0.1373887389908082,
+            0.01732057354803465,
+            -0.024490016009299245,
+            0.08260204987038541,
+            0.14000151730854624
+          ],
+          [
+            -0.13738873899080792,
+            -0.017320573548034762,
+            0.024490016009299245,
+            -0.08260204987038544,
+            -0.14000151730854637
+          ]
+        ],
+        "ranking_values": [
+          0.1373887389908082,
+          0.017320573548034762,
+          0.024490016009299245,
+          0.08260204987038544,
+          0.14000151730854637
+        ],
+        "base_value": 0.47822042268602927,
+        "max_abs_value": 0.14000151730854637,
+        "raw_values": [
+          -0.13738873899080792,
+          -0.017320573548034762,
+          0.024490016009299245,
+          -0.08260204987038544,
+          -0.14000151730854637
+        ],
+        "shown_feature_count": 2,
+        "shown_feature_indices": [
+          4,
+          0
+        ],
+        "direction_labels": {
+          "left": "Cheap",
+          "right": "Expensive"
+        }
+      },
+      "counterfactual": {
+        "feature_values": [
+          1320.0,
+          3.0,
+          1.0,
+          1.0,
+          8.0
+        ],
+        "prediction": {
+          "value": 1,
+          "label": "Expensive"
+        },
+        "source": "shap_proportional_direction_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 1,
+          "label": "Expensive"
+        },
+        "selected_feature_names": [
+          "Construction Grade",
+          "Living Area"
+        ],
+        "target_probability": 0.50003188445835,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.27386363636363636,
+          "proportionality_error": 0.12473166839730813,
+          "scale": 0.07497883801962746,
+          "directions": {
+            "grade": "increase",
+            "sqft_living": "increase"
+          },
+          "attribution_weights": {
+            "grade": 1.0,
+            "sqft_living": 0.9813374999930878
+          },
+          "normalized_changes": {
+            "grade": 0.2,
+            "sqft_living": 0.07386363636363637
+          },
+          "direction_assignments_evaluated": 4
+        },
+        "raw_feature_values": [
+          1320.0,
+          3.0,
+          1.0,
+          1.0,
+          8.0
+        ],
+        "raw_selected_feature_names": [
+          "grade",
+          "sqft_living"
+        ]
+      },
+      "model_metrics": {
+        "accuracy": 0.7660891089108911,
+        "log_loss": 0.49139408082222413
+      },
+      "feature_pair_key": "sqft_living|grade",
+      "feature_pair_names": [
+        "Living Area",
+        "Construction Grade"
+      ]
+    },
+    {
+      "dataset": "housing",
+      "model": "mlp",
+      "xai_method": "shap",
+      "xai_type": "attribution",
+      "split": "train",
+      "explanation_feature_count": 2,
+      "instance_id": 165,
+      "available_instance_count": 15086,
+      "feature_names": [
+        "Living Area",
+        "Bedrooms",
+        "Bathrooms",
+        "Floors",
+        "Construction Grade"
+      ],
+      "raw_feature_names": [
+        "sqft_living",
+        "bedrooms",
+        "bathrooms",
+        "floors",
+        "grade"
+      ],
+      "feature_types": [
+        "numerical",
+        "numerical",
+        "numerical",
+        "numerical",
+        "numerical"
+      ],
+      "feature_ranges": [
+        [
+          800,
+          4320
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          1.0,
+          3.75
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          6,
+          11
+        ]
+      ],
+      "raw_feature_ranges": [
+        [
+          800,
+          4320
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          1.0,
+          3.75
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          6,
+          11
+        ]
+      ],
+      "feature_values": [
+        1580.0,
+        3.0,
+        1.75,
+        1.0,
+        7.0
+      ],
+      "raw_feature_values": [
+        1580.0,
+        3.0,
+        1.75,
+        1.0,
+        7.0
+      ],
+      "prediction": {
+        "value": 0,
+        "label": "Cheap",
+        "probabilities": [
+          {
+            "label": "Cheap",
+            "value": 0.7041569609970038
+          },
+          {
+            "label": "Expensive",
+            "value": 0.2958430390029963
+          }
+        ]
+      },
+      "prediction_labels": [
+        "Cheap",
+        "Expensive"
+      ],
+      "feature_importance_by_name": {
+        "sqft_living": 0.0,
+        "bedrooms": 0.0,
+        "bathrooms": 0.0,
+        "floors": 0.0,
+        "grade": 0.0
+      },
+      "counterfactual_settings": {
+        "mode": "minimal",
+        "controllable_only": false,
+        "controllable_feature_names": [
+          "Living Area",
+          "Bedrooms",
+          "Bathrooms",
+          "Floors",
+          "Construction Grade"
+        ],
+        "raw_controllable_feature_names": [
+          "sqft_living",
+          "bedrooms",
+          "bathrooms",
+          "floors",
+          "grade"
+        ]
+      },
+      "attribution": {
+        "method": "shap",
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          -0.09588187582113428,
+          -0.11205493348510177
+        ],
+        "class_values": [
+          [
+            0.0027910492657040667,
+            0.008291911726980544,
+            -0.03664238661588748,
+            0.0958818758211342,
+            0.1120549334851017
+          ],
+          [
+            -0.0027910492657038447,
+            -0.008291911726980641,
+            0.03664238661588757,
+            -0.09588187582113428,
+            -0.11205493348510177
+          ]
+        ],
+        "ranking_values": [
+          0.0027910492657040667,
+          0.008291911726980641,
+          0.03664238661588757,
+          0.09588187582113428,
+          0.11205493348510177
+        ],
+        "base_value": 0.47822042268602927,
+        "max_abs_value": 0.11205493348510177,
+        "raw_values": [
+          -0.0027910492657038447,
+          -0.008291911726980641,
+          0.03664238661588757,
+          -0.09588187582113428,
+          -0.11205493348510177
+        ],
+        "shown_feature_count": 2,
+        "shown_feature_indices": [
+          4,
+          3
+        ],
+        "direction_labels": {
+          "left": "Cheap",
+          "right": "Expensive"
+        }
+      },
+      "counterfactual": {
+        "feature_values": [
+          1580.0,
+          3.0,
+          1.75,
+          1.5,
+          8.0
+        ],
+        "prediction": {
+          "value": 1,
+          "label": "Expensive"
+        },
+        "source": "shap_proportional_direction_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 1,
+          "label": "Expensive"
+        },
+        "selected_feature_names": [
+          "Construction Grade",
+          "Floors"
+        ],
+        "target_probability": 0.8711175791739614,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.5333333333333333,
+          "proportionality_error": 0.1895589669596438,
+          "scale": 4.5297790594138063e-14,
+          "directions": {
+            "grade": "increase",
+            "floors": "increase"
+          },
+          "attribution_weights": {
+            "grade": 1.0,
+            "floors": 0.8556684907932431
+          },
+          "normalized_changes": {
+            "grade": 0.2,
+            "floors": 0.3333333333333333
+          },
+          "direction_assignments_evaluated": 2
+        },
+        "raw_feature_values": [
+          1580.0,
+          3.0,
+          1.75,
+          1.5,
+          8.0
+        ],
+        "raw_selected_feature_names": [
+          "grade",
+          "floors"
+        ]
+      },
+      "model_metrics": {
+        "accuracy": 0.7660891089108911,
+        "log_loss": 0.49139408082222413
+      },
+      "feature_pair_key": "floors|grade",
+      "feature_pair_names": [
+        "Floors",
+        "Construction Grade"
+      ]
+    },
+    {
+      "dataset": "housing",
+      "model": "mlp",
+      "xai_method": "shap",
+      "xai_type": "attribution",
+      "split": "train",
+      "explanation_feature_count": 2,
+      "instance_id": 3081,
+      "available_instance_count": 15086,
+      "feature_names": [
+        "Living Area",
+        "Bedrooms",
+        "Bathrooms",
+        "Floors",
+        "Construction Grade"
+      ],
+      "raw_feature_names": [
+        "sqft_living",
+        "bedrooms",
+        "bathrooms",
+        "floors",
+        "grade"
+      ],
+      "feature_types": [
+        "numerical",
+        "numerical",
+        "numerical",
+        "numerical",
+        "numerical"
+      ],
+      "feature_ranges": [
+        [
+          800,
+          4320
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          1.0,
+          3.75
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          6,
+          11
+        ]
+      ],
+      "raw_feature_ranges": [
+        [
+          800,
+          4320
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          1.0,
+          3.75
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          6,
+          11
+        ]
+      ],
+      "feature_values": [
+        1780.0,
+        2.0,
+        2.0,
+        1.5,
+        7.0
+      ],
+      "raw_feature_values": [
+        1780.0,
+        2.0,
+        2.0,
+        1.5,
+        7.0
+      ],
+      "prediction": {
+        "value": 1,
+        "label": "Expensive",
+        "probabilities": [
+          {
+            "label": "Cheap",
+            "value": 0.1114007362049465
+          },
+          {
+            "label": "Expensive",
+            "value": 0.8885992637950535
+          }
+        ]
+      },
+      "prediction_labels": [
+        "Cheap",
+        "Expensive"
+      ],
+      "feature_importance_by_name": {
+        "sqft_living": 0.0,
+        "bedrooms": 0.0,
+        "bathrooms": 0.0,
+        "floors": 0.0,
+        "grade": 0.0
+      },
+      "counterfactual_settings": {
+        "mode": "minimal",
+        "controllable_only": false,
+        "controllable_feature_names": [
+          "Living Area",
+          "Bedrooms",
+          "Bathrooms",
+          "Floors",
+          "Construction Grade"
+        ],
+        "raw_controllable_feature_names": [
+          "sqft_living",
+          "bedrooms",
+          "bathrooms",
+          "floors",
+          "grade"
+        ]
+      },
+      "attribution": {
+        "method": "shap",
+        "values": [
+          0.0,
+          0.1256707660544335,
+          0.0,
+          0.16595051626380633,
+          0.0
+        ],
+        "class_values": [
+          [
+            -0.08902958329985275,
+            -0.12567076605443367,
+            -0.05865964077111355,
+            -0.16595051626380647,
+            0.028931665280182206
+          ],
+          [
+            0.08902958329985286,
+            0.1256707660544335,
+            0.05865964077111352,
+            0.16595051626380633,
+            -0.028931665280181984
+          ]
+        ],
+        "ranking_values": [
+          0.08902958329985286,
+          0.12567076605443367,
+          0.05865964077111355,
+          0.16595051626380647,
+          0.028931665280182206
+        ],
+        "base_value": 0.47822042268602927,
+        "max_abs_value": 0.16595051626380633,
+        "raw_values": [
+          0.08902958329985286,
+          0.1256707660544335,
+          0.05865964077111352,
+          0.16595051626380633,
+          -0.028931665280181984
+        ],
+        "shown_feature_count": 2,
+        "shown_feature_indices": [
+          3,
+          1
+        ],
+        "direction_labels": {
+          "left": "Cheap",
+          "right": "Expensive"
+        }
+      },
+      "counterfactual": {
+        "feature_values": [
+          1780.0,
+          3.0,
+          2.0,
+          2.0,
+          7.0
+        ],
+        "prediction": {
+          "value": 0,
+          "label": "Cheap"
+        },
+        "source": "shap_proportional_direction_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 0,
+          "label": "Cheap"
+        },
+        "selected_feature_names": [
+          "Floors",
+          "Bedrooms"
+        ],
+        "target_probability": 0.6435891892423302,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.6666666666666666,
+          "proportionality_error": 0.10683935353197921,
+          "scale": 3.774815882844838e-14,
+          "directions": {
+            "floors": "increase",
+            "bedrooms": "increase"
+          },
+          "attribution_weights": {
+            "floors": 1.0,
+            "bedrooms": 0.7572785483514775
+          },
+          "normalized_changes": {
+            "floors": 0.3333333333333333,
+            "bedrooms": 0.3333333333333333
+          },
+          "direction_assignments_evaluated": 2
+        },
+        "raw_feature_values": [
+          1780.0,
+          3.0,
+          2.0,
+          2.0,
+          7.0
+        ],
+        "raw_selected_feature_names": [
+          "floors",
+          "bedrooms"
+        ]
+      },
+      "model_metrics": {
+        "accuracy": 0.7660891089108911,
+        "log_loss": 0.49139408082222413
+      },
+      "feature_pair_key": "bedrooms|floors",
+      "feature_pair_names": [
+        "Bedrooms",
+        "Floors"
+      ]
+    },
+    {
+      "dataset": "housing",
+      "model": "mlp",
+      "xai_method": "shap",
+      "xai_type": "attribution",
+      "split": "train",
+      "explanation_feature_count": 2,
+      "instance_id": 289,
+      "available_instance_count": 15086,
+      "feature_names": [
+        "Living Area",
+        "Bedrooms",
+        "Bathrooms",
+        "Floors",
+        "Construction Grade"
+      ],
+      "raw_feature_names": [
+        "sqft_living",
+        "bedrooms",
+        "bathrooms",
+        "floors",
+        "grade"
+      ],
+      "feature_types": [
+        "numerical",
+        "numerical",
+        "numerical",
+        "numerical",
+        "numerical"
+      ],
+      "feature_ranges": [
+        [
+          800,
+          4320
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          1.0,
+          3.75
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          6,
+          11
+        ]
+      ],
+      "raw_feature_ranges": [
+        [
+          800,
+          4320
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          1.0,
+          3.75
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          6,
+          11
+        ]
+      ],
+      "feature_values": [
+        1640.0,
+        2.0,
+        1.0,
+        1.0,
+        7.0
+      ],
+      "raw_feature_values": [
+        1640.0,
+        2.0,
+        1.0,
+        1.0,
+        7.0
+      ],
+      "prediction": {
+        "value": 0,
+        "label": "Cheap",
+        "probabilities": [
+          {
+            "label": "Cheap",
+            "value": 0.5873391535779844
+          },
+          {
+            "label": "Expensive",
+            "value": 0.4126608464220156
+          }
+        ]
+      },
+      "prediction_labels": [
+        "Cheap",
+        "Expensive"
+      ],
+      "feature_importance_by_name": {
+        "sqft_living": 0.0,
+        "bedrooms": 0.0,
+        "bathrooms": 0.0,
+        "floors": 0.0,
+        "grade": 0.0
+      },
+      "counterfactual_settings": {
+        "mode": "minimal",
+        "controllable_only": false,
+        "controllable_feature_names": [
+          "Living Area",
+          "Bedrooms",
+          "Bathrooms",
+          "Floors",
+          "Construction Grade"
+        ],
+        "raw_controllable_feature_names": [
+          "sqft_living",
+          "bedrooms",
+          "bathrooms",
+          "floors",
+          "grade"
+        ]
+      },
+      "attribution": {
+        "method": "shap",
+        "values": [
+          0.0,
+          0.13470867028890987,
+          0.0,
+          0.0,
+          -0.11675250892763814
+        ],
+        "class_values": [
+          [
+            -0.004448574917012147,
+            -0.13470867028890987,
+            0.0011948733081213643,
+            0.08676943923417618,
+            0.11675250892763811
+          ],
+          [
+            0.004448574917012376,
+            0.13470867028890987,
+            -0.0011948733081214406,
+            -0.08676943923417632,
+            -0.11675250892763814
+          ]
+        ],
+        "ranking_values": [
+          0.004448574917012376,
+          0.13470867028890987,
+          0.0011948733081214406,
+          0.08676943923417632,
+          0.11675250892763814
+        ],
+        "base_value": 0.47822042268602927,
+        "max_abs_value": 0.13470867028890987,
+        "raw_values": [
+          0.004448574917012376,
+          0.13470867028890987,
+          -0.0011948733081214406,
+          -0.08676943923417632,
+          -0.11675250892763814
+        ],
+        "shown_feature_count": 2,
+        "shown_feature_indices": [
+          1,
+          4
+        ],
+        "direction_labels": {
+          "left": "Cheap",
+          "right": "Expensive"
+        }
+      },
+      "counterfactual": {
+        "feature_values": [
+          1640.0,
+          3.0,
+          1.0,
+          1.0,
+          8.0
+        ],
+        "prediction": {
+          "value": 1,
+          "label": "Expensive"
+        },
+        "source": "shap_proportional_direction_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 1,
+          "label": "Expensive"
+        },
+        "selected_feature_names": [
+          "Bedrooms",
+          "Construction Grade"
+        ],
+        "target_probability": 0.5659967879183253,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.5333333333333333,
+          "proportionality_error": 0.10257397488151493,
+          "scale": 5.226444548394056e-14,
+          "directions": {
+            "bedrooms": "increase",
+            "grade": "increase"
+          },
+          "attribution_weights": {
+            "bedrooms": 1.0,
+            "grade": 0.8667037442893533
+          },
+          "normalized_changes": {
+            "bedrooms": 0.3333333333333333,
+            "grade": 0.2
+          },
+          "direction_assignments_evaluated": 2
+        },
+        "raw_feature_values": [
+          1640.0,
+          3.0,
+          1.0,
+          1.0,
+          8.0
+        ],
+        "raw_selected_feature_names": [
+          "bedrooms",
+          "grade"
+        ]
+      },
+      "model_metrics": {
+        "accuracy": 0.7660891089108911,
+        "log_loss": 0.49139408082222413
+      },
+      "feature_pair_key": "bedrooms|grade",
+      "feature_pair_names": [
+        "Bedrooms",
+        "Construction Grade"
+      ]
+    },
+    {
+      "dataset": "housing",
+      "model": "mlp",
+      "xai_method": "shap",
+      "xai_type": "attribution",
+      "split": "train",
+      "explanation_feature_count": 2,
+      "instance_id": 1143,
+      "available_instance_count": 15086,
+      "feature_names": [
+        "Living Area",
+        "Bedrooms",
+        "Bathrooms",
+        "Floors",
+        "Construction Grade"
+      ],
+      "raw_feature_names": [
+        "sqft_living",
+        "bedrooms",
+        "bathrooms",
+        "floors",
+        "grade"
+      ],
+      "feature_types": [
+        "numerical",
+        "numerical",
+        "numerical",
+        "numerical",
+        "numerical"
+      ],
+      "feature_ranges": [
+        [
+          800,
+          4320
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          1.0,
+          3.75
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          6,
+          11
+        ]
+      ],
+      "raw_feature_ranges": [
+        [
+          800,
+          4320
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          1.0,
+          3.75
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          6,
+          11
+        ]
+      ],
+      "feature_values": [
+        1860.0,
+        3.0,
+        2.5,
+        2.0,
+        8.0
+      ],
+      "raw_feature_values": [
+        1860.0,
+        3.0,
+        2.5,
+        2.0,
+        8.0
+      ],
+      "prediction": {
+        "value": 1,
+        "label": "Expensive",
+        "probabilities": [
+          {
+            "label": "Cheap",
+            "value": 0.4363673487371238
+          },
+          {
+            "label": "Expensive",
+            "value": 0.5636326512628762
+          }
+        ]
+      },
+      "prediction_labels": [
+        "Cheap",
+        "Expensive"
+      ],
+      "feature_importance_by_name": {
+        "sqft_living": 0.0,
+        "bedrooms": 0.0,
+        "bathrooms": 0.0,
+        "floors": 0.0,
+        "grade": 0.0
+      },
+      "counterfactual_settings": {
+        "mode": "minimal",
+        "controllable_only": false,
+        "controllable_feature_names": [
+          "Living Area",
+          "Bedrooms",
+          "Bathrooms",
+          "Floors",
+          "Construction Grade"
+        ],
+        "raw_controllable_feature_names": [
+          "sqft_living",
+          "bedrooms",
+          "bathrooms",
+          "floors",
+          "grade"
+        ]
+      },
+      "attribution": {
+        "method": "shap",
+        "values": [
+          0.0,
+          0.0,
+          -0.12375928260140176,
+          0.0,
+          0.146542234146342
+        ],
+        "class_values": [
+          [
+            -0.0602190023254419,
+            -0.018181158443504673,
+            0.12375928260140184,
+            0.015770883737039887,
+            -0.1465422341463421
+          ],
+          [
+            0.060219002325441945,
+            0.018181158443504618,
+            -0.12375928260140176,
+            -0.01577088373703986,
+            0.146542234146342
+          ]
+        ],
+        "ranking_values": [
+          0.060219002325441945,
+          0.018181158443504673,
+          0.12375928260140184,
+          0.015770883737039887,
+          0.1465422341463421
+        ],
+        "base_value": 0.47822042268602927,
+        "max_abs_value": 0.146542234146342,
+        "raw_values": [
+          0.060219002325441945,
+          0.018181158443504618,
+          -0.12375928260140176,
+          -0.01577088373703986,
+          0.146542234146342
+        ],
+        "shown_feature_count": 2,
+        "shown_feature_indices": [
+          4,
+          2
+        ],
+        "direction_labels": {
+          "left": "Cheap",
+          "right": "Expensive"
+        }
+      },
+      "counterfactual": {
+        "feature_values": [
+          1860.0,
+          3.0,
+          2.25,
+          2.0,
+          7.0
+        ],
+        "prediction": {
+          "value": 0,
+          "label": "Cheap"
+        },
+        "source": "shap_proportional_direction_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 0,
+          "label": "Cheap"
+        },
+        "selected_feature_names": [
+          "Construction Grade",
+          "Bathrooms"
+        ],
+        "target_probability": 0.8569454461003017,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.2909090909090909,
+          "proportionality_error": 0.09235537726137243,
+          "scale": 2.2648895297069032e-14,
+          "directions": {
+            "grade": "decrease",
+            "bathrooms": "decrease"
+          },
+          "attribution_weights": {
+            "grade": 1.0,
+            "bathrooms": 0.8445297925362022
+          },
+          "normalized_changes": {
+            "grade": 0.2,
+            "bathrooms": 0.09090909090909091
+          },
+          "direction_assignments_evaluated": 4
+        },
+        "raw_feature_values": [
+          1860.0,
+          3.0,
+          2.25,
+          2.0,
+          7.0
+        ],
+        "raw_selected_feature_names": [
+          "grade",
+          "bathrooms"
+        ]
+      },
+      "model_metrics": {
+        "accuracy": 0.7660891089108911,
+        "log_loss": 0.49139408082222413
+      },
+      "feature_pair_key": "bathrooms|grade",
+      "feature_pair_names": [
+        "Bathrooms",
+        "Construction Grade"
+      ]
+    },
+    {
+      "dataset": "housing",
+      "model": "mlp",
+      "xai_method": "shap",
+      "xai_type": "attribution",
+      "split": "train",
+      "explanation_feature_count": 2,
+      "instance_id": 939,
+      "available_instance_count": 15086,
+      "feature_names": [
+        "Living Area",
+        "Bedrooms",
+        "Bathrooms",
+        "Floors",
+        "Construction Grade"
+      ],
+      "raw_feature_names": [
+        "sqft_living",
+        "bedrooms",
+        "bathrooms",
+        "floors",
+        "grade"
+      ],
+      "feature_types": [
+        "numerical",
+        "numerical",
+        "numerical",
+        "numerical",
+        "numerical"
+      ],
+      "feature_ranges": [
+        [
+          800,
+          4320
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          1.0,
+          3.75
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          6,
+          11
+        ]
+      ],
+      "raw_feature_ranges": [
+        [
+          800,
+          4320
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          1.0,
+          3.75
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          6,
+          11
+        ]
+      ],
+      "feature_values": [
+        1490.0,
+        4.0,
+        3.0,
+        1.5,
+        7.0
+      ],
+      "raw_feature_values": [
+        1490.0,
+        4.0,
+        3.0,
+        1.5,
+        7.0
+      ],
+      "prediction": {
+        "value": 1,
+        "label": "Expensive",
+        "probabilities": [
+          {
+            "label": "Cheap",
+            "value": 0.25506924072798554
+          },
+          {
+            "label": "Expensive",
+            "value": 0.7449307592720145
+          }
+        ]
+      },
+      "prediction_labels": [
+        "Cheap",
+        "Expensive"
+      ],
+      "feature_importance_by_name": {
+        "sqft_living": 0.0,
+        "bedrooms": 0.0,
+        "bathrooms": 0.0,
+        "floors": 0.0,
+        "grade": 0.0
+      },
+      "counterfactual_settings": {
+        "mode": "minimal",
+        "controllable_only": false,
+        "controllable_feature_names": [
+          "Living Area",
+          "Bedrooms",
+          "Bathrooms",
+          "Floors",
+          "Construction Grade"
+        ],
+        "raw_controllable_feature_names": [
+          "sqft_living",
+          "bedrooms",
+          "bathrooms",
+          "floors",
+          "grade"
+        ]
+      },
+      "attribution": {
+        "method": "shap",
+        "values": [
+          0.0,
+          0.0,
+          0.09401860613407675,
+          0.2655365238068551,
+          0.0
+        ],
+        "class_values": [
+          [
+            -0.004140162732128638,
+            0.02005707251710165,
+            -0.09401860613407673,
+            -0.26553652380685516,
+            0.07692788356997371
+          ],
+          [
+            0.0041401627321287215,
+            -0.02005707251710176,
+            0.09401860613407675,
+            0.2655365238068551,
+            -0.0769278835699736
+          ]
+        ],
+        "ranking_values": [
+          0.0041401627321287215,
+          0.02005707251710176,
+          0.09401860613407675,
+          0.26553652380685516,
+          0.07692788356997371
+        ],
+        "base_value": 0.47822042268602927,
+        "max_abs_value": 0.2655365238068551,
+        "raw_values": [
+          0.0041401627321287215,
+          -0.02005707251710176,
+          0.09401860613407675,
+          0.2655365238068551,
+          -0.0769278835699736
+        ],
+        "shown_feature_count": 2,
+        "shown_feature_indices": [
+          3,
+          2
+        ],
+        "direction_labels": {
+          "left": "Cheap",
+          "right": "Expensive"
+        }
+      },
+      "counterfactual": {
+        "feature_values": [
+          1490.0,
+          4.0,
+          2.75,
+          1.0,
+          7.0
+        ],
+        "prediction": {
+          "value": 0,
+          "label": "Cheap"
+        },
+        "source": "shap_proportional_direction_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 0,
+          "label": "Cheap"
+        },
+        "selected_feature_names": [
+          "Floors",
+          "Bathrooms"
+        ],
+        "target_probability": 0.8610261898141292,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.4242424242424242,
+          "proportionality_error": 0.0765790059184322,
+          "scale": 1.887407941422419e-14,
+          "directions": {
+            "floors": "decrease",
+            "bathrooms": "decrease"
+          },
+          "attribution_weights": {
+            "floors": 1.0,
+            "bathrooms": 0.3540703357345434
+          },
+          "normalized_changes": {
+            "floors": 0.3333333333333333,
+            "bathrooms": 0.09090909090909091
+          },
+          "direction_assignments_evaluated": 4
+        },
+        "raw_feature_values": [
+          1490.0,
+          4.0,
+          2.75,
+          1.0,
+          7.0
+        ],
+        "raw_selected_feature_names": [
+          "floors",
+          "bathrooms"
+        ]
+      },
+      "model_metrics": {
+        "accuracy": 0.7660891089108911,
+        "log_loss": 0.49139408082222413
+      },
+      "feature_pair_key": "bathrooms|floors",
+      "feature_pair_names": [
+        "Bathrooms",
+        "Floors"
+      ]
+    },
+    {
+      "dataset": "housing",
+      "model": "mlp",
+      "xai_method": "shap",
+      "xai_type": "attribution",
+      "split": "train",
+      "explanation_feature_count": 2,
+      "instance_id": 1044,
+      "available_instance_count": 15086,
+      "feature_names": [
+        "Living Area",
+        "Bedrooms",
+        "Bathrooms",
+        "Floors",
+        "Construction Grade"
+      ],
+      "raw_feature_names": [
+        "sqft_living",
+        "bedrooms",
+        "bathrooms",
+        "floors",
+        "grade"
+      ],
+      "feature_types": [
+        "numerical",
+        "numerical",
+        "numerical",
+        "numerical",
+        "numerical"
+      ],
+      "feature_ranges": [
+        [
+          800,
+          4320
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          1.0,
+          3.75
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          6,
+          11
+        ]
+      ],
+      "raw_feature_ranges": [
+        [
+          800,
+          4320
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          1.0,
+          3.75
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          6,
+          11
+        ]
+      ],
+      "feature_values": [
+        2040.0,
+        2.0,
+        1.75,
+        1.0,
+        7.0
+      ],
+      "raw_feature_values": [
+        2040.0,
+        2.0,
+        1.75,
+        1.0,
+        7.0
+      ],
+      "prediction": {
+        "value": 1,
+        "label": "Expensive",
+        "probabilities": [
+          {
+            "label": "Cheap",
+            "value": 0.24664786762172242
+          },
+          {
+            "label": "Expensive",
+            "value": 0.7533521323782776
+          }
+        ]
+      },
+      "prediction_labels": [
+        "Cheap",
+        "Expensive"
+      ],
+      "feature_importance_by_name": {
+        "sqft_living": 0.0,
+        "bedrooms": 0.0,
+        "bathrooms": 0.0,
+        "floors": 0.0,
+        "grade": 0.0
+      },
+      "counterfactual_settings": {
+        "mode": "minimal",
+        "controllable_only": false,
+        "controllable_feature_names": [
+          "Living Area",
+          "Bedrooms",
+          "Bathrooms",
+          "Floors",
+          "Construction Grade"
+        ],
+        "raw_controllable_feature_names": [
+          "sqft_living",
+          "bedrooms",
+          "bathrooms",
+          "floors",
+          "grade"
+        ]
+      },
+      "attribution": {
+        "method": "shap",
+        "values": [
+          0.0,
+          0.20605517318802596,
+          0.10035250840306126,
+          0.0,
+          0.0
+        ],
+        "class_values": [
+          [
+            -0.10020114170133781,
+            -0.2060551731880262,
+            -0.10035250840306109,
+            0.06462096169999851,
+            0.06685615190017824
+          ],
+          [
+            0.10020114170133787,
+            0.20605517318802596,
+            0.10035250840306126,
+            -0.06462096169999842,
+            -0.06685615190017835
+          ]
+        ],
+        "ranking_values": [
+          0.10020114170133787,
+          0.2060551731880262,
+          0.10035250840306126,
+          0.06462096169999851,
+          0.06685615190017835
+        ],
+        "base_value": 0.47822042268602927,
+        "max_abs_value": 0.20605517318802596,
+        "raw_values": [
+          0.10020114170133787,
+          0.20605517318802596,
+          0.10035250840306126,
+          -0.06462096169999842,
+          -0.06685615190017835
+        ],
+        "shown_feature_count": 2,
+        "shown_feature_indices": [
+          1,
+          2
+        ],
+        "direction_labels": {
+          "left": "Cheap",
+          "right": "Expensive"
+        }
+      },
+      "counterfactual": {
+        "feature_values": [
+          2040.0,
+          3.0,
+          1.5,
+          1.0,
+          7.0
+        ],
+        "prediction": {
+          "value": 0,
+          "label": "Cheap"
+        },
+        "source": "shap_proportional_direction_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 0,
+          "label": "Cheap"
+        },
+        "selected_feature_names": [
+          "Bedrooms",
+          "Bathrooms"
+        ],
+        "target_probability": 0.6852796713624636,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.4242424242424242,
+          "proportionality_error": 0.14666845798810182,
+          "scale": 3.1708149130009424e-14,
+          "directions": {
+            "bedrooms": "increase",
+            "bathrooms": "decrease"
+          },
+          "attribution_weights": {
+            "bedrooms": 1.0,
+            "bathrooms": 0.4870176606121376
+          },
+          "normalized_changes": {
+            "bedrooms": 0.3333333333333333,
+            "bathrooms": 0.09090909090909091
+          },
+          "direction_assignments_evaluated": 2
+        },
+        "raw_feature_values": [
+          2040.0,
+          3.0,
+          1.5,
+          1.0,
+          7.0
+        ],
+        "raw_selected_feature_names": [
+          "bedrooms",
+          "bathrooms"
+        ]
+      },
+      "model_metrics": {
+        "accuracy": 0.7660891089108911,
+        "log_loss": 0.49139408082222413
+      },
+      "feature_pair_key": "bedrooms|bathrooms",
+      "feature_pair_names": [
+        "Bedrooms",
+        "Bathrooms"
+      ]
+    }
+  ],
+  "generation_stats": {
+    "cached_attributions": 650,
+    "cached_sqft_living|bedrooms": 167,
+    "cached_sqft_living|floors": 22,
+    "cached_sqft_living|bathrooms": 29,
+    "cached_sqft_living|grade": 153,
+    "cached_floors|grade": 148,
+    "cached_bedrooms|floors": 16,
+    "cached_bedrooms|grade": 22,
+    "cached_bathrooms|grade": 64,
+    "cached_bathrooms|floors": 12,
+    "cached_bedrooms|bathrooms": 17,
+    "examined_sqft_living|bedrooms": 62,
+    "best_effort_sqft_living|bedrooms": 50,
+    "examined_sqft_living|floors": 12,
+    "excluded_current_sqft_living|floors": 1,
+    "examined_sqft_living|bathrooms": 12,
+    "examined_sqft_living|grade": 12,
+    "examined_floors|grade": 12,
+    "examined_bedrooms|floors": 13,
+    "best_effort_bedrooms|floors": 1,
+    "excluded_current_bedrooms|floors": 1,
+    "examined_bedrooms|grade": 12,
+    "excluded_current_bedrooms|grade": 1,
+    "examined_bathrooms|grade": 12,
+    "examined_bathrooms|floors": 11,
+    "excluded_current_bathrooms|floors": 1,
+    "best_effort_bathrooms|floors": 1,
+    "examined_bedrooms|bathrooms": 12,
+    "excluded_current_bedrooms|bathrooms": 1
+  }
+}

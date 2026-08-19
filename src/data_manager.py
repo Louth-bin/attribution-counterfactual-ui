@@ -11,7 +11,7 @@ import pandas as pd
 from .runtime_config import get_dataset_runtime_config
 
 
-DIABETES_SOURCE_VERSION = "kaggle_mathchi_pima_flipped_labels_v1"
+DIABETES_SOURCE_VERSION = "kaggle_mathchi_pima_complete_cases_flipped_labels_v2"
 DIABETES_SOURCE_URL = "https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.data.csv"
 CERAMIC_SOURCE_VERSION = "synthetic_ceramic_tile_firing_deformation_n2000_v1"
 SAFELIMIT_SOURCE_VERSION = "widmark_synthetic_safelimit_n2000_drunk_zero_v2"
@@ -137,12 +137,23 @@ def _generate_diabetes_dataset() -> tuple[pd.DataFrame, dict[str, Any]]:
             "usecols": [1, 2, 3, 4, 5, 7, 8],
         },
     ).copy()
+    missing_zero_columns = [
+        "glucose",
+        "blood_pressure",
+        "skin_thickness",
+        "insulin",
+        "bmi",
+    ]
+    for column in missing_zero_columns:
+        raw_df[column] = raw_df[column].replace(0, np.nan)
+    raw_df = raw_df.dropna(subset=missing_zero_columns).reset_index(drop=True)
     raw_df.insert(0, "row_id", range(len(raw_df)))
     raw_df["target"] = raw_df["target"].map({0: 1, 1: 0})
 
     metadata = {
         "target_column": "target",
         "source_format": DIABETES_SOURCE_VERSION,
+        "source": "Pima Indians Diabetes dataset; profiles with physiologically impossible zero measurements are treated as incomplete and removed.",
         "class_labels": [
             "Diabetes",
             "No Diabetes",

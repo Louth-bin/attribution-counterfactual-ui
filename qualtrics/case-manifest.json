@@ -2,7 +2,7 @@
   "selection_rule": {
     "training": "Exactly 10 fixed profiles: 5 per predicted label and one per possible top-two-feature pair.",
     "test": "Exactly 20 fixed profiles: 10 per predicted label, split into two direction-specific phases.",
-    "ordering": "Cases 1-10 have label 0 and cases 11-20 have label 1. Qualtrics presents both ten-case blocks and randomizes their block order."
+    "ordering": "The training cases are presented in randomized order. Test cases 1-10 in the stored pool have label 0 and cases 11-20 have label 1; Qualtrics presents both ten-case blocks, randomizes their block order, and randomizes cases within each block."
   },
   "housing": {
     "labels": ["Cheap", "Expensive"],
@@ -36,5 +36,22 @@
       {"instance_id": 322, "label": "Below Limit", "feature_pair": "gender|stomach_fullness"}
     ],
     "test": [87, 203, 106, 143, 300, 211, 262, 69, 251, 177, 98, 261, 4, 209, 245, 281, 148, 265, 25, 117]
+  },
+  "diabetes": {
+    "display_name": "Diabetes Warning",
+    "labels": ["Diabetes", "No Diabetes"],
+    "training": [
+      {"instance_id": 36, "label": "No Diabetes", "feature_pair": "glucose|blood_pressure"},
+      {"instance_id": 190, "label": "No Diabetes", "feature_pair": "glucose|insulin"},
+      {"instance_id": 225, "label": "Diabetes", "feature_pair": "glucose|bmi"},
+      {"instance_id": 115, "label": "Diabetes", "feature_pair": "glucose|age"},
+      {"instance_id": 1, "label": "Diabetes", "feature_pair": "blood_pressure|insulin"},
+      {"instance_id": 2, "label": "Diabetes", "feature_pair": "blood_pressure|bmi"},
+      {"instance_id": 118, "label": "No Diabetes", "feature_pair": "blood_pressure|age"},
+      {"instance_id": 7, "label": "No Diabetes", "feature_pair": "insulin|bmi"},
+      {"instance_id": 74, "label": "No Diabetes", "feature_pair": "insulin|age"},
+      {"instance_id": 60, "label": "Diabetes", "feature_pair": "bmi|age"}
+    ],
+    "test": [32, 30, 14, 53, 35, 42, 26, 7, 56, 33, 59, 0, 12, 20, 15, 52, 58, 11, 31, 51]
   }
 }

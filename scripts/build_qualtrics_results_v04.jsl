@@ -1,0 +1,15 @@
+Names Default To Here(1);
+
+sourcePath = Convert File Path(
+	"$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/qualtrics_results_v0.4.csv",
+	Windows
+);
+destinationPath = Convert File Path(
+	"$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/qualtrics_results_v0.4_new.jmp",
+	Windows
+);
+
+dataTable = Open(sourcePath, Invisible);
+dataTable << Save As(destinationPath);
+Close(dataTable, No Save);
+Exit();

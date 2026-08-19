@@ -1427,8 +1427,8 @@ function shortenClassLabel(label) {
     const labelText = String(label ?? "");
     if (datasetName === "diabetes") {
         return labelText.toLowerCase().includes("no")
-            ? "Non-Diabetic"
-            : "Diabetic";
+            ? "No Diabetes"
+            : "Diabetes";
     }
     if (datasetName === "safelimit") {
         return labelText;
@@ -2116,7 +2116,7 @@ function getProfileCounterfactualQuestion(originalLabel, targetLabel) {
     }
 
     if (datasetName === "diabetes") {
-        return `${subjectName} is diagnosed as being ${originalLabel}. If ${subjectName} was to become ${targetLabel}, what minimal changes to their profile would need to occur?`;
+        return `${subjectName} receives a ${originalLabel} warning. What minimal changes to their profile would make the AI issue a ${targetLabel} warning instead?`;
     }
 
     if (datasetName === "safelimit") {
@@ -2719,8 +2719,8 @@ function getPatientOutcomePhrase(label) {
 
     if (datasetName === "diabetes") {
         return labelText.includes("no")
-            ? "the patient would likely not develop diabetes"
-            : "the patient would likely develop diabetes";
+            ? "the AI would issue a No Diabetes warning"
+            : "the AI would issue a Diabetes warning";
     }
 
     if (datasetName === "safelimit") {
@@ -2745,15 +2745,10 @@ function getProfileOutcomePhrase(label, options = {}) {
     const labelText = String(label ?? "").toLowerCase();
 
     if (datasetName === "diabetes") {
-        if (hypothetical) {
-            return labelText.includes("no")
-                ? "the person would not have diabetes"
-                : "the person would have diabetes";
-        }
-
-        return labelText.includes("no")
-            ? "the person does not have diabetes"
-            : "the person has diabetes";
+        const warning = labelText.includes("no") ? "No Diabetes" : "Diabetes";
+        return hypothetical
+            ? `the AI would issue a ${warning} warning`
+            : `the AI issues a ${warning} warning`;
     }
 
     const verb = hypothetical ? "would be" : "is";
@@ -2946,9 +2941,9 @@ function buildNarrativeHtml() {
         }
 
         if (datasetName === "diabetes") {
-            const currentDiagnosis = strongHtml(shortenClassLabel(currentExplanation.prediction.label));
-            const counterfactualDiagnosis = strongHtml(shortenClassLabel(counterfactual.prediction.label));
-            return `This patient is diagnosed as ${currentDiagnosis}. But, if their ${looseChanges}, then they would be diagnosed as ${counterfactualDiagnosis}.`;
+            const currentWarning = strongHtml(shortenClassLabel(currentExplanation.prediction.label));
+            const counterfactualWarning = strongHtml(shortenClassLabel(counterfactual.prediction.label));
+            return `The AI issues a ${currentWarning} warning for this profile. But, if ${looseChanges}, then it would issue a ${counterfactualWarning} warning.`;
         }
 
         if (datasetName === "safelimit") {
@@ -2969,10 +2964,10 @@ function buildNarrativeHtml() {
         const influenceText = buildLooseAttributionInfluenceText(attribution);
 
         if (datasetName === "diabetes") {
-            const diagnosis = strongHtml(shortenClassLabel(currentExplanation.prediction.label));
+            const warning = strongHtml(shortenClassLabel(currentExplanation.prediction.label));
             return influenceText
-                ? `This patient is diagnosed as ${diagnosis}, given the influence of ${influenceText}.`
-                : `This patient is diagnosed as ${diagnosis}.`;
+                ? `The AI issues a ${warning} warning, given the influence of ${influenceText}.`
+                : `The AI issues a ${warning} warning.`;
         }
 
         const predictionLabel = strongHtml(`${shortenClassLabel(currentExplanation.prediction.label)}.`);
@@ -3213,7 +3208,7 @@ function showFaceFigurePanel() {
 
 function getFaceFigureLabel() {
     if (datasetName === "diabetes") {
-        return "Patient";
+        return "Person";
     }
     if (datasetName === "safelimit") {
         return "Person";

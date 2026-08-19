@@ -631,7 +631,13 @@ def replace_active_design(document: dict[str, Any]) -> None:
             ["QID280", "QID271", "QID9"],
         ),
         block(TRAINING_INTRO_BLOCK, "Training Introduction", ["QID11"]),
-        block(TRAINING_BLOCK, "Training: 10 Fixed Cases", ["QID12"], loop_count=10),
+        block(
+            TRAINING_BLOCK,
+            "Training: 10 Fixed Cases",
+            ["QID12"],
+            loop_count=10,
+            loop_randomization="All",
+        ),
         block(TEST_INTRO_BLOCK, "Testing Introduction", ["QID390"]),
         block(
             TEST_LABEL_0_BLOCK,

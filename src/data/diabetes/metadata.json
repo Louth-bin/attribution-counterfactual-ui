@@ -1,6 +1,7 @@
 {
   "target_column": "target",
-  "source_format": "kaggle_mathchi_pima_flipped_labels_v1",
+  "source_format": "kaggle_mathchi_pima_complete_cases_flipped_labels_v2",
+  "source": "Pima Indians Diabetes dataset; profiles with physiologically impossible zero measurements are treated as incomplete and removed.",
   "class_labels": [
     "Diabetes",
     "No Diabetes"

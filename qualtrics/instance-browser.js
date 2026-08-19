@@ -13,7 +13,10 @@ const controls = {
 };
 
 const params = new URLSearchParams(window.location.search);
-controls.dataset.value = params.get("dataset") === "safelimit" ? "safelimit" : "housing";
+const requestedDataset = String(params.get("dataset") || "housing").toLowerCase();
+controls.dataset.value = ["housing", "safelimit", "diabetes"].includes(requestedDataset)
+    ? requestedDataset
+    : "housing";
 controls.split.value = params.get("split") === "test" ? "test" : "train";
 controls.explanation.value = ["attribution", "counterfactual", "none"].includes(params.get("explanation"))
     ? params.get("explanation")

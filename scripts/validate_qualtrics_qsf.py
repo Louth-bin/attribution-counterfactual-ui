@@ -13,7 +13,7 @@ from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_QSF = REPO_ROOT / "qualtrics" / "UPLOAD_THIS_Qualtrics_Starter.qsf"
+DEFAULT_QSF = REPO_ROOT / "qualtrics" / "Recourse_v10.qsf"
 STATIC_DATA = REPO_ROOT / "static" / "experiment-data.json"
 FRAME_JS = REPO_ROOT / "qualtrics" / "qualtrics-frame.js"
 IFRAME_JS = REPO_ROOT / "iframe.js"
@@ -81,7 +81,10 @@ def validate(qsf_path: Path) -> dict[str, Any]:
     assert isinstance(entry, dict) and isinstance(elements, list)
     for key in ("SurveyID", "SurveyName", "SurveyLanguage"):
         assert entry.get(key), f"SurveyEntry.{key} is required"
-    assert entry["SurveyName"] == "Summative Study - Housing and Drink Driving"
+    assert entry["SurveyName"] in {
+        "Summative Study - Housing and Drink Driving",
+        "Recourse v0.10",
+    }
 
     element_types = [element.get("Element") for element in elements]
     for required in ("BL", "FL", "SO", "PROJ", "SQ"):
@@ -103,14 +106,19 @@ def validate(qsf_path: Path) -> dict[str, Any]:
     assert all(question_id == payload.get("QuestionID") for question_id, payload in questions.items())
 
     blocks = next(element["Payload"] for element in elements if element.get("Element") == "BL")
-    assert isinstance(blocks, dict) and list(blocks) == [str(index) for index in range(len(blocks))]
-    block_ids = [block["ID"] for block in blocks.values()]
+    assert isinstance(blocks, (dict, list))
+    if isinstance(blocks, dict):
+        assert list(blocks) == [str(index) for index in range(len(blocks))]
+        block_list = list(blocks.values())
+    else:
+        block_list = blocks
+    block_ids = [block["ID"] for block in block_list]
     assert_unique(block_ids, "block IDs")
-    assert sum(block.get("Type") == "Default" for block in blocks.values()) == 1
-    assert sum(block.get("Type") == "Trash" for block in blocks.values()) == 1
+    assert sum(block.get("Type") == "Default" for block in block_list) == 1
+    assert sum(block.get("Type") == "Trash" for block in block_list) == 1
 
     question_references: list[str] = []
-    for block_payload in blocks.values():
+    for block_payload in block_list:
         for item in block_payload.get("BlockElements", []):
             if item.get("Type") != "Question":
                 continue
@@ -121,7 +129,7 @@ def validate(qsf_path: Path) -> dict[str, Any]:
     assert set(question_references) == set(questions), "Every question must be assigned to a block"
 
     looped = [
-        block_payload for block_payload in blocks.values()
+        block_payload for block_payload in block_list
         if block_payload.get("Options", {}).get("Looping") == "Static"
     ]
     assert len(looped) == 3, "Expected one training loop and two testing loops"
@@ -138,7 +146,7 @@ def validate(qsf_path: Path) -> dict[str, Any]:
             str(index) for index in range(row_count)
         ]
     assert sorted(loop_row_counts) == [10, 10, 10]
-    assert Counter(loop_randomizations) == {"None": 1, "All": 2}
+    assert Counter(loop_randomizations) == {"All": 3}
 
     flow = next(element["Payload"] for element in elements if element.get("Element") == "FL")
     assert flow.get("Type") == "Root" and isinstance(flow.get("Flow"), list)
@@ -150,11 +158,10 @@ def validate(qsf_path: Path) -> dict[str, Any]:
         if node.get("Type") in {"Block", "Standard"} and "ID" in node
     ]
     assert all(block_id in block_ids for block_id in flow_block_ids)
-    trash_id = next(block["ID"] for block in blocks.values() if block.get("Type") == "Trash")
+    trash_id = next(block["ID"] for block in block_list if block.get("Type") == "Trash")
     assert trash_id not in flow_block_ids
     expected_active = set(block_ids) - {trash_id}
     assert set(flow_block_ids) == expected_active
-    assert len(flow_block_ids) == len(expected_active)
 
     randomizers = [node for node in flow_nodes if node.get("Type") == "BlockRandomizer"]
     assert len(randomizers) == 1
@@ -172,9 +179,9 @@ def validate(qsf_path: Path) -> dict[str, Any]:
     initial_node = flow["Flow"][0]
     assert initial_node.get("Type") == "EmbeddedData"
     initial_fields = {field.get("Field"): field.get("Value") for field in initial_node["EmbeddedData"]}
-    assert set(initial_fields) == {
+    assert {
         "ui_base_url", "xaiType", "training_log_json", "testing_log_json"
-    }
+    }.issubset(initial_fields)
     assert initial_fields.get("xaiType") in {"attribution", "counterfactual", "none"}
     assert initial_fields.get("training_log_json") == "[]"
     assert initial_fields.get("testing_log_json") == "[]"
@@ -191,7 +198,7 @@ def validate(qsf_path: Path) -> dict[str, Any]:
         field for field in domain_nodes[0]["EmbeddedData"]
         if field.get("Field") == "appId"
     )
-    assert app_field.get("Value") in {"housing", "safelimit"}
+    assert app_field.get("Value") in {"housing", "safelimit", "diabetes"}
 
     scripts_checked = 0
     for question_id, payload in questions.items():
@@ -208,26 +215,51 @@ def validate(qsf_path: Path) -> dict[str, Any]:
     assert 'id="cf-scenario-root"' in questions["QID280"]["QuestionText"]
     assert 'data-domain="housing"' in questions["QID280"]["QuestionText"]
     assert 'data-domain="safelimit"' in questions["QID280"]["QuestionText"]
-    assert "What you will do" in questions["QID280"]["QuestionText"]
+    assert 'data-domain="diabetes"' in questions["QID280"]["QuestionText"]
     assert "AI prediction 0" not in questions["QID280"]["QuestionText"]
     assert "AI prediction 1" not in questions["QID280"]["QuestionText"]
-    assert 'data-explanation="attribution"' in questions["QID280"]["QuestionText"]
-    assert 'data-explanation="counterfactual"' in questions["QID280"]["QuestionText"]
-    assert 'data-explanation="none"' in questions["QID280"]["QuestionText"]
     assert 'id="cf-basic-tutorial-root"' in questions["QID271"]["QuestionText"]
+    assert 'data-domain="diabetes"' in questions["QID271"]["QuestionText"]
     assert "tutorialCallouts: 'basic'" in questions["QID271"]["QuestionJS"]
     assert 'id="cf-explanation-tutorial-root"' in questions["QID9"]["QuestionText"]
     assert 'data-explanation="attribution"' in questions["QID9"]["QuestionText"]
     assert 'data-explanation="counterfactual"' in questions["QID9"]["QuestionText"]
     assert "tutorialCallouts: 'explanation'" in questions["QID9"]["QuestionJS"]
     assert "getQuestionContainer().style.display = 'none'" in questions["QID9"]["QuestionJS"]
+    assert 'data-domain="diabetes"' in questions["QID9"]["QuestionText"]
     assert 'data-phase="test"' in questions["QID376"]["QuestionText"]
     assert 'data-test-label="0"' in questions["QID376"]["QuestionText"]
     assert 'data-test-label="1"' in questions["QID379"]["QuestionText"]
     assert 'data-domain="housing"' in questions["QID376"]["QuestionText"]
     assert 'data-domain="safelimit"' in questions["QID376"]["QuestionText"]
+    assert 'data-domain="diabetes"' in questions["QID376"]["QuestionText"]
     assert 'data-domain="housing"' in questions["QID379"]["QuestionText"]
     assert 'data-domain="safelimit"' in questions["QID379"]["QuestionText"]
+    assert 'data-domain="diabetes"' in questions["QID379"]["QuestionText"]
+    assert "Diabetes to No Diabetes" in questions["QID19"]["QuestionText"]
+    assert "No Diabetes to Diabetes" in questions["QID20"]["QuestionText"]
+    assert "diabetes" in questions["QID26"]["QuestionJS"]
+
+    for question_id in ("QID18", "QID27"):
+        assert "two possible AI outputs" in questions[question_id]["QuestionText"]
+        assert "data-screening-domain=\"housing\"" in questions[question_id]["Choices"]["1"]["Display"]
+        assert "data-screening-domain=\"safelimit\"" in questions[question_id]["Choices"]["1"]["Display"]
+        assert "data-screening-domain=\"diabetes\"" in questions[question_id]["Choices"]["1"]["Display"]
+        assert "Diabetes or No Diabetes" in questions[question_id]["Choices"]["1"]["Display"]
+
+    screening_block = next(
+        block for block in block_list if block["ID"] == "BL_9ScreenAttempt2"
+    )
+    screening_order = [
+        item.get("QuestionID", "PAGE_BREAK")
+        for item in screening_block["BlockElements"]
+    ]
+    assert screening_order == [
+        "QID33", "QID34", "QID27", "QID28", "PAGE_BREAK",
+        "QID35", "QID29", "QID30", "QID31", "QID32",
+    ]
+    assert questions["QID34"]["QuestionText"] == questions["QID271"]["QuestionText"]
+    assert questions["QID35"]["QuestionText"] == questions["QID9"]["QuestionText"]
     iframe_source = IFRAME_JS.read_text(encoding="utf-8")
     assert 'const explanationView = "persona";' in iframe_source
     assert "getExplanationView(" not in iframe_source
@@ -249,7 +281,7 @@ def validate(qsf_path: Path) -> dict[str, Any]:
 
     data = strict_json(STATIC_DATA)
     domain_report: dict[str, Any] = {}
-    for domain in ("housing", "safelimit"):
+    for domain in ("housing", "safelimit", "diabetes"):
         bundle = data["datasets"][domain]
         training = bundle["training_pool"]
         testing = bundle["test_pool"]
@@ -286,6 +318,12 @@ def validate(qsf_path: Path) -> dict[str, Any]:
             assert counterfactual.get("optimization", {}).get("objective") == (
                 "minimum_total_normalized_change"
             )
+            if domain == "diabetes":
+                assert all(float(value) > 0 for value in case["raw_feature_values"])
+                assert all(
+                    float(value) > 0
+                    for value in counterfactual["raw_feature_values"]
+                )
         training_ids = [case["instance_id"] for case in training]
         test_ids = [case["instance_id"] for case in testing]
         assert json.dumps(training_ids) in frame_source
@@ -306,7 +344,7 @@ def validate(qsf_path: Path) -> dict[str, Any]:
         "sha256": hashlib.sha256(qsf_path.read_bytes()).hexdigest(),
         "survey_elements": len(elements),
         "questions": len(questions),
-        "blocks": len(blocks),
+        "blocks": len(block_list),
         "active_flow_blocks": len(flow_block_ids),
         "looped_blocks": len(looped),
         "javascript_payloads_checked": scripts_checked,

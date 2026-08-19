@@ -1,4 +1,4 @@
-"""Build the static housing and drink-driving experiment bundle.
+"""Build the static housing, drink-driving, and diabetes experiment bundle.
 
 Only profiles with successful two-attribute counterfactuals are retained. The
 ten training profiles contain every possible pair of most influential features
@@ -30,7 +30,7 @@ from src.pipeline import ExplanationPipeline
 STATIC_JSON = REPO_ROOT / "static" / "experiment-data.json"
 STATIC_JS = REPO_ROOT / "static" / "experiment-data.js"
 PAIR_SEPARATOR = "|"
-DATASETS = ("housing", "safelimit")
+DATASETS = ("housing", "safelimit", "diabetes")
 TRAINING_TARGET_PER_PAIR = 1
 TRAINING_CANDIDATE_RESERVE_PER_PAIR = 6
 TRAINING_PAIR_SCAN_BATCH_SIZE = 500
@@ -490,6 +490,14 @@ def main() -> None:
         action="store_true",
         help="Keep the existing fixed training pools while regenerating testing pools.",
     )
+    parser.add_argument(
+        "--regenerate-training",
+        action="append",
+        default=[],
+        choices=DATASETS,
+        metavar="DATASET",
+        help="Regenerate this dataset's training pool even with --preserve-training.",
+    )
     args = parser.parse_args()
 
     pipeline = ExplanationPipeline()
@@ -501,7 +509,11 @@ def main() -> None:
     datasets: dict[str, Any] = {}
     report: dict[str, Any] = {}
     for dataset_name in DATASETS:
-        if previous is not None:
+        if (
+            previous is not None
+            and dataset_name in previous.get("datasets", {})
+            and dataset_name not in set(args.regenerate_training)
+        ):
             training_pool = previous["datasets"][dataset_name]["training_pool"]
             training_labels = Counter(
                 int(payload["prediction"]["value"]) for payload in training_pool
@@ -542,7 +554,7 @@ def main() -> None:
         }
 
     bundle = {
-        "version": "static-experiment-v7-grouped-test-directions",
+        "version": "static-experiment-v10-three-domains",
         "generated_at": date.today().isoformat(),
         "default_model": "mlp",
         "datasets": datasets,

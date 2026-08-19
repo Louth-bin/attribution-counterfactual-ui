@@ -11,8 +11,8 @@
     "No Diabetes"
   ],
   "metrics": {
-    "accuracy": 0.8173913043478261,
-    "log_loss": 0.7474518285244405
+    "accuracy": 0.7758620689655172,
+    "log_loss": 1.1534180618369267
   },
   "sklearn_version": "1.5.1"
 }

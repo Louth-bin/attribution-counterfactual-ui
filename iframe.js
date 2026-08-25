@@ -3063,7 +3063,7 @@ function normalizeExplanationPayload(payload) {
         : null;
 
     return applyAttributeOrder({
-        attributeNames: payload.feature_names ?? [],
+        attributeNames: (payload.feature_names ?? []).map(participantFacingAttributeName),
         rawAttributeNames: payload.raw_feature_names ?? [],
         attributeTypes: payload.feature_types ?? [],
         attributeValues: payload.feature_values ?? [],
@@ -3077,6 +3077,13 @@ function normalizeExplanationPayload(payload) {
         predictionLabels: payload.prediction_labels ?? [],
         counterfactual: payload.counterfactual ?? null,
     });
+}
+
+function participantFacingAttributeName(name) {
+    if (datasetName === "diabetes" && name === "Blood Glucose") {
+        return "Glucose";
+    }
+    return name;
 }
 
 function applyAttributeOrder(explanation) {

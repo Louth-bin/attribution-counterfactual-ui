@@ -2803,13 +2803,20 @@ function buildLooseAttributionInfluenceText(attribution) {
         return "";
     }
 
-    const clauses = signedEntries.map((entry, index) => {
-        const name = index === 0 ? strongHtml(entry.name) : escapeHtml(entry.name);
-        const prefix = index === 0 ? `${name} had an influence` : name;
-        return `${prefix} towards ${strongHtml(entry.direction)}`;
-    });
+    const names = signedEntries.map((entry) => strongHtml(entry.name));
+    const sharedDirection = signedEntries.every((entry) =>
+        entry.direction === signedEntries[0].direction
+    );
 
-    return joinClauses(clauses);
+    if (sharedDirection) {
+        return `${joinClauses(names)} contributed towards ${strongHtml(signedEntries[0].direction)}`;
+    }
+
+    return signedEntries
+        .map((entry) =>
+            `${strongHtml(entry.name)} contributed towards ${strongHtml(entry.direction)}`
+        )
+        .join(", while ");
 }
 
 function buildLooseCounterfactualChangeEntry(index, counterfactualValues) {
@@ -2966,18 +2973,18 @@ function buildNarrativeHtml() {
         if (datasetName === "diabetes") {
             const warning = strongHtml(shortenClassLabel(currentExplanation.prediction.label));
             return influenceText
-                ? `The AI issues a ${warning} warning, given the influence of ${influenceText}.`
+                ? `The AI issues a ${warning} warning. ${influenceText}.`
                 : `The AI issues a ${warning} warning.`;
         }
 
-        const predictionLabel = strongHtml(`${shortenClassLabel(currentExplanation.prediction.label)}.`);
+        const predictionLabel = strongHtml(shortenClassLabel(currentExplanation.prediction.label));
         if (datasetName === "housing" || datasetName === "loan") {
             return influenceText
-                ? `This profile was predicted as ${predictionLabel} The ${influenceText}.`
-                : `This profile was predicted as ${predictionLabel}`;
+                ? `This profile was predicted as ${predictionLabel}. ${influenceText}.`
+                : `This profile was predicted as ${predictionLabel}.`;
         }
         return influenceText
-            ? `Given this profile, the AI prediction is ${predictionLabel}, reflecting the influence of ${influenceText}.`
+            ? `Given this profile, the AI prediction is ${predictionLabel}. ${influenceText}.`
             : `Given this profile, the AI prediction is ${predictionLabel}.`;
     }
 

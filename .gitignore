@@ -5,3 +5,15 @@ src/data/*/explanation_cache/
 *.log
 service-account*.json
 *-interactions.json
+
+# Generated research analyses and local survey-response artifacts.
+# Keep QSF survey definitions and case manifests available for version control.
+analysis/
+qualtrics/raw_output_*
+qualtrics/qualtrics_results_*
+qualtrics/*.jmp
+qualtrics/model_only_strategy_*
+qualtrics/v0.9_*
+qualtrics/*inspection.txt
+qualtrics/*validation.txt
+qualtrics/*summary.txt

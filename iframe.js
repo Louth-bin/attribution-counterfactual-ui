@@ -2791,11 +2791,16 @@ function buildLooseAttributionInfluenceText(attribution) {
             .sort((a, b) => Math.abs(b.value) - Math.abs(a.value))
             .slice(0, 2)
             .map((entry) => entry.index);
+    const totalAttribution = attribution.values.reduce(
+        (sum, value) => sum + Math.abs(Number(value) || 0),
+        0
+    ) || 1;
     const signedEntries = shownIndices
         .map((index) => ({
             name: getNarrativeAttributeName(index),
             value: attribution.values[index],
             direction: getInfluenceDirectionLabel(attribution.values[index], attribution),
+            percent: Math.round((Math.abs(attribution.values[index]) / totalAttribution) * 100),
         }))
         .filter((entry) => Math.abs(entry.value) > 0);
 
@@ -2803,7 +2808,10 @@ function buildLooseAttributionInfluenceText(attribution) {
         return "";
     }
 
-    const names = signedEntries.map((entry) => strongHtml(entry.name));
+    const names = signedEntries.map((entry) => {
+        const signedPercent = `${entry.value >= 0 ? "+" : "-"}${entry.percent}%`;
+        return strongHtml(`${entry.name} (${signedPercent})`);
+    });
     const sharedDirection = signedEntries.every((entry) =>
         entry.direction === signedEntries[0].direction
     );
@@ -2814,7 +2822,7 @@ function buildLooseAttributionInfluenceText(attribution) {
 
     return signedEntries
         .map((entry) =>
-            `${strongHtml(entry.name)} contributed towards ${strongHtml(entry.direction)}`
+            `${strongHtml(`${entry.name} (${entry.value >= 0 ? "+" : "-"}${entry.percent}%)`)} contributed towards ${strongHtml(entry.direction)}`
         )
         .join(", while ");
 }
@@ -2882,23 +2890,23 @@ function buildLooseCounterfactualChangeText(changedIndices, counterfactualValues
 }
 
 function buildCounterfactualChangeText(index, counterfactualValues) {
-    const name = strongHtml(getNarrativeAttributeName(index));
-    const originalDisplay = getAttributeDisplayValue(index, currentExplanation.attributeValues);
+    const name = getNarrativeAttributeName(index);
     const updatedDisplay = getAttributeDisplayValue(index, counterfactualValues);
 
     if (currentExplanation.attributeTypes[index] === "categorical") {
-        return `${name} was <span class="categorical-old-value-marker" title="Original: ${escapeHtml(originalDisplay)}"></span><span class="value-change-arrow"> -> </span><span class="value-delta value-delta-increase">${escapeHtml(updatedDisplay)}</span>`;
+        return `${strongHtml(`${name} (${updatedDisplay})`)} changed`;
     }
 
     const originalValue = Number(currentExplanation.attributeValues[index]);
     const updatedValue = Number(counterfactualValues[index]);
     const delta = updatedValue - originalValue;
     if (!Number.isFinite(originalValue) || !Number.isFinite(updatedValue) || delta === 0) {
-        return `${name} was <strong>${escapeHtml(updatedDisplay)}</strong>`;
+        return strongHtml(`${name} (${updatedDisplay})`);
     }
 
-    const deltaClass = delta > 0 ? "value-delta-increase" : "value-delta-decrease";
-    return `${name} was ${escapeHtml(formatValue(originalValue))}<span class="value-delta ${deltaClass}"> ${delta > 0 ? "+" : "-"} ${escapeHtml(formatValue(Math.abs(delta)))}</span>`;
+    const signedDelta = `${delta > 0 ? "+" : "-"}${formatValue(Math.abs(delta))}`;
+    const direction = delta > 0 ? "increased" : "decreased";
+    return `${strongHtml(`${name} (${signedDelta})`)} ${direction}`;
 }
 
 function buildNarrativeHtml() {
@@ -2950,7 +2958,7 @@ function buildNarrativeHtml() {
         if (datasetName === "diabetes") {
             const currentWarning = strongHtml(shortenClassLabel(currentExplanation.prediction.label));
             const counterfactualWarning = strongHtml(shortenClassLabel(counterfactual.prediction.label));
-            return `The AI issues a ${currentWarning} warning for this profile. But, if ${looseChanges}, then it would issue a ${counterfactualWarning} warning.`;
+            return `The AI issues a ${currentWarning} warning for this profile. But, if ${joinClauses(changes)}, then it would issue a ${counterfactualWarning} warning.`;
         }
 
         if (datasetName === "safelimit") {

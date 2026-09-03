@@ -15,6 +15,16 @@ const tutorialCalloutMode = urlParams.get("tutorialCallouts") ?? "";
 const faceFiguresEnabled = urlParams.get("faceFigures") === "1";
 const counterfactualSimulationEnabled = urlParams.get("counterfactualSimulation") === "1";
 const counterfactualSimulationMode = getCounterfactualSimulationMode(urlParams.get("simulationMode"));
+const simulationImmutableFeatures = new Set(
+    (urlParams.get("immutableFeatures") ?? "")
+        .split(",")
+        .map((name) => normalizeSimulationFeatureName(name))
+        .filter(Boolean)
+);
+const parsedSimulationMaxChangedFeatures = Number(urlParams.get("maxChangedFeatures"));
+const simulationMaxChangedFeatures = Number.isInteger(parsedSimulationMaxChangedFeatures) && parsedSimulationMaxChangedFeatures > 0
+    ? parsedSimulationMaxChangedFeatures
+    : null;
 const initialSimulationValues = parseInitialSimulationValues(urlParams.get("simulationValues"));
 const explicitProfileName = urlParams.get("profileName");
 const stakeholder = urlParams.get("stakeholder") ?? "";
@@ -68,6 +78,20 @@ function parseInitialSimulationValues(serializedValues) {
     } catch {
         return null;
     }
+}
+
+function normalizeSimulationFeatureName(name) {
+    return String(name ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+function getSimulationFeatureName(attributeIndex) {
+    return currentExplanation?.rawAttributeNames?.[attributeIndex]
+        ?? currentExplanation?.attributeNames?.[attributeIndex]
+        ?? "";
+}
+
+function isSimulationFeatureImmutable(attributeIndex) {
+    return simulationImmutableFeatures.has(normalizeSimulationFeatureName(getSimulationFeatureName(attributeIndex)));
 }
 
 function saveCounterfactualSimulation() {
@@ -1777,6 +1801,18 @@ function isSimulationControlDisabled(attributeIndex) {
         return true;
     }
 
+    if (isSimulationFeatureImmutable(attributeIndex)) {
+        return true;
+    }
+
+    if (
+        simulationMaxChangedFeatures !== null &&
+        getSimulationChangedAttributeIndices().length >= simulationMaxChangedFeatures &&
+        !hasAttributeChanged(attributeIndex, currentExplanation.attributeValues, simulationValues)
+    ) {
+        return true;
+    }
+
     if (counterfactualSimulationMode === "budget") {
         return false;
     }
@@ -2606,6 +2642,15 @@ async function checkCounterfactualSimulation() {
 
 function getSimulationValidationMessage() {
     const changedIndices = getSimulationChangedAttributeIndices();
+
+    if (changedIndices.some((attributeIndex) => isSimulationFeatureImmutable(attributeIndex))) {
+        return `${formatSimulationAttributeList(changedIndices.filter((attributeIndex) => isSimulationFeatureImmutable(attributeIndex)))} cannot be changed in this case.`;
+    }
+
+    if (simulationMaxChangedFeatures !== null && changedIndices.length > simulationMaxChangedFeatures) {
+        const noun = simulationMaxChangedFeatures === 1 ? "attribute" : "attributes";
+        return `Change at most ${simulationMaxChangedFeatures} ${noun} in this case.`;
+    }
 
     if (
         simulationAllowedAttributeIndices !== null &&

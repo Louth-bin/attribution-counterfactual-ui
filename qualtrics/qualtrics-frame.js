@@ -30,10 +30,10 @@ Qualtrics.SurveyEngine.addOnload(function () {
             }
         },
         diabetes: {
-            training: [36, 190, 225, 115, 1, 2, 118, 7, 74, 60],
+            training: [130100, 130101, 130102, 130103, 130104, 130105, 130106, 130107, 130108, 130109, 130110, 130111],
             test: {
-                0: [32, 30, 14, 53, 35, 42, 26, 7, 56, 33],
-                1: [59, 0, 12, 20, 15, 52, 58, 11, 31, 51]
+                0: [130200, 130201, 130202, 130203, 130204, 130205, 130206, 130207, 130208, 130209],
+                1: [130300, 130301, 130302, 130303, 130304, 130305, 130306, 130307, 130308, 130309]
             }
         }
     };
@@ -93,12 +93,21 @@ Qualtrics.SurveyEngine.addOnload(function () {
     var status = document.getElementById("cf-status");
     var answerPanel = document.getElementById("cf-training-answer");
     var explanation = getEmbeddedData("xaiType") || "attribution";
+    if (explanation === "counterfactuals") explanation = "counterfactual";
+    var TRAINING_EXPLANATION_DELAY_MS = 8000;
     var startedAt = Date.now();
     var prediction = null;
     var selectedPrediction = null;
     var latestChanges = [];
     var latestRawValues = null;
     var latestFeedback = null;
+    var latestScreenState = null;
+    var testingAttempts = [];
+    var currentAttempt = null;
+    var attemptSequence = 0;
+    var trainingReviewUnlockAt = null;
+    var trainingReviewTimer = null;
+    var trainingFeedbackText = "";
 
     if (instanceId === undefined) {
         status.textContent = "The Loop & Merge rows are not configured correctly.";
@@ -116,13 +125,98 @@ Qualtrics.SurveyEngine.addOnload(function () {
             showPrediction: showPrediction ? "1" : "0",
             counterfactualSimulation: simulation ? "1" : "0"
         });
+        if (domain === "diabetes" && phase === "test" && simulation) {
+            parameters.set("immutableFeatures", "Glucose");
+            parameters.set("maxChangedFeatures", "1");
+        }
         return base + (base.indexOf("?") >= 0 ? "&" : "?") + parameters.toString();
+    }
+
+    function getOrCreateCheckPanel(id) {
+        var panel = document.getElementById(id);
+        if (panel) return panel;
+        panel = document.createElement("div");
+        panel.id = id;
+        panel.className = "cf-check-panel";
+        panel.style.cssText = "margin:16px 0;padding:14px;border:1px solid #d4dae2;border-radius:8px;background:#f8fafc";
+        status.parentNode.insertBefore(panel, status);
+        return panel;
+    }
+
+    function normalizeChangeDirection(change) {
+        var before = Number(change.originalValue);
+        var after = Number(change.newValue);
+        if (Number.isFinite(before) && Number.isFinite(after)) {
+            if (after > before) return "increased";
+            if (after < before) return "decreased";
+        }
+        return "changed";
+    }
+
+    function describeChanges(changes) {
+        if (!Array.isArray(changes) || changes.length === 0) return "No attributes were changed";
+        return changes.map(function (change) {
+            return change.attributeName + " " + normalizeChangeDirection(change);
+        }).join("; ");
+    }
+
+    function changedAttributeNames(changes) {
+        if (!Array.isArray(changes)) return [];
+        return changes.map(function (change) {
+            return String(change.attributeName);
+        }).sort();
+    }
+
+    function makeAttributePairDistractors(correctNames, attributeNames) {
+        var correctKey = correctNames.join("|");
+        var pairs = [];
+        for (var i = 0; i < attributeNames.length; i += 1) {
+            for (var j = i + 1; j < attributeNames.length; j += 1) {
+                var pair = [attributeNames[i], attributeNames[j]].sort();
+                if (pair.join("|") !== correctKey) pairs.push(pair.join(" and "));
+            }
+        }
+        return pairs.slice(0, 3);
+    }
+
+    function createMcq(name, prompt, choices, correctValue, onChange) {
+        var wrapper = document.createElement("fieldset");
+        wrapper.style.cssText = "border:0;margin:0 0 14px;padding:0";
+        var legend = document.createElement("legend");
+        legend.textContent = prompt;
+        legend.style.cssText = "font-weight:700;margin-bottom:8px";
+        wrapper.appendChild(legend);
+        choices.forEach(function (choice) {
+            var label = document.createElement("label");
+            label.style.cssText = "display:block;margin:6px 0";
+            var input = document.createElement("input");
+            input.type = "radio";
+            input.name = name;
+            input.value = choice.value;
+            input.style.marginRight = "8px";
+            input.addEventListener("change", function () {
+                onChange({
+                    value: choice.value,
+                    text: choice.text,
+                    correctValue: correctValue,
+                    correct: choice.value === correctValue
+                });
+            });
+            label.appendChild(input);
+            label.appendChild(document.createTextNode(choice.text));
+            wrapper.appendChild(label);
+        });
+        return wrapper;
+    }
+
+    function allCheckAnswersPresent(answers) {
+        return Boolean(answers && answers.target && answers.change);
     }
 
     function trainingRecord() {
         return {
             domain: domain,
-            caseNumber: presentationPosition,
+            caseNumber: loopIndex + 1,
             casePoolPosition: loopIndex + 1,
             instanceId: instanceId,
             explanation: explanation,
@@ -147,8 +241,26 @@ Qualtrics.SurveyEngine.addOnload(function () {
             changes: latestChanges,
             changedRawFeatureValues: latestRawValues,
             feedback: latestFeedback,
+            attempts: testingAttempts,
             responseMs: Date.now() - startedAt
         };
+    }
+
+    function finishTrainingReview() {
+        if (!latestScreenState || selectedPrediction === null) return;
+        if (trainingReviewUnlockAt && Date.now() < trainingReviewUnlockAt) {
+            var secondsRemaining = Math.max(1, Math.ceil((trainingReviewUnlockAt - Date.now()) / 1000));
+            status.textContent = trainingFeedbackText + " Review the explanation carefully (" + secondsRemaining + "s).";
+            if (trainingReviewTimer) window.clearTimeout(trainingReviewTimer);
+            trainingReviewTimer = window.setTimeout(finishTrainingReview, 250);
+            return;
+        }
+        if (trainingReviewTimer) {
+            window.clearTimeout(trainingReviewTimer);
+            trainingReviewTimer = null;
+        }
+        status.textContent = trainingFeedbackText + " You may continue.";
+        setNextEnabled(true);
     }
 
     function showTrainingChoices() {
@@ -162,16 +274,16 @@ Qualtrics.SurveyEngine.addOnload(function () {
             button.addEventListener("click", function () {
                 selectedPrediction = value;
                 var correct = Number(prediction.value) === value;
-                status.textContent = correct
-                    ? "Correct. Review the AI answer and explanation, then continue."
-                    : "Not quite. Review the AI answer and explanation, then continue.";
+                trainingFeedbackText = correct ? "Correct." : "Not quite.";
+                status.textContent = trainingFeedbackText + " Loading the AI answer and explanation...";
                 status.className = correct ? "cf-status cf-correct" : "cf-status cf-incorrect";
                 Array.prototype.forEach.call(answerPanel.querySelectorAll("button"), function (item) {
                     item.disabled = true;
                 });
                 saveRecord("training_log_json", trainingRecord());
                 iframe.src = makeIframeUrl(explanation, true, false);
-                setNextEnabled(true);
+                trainingReviewUnlockAt = null;
+                setNextEnabled(false);
             });
             answerPanel.appendChild(button);
         });
@@ -186,14 +298,44 @@ Qualtrics.SurveyEngine.addOnload(function () {
         if (data.type === "counterfactual-ui:iframe-height") {
             iframe.style.height = Math.max(320, Math.min(900, Number(data.height) || 0)) + "px";
         } else if (data.type === "counterfactual-ui:screen-state") {
+            latestScreenState = data.screenState || null;
             if (data.screenState && data.screenState.prediction) {
                 prediction = data.screenState.prediction;
             }
             if (phase === "training") showTrainingChoices();
+            if (
+                phase === "training" &&
+                selectedPrediction !== null &&
+                data.screenState &&
+                data.screenState.explanationType === explanation
+            ) {
+                if (!trainingReviewUnlockAt) {
+                    trainingReviewUnlockAt = Date.now() + TRAINING_EXPLANATION_DELAY_MS;
+                }
+                finishTrainingReview();
+            }
         } else if (phase === "test" && data.type === "counterfactual-ui:simulation-change") {
             latestChanges = Array.isArray(data.changes) ? data.changes : [];
             latestRawValues = data.changedRawFeatureValues || null;
             if (latestChanges.length > 0) {
+                if (
+                    !currentAttempt ||
+                    currentAttempt.feedback
+                ) {
+                    currentAttempt = {
+                        attemptNumber: ++attemptSequence,
+                        atMs: Date.now() - startedAt,
+                        changes: latestChanges,
+                        changedRawFeatureValues: latestRawValues,
+                        feedback: null
+                    };
+                    testingAttempts.push(currentAttempt);
+                } else {
+                    currentAttempt.atMs = Date.now() - startedAt;
+                    currentAttempt.changes = latestChanges;
+                    currentAttempt.changedRawFeatureValues = latestRawValues;
+                    currentAttempt.feedback = null;
+                }
                 status.textContent = "Your changes are saved. You may continue or revise them.";
                 saveRecord("testing_log_json", testingRecord());
                 setNextEnabled(true);
@@ -206,17 +348,20 @@ Qualtrics.SurveyEngine.addOnload(function () {
                 feedback: data.feedback || null,
                 prediction: data.prediction || null
             };
+            if (currentAttempt) {
+                currentAttempt.feedback = latestFeedback;
+            }
             saveRecord("testing_log_json", testingRecord());
         }
     });
 
     if (phase === "training") {
-        title.textContent = "Training case " + presentationPosition + " of 10";
+        title.textContent = "Training case";
         status.textContent = "Loading the profile...";
         iframe.src = makeIframeUrl("none", false, false);
     } else {
         title.textContent = LABELS[domain][testLabel] + " to " +
-            LABELS[domain][1 - testLabel] + ": case " + presentationPosition + " of 10";
+            LABELS[domain][1 - testLabel] + ": case " + presentationPosition + " of " + caseList.length;
         status.textContent = "Make at least one change before continuing.";
         iframe.src = makeIframeUrl("none", true, true);
     }

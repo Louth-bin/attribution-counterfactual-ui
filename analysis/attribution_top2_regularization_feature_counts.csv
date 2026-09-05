@@ -1,0 +1,16 @@
+﻿domain,feature,instances,truncated_top2_selected_count,regularized_selected_count,regularized_minus_truncated
+housing,sqft_living,30,17,16,-1
+housing,bedrooms,30,4,3,-1
+housing,bathrooms,30,8,7,-1
+housing,floors,30,8,9,1
+housing,grade,30,23,25,2
+safelimit,units,30,20,20,0
+safelimit,weight,30,15,16,1
+safelimit,duration,30,13,11,-2
+safelimit,gender,30,6,6,0
+safelimit,stomach_fullness,30,6,7,1
+diabetes,glucose,30,18,18,0
+diabetes,blood_pressure,30,11,11,0
+diabetes,insulin,30,13,13,0
+diabetes,bmi,30,6,6,0
+diabetes,age,30,12,12,0

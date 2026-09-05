@@ -1,0 +1,3408 @@
+{
+  "parameters": {
+    "domains": [
+      "diabetes"
+    ],
+    "boundary_quantile": 0.5,
+    "boundary_quantile_overrides": [],
+    "minimum_clusters": 3,
+    "maximum_clusters": 5,
+    "represented_clusters": 3,
+    "training_per_cluster_label": 2,
+    "testing_per_cluster_label": 3,
+    "seed": 42,
+    "output_prefix": "analysis\\diabetes_explanation_pattern_diverse_v2"
+  },
+  "selected_instances": [
+    {
+      "domain": "diabetes",
+      "source_split": "test",
+      "instance_id": 55,
+      "prediction": 0,
+      "prediction_label": "Diabetes",
+      "target_label": "No Diabetes",
+      "positive_class_probability": 0.45353124234220055,
+      "local_boundary_distance": 0.0019137644270486448,
+      "raw_feature_values": [
+        181.0,
+        88.0,
+        510.0,
+        43.3,
+        26.0
+      ],
+      "counterfactual_feature_values": [
+        180.0,
+        88.0,
+        510.0,
+        43.3,
+        27.0
+      ],
+      "selected_indices": [
+        0,
+        4
+      ],
+      "selected_feature_names": [
+        "glucose",
+        "age"
+      ],
+      "attribution_values": [
+        -0.40937865517298927,
+        0.0,
+        0.0,
+        0.0,
+        0.14239813440836835
+      ],
+      "normalized_changes": [
+        -0.00850195544975344,
+        0.0,
+        0.0,
+        0.0,
+        0.02702702702702703
+      ],
+      "counterfactual_distance": 0.03552898247678047,
+      "counterfactual_target_probability": 0.786312596368055,
+      "explanation_pattern": [
+        0.74192800948295,
+        0.0,
+        0.0,
+        0.0,
+        0.2580719905170499,
+        0.00850195544975344,
+        0.0,
+        0.0,
+        0.0,
+        0.02702702702702703
+      ],
+      "counterfactual": {
+        "feature_values": [
+          180.0,
+          88.0,
+          510.0,
+          43.3,
+          27.0
+        ],
+        "prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "selected_feature_names": [
+          "glucose",
+          "age"
+        ],
+        "target_probability": 0.786312596368055,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.03552898247678047,
+          "directions": {
+            "glucose": "decrease",
+            "age": "increase"
+          },
+          "selection_attribution_values": {
+            "glucose": -0.40937865517298927,
+            "age": 0.14239813440836835
+          },
+          "normalized_changes": {
+            "glucose": 0.00850195544975344,
+            "age": 0.02702702702702703
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 3,
+      "cluster_rank": 1,
+      "distance_to_cluster_centroid": 0.18537006589465926,
+      "experimental_phase": "testing",
+      "selection_role": "representative_testing_case"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "train",
+      "instance_id": 150,
+      "prediction": 0,
+      "prediction_label": "Diabetes",
+      "target_label": "No Diabetes",
+      "positive_class_probability": 0.0016608688453299068,
+      "local_boundary_distance": 0.09539767406787326,
+      "raw_feature_values": [
+        161.0,
+        68.0,
+        132.0,
+        25.5,
+        47.0
+      ],
+      "counterfactual_feature_values": [
+        150.0,
+        68.0,
+        132.0,
+        25.5,
+        46.0
+      ],
+      "selected_indices": [
+        0,
+        4
+      ],
+      "selected_feature_names": [
+        "glucose",
+        "age"
+      ],
+      "attribution_values": [
+        -0.4592863874807914,
+        0.0,
+        0.0,
+        0.0,
+        -0.2595645067806992
+      ],
+      "normalized_changes": [
+        -0.09352150994728783,
+        0.0,
+        0.0,
+        0.0,
+        -0.02702702702702703
+      ],
+      "counterfactual_distance": 0.12054853697431486,
+      "counterfactual_target_probability": 0.5814605168088115,
+      "explanation_pattern": [
+        0.6389174600007113,
+        0.0,
+        0.0,
+        0.0,
+        0.3610825399992888,
+        0.09352150994728783,
+        0.0,
+        0.0,
+        0.0,
+        0.02702702702702703
+      ],
+      "counterfactual": {
+        "feature_values": [
+          150.0,
+          68.0,
+          132.0,
+          25.5,
+          46.0
+        ],
+        "prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "selected_feature_names": [
+          "glucose",
+          "age"
+        ],
+        "target_probability": 0.5814605168088115,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.12054853697431486,
+          "directions": {
+            "glucose": "decrease",
+            "age": "decrease"
+          },
+          "selection_attribution_values": {
+            "glucose": -0.4592863874807914,
+            "age": -0.2595645067806992
+          },
+          "normalized_changes": {
+            "glucose": 0.09352150994728783,
+            "age": 0.02702702702702703
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 3,
+      "cluster_rank": 1,
+      "distance_to_cluster_centroid": 0.18721633064952453,
+      "experimental_phase": "testing",
+      "selection_role": "representative_testing_case"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "train",
+      "instance_id": 5,
+      "prediction": 0,
+      "prediction_label": "Diabetes",
+      "target_label": "No Diabetes",
+      "positive_class_probability": 0.002141381809881464,
+      "local_boundary_distance": 0.07998046545663212,
+      "raw_feature_values": [
+        166.0,
+        72.0,
+        175.0,
+        25.8,
+        51.0
+      ],
+      "counterfactual_feature_values": [
+        149.0,
+        72.0,
+        175.0,
+        25.8,
+        50.0
+      ],
+      "selected_indices": [
+        0,
+        4
+      ],
+      "selected_feature_names": [
+        "glucose",
+        "age"
+      ],
+      "attribution_values": [
+        -0.4521433687507249,
+        0.0,
+        0.0,
+        0.0,
+        -0.26622701254621417
+      ],
+      "normalized_changes": [
+        -0.14453324264580847,
+        0.0,
+        0.0,
+        0.0,
+        -0.02702702702702703
+      ],
+      "counterfactual_distance": 0.1715602696728355,
+      "counterfactual_target_probability": 0.5615594244148504,
+      "explanation_pattern": [
+        0.6294014627028881,
+        0.0,
+        0.0,
+        0.0,
+        0.3705985372971119,
+        0.14453324264580847,
+        0.0,
+        0.0,
+        0.0,
+        0.02702702702702703
+      ],
+      "counterfactual": {
+        "feature_values": [
+          149.0,
+          72.0,
+          175.0,
+          25.8,
+          50.0
+        ],
+        "prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "selected_feature_names": [
+          "glucose",
+          "age"
+        ],
+        "target_probability": 0.5615594244148504,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.1715602696728355,
+          "directions": {
+            "glucose": "decrease",
+            "age": "decrease"
+          },
+          "selection_attribution_values": {
+            "glucose": -0.4521433687507249,
+            "age": -0.26622701254621417
+          },
+          "normalized_changes": {
+            "glucose": 0.14453324264580847,
+            "age": 0.02702702702702703
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 3,
+      "cluster_rank": 1,
+      "distance_to_cluster_centroid": 0.1993069190808452,
+      "experimental_phase": "testing",
+      "selection_role": "representative_testing_case"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "test",
+      "instance_id": 46,
+      "prediction": 1,
+      "prediction_label": "No Diabetes",
+      "target_label": "Diabetes",
+      "positive_class_probability": 0.9997076597318566,
+      "local_boundary_distance": 0.11584129223688708,
+      "raw_feature_values": [
+        99.0,
+        60.0,
+        160.0,
+        36.6,
+        21.0
+      ],
+      "counterfactual_feature_values": [
+        111.0,
+        60.0,
+        160.0,
+        36.6,
+        22.0
+      ],
+      "selected_indices": [
+        0,
+        4
+      ],
+      "selected_feature_names": [
+        "glucose",
+        "age"
+      ],
+      "attribution_values": [
+        0.20233995494270263,
+        0.0,
+        0.0,
+        0.0,
+        0.07685594168233345
+      ],
+      "normalized_changes": [
+        0.10202346539704128,
+        0.0,
+        0.0,
+        0.0,
+        0.02702702702702703
+      ],
+      "counterfactual_distance": 0.1290504924240683,
+      "counterfactual_target_probability": 0.5806619237587931,
+      "explanation_pattern": [
+        0.7247239568654834,
+        0.0,
+        0.0,
+        0.0,
+        0.27527604313451653,
+        0.10202346539704128,
+        0.0,
+        0.0,
+        0.0,
+        0.02702702702702703
+      ],
+      "counterfactual": {
+        "feature_values": [
+          111.0,
+          60.0,
+          160.0,
+          36.6,
+          22.0
+        ],
+        "prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "selected_feature_names": [
+          "glucose",
+          "age"
+        ],
+        "target_probability": 0.5806619237587931,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.1290504924240683,
+          "directions": {
+            "glucose": "increase",
+            "age": "increase"
+          },
+          "selection_attribution_values": {
+            "glucose": 0.20233995494270263,
+            "age": 0.07685594168233345
+          },
+          "normalized_changes": {
+            "glucose": 0.10202346539704128,
+            "age": 0.02702702702702703
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 3,
+      "cluster_rank": 1,
+      "distance_to_cluster_centroid": 0.15524823204188917,
+      "experimental_phase": "testing",
+      "selection_role": "representative_testing_case"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "train",
+      "instance_id": 185,
+      "prediction": 1,
+      "prediction_label": "No Diabetes",
+      "target_label": "Diabetes",
+      "positive_class_probability": 0.9991591661011607,
+      "local_boundary_distance": 0.09561605783949374,
+      "raw_feature_values": [
+        84.0,
+        64.0,
+        66.0,
+        35.8,
+        21.0
+      ],
+      "counterfactual_feature_values": [
+        96.0,
+        64.0,
+        66.0,
+        35.8,
+        22.0
+      ],
+      "selected_indices": [
+        0,
+        4
+      ],
+      "selected_feature_names": [
+        "glucose",
+        "age"
+      ],
+      "attribution_values": [
+        0.19539514305591718,
+        0.0,
+        0.0,
+        0.0,
+        0.08325225993842303
+      ],
+      "normalized_changes": [
+        0.10202346539704128,
+        0.0,
+        0.0,
+        0.0,
+        0.02702702702702703
+      ],
+      "counterfactual_distance": 0.1290504924240683,
+      "counterfactual_target_probability": 0.5656971114713465,
+      "explanation_pattern": [
+        0.701227217466247,
+        0.0,
+        0.0,
+        0.0,
+        0.29877278253375295,
+        0.10202346539704128,
+        0.0,
+        0.0,
+        0.0,
+        0.02702702702702703
+      ],
+      "counterfactual": {
+        "feature_values": [
+          96.0,
+          64.0,
+          66.0,
+          35.8,
+          22.0
+        ],
+        "prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "selected_feature_names": [
+          "glucose",
+          "age"
+        ],
+        "target_probability": 0.5656971114713465,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.1290504924240683,
+          "directions": {
+            "glucose": "increase",
+            "age": "increase"
+          },
+          "selection_attribution_values": {
+            "glucose": 0.19539514305591718,
+            "age": 0.08325225993842303
+          },
+          "normalized_changes": {
+            "glucose": 0.10202346539704128,
+            "age": 0.02702702702702703
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 3,
+      "cluster_rank": 1,
+      "distance_to_cluster_centroid": 0.15539730061991944,
+      "experimental_phase": "testing",
+      "selection_role": "representative_testing_case"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "test",
+      "instance_id": 25,
+      "prediction": 1,
+      "prediction_label": "No Diabetes",
+      "target_label": "Diabetes",
+      "positive_class_probability": 0.8375005186111013,
+      "local_boundary_distance": 0.03404190434029542,
+      "raw_feature_values": [
+        142.0,
+        90.0,
+        480.0,
+        30.4,
+        43.0
+      ],
+      "counterfactual_feature_values": [
+        138.0,
+        90.0,
+        480.0,
+        30.4,
+        44.0
+      ],
+      "selected_indices": [
+        0,
+        4
+      ],
+      "selected_feature_names": [
+        "glucose",
+        "age"
+      ],
+      "attribution_values": [
+        0.21812545922870336,
+        0.0,
+        0.0,
+        0.0,
+        -0.10113670372442224
+      ],
+      "normalized_changes": [
+        -0.03400782179901376,
+        0.0,
+        0.0,
+        0.0,
+        0.02702702702702703
+      ],
+      "counterfactual_distance": 0.06103484882604079,
+      "counterfactual_target_probability": 0.5437912186877066,
+      "explanation_pattern": [
+        0.6832173822637692,
+        0.0,
+        0.0,
+        0.0,
+        0.3167826177362309,
+        0.03400782179901376,
+        0.0,
+        0.0,
+        0.0,
+        0.02702702702702703
+      ],
+      "counterfactual": {
+        "feature_values": [
+          138.0,
+          90.0,
+          480.0,
+          30.4,
+          44.0
+        ],
+        "prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "selected_feature_names": [
+          "glucose",
+          "age"
+        ],
+        "target_probability": 0.5437912186877066,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.06103484882604079,
+          "directions": {
+            "glucose": "decrease",
+            "age": "increase"
+          },
+          "selection_attribution_values": {
+            "glucose": 0.21812545922870336,
+            "age": -0.10113670372442224
+          },
+          "normalized_changes": {
+            "glucose": 0.03400782179901376,
+            "age": 0.02702702702702703
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 3,
+      "cluster_rank": 1,
+      "distance_to_cluster_centroid": 0.17439060213304514,
+      "experimental_phase": "testing",
+      "selection_role": "representative_testing_case"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "test",
+      "instance_id": 33,
+      "prediction": 0,
+      "prediction_label": "Diabetes",
+      "target_label": "No Diabetes",
+      "positive_class_probability": 0.30168632103936255,
+      "local_boundary_distance": 0.017376820853238738,
+      "raw_feature_values": [
+        126.0,
+        78.0,
+        22.0,
+        29.6,
+        40.0
+      ],
+      "counterfactual_feature_values": [
+        126.0,
+        78.0,
+        22.0,
+        29.7,
+        41.0
+      ],
+      "selected_indices": [
+        3,
+        4
+      ],
+      "selected_feature_names": [
+        "bmi",
+        "age"
+      ],
+      "attribution_values": [
+        0.0,
+        0.0,
+        0.0,
+        -0.20583482537802195,
+        -0.21299061668943547
+      ],
+      "normalized_changes": [
+        0.0,
+        0.0,
+        0.0,
+        0.0035122225344197014,
+        0.02702702702702703
+      ],
+      "counterfactual_distance": 0.03053924956144673,
+      "counterfactual_target_probability": 0.5083574005230133,
+      "explanation_pattern": [
+        0.0,
+        0.0,
+        0.0,
+        0.4914573106207562,
+        0.5085426893792439,
+        0.0,
+        0.0,
+        0.0,
+        0.0035122225344197014,
+        0.02702702702702703
+      ],
+      "counterfactual": {
+        "feature_values": [
+          126.0,
+          78.0,
+          22.0,
+          29.7,
+          41.0
+        ],
+        "prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "selected_feature_names": [
+          "bmi",
+          "age"
+        ],
+        "target_probability": 0.5083574005230133,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.03053924956144673,
+          "directions": {
+            "bmi": "increase",
+            "age": "increase"
+          },
+          "selection_attribution_values": {
+            "bmi": -0.20583482537802195,
+            "age": -0.21299061668943547
+          },
+          "normalized_changes": {
+            "bmi": 0.0035122225344197014,
+            "age": 0.02702702702702703
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 4,
+      "cluster_rank": 2,
+      "distance_to_cluster_centroid": 0.37037673117548214,
+      "experimental_phase": "testing",
+      "selection_role": "representative_testing_case"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "dev",
+      "instance_id": 21,
+      "prediction": 0,
+      "prediction_label": "Diabetes",
+      "target_label": "No Diabetes",
+      "positive_class_probability": 0.14332063341846943,
+      "local_boundary_distance": 0.0933933028487444,
+      "raw_feature_values": [
+        121.0,
+        66.0,
+        165.0,
+        34.3,
+        33.0
+      ],
+      "counterfactual_feature_values": [
+        121.0,
+        66.0,
+        155.0,
+        33.5,
+        33.0
+      ],
+      "selected_indices": [
+        2,
+        3
+      ],
+      "selected_feature_names": [
+        "insulin",
+        "bmi"
+      ],
+      "attribution_values": [
+        0.0,
+        0.0,
+        -0.24596818734910053,
+        -0.33122294233925065,
+        0.0
+      ],
+      "normalized_changes": [
+        0.0,
+        0.0,
+        -0.020621958261156436,
+        -0.02809778027535811,
+        0.0
+      ],
+      "counterfactual_distance": 0.04871973853651455,
+      "counterfactual_target_probability": 0.5014326117475215,
+      "explanation_pattern": [
+        0.0,
+        0.0,
+        0.4261468596752495,
+        0.5738531403247505,
+        0.0,
+        0.0,
+        0.0,
+        0.020621958261156436,
+        0.02809778027535811,
+        0.0
+      ],
+      "counterfactual": {
+        "feature_values": [
+          121.0,
+          66.0,
+          155.0,
+          33.5,
+          33.0
+        ],
+        "prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "selected_feature_names": [
+          "insulin",
+          "bmi"
+        ],
+        "target_probability": 0.5014326117475215,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.04871973853651455,
+          "directions": {
+            "insulin": "decrease",
+            "bmi": "decrease"
+          },
+          "selection_attribution_values": {
+            "insulin": -0.24596818734910053,
+            "bmi": -0.33122294233925065
+          },
+          "normalized_changes": {
+            "insulin": 0.020621958261156436,
+            "bmi": 0.02809778027535811
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 4,
+      "cluster_rank": 2,
+      "distance_to_cluster_centroid": 0.37452992065560486,
+      "experimental_phase": "testing",
+      "selection_role": "representative_testing_case"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "train",
+      "instance_id": 8,
+      "prediction": 0,
+      "prediction_label": "Diabetes",
+      "target_label": "No Diabetes",
+      "positive_class_probability": 0.037876704902566075,
+      "local_boundary_distance": 0.09239240031199972,
+      "raw_feature_values": [
+        115.0,
+        70.0,
+        96.0,
+        34.6,
+        32.0
+      ],
+      "counterfactual_feature_values": [
+        115.0,
+        70.0,
+        96.0,
+        34.9,
+        34.0
+      ],
+      "selected_indices": [
+        3,
+        4
+      ],
+      "selected_feature_names": [
+        "bmi",
+        "age"
+      ],
+      "attribution_values": [
+        0.0,
+        0.0,
+        0.0,
+        -0.3278960669826639,
+        -0.3547389912215905
+      ],
+      "normalized_changes": [
+        0.0,
+        0.0,
+        0.0,
+        0.010536667603259229,
+        0.05405405405405406
+      ],
+      "counterfactual_distance": 0.06459072165731329,
+      "counterfactual_target_probability": 0.5456282901186091,
+      "explanation_pattern": [
+        0.0,
+        0.0,
+        0.0,
+        0.48033874475364635,
+        0.5196612552463536,
+        0.0,
+        0.0,
+        0.0,
+        0.010536667603259229,
+        0.05405405405405406
+      ],
+      "counterfactual": {
+        "feature_values": [
+          115.0,
+          70.0,
+          96.0,
+          34.9,
+          34.0
+        ],
+        "prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "selected_feature_names": [
+          "bmi",
+          "age"
+        ],
+        "target_probability": 0.5456282901186091,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.06459072165731329,
+          "directions": {
+            "bmi": "increase",
+            "age": "increase"
+          },
+          "selection_attribution_values": {
+            "bmi": -0.3278960669826639,
+            "age": -0.3547389912215905
+          },
+          "normalized_changes": {
+            "bmi": 0.010536667603259229,
+            "age": 0.05405405405405406
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 4,
+      "cluster_rank": 2,
+      "distance_to_cluster_centroid": 0.38097991734923037,
+      "experimental_phase": "testing",
+      "selection_role": "representative_testing_case"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "dev",
+      "instance_id": 2,
+      "prediction": 1,
+      "prediction_label": "No Diabetes",
+      "target_label": "Diabetes",
+      "positive_class_probability": 0.5424022896515992,
+      "local_boundary_distance": 0.0034167171475546682,
+      "raw_feature_values": [
+        129.0,
+        92.0,
+        155.0,
+        36.4,
+        32.0
+      ],
+      "counterfactual_feature_values": [
+        129.0,
+        92.0,
+        155.0,
+        36.5,
+        33.0
+      ],
+      "selected_indices": [
+        3,
+        4
+      ],
+      "selected_feature_names": [
+        "bmi",
+        "age"
+      ],
+      "attribution_values": [
+        0.0,
+        0.0,
+        0.0,
+        -0.12869503014412878,
+        -0.04941444331109243
+      ],
+      "normalized_changes": [
+        0.0,
+        0.0,
+        0.0,
+        0.0035122225344198263,
+        0.02702702702702703
+      ],
+      "counterfactual_distance": 0.030539249561446855,
+      "counterfactual_target_probability": 0.7563370556504236,
+      "explanation_pattern": [
+        0.0,
+        0.0,
+        0.0,
+        0.7225613980408752,
+        0.27743860195912484,
+        0.0,
+        0.0,
+        0.0,
+        0.0035122225344198263,
+        0.02702702702702703
+      ],
+      "counterfactual": {
+        "feature_values": [
+          129.0,
+          92.0,
+          155.0,
+          36.5,
+          33.0
+        ],
+        "prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "selected_feature_names": [
+          "bmi",
+          "age"
+        ],
+        "target_probability": 0.7563370556504236,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.030539249561446855,
+          "directions": {
+            "bmi": "increase",
+            "age": "increase"
+          },
+          "selection_attribution_values": {
+            "bmi": -0.12869503014412878,
+            "age": -0.04941444331109243
+          },
+          "normalized_changes": {
+            "bmi": 0.0035122225344198263,
+            "age": 0.02702702702702703
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 4,
+      "cluster_rank": 2,
+      "distance_to_cluster_centroid": 0.2432597156950539,
+      "experimental_phase": "testing",
+      "selection_role": "representative_testing_case"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "train",
+      "instance_id": 123,
+      "prediction": 1,
+      "prediction_label": "No Diabetes",
+      "target_label": "Diabetes",
+      "positive_class_probability": 0.999698142868142,
+      "local_boundary_distance": 0.09637869559414862,
+      "raw_feature_values": [
+        193.0,
+        50.0,
+        375.0,
+        25.9,
+        24.0
+      ],
+      "counterfactual_feature_values": [
+        193.0,
+        50.0,
+        375.0,
+        27.0,
+        26.0
+      ],
+      "selected_indices": [
+        3,
+        4
+      ],
+      "selected_feature_names": [
+        "bmi",
+        "age"
+      ],
+      "attribution_values": [
+        0.0,
+        0.0,
+        0.0,
+        0.16745821356407986,
+        0.11172816619724157
+      ],
+      "normalized_changes": [
+        0.0,
+        0.0,
+        0.0,
+        0.03863444787861759,
+        0.05405405405405406
+      ],
+      "counterfactual_distance": 0.09268850193267164,
+      "counterfactual_target_probability": 0.5342045281196546,
+      "explanation_pattern": [
+        0.0,
+        0.0,
+        0.0,
+        0.5998079623627813,
+        0.40019203763721867,
+        0.0,
+        0.0,
+        0.0,
+        0.03863444787861759,
+        0.05405405405405406
+      ],
+      "counterfactual": {
+        "feature_values": [
+          193.0,
+          50.0,
+          375.0,
+          27.0,
+          26.0
+        ],
+        "prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "selected_feature_names": [
+          "bmi",
+          "age"
+        ],
+        "target_probability": 0.5342045281196546,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.09268850193267164,
+          "directions": {
+            "bmi": "increase",
+            "age": "increase"
+          },
+          "selection_attribution_values": {
+            "bmi": 0.16745821356407986,
+            "age": 0.11172816619724157
+          },
+          "normalized_changes": {
+            "bmi": 0.03863444787861759,
+            "age": 0.05405405405405406
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 4,
+      "cluster_rank": 2,
+      "distance_to_cluster_centroid": 0.2651171421734797,
+      "experimental_phase": "testing",
+      "selection_role": "representative_testing_case"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "test",
+      "instance_id": 21,
+      "prediction": 1,
+      "prediction_label": "No Diabetes",
+      "target_label": "Diabetes",
+      "positive_class_probability": 0.9999822834702005,
+      "local_boundary_distance": 0.1208366761881754,
+      "raw_feature_values": [
+        140.0,
+        74.0,
+        180.0,
+        24.1,
+        23.0
+      ],
+      "counterfactual_feature_values": [
+        140.0,
+        74.0,
+        180.0,
+        29.6,
+        24.0
+      ],
+      "selected_indices": [
+        3,
+        4
+      ],
+      "selected_feature_names": [
+        "bmi",
+        "age"
+      ],
+      "attribution_values": [
+        0.0,
+        0.0,
+        0.0,
+        0.21135040696111532,
+        0.06812011340226462
+      ],
+      "normalized_changes": [
+        0.0,
+        0.0,
+        0.0,
+        0.1931722393930877,
+        0.02702702702702703
+      ],
+      "counterfactual_distance": 0.22019926642011473,
+      "counterfactual_target_probability": 0.5015116802783954,
+      "explanation_pattern": [
+        0.0,
+        0.0,
+        0.0,
+        0.756252955361117,
+        0.24374704463888297,
+        0.0,
+        0.0,
+        0.0,
+        0.1931722393930877,
+        0.02702702702702703
+      ],
+      "counterfactual": {
+        "feature_values": [
+          140.0,
+          74.0,
+          180.0,
+          29.6,
+          24.0
+        ],
+        "prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "selected_feature_names": [
+          "bmi",
+          "age"
+        ],
+        "target_probability": 0.5015116802783954,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.22019926642011473,
+          "directions": {
+            "bmi": "increase",
+            "age": "increase"
+          },
+          "selection_attribution_values": {
+            "bmi": 0.21135040696111532,
+            "age": 0.06812011340226462
+          },
+          "normalized_changes": {
+            "bmi": 0.1931722393930877,
+            "age": 0.02702702702702703
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 4,
+      "cluster_rank": 2,
+      "distance_to_cluster_centroid": 0.2764565977356732,
+      "experimental_phase": "testing",
+      "selection_role": "representative_testing_case"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "test",
+      "instance_id": 48,
+      "prediction": 0,
+      "prediction_label": "Diabetes",
+      "target_label": "No Diabetes",
+      "positive_class_probability": 0.08554892361707903,
+      "local_boundary_distance": 0.006294682769294548,
+      "raw_feature_values": [
+        102.0,
+        44.0,
+        94.0,
+        30.8,
+        26.0
+      ],
+      "counterfactual_feature_values": [
+        102.0,
+        48.0,
+        94.0,
+        30.9,
+        26.0
+      ],
+      "selected_indices": [
+        1,
+        3
+      ],
+      "selected_feature_names": [
+        "blood_pressure",
+        "bmi"
+      ],
+      "attribution_values": [
+        0.0,
+        -0.44613247818644536,
+        0.0,
+        -0.1888303613032965,
+        0.0
+      ],
+      "normalized_changes": [
+        0.0,
+        0.08695652173913043,
+        0.0,
+        0.0035122225344197014,
+        0.0
+      ],
+      "counterfactual_distance": 0.09046874427355013,
+      "counterfactual_target_probability": 0.6160798221832,
+      "explanation_pattern": [
+        0.0,
+        0.7026119489842253,
+        0.0,
+        0.2973880510157747,
+        0.0,
+        0.0,
+        0.08695652173913043,
+        0.0,
+        0.0035122225344197014,
+        0.0
+      ],
+      "counterfactual": {
+        "feature_values": [
+          102.0,
+          48.0,
+          94.0,
+          30.9,
+          26.0
+        ],
+        "prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "selected_feature_names": [
+          "blood_pressure",
+          "bmi"
+        ],
+        "target_probability": 0.6160798221832,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.09046874427355013,
+          "directions": {
+            "blood_pressure": "increase",
+            "bmi": "increase"
+          },
+          "selection_attribution_values": {
+            "blood_pressure": -0.44613247818644536,
+            "bmi": -0.1888303613032965
+          },
+          "normalized_changes": {
+            "blood_pressure": 0.08695652173913043,
+            "bmi": 0.0035122225344197014
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 2,
+      "cluster_rank": 3,
+      "distance_to_cluster_centroid": 0.3002124394301863,
+      "experimental_phase": "testing",
+      "selection_role": "representative_testing_case"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "dev",
+      "instance_id": 30,
+      "prediction": 0,
+      "prediction_label": "Diabetes",
+      "target_label": "No Diabetes",
+      "positive_class_probability": 0.44864853388597475,
+      "local_boundary_distance": 0.0032321303152691833,
+      "raw_feature_values": [
+        82.0,
+        52.0,
+        115.0,
+        28.5,
+        25.0
+      ],
+      "counterfactual_feature_values": [
+        82.0,
+        53.0,
+        115.0,
+        28.4,
+        25.0
+      ],
+      "selected_indices": [
+        1,
+        3
+      ],
+      "selected_feature_names": [
+        "blood_pressure",
+        "bmi"
+      ],
+      "attribution_values": [
+        0.0,
+        -0.16934272327394825,
+        0.0,
+        -0.1025205059468984,
+        0.0
+      ],
+      "normalized_changes": [
+        0.0,
+        0.021739130434782608,
+        0.0,
+        -0.0035122225344198263,
+        0.0
+      ],
+      "counterfactual_distance": 0.025251352969202435,
+      "counterfactual_target_probability": 0.7779961925726175,
+      "explanation_pattern": [
+        0.0,
+        0.6228967549575584,
+        0.0,
+        0.3771032450424416,
+        0.0,
+        0.0,
+        0.021739130434782608,
+        0.0,
+        0.0035122225344198263,
+        0.0
+      ],
+      "counterfactual": {
+        "feature_values": [
+          82.0,
+          53.0,
+          115.0,
+          28.4,
+          25.0
+        ],
+        "prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "selected_feature_names": [
+          "blood_pressure",
+          "bmi"
+        ],
+        "target_probability": 0.7779961925726175,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.025251352969202435,
+          "directions": {
+            "blood_pressure": "increase",
+            "bmi": "decrease"
+          },
+          "selection_attribution_values": {
+            "blood_pressure": -0.16934272327394825,
+            "bmi": -0.1025205059468984
+          },
+          "normalized_changes": {
+            "blood_pressure": 0.021739130434782608,
+            "bmi": 0.0035122225344198263
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 2,
+      "cluster_rank": 3,
+      "distance_to_cluster_centroid": 0.33337032463034966,
+      "experimental_phase": "testing",
+      "selection_role": "representative_testing_case"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "train",
+      "instance_id": 1,
+      "prediction": 0,
+      "prediction_label": "Diabetes",
+      "target_label": "No Diabetes",
+      "positive_class_probability": 0.0003525220827330244,
+      "local_boundary_distance": 0.00846722048271143,
+      "raw_feature_values": [
+        137.0,
+        40.0,
+        168.0,
+        43.1,
+        33.0
+      ],
+      "counterfactual_feature_values": [
+        137.0,
+        41.0,
+        142.0,
+        43.1,
+        33.0
+      ],
+      "selected_indices": [
+        1,
+        2
+      ],
+      "selected_feature_names": [
+        "blood_pressure",
+        "insulin"
+      ],
+      "attribution_values": [
+        0.0,
+        -0.40582574875280747,
+        -0.31433349227128,
+        0.0,
+        0.0
+      ],
+      "normalized_changes": [
+        0.0,
+        0.021739130434782608,
+        -0.053617091479006736,
+        0.0,
+        0.0
+      ],
+      "counterfactual_distance": 0.07535622191378935,
+      "counterfactual_target_probability": 0.5195290022833088,
+      "explanation_pattern": [
+        0.0,
+        0.5635222401308235,
+        0.4364777598691764,
+        0.0,
+        0.0,
+        0.0,
+        0.021739130434782608,
+        0.053617091479006736,
+        0.0,
+        0.0
+      ],
+      "counterfactual": {
+        "feature_values": [
+          137.0,
+          41.0,
+          142.0,
+          43.1,
+          33.0
+        ],
+        "prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "selected_feature_names": [
+          "blood_pressure",
+          "insulin"
+        ],
+        "target_probability": 0.5195290022833088,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.07535622191378935,
+          "directions": {
+            "blood_pressure": "increase",
+            "insulin": "decrease"
+          },
+          "selection_attribution_values": {
+            "blood_pressure": -0.40582574875280747,
+            "insulin": -0.31433349227128
+          },
+          "normalized_changes": {
+            "blood_pressure": 0.021739130434782608,
+            "insulin": 0.053617091479006736
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 2,
+      "cluster_rank": 3,
+      "distance_to_cluster_centroid": 0.33705703295918404,
+      "experimental_phase": "testing",
+      "selection_role": "representative_testing_case"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "train",
+      "instance_id": 70,
+      "prediction": 1,
+      "prediction_label": "No Diabetes",
+      "target_label": "Diabetes",
+      "positive_class_probability": 0.9935118680214258,
+      "local_boundary_distance": 0.11594245073251352,
+      "raw_feature_values": [
+        106.0,
+        64.0,
+        119.0,
+        30.5,
+        34.0
+      ],
+      "counterfactual_feature_values": [
+        106.0,
+        68.0,
+        121.0,
+        30.5,
+        34.0
+      ],
+      "selected_indices": [
+        1,
+        2
+      ],
+      "selected_feature_names": [
+        "blood_pressure",
+        "insulin"
+      ],
+      "attribution_values": [
+        0.0,
+        0.18352189671060337,
+        0.08947820820400187,
+        0.0,
+        0.0
+      ],
+      "normalized_changes": [
+        0.0,
+        0.08695652173913043,
+        0.004124391652231288,
+        0.0,
+        0.0
+      ],
+      "counterfactual_distance": 0.09108091339136172,
+      "counterfactual_target_probability": 0.5011522540908169,
+      "explanation_pattern": [
+        0.0,
+        0.6722411215483204,
+        0.32775887845167956,
+        0.0,
+        0.0,
+        0.0,
+        0.08695652173913043,
+        0.004124391652231288,
+        0.0,
+        0.0
+      ],
+      "counterfactual": {
+        "feature_values": [
+          106.0,
+          68.0,
+          121.0,
+          30.5,
+          34.0
+        ],
+        "prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "selected_feature_names": [
+          "blood_pressure",
+          "insulin"
+        ],
+        "target_probability": 0.5011522540908169,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.09108091339136172,
+          "directions": {
+            "blood_pressure": "increase",
+            "insulin": "increase"
+          },
+          "selection_attribution_values": {
+            "blood_pressure": 0.18352189671060337,
+            "insulin": 0.08947820820400187
+          },
+          "normalized_changes": {
+            "blood_pressure": 0.08695652173913043,
+            "insulin": 0.004124391652231288
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 2,
+      "cluster_rank": 3,
+      "distance_to_cluster_centroid": 0.2670510152832764,
+      "experimental_phase": "testing",
+      "selection_role": "representative_testing_case"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "train",
+      "instance_id": 143,
+      "prediction": 1,
+      "prediction_label": "No Diabetes",
+      "target_label": "Diabetes",
+      "positive_class_probability": 0.9712867997164749,
+      "local_boundary_distance": 0.06017774966050013,
+      "raw_feature_values": [
+        151.0,
+        62.0,
+        120.0,
+        35.5,
+        28.0
+      ],
+      "counterfactual_feature_values": [
+        151.0,
+        63.0,
+        135.0,
+        35.5,
+        28.0
+      ],
+      "selected_indices": [
+        1,
+        2
+      ],
+      "selected_feature_names": [
+        "blood_pressure",
+        "insulin"
+      ],
+      "attribution_values": [
+        0.0,
+        0.15949168823537047,
+        0.09128334837428392,
+        0.0,
+        0.0
+      ],
+      "normalized_changes": [
+        0.0,
+        0.021739130434782608,
+        0.030932937391734656,
+        0.0,
+        0.0
+      ],
+      "counterfactual_distance": 0.05267206782651726,
+      "counterfactual_target_probability": 0.5340839649002944,
+      "explanation_pattern": [
+        0.0,
+        0.6359950750745114,
+        0.3640049249254887,
+        0.0,
+        0.0,
+        0.0,
+        0.021739130434782608,
+        0.030932937391734656,
+        0.0,
+        0.0
+      ],
+      "counterfactual": {
+        "feature_values": [
+          151.0,
+          63.0,
+          135.0,
+          35.5,
+          28.0
+        ],
+        "prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "selected_feature_names": [
+          "blood_pressure",
+          "insulin"
+        ],
+        "target_probability": 0.5340839649002944,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.05267206782651726,
+          "directions": {
+            "blood_pressure": "increase",
+            "insulin": "increase"
+          },
+          "selection_attribution_values": {
+            "blood_pressure": 0.15949168823537047,
+            "insulin": 0.09128334837428392
+          },
+          "normalized_changes": {
+            "blood_pressure": 0.021739130434782608,
+            "insulin": 0.030932937391734656
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 2,
+      "cluster_rank": 3,
+      "distance_to_cluster_centroid": 0.2832185470385298,
+      "experimental_phase": "testing",
+      "selection_role": "representative_testing_case"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "dev",
+      "instance_id": 31,
+      "prediction": 1,
+      "prediction_label": "No Diabetes",
+      "target_label": "Diabetes",
+      "positive_class_probability": 0.8136430151341247,
+      "local_boundary_distance": 0.024301452654382775,
+      "raw_feature_values": [
+        123.0,
+        72.0,
+        230.0,
+        33.6,
+        34.0
+      ],
+      "counterfactual_feature_values": [
+        121.0,
+        71.0,
+        230.0,
+        33.6,
+        34.0
+      ],
+      "selected_indices": [
+        0,
+        1
+      ],
+      "selected_feature_names": [
+        "glucose",
+        "blood_pressure"
+      ],
+      "attribution_values": [
+        0.02468894480106633,
+        0.06844230722623822,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "normalized_changes": [
+        -0.01700391089950688,
+        -0.021739130434782608,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "counterfactual_distance": 0.03874304133428949,
+      "counterfactual_target_probability": 0.5283049809368523,
+      "explanation_pattern": [
+        0.2650983881740142,
+        0.7349016118259858,
+        0.0,
+        0.0,
+        0.0,
+        0.01700391089950688,
+        0.021739130434782608,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "counterfactual": {
+        "feature_values": [
+          121.0,
+          71.0,
+          230.0,
+          33.6,
+          34.0
+        ],
+        "prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "selected_feature_names": [
+          "glucose",
+          "blood_pressure"
+        ],
+        "target_probability": 0.5283049809368523,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.03874304133428949,
+          "directions": {
+            "glucose": "decrease",
+            "blood_pressure": "decrease"
+          },
+          "selection_attribution_values": {
+            "glucose": 0.02468894480106633,
+            "blood_pressure": 0.06844230722623822
+          },
+          "normalized_changes": {
+            "glucose": 0.01700391089950688,
+            "blood_pressure": 0.021739130434782608
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 2,
+      "cluster_rank": 3,
+      "distance_to_cluster_centroid": 0.290872999591549,
+      "experimental_phase": "testing",
+      "selection_role": "representative_testing_case"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "train",
+      "instance_id": 211,
+      "prediction": 0,
+      "prediction_label": "Diabetes",
+      "target_label": "No Diabetes",
+      "positive_class_probability": 4.1919540546963266e-05,
+      "local_boundary_distance": 0.09998833410290378,
+      "raw_feature_values": [
+        173.0,
+        84.0,
+        474.0,
+        35.7,
+        22.0
+      ],
+      "counterfactual_feature_values": [
+        162.0,
+        84.0,
+        474.0,
+        35.8,
+        22.0
+      ],
+      "selected_indices": [
+        0,
+        3
+      ],
+      "selected_feature_names": [
+        "glucose",
+        "bmi"
+      ],
+      "attribution_values": [
+        -0.5845646119298123,
+        0.0,
+        0.0,
+        -0.13590523163646118,
+        0.0
+      ],
+      "normalized_changes": [
+        -0.09352150994728783,
+        0.0,
+        0.0,
+        0.0035122225344195765,
+        0.0
+      ],
+      "counterfactual_distance": 0.09703373248170741,
+      "counterfactual_target_probability": 0.5656523514277009,
+      "explanation_pattern": [
+        0.8113658290488049,
+        0.0,
+        0.0,
+        0.18863417095119503,
+        0.0,
+        0.09352150994728783,
+        0.0,
+        0.0,
+        0.0035122225344195765,
+        0.0
+      ],
+      "counterfactual": {
+        "feature_values": [
+          162.0,
+          84.0,
+          474.0,
+          35.8,
+          22.0
+        ],
+        "prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "selected_feature_names": [
+          "glucose",
+          "bmi"
+        ],
+        "target_probability": 0.5656523514277009,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.09703373248170741,
+          "directions": {
+            "glucose": "decrease",
+            "bmi": "increase"
+          },
+          "selection_attribution_values": {
+            "glucose": -0.5845646119298123,
+            "bmi": -0.13590523163646118
+          },
+          "normalized_changes": {
+            "glucose": 0.09352150994728783,
+            "bmi": 0.0035122225344195765
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 3,
+      "cluster_rank": 1,
+      "distance_to_cluster_centroid": 0.2992373591641491,
+      "experimental_phase": "training",
+      "selection_role": "diverse_training_example"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "train",
+      "instance_id": 155,
+      "prediction": 0,
+      "prediction_label": "Diabetes",
+      "target_label": "No Diabetes",
+      "positive_class_probability": 0.00521326663514135,
+      "local_boundary_distance": 0.07571479890064052,
+      "raw_feature_values": [
+        155.0,
+        74.0,
+        96.0,
+        26.6,
+        27.0
+      ],
+      "counterfactual_feature_values": [
+        145.0,
+        75.0,
+        96.0,
+        26.6,
+        27.0
+      ],
+      "selected_indices": [
+        0,
+        1
+      ],
+      "selected_feature_names": [
+        "glucose",
+        "blood_pressure"
+      ],
+      "attribution_values": [
+        -0.4638442358986976,
+        -0.2514542605729816,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "normalized_changes": [
+        -0.0850195544975344,
+        0.021739130434782608,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "counterfactual_distance": 0.10675868493231701,
+      "counterfactual_target_probability": 0.5404699929545261,
+      "explanation_pattern": [
+        0.64846247851307,
+        0.3515375214869299,
+        0.0,
+        0.0,
+        0.0,
+        0.0850195544975344,
+        0.021739130434782608,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "counterfactual": {
+        "feature_values": [
+          145.0,
+          75.0,
+          96.0,
+          26.6,
+          27.0
+        ],
+        "prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "selected_feature_names": [
+          "glucose",
+          "blood_pressure"
+        ],
+        "target_probability": 0.5404699929545261,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.10675868493231701,
+          "directions": {
+            "glucose": "decrease",
+            "blood_pressure": "increase"
+          },
+          "selection_attribution_values": {
+            "glucose": -0.4638442358986976,
+            "blood_pressure": -0.2514542605729816
+          },
+          "normalized_changes": {
+            "glucose": 0.0850195544975344,
+            "blood_pressure": 0.021739130434782608
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 3,
+      "cluster_rank": 1,
+      "distance_to_cluster_centroid": 0.3721354476186069,
+      "experimental_phase": "training",
+      "selection_role": "diverse_training_example"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "train",
+      "instance_id": 194,
+      "prediction": 1,
+      "prediction_label": "No Diabetes",
+      "target_label": "Diabetes",
+      "positive_class_probability": 0.999987309342718,
+      "local_boundary_distance": 0.09821927366035882,
+      "raw_feature_values": [
+        90.0,
+        62.0,
+        59.0,
+        25.1,
+        25.0
+      ],
+      "counterfactual_feature_values": [
+        102.0,
+        62.0,
+        59.0,
+        25.2,
+        25.0
+      ],
+      "selected_indices": [
+        0,
+        3
+      ],
+      "selected_feature_names": [
+        "glucose",
+        "bmi"
+      ],
+      "attribution_values": [
+        0.20521250690197074,
+        0.0,
+        0.0,
+        0.0742630393339267,
+        0.0
+      ],
+      "normalized_changes": [
+        0.10202346539704128,
+        0.0,
+        0.0,
+        0.0035122225344197014,
+        0.0
+      ],
+      "counterfactual_distance": 0.10553568793146098,
+      "counterfactual_target_probability": 0.5670887987119622,
+      "explanation_pattern": [
+        0.7342771475567907,
+        0.0,
+        0.0,
+        0.2657228524432093,
+        0.0,
+        0.10202346539704128,
+        0.0,
+        0.0,
+        0.0035122225344197014,
+        0.0
+      ],
+      "counterfactual": {
+        "feature_values": [
+          102.0,
+          62.0,
+          59.0,
+          25.2,
+          25.0
+        ],
+        "prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "selected_feature_names": [
+          "glucose",
+          "bmi"
+        ],
+        "target_probability": 0.5670887987119622,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.10553568793146098,
+          "directions": {
+            "glucose": "increase",
+            "bmi": "increase"
+          },
+          "selection_attribution_values": {
+            "glucose": 0.20521250690197074,
+            "bmi": 0.0742630393339267
+          },
+          "normalized_changes": {
+            "glucose": 0.10202346539704128,
+            "bmi": 0.0035122225344197014
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 3,
+      "cluster_rank": 1,
+      "distance_to_cluster_centroid": 0.29958049268489695,
+      "experimental_phase": "training",
+      "selection_role": "diverse_training_example"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "dev",
+      "instance_id": 47,
+      "prediction": 1,
+      "prediction_label": "No Diabetes",
+      "target_label": "Diabetes",
+      "positive_class_probability": 0.9949985833260497,
+      "local_boundary_distance": 0.11817588291368594,
+      "raw_feature_values": [
+        90.0,
+        88.0,
+        54.0,
+        37.7,
+        29.0
+      ],
+      "counterfactual_feature_values": [
+        102.0,
+        88.0,
+        39.0,
+        37.7,
+        29.0
+      ],
+      "selected_indices": [
+        0,
+        2
+      ],
+      "selected_feature_names": [
+        "glucose",
+        "insulin"
+      ],
+      "attribution_values": [
+        0.20778407851461683,
+        0.0,
+        0.06670274170461238,
+        0.0,
+        0.0
+      ],
+      "normalized_changes": [
+        0.10202346539704128,
+        0.0,
+        -0.030932937391734656,
+        0.0,
+        0.0
+      ],
+      "counterfactual_distance": 0.13295640278877593,
+      "counterfactual_target_probability": 0.5055314432021789,
+      "explanation_pattern": [
+        0.756991094685939,
+        0.0,
+        0.24300890531406108,
+        0.0,
+        0.0,
+        0.10202346539704128,
+        0.0,
+        0.030932937391734656,
+        0.0,
+        0.0
+      ],
+      "counterfactual": {
+        "feature_values": [
+          102.0,
+          88.0,
+          39.0,
+          37.7,
+          29.0
+        ],
+        "prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "selected_feature_names": [
+          "glucose",
+          "insulin"
+        ],
+        "target_probability": 0.5055314432021789,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.13295640278877593,
+          "directions": {
+            "glucose": "increase",
+            "insulin": "decrease"
+          },
+          "selection_attribution_values": {
+            "glucose": 0.20778407851461683,
+            "insulin": 0.06670274170461238
+          },
+          "normalized_changes": {
+            "glucose": 0.10202346539704128,
+            "insulin": 0.030932937391734656
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 3,
+      "cluster_rank": 1,
+      "distance_to_cluster_centroid": 0.3497703656803413,
+      "experimental_phase": "training",
+      "selection_role": "diverse_training_example"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "train",
+      "instance_id": 91,
+      "prediction": 0,
+      "prediction_label": "Diabetes",
+      "target_label": "No Diabetes",
+      "positive_class_probability": 0.013297044524766849,
+      "local_boundary_distance": 0.06044485967474462,
+      "raw_feature_values": [
+        139.0,
+        80.0,
+        160.0,
+        31.6,
+        25.0
+      ],
+      "counterfactual_feature_values": [
+        135.0,
+        80.0,
+        160.0,
+        31.7,
+        25.0
+      ],
+      "selected_indices": [
+        0,
+        3
+      ],
+      "selected_feature_names": [
+        "glucose",
+        "bmi"
+      ],
+      "attribution_values": [
+        -0.33997430230303705,
+        0.0,
+        0.0,
+        -0.3672404162790166,
+        0.0
+      ],
+      "normalized_changes": [
+        -0.03400782179901376,
+        0.0,
+        0.0,
+        0.0035122225344197014,
+        0.0
+      ],
+      "counterfactual_distance": 0.03752004433343346,
+      "counterfactual_target_probability": 0.64466035621615,
+      "explanation_pattern": [
+        0.48072288849513245,
+        0.0,
+        0.0,
+        0.5192771115048676,
+        0.0,
+        0.03400782179901376,
+        0.0,
+        0.0,
+        0.0035122225344197014,
+        0.0
+      ],
+      "counterfactual": {
+        "feature_values": [
+          135.0,
+          80.0,
+          160.0,
+          31.7,
+          25.0
+        ],
+        "prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "selected_feature_names": [
+          "glucose",
+          "bmi"
+        ],
+        "target_probability": 0.64466035621615,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.03752004433343346,
+          "directions": {
+            "glucose": "decrease",
+            "bmi": "increase"
+          },
+          "selection_attribution_values": {
+            "glucose": -0.33997430230303705,
+            "bmi": -0.3672404162790166
+          },
+          "normalized_changes": {
+            "glucose": 0.03400782179901376,
+            "bmi": 0.0035122225344197014
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 4,
+      "cluster_rank": 2,
+      "distance_to_cluster_centroid": 0.47624939714348424,
+      "experimental_phase": "training",
+      "selection_role": "diverse_training_example"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "train",
+      "instance_id": 86,
+      "prediction": 0,
+      "prediction_label": "Diabetes",
+      "target_label": "No Diabetes",
+      "positive_class_probability": 3.522550572762183e-05,
+      "local_boundary_distance": 0.025968986087861395,
+      "raw_feature_values": [
+        129.0,
+        110.0,
+        130.0,
+        67.1,
+        26.0
+      ],
+      "counterfactual_feature_values": [
+        129.0,
+        55.0,
+        130.0,
+        67.0,
+        26.0
+      ],
+      "selected_indices": [
+        1,
+        3
+      ],
+      "selected_feature_names": [
+        "blood_pressure",
+        "bmi"
+      ],
+      "attribution_values": [
+        0.0,
+        -0.11584064707538988,
+        0.0,
+        -0.604635890525703,
+        0.0
+      ],
+      "normalized_changes": [
+        0.0,
+        -1.1956521739130435,
+        0.0,
+        -0.0035122225344195765,
+        0.0
+      ],
+      "counterfactual_distance": 1.199164396447463,
+      "counterfactual_target_probability": 0.6136737572297573,
+      "explanation_pattern": [
+        0.0,
+        0.1607833718792485,
+        0.0,
+        0.8392166281207515,
+        0.0,
+        0.0,
+        1.1956521739130435,
+        0.0,
+        0.0035122225344195765,
+        0.0
+      ],
+      "counterfactual": {
+        "feature_values": [
+          129.0,
+          55.0,
+          130.0,
+          67.0,
+          26.0
+        ],
+        "prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "selected_feature_names": [
+          "blood_pressure",
+          "bmi"
+        ],
+        "target_probability": 0.6136737572297573,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 1.199164396447463,
+          "directions": {
+            "blood_pressure": "decrease",
+            "bmi": "decrease"
+          },
+          "selection_attribution_values": {
+            "blood_pressure": -0.11584064707538988,
+            "bmi": -0.604635890525703
+          },
+          "normalized_changes": {
+            "blood_pressure": 1.1956521739130435,
+            "bmi": 0.0035122225344195765
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 4,
+      "cluster_rank": 2,
+      "distance_to_cluster_centroid": 1.2244929533429014,
+      "experimental_phase": "training",
+      "selection_role": "diverse_training_example"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "train",
+      "instance_id": 32,
+      "prediction": 1,
+      "prediction_label": "No Diabetes",
+      "target_label": "Diabetes",
+      "positive_class_probability": 0.9727924109016614,
+      "local_boundary_distance": 0.05352567583518701,
+      "raw_feature_values": [
+        139.0,
+        64.0,
+        140.0,
+        28.6,
+        26.0
+      ],
+      "counterfactual_feature_values": [
+        139.0,
+        64.0,
+        139.0,
+        29.7,
+        26.0
+      ],
+      "selected_indices": [
+        2,
+        3
+      ],
+      "selected_feature_names": [
+        "insulin",
+        "bmi"
+      ],
+      "attribution_values": [
+        0.0,
+        0.0,
+        0.059096620426498714,
+        0.19318402736834211,
+        0.0
+      ],
+      "normalized_changes": [
+        0.0,
+        0.0,
+        -0.002062195826115644,
+        0.038634447878617466,
+        0.0
+      ],
+      "counterfactual_distance": 0.04069664370473311,
+      "counterfactual_target_probability": 0.5054794104967472,
+      "explanation_pattern": [
+        0.0,
+        0.0,
+        0.23424951910919917,
+        0.7657504808908008,
+        0.0,
+        0.0,
+        0.0,
+        0.002062195826115644,
+        0.038634447878617466,
+        0.0
+      ],
+      "counterfactual": {
+        "feature_values": [
+          139.0,
+          64.0,
+          139.0,
+          29.7,
+          26.0
+        ],
+        "prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "selected_feature_names": [
+          "insulin",
+          "bmi"
+        ],
+        "target_probability": 0.5054794104967472,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.04069664370473311,
+          "directions": {
+            "insulin": "decrease",
+            "bmi": "increase"
+          },
+          "selection_attribution_values": {
+            "insulin": 0.059096620426498714,
+            "bmi": 0.19318402736834211
+          },
+          "normalized_changes": {
+            "insulin": 0.002062195826115644,
+            "bmi": 0.038634447878617466
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 4,
+      "cluster_rank": 2,
+      "distance_to_cluster_centroid": 0.31222343619910703,
+      "experimental_phase": "training",
+      "selection_role": "diverse_training_example"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "train",
+      "instance_id": 107,
+      "prediction": 1,
+      "prediction_label": "No Diabetes",
+      "target_label": "Diabetes",
+      "positive_class_probability": 0.9978699652440559,
+      "local_boundary_distance": 0.1388296320898957,
+      "raw_feature_values": [
+        142.0,
+        60.0,
+        190.0,
+        28.8,
+        61.0
+      ],
+      "counterfactual_feature_values": [
+        142.0,
+        61.0,
+        190.0,
+        31.1,
+        61.0
+      ],
+      "selected_indices": [
+        1,
+        3
+      ],
+      "selected_feature_names": [
+        "blood_pressure",
+        "bmi"
+      ],
+      "attribution_values": [
+        0.0,
+        0.09154170124399352,
+        0.0,
+        0.18581650089324186,
+        0.0
+      ],
+      "normalized_changes": [
+        0.0,
+        0.021739130434782608,
+        0.0,
+        0.08078111829165488,
+        0.0
+      ],
+      "counterfactual_distance": 0.10252024872643749,
+      "counterfactual_target_probability": 0.5078653787062406,
+      "explanation_pattern": [
+        0.0,
+        0.33004865382960324,
+        0.0,
+        0.6699513461703968,
+        0.0,
+        0.0,
+        0.021739130434782608,
+        0.0,
+        0.08078111829165488,
+        0.0
+      ],
+      "counterfactual": {
+        "feature_values": [
+          142.0,
+          61.0,
+          190.0,
+          31.1,
+          61.0
+        ],
+        "prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "selected_feature_names": [
+          "blood_pressure",
+          "bmi"
+        ],
+        "target_probability": 0.5078653787062406,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.10252024872643749,
+          "directions": {
+            "blood_pressure": "increase",
+            "bmi": "increase"
+          },
+          "selection_attribution_values": {
+            "blood_pressure": 0.09154170124399352,
+            "bmi": 0.18581650089324186
+          },
+          "normalized_changes": {
+            "blood_pressure": 0.021739130434782608,
+            "bmi": 0.08078111829165488
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 4,
+      "cluster_rank": 2,
+      "distance_to_cluster_centroid": 0.39162617994968363,
+      "experimental_phase": "training",
+      "selection_role": "diverse_training_example"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "train",
+      "instance_id": 152,
+      "prediction": 0,
+      "prediction_label": "Diabetes",
+      "target_label": "No Diabetes",
+      "positive_class_probability": 0.021987244328948174,
+      "local_boundary_distance": 0.05862298155111999,
+      "raw_feature_values": [
+        128.0,
+        68.0,
+        180.0,
+        30.5,
+        25.0
+      ],
+      "counterfactual_feature_values": [
+        127.0,
+        72.0,
+        180.0,
+        30.5,
+        25.0
+      ],
+      "selected_indices": [
+        0,
+        1
+      ],
+      "selected_feature_names": [
+        "glucose",
+        "blood_pressure"
+      ],
+      "attribution_values": [
+        -0.33274321684914165,
+        -0.3657813019287307,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "normalized_changes": [
+        -0.00850195544975344,
+        0.08695652173913043,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "counterfactual_distance": 0.09545847718888387,
+      "counterfactual_target_probability": 0.7075258083965658,
+      "explanation_pattern": [
+        0.476351520818917,
+        0.523648479181083,
+        0.0,
+        0.0,
+        0.0,
+        0.00850195544975344,
+        0.08695652173913043,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "counterfactual": {
+        "feature_values": [
+          127.0,
+          72.0,
+          180.0,
+          30.5,
+          25.0
+        ],
+        "prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "selected_feature_names": [
+          "glucose",
+          "blood_pressure"
+        ],
+        "target_probability": 0.7075258083965658,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.09545847718888387,
+          "directions": {
+            "glucose": "decrease",
+            "blood_pressure": "increase"
+          },
+          "selection_attribution_values": {
+            "glucose": -0.33274321684914165,
+            "blood_pressure": -0.3657813019287307
+          },
+          "normalized_changes": {
+            "glucose": 0.00850195544975344,
+            "blood_pressure": 0.08695652173913043
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 2,
+      "cluster_rank": 3,
+      "distance_to_cluster_centroid": 0.40473451257876464,
+      "experimental_phase": "training",
+      "selection_role": "diverse_training_example"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "dev",
+      "instance_id": 26,
+      "prediction": 0,
+      "prediction_label": "Diabetes",
+      "target_label": "No Diabetes",
+      "positive_class_probability": 0.0004108748893451491,
+      "local_boundary_distance": 0.06726790869615895,
+      "raw_feature_values": [
+        108.0,
+        44.0,
+        130.0,
+        24.0,
+        35.0
+      ],
+      "counterfactual_feature_values": [
+        108.0,
+        53.0,
+        130.0,
+        24.0,
+        36.0
+      ],
+      "selected_indices": [
+        1,
+        4
+      ],
+      "selected_feature_names": [
+        "blood_pressure",
+        "age"
+      ],
+      "attribution_values": [
+        0.0,
+        -0.5168992421895423,
+        0.0,
+        0.0,
+        -0.2032016460279331
+      ],
+      "normalized_changes": [
+        0.0,
+        0.1956521739130435,
+        0.0,
+        0.0,
+        0.02702702702702703
+      ],
+      "counterfactual_distance": 0.22267920094007052,
+      "counterfactual_target_probability": 0.6090735908168898,
+      "explanation_pattern": [
+        0.0,
+        0.7178150320978846,
+        0.0,
+        0.0,
+        0.28218496790211545,
+        0.0,
+        0.1956521739130435,
+        0.0,
+        0.0,
+        0.02702702702702703
+      ],
+      "counterfactual": {
+        "feature_values": [
+          108.0,
+          53.0,
+          130.0,
+          24.0,
+          36.0
+        ],
+        "prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 1,
+          "label": "No Diabetes"
+        },
+        "selected_feature_names": [
+          "blood_pressure",
+          "age"
+        ],
+        "target_probability": 0.6090735908168898,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.22267920094007052,
+          "directions": {
+            "blood_pressure": "increase",
+            "age": "increase"
+          },
+          "selection_attribution_values": {
+            "blood_pressure": -0.5168992421895423,
+            "age": -0.2032016460279331
+          },
+          "normalized_changes": {
+            "blood_pressure": 0.1956521739130435,
+            "age": 0.02702702702702703
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 2,
+      "cluster_rank": 3,
+      "distance_to_cluster_centroid": 0.4064878973714297,
+      "experimental_phase": "training",
+      "selection_role": "diverse_training_example"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "train",
+      "instance_id": 125,
+      "prediction": 1,
+      "prediction_label": "No Diabetes",
+      "target_label": "Diabetes",
+      "positive_class_probability": 0.9887974885978451,
+      "local_boundary_distance": 0.0742724827345775,
+      "raw_feature_values": [
+        191.0,
+        68.0,
+        130.0,
+        30.9,
+        34.0
+      ],
+      "counterfactual_feature_values": [
+        191.0,
+        71.0,
+        130.0,
+        31.0,
+        34.0
+      ],
+      "selected_indices": [
+        1,
+        3
+      ],
+      "selected_feature_names": [
+        "blood_pressure",
+        "bmi"
+      ],
+      "attribution_values": [
+        0.0,
+        0.1655764929895403,
+        0.0,
+        0.10270923250148428,
+        0.0
+      ],
+      "normalized_changes": [
+        0.0,
+        0.06521739130434782,
+        0.0,
+        0.0035122225344198263,
+        0.0
+      ],
+      "counterfactual_distance": 0.06872961383876765,
+      "counterfactual_target_probability": 0.7821293472894306,
+      "explanation_pattern": [
+        0.0,
+        0.6171647510746135,
+        0.0,
+        0.3828352489253864,
+        0.0,
+        0.0,
+        0.06521739130434782,
+        0.0,
+        0.0035122225344198263,
+        0.0
+      ],
+      "counterfactual": {
+        "feature_values": [
+          191.0,
+          71.0,
+          130.0,
+          31.0,
+          34.0
+        ],
+        "prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "selected_feature_names": [
+          "blood_pressure",
+          "bmi"
+        ],
+        "target_probability": 0.7821293472894306,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.06872961383876765,
+          "directions": {
+            "blood_pressure": "increase",
+            "bmi": "increase"
+          },
+          "selection_attribution_values": {
+            "blood_pressure": 0.1655764929895403,
+            "bmi": 0.10270923250148428
+          },
+          "normalized_changes": {
+            "blood_pressure": 0.06521739130434782,
+            "bmi": 0.0035122225344198263
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 2,
+      "cluster_rank": 3,
+      "distance_to_cluster_centroid": 0.33531239116163386,
+      "experimental_phase": "training",
+      "selection_role": "diverse_training_example"
+    },
+    {
+      "domain": "diabetes",
+      "source_split": "train",
+      "instance_id": 118,
+      "prediction": 1,
+      "prediction_label": "No Diabetes",
+      "target_label": "Diabetes",
+      "positive_class_probability": 0.9904945686375065,
+      "local_boundary_distance": 0.05337297901580322,
+      "raw_feature_values": [
+        146.0,
+        76.0,
+        194.0,
+        38.2,
+        29.0
+      ],
+      "counterfactual_feature_values": [
+        146.0,
+        80.0,
+        194.0,
+        38.2,
+        30.0
+      ],
+      "selected_indices": [
+        1,
+        4
+      ],
+      "selected_feature_names": [
+        "blood_pressure",
+        "age"
+      ],
+      "attribution_values": [
+        0.0,
+        0.1714676450439322,
+        0.0,
+        0.0,
+        0.0985151604867538
+      ],
+      "normalized_changes": [
+        0.0,
+        0.08695652173913043,
+        0.0,
+        0.0,
+        0.02702702702702703
+      ],
+      "counterfactual_distance": 0.11398354876615746,
+      "counterfactual_target_probability": 0.5356968501141512,
+      "explanation_pattern": [
+        0.0,
+        0.635105797596593,
+        0.0,
+        0.0,
+        0.364894202403407,
+        0.0,
+        0.08695652173913043,
+        0.0,
+        0.0,
+        0.02702702702702703
+      ],
+      "counterfactual": {
+        "feature_values": [
+          146.0,
+          80.0,
+          194.0,
+          38.2,
+          30.0
+        ],
+        "prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "source": "regularized_shap_top2_independent_change_optimization",
+        "generation_mode": "minimal",
+        "target_prediction": {
+          "value": 0,
+          "label": "Diabetes"
+        },
+        "selected_feature_names": [
+          "blood_pressure",
+          "age"
+        ],
+        "target_probability": 0.5356968501141512,
+        "optimization": {
+          "objective": "minimum_total_normalized_change",
+          "objective_value": 0.11398354876615746,
+          "directions": {
+            "blood_pressure": "increase",
+            "age": "increase"
+          },
+          "selection_attribution_values": {
+            "blood_pressure": 0.1714676450439322,
+            "age": 0.0985151604867538
+          },
+          "normalized_changes": {
+            "blood_pressure": 0.08695652173913043,
+            "age": 0.02702702702702703
+          },
+          "constraints": {
+            "exact_selected_feature_count": 2,
+            "all_selected_features_changed": true,
+            "each_change_individually_improves_target_probability": true,
+            "change_amounts_proportional_to_attribution": false
+          },
+          "search_grid_size": 65,
+          "refinement_steps": 3
+        }
+      },
+      "cluster": 2,
+      "cluster_rank": 3,
+      "distance_to_cluster_centroid": 0.4249153221272284,
+      "experimental_phase": "training",
+      "selection_role": "diverse_training_example"
+    }
+  ]
+}

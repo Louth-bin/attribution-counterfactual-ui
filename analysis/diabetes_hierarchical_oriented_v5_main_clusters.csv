@@ -1,0 +1,11 @@
+main_pair,total,prediction_0,prediction_1,chosen_subclusters,training_pattern_available,largest_eligible_training_pattern,largest_eligible_training_pattern_total,selected
+glucose | insulin,35,8,27,4,1,++/++,18,1
+glucose | age,32,7,25,4,1,++/++,16,0
+glucose | bmi,21,8,13,3,0,,0,0
+glucose | blood_pressure,20,7,13,4,1,++/++,8,0
+bmi | age,19,5,14,2,0,,0,0
+blood_pressure | bmi,15,9,6,2,0,,0,0
+blood_pressure | age,13,6,7,1,1,++/++,7,1
+blood_pressure | insulin,12,4,8,1,0,,0,0
+insulin | age,12,5,7,3,0,,0,0
+insulin | bmi,11,8,3,1,0,,0,0

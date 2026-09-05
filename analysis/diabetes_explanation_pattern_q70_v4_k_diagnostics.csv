@@ -1,0 +1,4 @@
+﻿domain,cluster_count,silhouette_score,minimum_cluster_size,passes_minimum_size,chosen
+diabetes,3,0.31377916849461535,64,1,0
+diabetes,4,0.315260847446281,51,1,0
+diabetes,5,0.3269831213226283,47,1,1

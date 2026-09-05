@@ -1,0 +1,11 @@
+﻿domain,cluster,total,prediction_0,prediction_1,selected
+diabetes,0,11,8,3,0
+diabetes,1,35,8,27,1
+diabetes,2,32,7,25,1
+diabetes,3,20,7,13,0
+diabetes,4,19,5,14,0
+diabetes,5,12,5,7,0
+diabetes,6,15,9,6,0
+diabetes,7,21,8,13,1
+diabetes,8,13,6,7,0
+diabetes,9,12,4,8,0

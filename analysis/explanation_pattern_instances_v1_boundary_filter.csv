@@ -1,0 +1,7 @@
+﻿prediction,available,boundary_quantile,shortlisted,maximum_local_boundary_distance,domain,valid_explanation_candidates,failures,failure_reasons
+0,11022,0.2,2205,0.059956821266099414,housing,1989,216,"{""no_valid_two-feature_counterfactual"": 216}"
+1,10531,0.2,2107,0.04443313667980865,housing,1544,563,"{""no_valid_two-feature_counterfactual"": 563}"
+0,484,0.2,97,0.06373660673888838,safelimit,97,0,{}
+1,1516,0.2,304,0.21448584409781618,safelimit,280,24,"{""no_valid_two-feature_counterfactual"": 24}"
+0,135,0.5,68,0.10189921624122138,diabetes,67,1,"{""no_valid_two-feature_counterfactual"": 1}"
+1,257,0.5,129,0.14299903835387062,diabetes,123,6,"{""no_valid_two-feature_counterfactual"": 6}"

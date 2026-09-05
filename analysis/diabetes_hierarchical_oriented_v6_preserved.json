@@ -1,0 +1,71 @@
+{
+  "training": 12,
+  "testing": 20,
+  "preserved_cases": 24,
+  "added_cases": [
+    {
+      "main_pair": "glucose | insulin",
+      "prediction": 0,
+      "source_split": "train",
+      "instance_id": 218,
+      "local_boundary_distance": 0.1638915222798547,
+      "existing_pattern_distance": 1.3318033570449577
+    },
+    {
+      "main_pair": "glucose | insulin",
+      "prediction": 0,
+      "source_split": "train",
+      "instance_id": 61,
+      "local_boundary_distance": 0.0710559952448449,
+      "existing_pattern_distance": 1.5485812392634493
+    },
+    {
+      "main_pair": "glucose | insulin",
+      "prediction": 1,
+      "source_split": "train",
+      "instance_id": 215,
+      "local_boundary_distance": 0.0748664977106396,
+      "existing_pattern_distance": 0.5249972664104394
+    },
+    {
+      "main_pair": "glucose | insulin",
+      "prediction": 1,
+      "source_split": "train",
+      "instance_id": 133,
+      "local_boundary_distance": 0.1290764210881202,
+      "existing_pattern_distance": 1.203869760833897
+    },
+    {
+      "main_pair": "blood_pressure | age",
+      "prediction": 0,
+      "source_split": "train",
+      "instance_id": 117,
+      "local_boundary_distance": 0.150862670453457,
+      "existing_pattern_distance": 1.6698579872537027
+    },
+    {
+      "main_pair": "blood_pressure | age",
+      "prediction": 0,
+      "source_split": "train",
+      "instance_id": 89,
+      "local_boundary_distance": 0.1125414246198572,
+      "existing_pattern_distance": 3.0475296022565486
+    },
+    {
+      "main_pair": "blood_pressure | age",
+      "prediction": 1,
+      "source_split": "test",
+      "instance_id": 28,
+      "local_boundary_distance": 0.1641758521854689,
+      "existing_pattern_distance": 1.8516573303795216
+    },
+    {
+      "main_pair": "blood_pressure | age",
+      "prediction": 1,
+      "source_split": "dev",
+      "instance_id": 24,
+      "local_boundary_distance": 0.1000780692743525,
+      "existing_pattern_distance": 2.5655404991357966
+    }
+  ]
+}

@@ -1,4 +1,0 @@
-xai,participants,median_target_separation,mean_target_separation,median_expected_ordering_rate
-attribution,16,0.24985688361249997,0.19244101227343752,1.0
-counterfactual,20,0.163159881125,0.13548941835125,1.0
-none,16,0.14256078898750002,0.179198542946875,0.7083333333333333

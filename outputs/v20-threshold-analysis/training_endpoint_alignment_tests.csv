@@ -1,9 +1,0 @@
-metric,comparison,effect,p,q within metric
-mean_nearest_training_endpoint_distance,omnibus,1.1957002902757665,0.5499927706372684,0.5499927706372684
-mean_nearest_training_endpoint_distance,none vs attribution,-0.0374804764688412,0.5340292284243271,0.5499927706372684
-mean_nearest_training_endpoint_distance,none vs counterfactual,0.005919081348014638,0.5347334102789811,0.5499927706372684
-mean_nearest_training_endpoint_distance,attribution vs counterfactual,0.04339955781685584,0.3315534209342924,0.5499927706372684
-rate_within_0025_training_endpoint,omnibus,1.1354039438844976,0.566826526420505,0.7142823537989498
-rate_within_0025_training_endpoint,none vs attribution,0.014261700725115373,0.5091891909831854,0.7142823537989498
-rate_within_0025_training_endpoint,none vs counterfactual,-0.0015040650406503986,0.7142823537989498,0.7142823537989498
-rate_within_0025_training_endpoint,attribution vs counterfactual,-0.01576576576576577,0.30820031268867043,0.7142823537989498

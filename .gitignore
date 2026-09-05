@@ -9,6 +9,12 @@ service-account*.json
 # Generated research analyses and local survey-response artifacts.
 # Keep QSF survey definitions and case manifests available for version control.
 analysis/
+exports/
+outputs/*
+!outputs/v25-cognitive-model-fits/
+!outputs/v25-cognitive-model-fits/**
+!outputs/v25-new-cohort-cognitive-model-fits/
+!outputs/v25-new-cohort-cognitive-model-fits/**
 qualtrics/raw_output_*
 qualtrics/qualtrics_results_*
 qualtrics/*.jmp

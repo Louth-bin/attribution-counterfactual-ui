@@ -1,7 +1,0 @@
-﻿prediction,available_held_out,requested_boundary_quantile,qualified_by_effective_filter,effective_boundary_fraction,candidate_sampled_for_explanations,maximum_local_boundary_distance,domain,valid_candidates,generation_failures,failure_reasons
-0,3172,0.2,635,0.2001891551071879,300,0.05428954483491576,housing,281,19,"{""no_two-feature_target-supporting_counterfactual"": 19}"
-1,3295,0.2,659,0.2,300,0.044558020380412094,housing,245,55,"{""no_two-feature_target-supporting_counterfactual"": 55}"
-0,146,0.2,30,0.2054794520547945,30,0.06712049171104786,safelimit,30,0,"{}"
-1,455,0.2,91,0.2,91,0.2219014762756594,safelimit,82,9,"{""no_two-feature_target-supporting_counterfactual"": 9}"
-0,44,0.2,24,0.5454545454545454,24,0.0933933028487444,diabetes,24,0,"{}"
-1,74,0.2,24,0.32432432432432434,24,0.09965977423112102,diabetes,23,1,"{""no_two-feature_target-supporting_counterfactual"": 1}"

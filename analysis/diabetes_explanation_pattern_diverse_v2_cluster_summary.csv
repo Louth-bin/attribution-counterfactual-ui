@@ -1,6 +1,0 @@
-﻿domain,cluster,total,prediction_0,prediction_1,dominant_feature_pair,selected
-diabetes,0,27,10,17,insulin | age,0
-diabetes,1,32,7,25,glucose | insulin,0
-diabetes,2,34,16,18,blood_pressure | insulin,1
-diabetes,3,54,19,35,glucose | age,1
-diabetes,4,43,15,28,bmi | age,1

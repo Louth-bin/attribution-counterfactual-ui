@@ -1,2 +1,0 @@
-scope,interpretation,high_global_poor_cluster,high_global_better_cluster,other_strategy_poor_cluster,other_strategy_better_cluster,odds_ratio,fisher_p,warning
-counterfactual participants only,odds that the high-global fitted strategy falls in the poorer-response edit-pattern cluster,5,5,1,16,16.0,0.015181919529745617,Convergent but not independent: both labels were derived from the same response patterns.

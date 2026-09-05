@@ -1,5 +1,0 @@
-cluster_type,k,silhouette,feature_bootstrap_ari,minimum_cluster_size,cluster_sizes
-exogenous_instance_geometry,2,0.15736953188047453,0.20365223045538375,5,"{""1"": 15, ""2"": 5}"
-exogenous_instance_geometry,3,0.17994232296164003,0.29757265197746297,4,"{""1"": 11, ""2"": 4, ""3"": 5}"
-exogenous_instance_geometry,4,0.1896617531244405,0.4569102850473508,4,"{""1"": 5, ""2"": 4, ""3"": 4, ""4"": 7}"
-exogenous_instance_geometry,5,0.16459889797925426,0.38286423597959435,2,"{""1"": 6, ""2"": 5, ""3"": 2, ""4"": 4, ""5"": 3}"

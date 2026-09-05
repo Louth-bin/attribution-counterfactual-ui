@@ -1,3 +1,0 @@
-﻿prediction,available,boundary_quantile,shortlisted,maximum_local_boundary_distance,domain,valid_explanation_candidates,failures,failure_reasons
-0,135,0.6,81,0.1280400706867941,diabetes,80,1,"{""no_valid_two-feature_counterfactual"": 1}"
-1,257,0.6,155,0.16386945411027978,diabetes,148,7,"{""no_valid_two-feature_counterfactual"": 7}"

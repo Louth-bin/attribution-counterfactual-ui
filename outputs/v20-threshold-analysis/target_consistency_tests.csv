@@ -1,6 +1,0 @@
-scope,comparison,participants,median Diabetes MAE,median No Diabetes MAE,median paired difference,test,statistic,p,q
-all,Diabetes vs No Diabetes threshold CV MAE,52,0.08424309203921701,0.06874181458814338,0.01330913410008117,paired Wilcoxon,425.0,0.01620674994455849,0.08103374972279244
-condition interaction,condition difference in target-label MAE contrast,52,,,,Kruskal-Wallis,0.6478955007256957,0.7232880329298397,0.7232880329298397
-none,Diabetes vs No Diabetes threshold CV MAE,16,0.08607075160705742,0.06676417164008928,0.01521928624108795,paired Wilcoxon,32.0,0.065399169921875,0.1634979248046875
-attribution,Diabetes vs No Diabetes threshold CV MAE,16,0.07668116061875002,0.07889106162500001,0.012718114436666688,paired Wilcoxon,51.0,0.40374755859375,0.5046844482421875
-counterfactual,Diabetes vs No Diabetes threshold CV MAE,20,0.0939619256225,0.06842861786351541,0.01194190425156566,paired Wilcoxon,70.0,0.20244979858398438,0.3374163309733073

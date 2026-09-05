@@ -1,0 +1,40 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+inputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.plausibility-updated.jmp", Windows);
+outputPath = Convert File Path(rootPath || "v0.9_plausibility_validation.txt", Windows);
+scorePath = Convert File Path("C:/Users/Louth/AppData/Local/Temp/plausibility_v09_values_calculated.csv", Windows);
+
+dataTable = Open(inputPath, Invisible);
+scoreTable = Open(scorePath, Invisible);
+columnNames = dataTable << Get Column Names("String");
+valueMismatches = 0;
+trainingNonmissing = 0;
+testingMissing = 0;
+
+For(rowIndex = 1, rowIndex <= N Rows(dataTable), rowIndex++,
+	phaseValue = Lowercase(Char(Column(dataTable, "phase")[rowIndex]));
+	actualScore = Column(dataTable, "plausibility")[rowIndex];
+	expectedScore = Column(scoreTable, "plausibility")[rowIndex];
+	If(Is Missing(actualScore) != Is Missing(expectedScore),
+		valueMismatches++,
+		If(!Is Missing(actualScore) & Abs(actualScore - expectedScore) > 1e-10, valueMismatches++)
+	);
+	If(phaseValue == "training" & !Is Missing(actualScore), trainingNonmissing++);
+	If(phaseValue == "testing" & Is Missing(actualScore), testingMissing++);
+);
+
+summaryText = "rows=" || Char(N Rows(dataTable)) || "\!N";
+summaryText ||= "columns=" || Char(N Cols(dataTable)) || "\!N";
+summaryText ||= "plausibility_position=" || Char(Contains(columnNames, "plausibility")) || "\!N";
+summaryText ||= "actionability_position=" || Char(Contains(columnNames, "actionability (0/1)")) || "\!N";
+summaryText ||= "value_mismatches=" || Char(valueMismatches) || "\!N";
+summaryText ||= "training_nonmissing=" || Char(trainingNonmissing) || "\!N";
+summaryText ||= "testing_missing=" || Char(testingMissing) || "\!N";
+summaryText ||= "script_count=" || Char(N Items(dataTable << Get Table Script Names)) || "\!N";
+summaryText ||= "notes=" || Char(Column(dataTable, "plausibility") << Get Property("Notes")) || "\!N";
+
+Save Text File(outputPath, summaryText);
+Close(scoreTable, No Save);
+Close(dataTable, No Save);
+Exit();

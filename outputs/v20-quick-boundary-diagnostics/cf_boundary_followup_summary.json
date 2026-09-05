@@ -1,0 +1,302 @@
+{
+  "CF rows": 540,
+  "CF participants": 27,
+  "CF nearest-training distance vs boundary distance r": -0.173267374077485,
+  "CF nearest-training distance vs success r": 0.019579459005757,
+  "median nearest training distance across testing rows": 0.3855323007155,
+  "condition summary on close-to-training instances": [
+    {
+      "xai": "counterfactual",
+      "rows": 270,
+      "participants": 27,
+      "mean nearest training distance": 0.3222233388422,
+      "mean boundary distance new": 0.14412776499246324,
+      "sd boundary distance new": 0.12078421603220488,
+      "success rate": 0.45555555555555555,
+      "target-directed rate": 0.7962962962962963,
+      "mean normalized edit distance": 0.5246583297173858,
+      "mean changed features": 2.1037037037037036,
+      "distance-boundary correlation": -0.18592388715907335
+    },
+    {
+      "xai": "attribution",
+      "rows": 160,
+      "participants": 16,
+      "mean nearest training distance": 0.3222233388422,
+      "mean boundary distance new": 0.1462799177140935,
+      "sd boundary distance new": 0.11218394209253549,
+      "success rate": 0.54375,
+      "target-directed rate": 0.85,
+      "mean normalized edit distance": 0.447458147731784,
+      "mean changed features": 1.61875,
+      "distance-boundary correlation": -0.28035752010004766
+    },
+    {
+      "xai": "none",
+      "rows": 190,
+      "participants": 19,
+      "mean nearest training distance": 0.3222233388422,
+      "mean boundary distance new": 0.16017366048577192,
+      "sd boundary distance new": 0.1331933587562686,
+      "success rate": 0.5368421052631579,
+      "target-directed rate": 0.8368421052631579,
+      "mean normalized edit distance": 0.5649732402584283,
+      "mean changed features": 1.9,
+      "distance-boundary correlation": -0.15496271260629838
+    }
+  ],
+  "top 10 participants on close-to-training instances": [
+    {
+      "participant": "R_5cuU4NG0z68t0DW",
+      "xai": "counterfactual",
+      "rows": 10,
+      "participants": 1,
+      "mean nearest training distance": 0.32222333884219995,
+      "mean boundary distance new": 0.06679038797033301,
+      "sd boundary distance new": 0.06856087650368484,
+      "success rate": 0.7,
+      "target-directed rate": 0.9,
+      "mean normalized edit distance": 0.4720630084103,
+      "mean changed features": 2.3,
+      "distance-boundary correlation": 0.5685064092452591
+    },
+    {
+      "participant": "R_1hF6UnZQsvvwBCX",
+      "xai": "counterfactual",
+      "rows": 10,
+      "participants": 1,
+      "mean nearest training distance": 0.3222233388422,
+      "mean boundary distance new": 0.069593614902039,
+      "sd boundary distance new": 0.09163235319156839,
+      "success rate": 0.7,
+      "target-directed rate": 1.0,
+      "mean normalized edit distance": 0.34140724094514,
+      "mean changed features": 1.9,
+      "distance-boundary correlation": -0.06826737720918605
+    },
+    {
+      "participant": "R_6ltB5PoMoQ8gakx",
+      "xai": "counterfactual",
+      "rows": 10,
+      "participants": 1,
+      "mean nearest training distance": 0.32222333884219995,
+      "mean boundary distance new": 0.07438267427831,
+      "sd boundary distance new": 0.056561177525376254,
+      "success rate": 0.4,
+      "target-directed rate": 1.0,
+      "mean normalized edit distance": 0.7376135114690199,
+      "mean changed features": 2.8,
+      "distance-boundary correlation": -0.30534192524979853
+    },
+    {
+      "participant": "R_6P1wxXrNHroPf9i",
+      "xai": "counterfactual",
+      "rows": 10,
+      "participants": 1,
+      "mean nearest training distance": 0.3222233388422,
+      "mean boundary distance new": 0.07915495117542001,
+      "sd boundary distance new": 0.09267025520469642,
+      "success rate": 0.4,
+      "target-directed rate": 0.8,
+      "mean normalized edit distance": 0.48448044404240004,
+      "mean changed features": 2.0,
+      "distance-boundary correlation": -0.1467827334469845
+    },
+    {
+      "participant": "R_6dM4kpwwdD2TmDK",
+      "xai": "none",
+      "rows": 10,
+      "participants": 1,
+      "mean nearest training distance": 0.32222333884219995,
+      "mean boundary distance new": 0.0821779211087182,
+      "sd boundary distance new": 0.09581017943723247,
+      "success rate": 0.7,
+      "target-directed rate": 1.0,
+      "mean normalized edit distance": 0.5002178849775001,
+      "mean changed features": 2.4,
+      "distance-boundary correlation": 0.1040633298751942
+    },
+    {
+      "participant": "R_1bN1m4OYZIanJ5K",
+      "xai": "none",
+      "rows": 10,
+      "participants": 1,
+      "mean nearest training distance": 0.32222333884219995,
+      "mean boundary distance new": 0.08353207971550299,
+      "sd boundary distance new": 0.0657931345739913,
+      "success rate": 0.6,
+      "target-directed rate": 1.0,
+      "mean normalized edit distance": 0.3244122405646,
+      "mean changed features": 1.4,
+      "distance-boundary correlation": 0.08665087085273482
+    },
+    {
+      "participant": "R_7QQowZQ43kZcCj7",
+      "xai": "counterfactual",
+      "rows": 10,
+      "participants": 1,
+      "mean nearest training distance": 0.32222333884219995,
+      "mean boundary distance new": 0.08720949216228999,
+      "sd boundary distance new": 0.07907652273868362,
+      "success rate": 0.6,
+      "target-directed rate": 0.9,
+      "mean normalized edit distance": 0.6036443408597,
+      "mean changed features": 1.8,
+      "distance-boundary correlation": -0.8532894744090456
+    },
+    {
+      "participant": "R_6upJU84Jtf3Faf5",
+      "xai": "none",
+      "rows": 10,
+      "participants": 1,
+      "mean nearest training distance": 0.3222233388422,
+      "mean boundary distance new": 0.08888639423239,
+      "sd boundary distance new": 0.0380097843354076,
+      "success rate": 0.5,
+      "target-directed rate": 0.9,
+      "mean normalized edit distance": 0.46136689736219993,
+      "mean changed features": 2.1,
+      "distance-boundary correlation": -0.251259956321582
+    },
+    {
+      "participant": "R_5tEkygPCjFKzz2T",
+      "xai": "counterfactual",
+      "rows": 10,
+      "participants": 1,
+      "mean nearest training distance": 0.3222233388422,
+      "mean boundary distance new": 0.09286953666257,
+      "sd boundary distance new": 0.06930507310197256,
+      "success rate": 0.4,
+      "target-directed rate": 0.8,
+      "mean normalized edit distance": 0.37989688653302994,
+      "mean changed features": 2.6,
+      "distance-boundary correlation": -0.4173707362478031
+    },
+    {
+      "participant": "R_1ihbKBZG0EAXF8D",
+      "xai": "counterfactual",
+      "rows": 10,
+      "participants": 1,
+      "mean nearest training distance": 0.3222233388422,
+      "mean boundary distance new": 0.092993475817348,
+      "sd boundary distance new": 0.0699279144116387,
+      "success rate": 0.5,
+      "target-directed rate": 1.0,
+      "mean normalized edit distance": 0.5138323752263,
+      "mean changed features": 2.1,
+      "distance-boundary correlation": 0.0739801222547979
+    }
+  ],
+  "top 10 close-to-training participant xai counts": {
+    "counterfactual": 7,
+    "none": 3
+  },
+  "within-condition two-group summary": [
+    {
+      "xai": "counterfactual",
+      "boundary group": "closer-boundary group",
+      "participants": 18,
+      "mean boundary distance new": 0.10315379020781255,
+      "mean sd boundary distance new": 0.08333212520666734,
+      "mean boundary distance when correct": 0.08187977313422344,
+      "mean boundary distance when wrong": 0.11496777517567448,
+      "success rate": 0.44722222222222224,
+      "target-directed rate": 0.7694444444444445,
+      "mean normalized edit distance": 0.40756495776474955,
+      "mean changed features": 1.8527777777777779,
+      "model family counts": {
+        "weighted examples": 3,
+        "feature contribution": 15
+      }
+    },
+    {
+      "xai": "counterfactual",
+      "boundary group": "farther/spread group",
+      "participants": 9,
+      "mean boundary distance new": 0.1764521878255011,
+      "mean sd boundary distance new": 0.12011673827217278,
+      "mean boundary distance when correct": 0.15332037887194522,
+      "mean boundary distance when wrong": 0.1974892840849082,
+      "success rate": 0.5277777777777778,
+      "target-directed rate": 0.7055555555555555,
+      "mean normalized edit distance": 0.7516131449911216,
+      "mean changed features": 2.716666666666667,
+      "model family counts": {
+        "weighted examples": 5,
+        "feature contribution": 4
+      }
+    },
+    {
+      "xai": "attribution",
+      "boundary group": "closer-boundary group",
+      "participants": 7,
+      "mean boundary distance new": 0.1019813761445625,
+      "mean sd boundary distance new": 0.09814422576557828,
+      "mean boundary distance when correct": 0.06850983913589397,
+      "mean boundary distance when wrong": 0.12314628137239493,
+      "success rate": 0.4428571428571428,
+      "target-directed rate": 0.8071428571428572,
+      "mean normalized edit distance": 0.2734697243867582,
+      "mean changed features": 1.1714285714285713,
+      "model family counts": {
+        "weighted examples": 2,
+        "feature contribution": 5
+      }
+    },
+    {
+      "xai": "attribution",
+      "boundary group": "farther/spread group",
+      "participants": 9,
+      "mean boundary distance new": 0.12833416343107826,
+      "mean sd boundary distance new": 0.08582148092146949,
+      "mean boundary distance when correct": 0.12451258869334575,
+      "mean boundary distance when wrong": 0.11712757326423022,
+      "success rate": 0.6111111111111112,
+      "target-directed rate": 0.8388888888888889,
+      "mean normalized edit distance": 0.6063586171600329,
+      "mean changed features": 2.05,
+      "model family counts": {
+        "feature contribution": 9
+      }
+    },
+    {
+      "xai": "none",
+      "boundary group": "closer-boundary group",
+      "participants": 13,
+      "mean boundary distance new": 0.11549943920629883,
+      "mean sd boundary distance new": 0.09729983909053073,
+      "mean boundary distance when correct": 0.08927413693073433,
+      "mean boundary distance when wrong": 0.127214951405338,
+      "success rate": 0.4230769230769231,
+      "target-directed rate": 0.7576923076923077,
+      "mean normalized edit distance": 0.3695644252247265,
+      "mean changed features": 1.5076923076923079,
+      "model family counts": {
+        "weighted examples": 6,
+        "feature contribution": 7
+      }
+    },
+    {
+      "xai": "none",
+      "boundary group": "farther/spread group",
+      "participants": 6,
+      "mean boundary distance new": 0.18461063624732257,
+      "mean sd boundary distance new": 0.0969392135957892,
+      "mean boundary distance when correct": 0.19271526704241104,
+      "mean boundary distance when wrong": 0.08248856416155775,
+      "success rate": 0.8166666666666668,
+      "target-directed rate": 0.9333333333333332,
+      "mean normalized edit distance": 0.9375026488344084,
+      "mean changed features": 2.7916666666666665,
+      "model family counts": {
+        "feature contribution": 3,
+        "weighted examples": 3
+      }
+    }
+  ],
+  "outputs": {
+    "participant near-training summary": "outputs\\v20-quick-boundary-diagnostics\\participant_near_training_boundary_summary.csv",
+    "participant boundary groups": "outputs\\v20-quick-boundary-diagnostics\\participant_boundary_groups_by_condition.csv",
+    "condition boundary group summary": "outputs\\v20-quick-boundary-diagnostics\\condition_boundary_group_summary.csv"
+  }
+}

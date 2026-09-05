@@ -1,0 +1,119 @@
+Names Default To Here(1);
+
+inputPath = Convert File Path("C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/qualtrics/qualtrics_results_v1.0.jmp", Windows);
+outputPath = Convert File Path("C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/qualtrics/qualtrics_results_v1.0.cleaned-staging.jmp", Windows);
+reportPath = Convert File Path("C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/qualtrics/v1.0_strategy_cleanup_validation.txt", Windows);
+
+dt = Open(inputPath, Invisible);
+originalScripts = dt << Get Table Script Names;
+
+detailName = "best counterfactual strategy";
+groupName = "best-fitting strategy group";
+fitName = "counterfactual strategy CV normalized L1";
+cleanFitName = "strategy fit error (CV normalized L1)";
+
+For(rowIndex = 1, rowIndex <= N Rows(dt), rowIndex++,
+	detail = Char(Column(dt, detailName)[rowIndex]);
+	group = Match(
+		detail,
+		"change_most_influential_attributes_by_fixed_amount", "Case-specific influential attributes",
+		"change_most_influential_attributes_to_flip", "Case-specific influential attributes",
+		"change_most_contributing_attributes", "Case-specific influential attributes",
+		"change_largest_target_profile_mismatches", "Target-profile comparison",
+		"set_attributes_to_target_profile_values", "Target-profile comparison",
+		"change_attributes_not_matching_target_profile", "Target-profile comparison",
+		"change_toward_remembered_exemplar", "Remembered training example",
+		"copy_changes_from_remembered_example", "Remembered training example",
+		""
+	);
+	Column(dt, detailName)[rowIndex] = group;
+);
+
+Column(dt, detailName) << Set Name(groupName);
+Column(dt, fitName) << Set Name(cleanFitName);
+
+removeColumns = {
+	"participant change cluster",
+	"participant change strategy",
+	"supported forward mental models (delta BIC < 2)",
+	"forward mental model delta BIC to second",
+	"exemplar forward NLL",
+	"attribution forward NLL",
+	"prototype forward NLL",
+	"minimum-loss counterfactual strategy",
+	"selected strategy fitted parameter count",
+	"supported counterfactual strategies (one SE)",
+	"counterfactual strategy fit conclusion",
+	"counterfactual-implied mental model",
+	"supported counterfactual-implied mental models",
+	"counterfactual strategy feature-selection F1",
+	"counterfactual strategy direction accuracy",
+	"counterfactual strategy gap to second",
+	"counterfactual strategy fitted k",
+	"counterfactual strategy fixed amount"
+};
+
+For(columnIndex = 1, columnIndex <= N Items(removeColumns), columnIndex++,
+	If(Contains(dt << Get Column Names("String"), removeColumns[columnIndex]),
+		dt << Delete Columns(removeColumns[columnIndex])
+	);
+);
+
+Column(dt, "reasoning strategy") << Set Property(
+	"Notes",
+	"Human-interpretable participant strategy inferred from the pattern of testing edits and, for the diabetes participants, their open-ended explanations. This is the substantive strategy classification. It may be missing when the earlier domain data were not manually coded."
+);
+Column(dt, groupName) << Set Property(
+	"Notes",
+	"Best-fitting broad computational strategy family, repeated for all rows from the participant. Detailed model variants are combined as follows: Case-specific influential attributes = most influential by fixed amount, most influential until a predicted flip, or largest current contributors; Target-profile comparison = largest profile mismatches, set values to the target profile, or change all profile mismatches; Remembered training example = move toward an exemplar or reuse an example's changes. This is a model fit, not proof of the participant's conscious reasoning."
+);
+Column(dt, cleanFitName) << Set Property(
+	"Notes",
+	"Cross-validated mean normalized L1 prediction error of the participant's best-fitting detailed counterfactual strategy model. Lower values mean that model reproduced the participant's edits more closely. Use this to judge how much confidence to place in the best-fitting strategy group."
+);
+Column(dt, "best forward mental model") << Set Property(
+	"Notes",
+	"Best-fitting mental model for the participant's training-phase forward predictions. This concerns prediction learning, not the later counterfactual editing strategy."
+);
+Column(dt, "forward mental model fit conclusion") << Set Property(
+	"Notes",
+	"Whether the forward-prediction mental-model candidates were distinguishable for this participant. Retained as the compact qualification for the best forward mental model."
+);
+
+dt << Save As(outputPath);
+updatedScripts = dt << Get Table Script Names;
+
+groupCounts = Associative Array();
+participantGroup = Associative Array();
+missingGroup = 0;
+missingFit = 0;
+For(rowIndex = 1, rowIndex <= N Rows(dt), rowIndex++,
+	group = Char(Column(dt, groupName)[rowIndex]);
+	participant = Char(Column(dt, "participant")[rowIndex]);
+	If(group == "", missingGroup++);
+	If(Is Missing(Column(dt, cleanFitName)[rowIndex]), missingFit++);
+	participantGroup[participant] = group;
+);
+participantKeys = participantGroup << Get Keys;
+For(index = 1, index <= N Items(participantKeys), index++,
+	group = participantGroup[participantKeys[index]];
+	If(!Contains(groupCounts, group), groupCounts[group] = 0);
+	groupCounts[group] = groupCounts[group] + 1;
+);
+
+remainingNames = dt << Get Column Names("String");
+removedStillPresent = 0;
+For(index = 1, index <= N Items(removeColumns), index++,
+	If(Contains(remainingNames, removeColumns[index]), removedStillPresent++);
+);
+
+text = "rows=" || Char(N Rows(dt)) || " columns=" || Char(N Cols(dt)) || "\!N";
+text ||= "scripts_before=" || Char(originalScripts) || "\!N";
+text ||= "scripts_after=" || Char(updatedScripts) || "\!N";
+text ||= "removed_columns=" || Char(N Items(removeColumns)) || " removed_still_present=" || Char(removedStillPresent) || "\!N";
+text ||= "participant_group_counts=" || Char(groupCounts) || "\!N";
+text ||= "missing_group_rows=" || Char(missingGroup) || " missing_fit_rows=" || Char(missingFit) || "\!N";
+Save Text File(reportPath, text);
+
+Close(dt, No Save);
+Exit();

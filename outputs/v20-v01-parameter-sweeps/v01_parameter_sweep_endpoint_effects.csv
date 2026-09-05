@@ -1,0 +1,181 @@
+﻿cohort,xai,xai label,parameter,parameter label,low endpoint,high endpoint,metric,metric label,applicable participants,mean change (high - low),95% bootstrap CI low,95% bootstrap CI high
+direction-qualified 46,attribution,Feature attribution,age actionable,Age actionable,0.0,1.0,actionability,Actionability rate,16,-0.278125,-0.3875,-0.178125
+direction-qualified 46,attribution,Feature attribution,age actionable,Age actionable,0.0,1.0,boundary improvement,Boundary-distance improvement,16,0.005314802230984064,-0.00283832054971933,0.015312632240635869
+direction-qualified 46,attribution,Feature attribution,age actionable,Age actionable,0.0,1.0,edit L1,Normalized edit distance (L1),16,0.009566250165197535,-0.008997193896015812,0.026926870577633037
+direction-qualified 46,attribution,Feature attribution,age actionable,Age actionable,0.0,1.0,plausibility,Plausibility,16,0.0007799776673065653,-0.0017150913489063894,0.0032849025903045627
+direction-qualified 46,attribution,Feature attribution,age actionable,Age actionable,0.0,1.0,success,Counterfactual success rate,16,-0.03601973684210526,-0.062499999999999986,-0.0125
+direction-qualified 46,attribution,Feature attribution,age actionable,Age actionable,0.0,1.0,target confidence gain,Target-confidence gain,16,-0.022437607571245903,-0.036847967735488096,-0.008304934335373345
+direction-qualified 46,attribution,Feature attribution,alpha,Global relevance reliance (α),0.0,1.0,actionability,Actionability rate,14,0.060714285714285714,0.0,0.13214285714285715
+direction-qualified 46,attribution,Feature attribution,alpha,Global relevance reliance (α),0.0,1.0,boundary improvement,Boundary-distance improvement,14,-0.04805673083882371,-0.05938178582204107,-0.03728493345253869
+direction-qualified 46,attribution,Feature attribution,alpha,Global relevance reliance (α),0.0,1.0,edit L1,Normalized edit distance (L1),14,-0.10676695070970076,-0.12187197112457797,-0.09116625929360568
+direction-qualified 46,attribution,Feature attribution,alpha,Global relevance reliance (α),0.0,1.0,plausibility,Plausibility,14,-0.011588213334242203,-0.017067300358890022,-0.006542472123778621
+direction-qualified 46,attribution,Feature attribution,alpha,Global relevance reliance (α),0.0,1.0,success,Counterfactual success rate,14,0.02142857142857143,-0.024999999999999984,0.06785714285714285
+direction-qualified 46,attribution,Feature attribution,alpha,Global relevance reliance (α),0.0,1.0,target confidence gain,Target-confidence gain,14,0.024630934349684257,-0.011456926170134642,0.058603530846090046
+direction-qualified 46,attribution,Feature attribution,eta,Explanation reliance (η),0.0,1.0,actionability,Actionability rate,16,0.165625,0.034375,0.31562500000000004
+direction-qualified 46,attribution,Feature attribution,eta,Explanation reliance (η),0.0,1.0,boundary improvement,Boundary-distance improvement,16,0.03068568417874811,0.014426640464997875,0.04435878165372565
+direction-qualified 46,attribution,Feature attribution,eta,Explanation reliance (η),0.0,1.0,edit L1,Normalized edit distance (L1),16,-0.08825164852935372,-0.11076242660330594,-0.06544373644039889
+direction-qualified 46,attribution,Feature attribution,eta,Explanation reliance (η),0.0,1.0,plausibility,Plausibility,16,0.008953748084818566,0.0068196361703454405,0.011051732853533877
+direction-qualified 46,attribution,Feature attribution,eta,Explanation reliance (η),0.0,1.0,success,Counterfactual success rate,16,-0.009374999999999994,-0.04687499999999999,0.031250000000000014
+direction-qualified 46,attribution,Feature attribution,eta,Explanation reliance (η),0.0,1.0,target confidence gain,Target-confidence gain,16,-0.0019707532859067622,-0.035681797835585165,0.032535909338790636
+direction-qualified 46,attribution,Feature attribution,lambda,Exemplar locality (λ),0.0,6.0,actionability,Actionability rate,2,0.0,0.0,0.0
+direction-qualified 46,attribution,Feature attribution,lambda,Exemplar locality (λ),0.0,6.0,boundary improvement,Boundary-distance improvement,2,0.013364281608698955,0.011457596970072974,0.015270966247324935
+direction-qualified 46,attribution,Feature attribution,lambda,Exemplar locality (λ),0.0,6.0,edit L1,Normalized edit distance (L1),2,-0.032647781820935584,-0.04873285934190835,-0.016562704299962816
+direction-qualified 46,attribution,Feature attribution,lambda,Exemplar locality (λ),0.0,6.0,plausibility,Plausibility,2,0.0015357071964824387,0.00040934793328994967,0.0026620664596749277
+direction-qualified 46,attribution,Feature attribution,lambda,Exemplar locality (λ),0.0,6.0,success,Counterfactual success rate,2,-0.050000000000000044,-0.050000000000000044,-0.050000000000000044
+direction-qualified 46,attribution,Feature attribution,lambda,Exemplar locality (λ),0.0,6.0,target confidence gain,Target-confidence gain,2,-0.03700530985694081,-0.0442820071000668,-0.02972861261381482
+direction-qualified 46,attribution,Feature attribution,rho,Additive change margin (ρ),0.0,0.3,actionability,Actionability rate,16,-0.006249999999999999,-0.018749999999999996,0.0
+direction-qualified 46,attribution,Feature attribution,rho,Additive change margin (ρ),0.0,0.3,boundary improvement,Boundary-distance improvement,16,-0.10520429732120529,-0.11745677438102896,-0.09330154168888588
+direction-qualified 46,attribution,Feature attribution,rho,Additive change margin (ρ),0.0,0.3,edit L1,Normalized edit distance (L1),16,0.4661415589426614,0.39338565036191125,0.5363088289154265
+direction-qualified 46,attribution,Feature attribution,rho,Additive change margin (ρ),0.0,0.3,plausibility,Plausibility,16,-0.03550137129609043,-0.041607558278196115,-0.03045053705319744
+direction-qualified 46,attribution,Feature attribution,rho,Additive change margin (ρ),0.0,0.3,success,Counterfactual success rate,16,0.29374999999999996,0.253125,0.3375
+direction-qualified 46,attribution,Feature attribution,rho,Additive change margin (ρ),0.0,0.3,target confidence gain,Target-confidence gain,16,0.2601088114794379,0.21959607236002868,0.29872696197981913
+direction-qualified 46,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,1.0,actionability,Actionability rate,17,-0.2823529411764706,-0.4323529411764706,-0.14411764705882354
+direction-qualified 46,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,1.0,boundary improvement,Boundary-distance improvement,17,0.013618252051495744,0.0033034345887382396,0.02624019727106837
+direction-qualified 46,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,1.0,edit L1,Normalized edit distance (L1),17,0.006113588293564431,-0.013561823067374022,0.021434419592603945
+direction-qualified 46,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,1.0,plausibility,Plausibility,17,0.0010945794097383715,-0.0008873982119668855,0.003638826199467764
+direction-qualified 46,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,1.0,success,Counterfactual success rate,17,-0.004024767801857585,-0.05171439628482974,0.038239164086687275
+direction-qualified 46,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,1.0,target confidence gain,Target-confidence gain,17,-0.0018338457419446957,-0.039979863685220135,0.03383026474753544
+direction-qualified 46,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.0,1.0,actionability,Actionability rate,10,0.11000000000000001,-0.0001249999999999572,0.27
+direction-qualified 46,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.0,1.0,boundary improvement,Boundary-distance improvement,10,-0.043352150137635194,-0.06016994797083752,-0.028151147880739122
+direction-qualified 46,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.0,1.0,edit L1,Normalized edit distance (L1),10,-0.07386593546161044,-0.09685992397880913,-0.055223552559046554
+direction-qualified 46,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.0,1.0,plausibility,Plausibility,10,-0.011485098288711281,-0.016398501285494364,-0.006337073659389465
+direction-qualified 46,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.0,1.0,success,Counterfactual success rate,10,0.04500000000000002,-0.009999999999999998,0.09500000000000004
+direction-qualified 46,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.0,1.0,target confidence gain,Target-confidence gain,10,0.02726738555953535,-0.015856286710974374,0.06775581088890396
+direction-qualified 46,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.0,1.0,actionability,Actionability rate,7,0.43571428571428567,0.17857142857142858,0.6785714285714286
+direction-qualified 46,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.0,1.0,boundary improvement,Boundary-distance improvement,7,-0.03692027391428933,-0.05011189204034904,-0.02124935037211225
+direction-qualified 46,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.0,1.0,edit L1,Normalized edit distance (L1),7,-0.19394867700408322,-0.22012064362233602,-0.16554227757265857
+direction-qualified 46,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.0,1.0,plausibility,Plausibility,7,0.0024087307291615107,-0.0017555153842949436,0.006735647152313705
+direction-qualified 46,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.0,1.0,success,Counterfactual success rate,7,-0.06428571428571427,-0.16428571428571428,0.035714285714285754
+direction-qualified 46,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.0,1.0,target confidence gain,Target-confidence gain,7,-0.01914843454995877,-0.12343415067926648,0.0725433975297634
+direction-qualified 46,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,1.0,actionability,Actionability rate,17,0.17058823529411765,0.026470588235294114,0.33242647058823427
+direction-qualified 46,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,1.0,boundary improvement,Boundary-distance improvement,17,0.029108949503878472,0.0111992574708841,0.04758677451578852
+direction-qualified 46,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,1.0,edit L1,Normalized edit distance (L1),17,-0.04925755631234678,-0.07770084370223437,-0.023648925476002936
+direction-qualified 46,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,1.0,plausibility,Plausibility,17,0.006616452109018015,0.0034458756796944207,0.010348700761300525
+direction-qualified 46,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,1.0,success,Counterfactual success rate,17,0.04117647058823528,-0.005882352941176489,0.09117647058823529
+direction-qualified 46,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,1.0,target confidence gain,Target-confidence gain,17,0.04155273620097039,0.006475655995294308,0.07550535593353877
+direction-qualified 46,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),0.0,6.0,actionability,Actionability rate,7,0.0,0.0,0.0
+direction-qualified 46,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),0.0,6.0,boundary improvement,Boundary-distance improvement,7,0.0060901860901106395,-0.004597063461947877,0.01744992636969772
+direction-qualified 46,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),0.0,6.0,edit L1,Normalized edit distance (L1),7,-0.025226729901012483,-0.029907908299827552,-0.02102955348503756
+direction-qualified 46,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),0.0,6.0,plausibility,Plausibility,7,0.0036087165071726967,0.0009104437542130718,0.006313604838874855
+direction-qualified 46,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),0.0,6.0,success,Counterfactual success rate,7,0.04285714285714288,-0.05714285714285715,0.1571428571428572
+direction-qualified 46,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),0.0,6.0,target confidence gain,Target-confidence gain,7,0.07285296854042887,-0.007105912548887713,0.1593486394944818
+direction-qualified 46,counterfactual,Counterfactual example,rho,Additive change margin (ρ),0.0,0.3,actionability,Actionability rate,17,0.0,0.0,0.0
+direction-qualified 46,counterfactual,Counterfactual example,rho,Additive change margin (ρ),0.0,0.3,boundary improvement,Boundary-distance improvement,17,-0.11833568378445503,-0.1379470127719121,-0.09989786404245282
+direction-qualified 46,counterfactual,Counterfactual example,rho,Additive change margin (ρ),0.0,0.3,edit L1,Normalized edit distance (L1),17,0.6014081790383037,0.5285982576669709,0.6742067157775388
+direction-qualified 46,counterfactual,Counterfactual example,rho,Additive change margin (ρ),0.0,0.3,plausibility,Plausibility,17,-0.037768343785129395,-0.04086969944924548,-0.034252867660482064
+direction-qualified 46,counterfactual,Counterfactual example,rho,Additive change margin (ρ),0.0,0.3,success,Counterfactual success rate,17,0.3411764705882353,0.23529411764705882,0.4264705882352941
+direction-qualified 46,counterfactual,Counterfactual example,rho,Additive change margin (ρ),0.0,0.3,target confidence gain,Target-confidence gain,17,0.3385299694458893,0.24986600651921628,0.41178509696383714
+direction-qualified 46,none,No XAI,age actionable,Age actionable,0.0,1.0,actionability,Actionability rate,13,-0.6769230769230771,-0.7307692307692307,-0.6192307692307693
+direction-qualified 46,none,No XAI,age actionable,Age actionable,0.0,1.0,boundary improvement,Boundary-distance improvement,13,0.028863852540976762,0.007933382846243755,0.05068322789166556
+direction-qualified 46,none,No XAI,age actionable,Age actionable,0.0,1.0,edit L1,Normalized edit distance (L1),13,0.03254927977696283,-0.02693830737828678,0.09464529609553983
+direction-qualified 46,none,No XAI,age actionable,Age actionable,0.0,1.0,plausibility,Plausibility,13,0.003767573193895526,-0.0002504392571192574,0.008070855335683438
+direction-qualified 46,none,No XAI,age actionable,Age actionable,0.0,1.0,success,Counterfactual success rate,13,-0.0068825910931173875,-0.07995951417004045,0.06702429149797545
+direction-qualified 46,none,No XAI,age actionable,Age actionable,0.0,1.0,target confidence gain,Target-confidence gain,13,-0.005022740235099081,-0.05777392256834134,0.049483983147470156
+direction-qualified 46,none,No XAI,alpha,Global relevance reliance (α),0.0,1.0,actionability,Actionability rate,6,0.0,0.0,0.0
+direction-qualified 46,none,No XAI,alpha,Global relevance reliance (α),0.0,1.0,boundary improvement,Boundary-distance improvement,6,-0.026130627058944898,-0.03887997894521493,-0.00949500876160883
+direction-qualified 46,none,No XAI,alpha,Global relevance reliance (α),0.0,1.0,edit L1,Normalized edit distance (L1),6,-0.11128569042283372,-0.1459931386781653,-0.0810352570659868
+direction-qualified 46,none,No XAI,alpha,Global relevance reliance (α),0.0,1.0,plausibility,Plausibility,6,-0.008590430071632016,-0.013892121418268955,-0.0026720356897389865
+direction-qualified 46,none,No XAI,alpha,Global relevance reliance (α),0.0,1.0,success,Counterfactual success rate,6,-0.05000000000000002,-0.10833333333333334,0.008333333333333295
+direction-qualified 46,none,No XAI,alpha,Global relevance reliance (α),0.0,1.0,target confidence gain,Target-confidence gain,6,-0.024795733212940447,-0.05140033757840397,0.00013657160073580568
+direction-qualified 46,none,No XAI,lambda,Exemplar locality (λ),0.0,6.0,actionability,Actionability rate,7,0.014285714285714287,0.0,0.02857142857142858
+direction-qualified 46,none,No XAI,lambda,Exemplar locality (λ),0.0,6.0,boundary improvement,Boundary-distance improvement,7,0.01698014333248437,0.011552910698509422,0.02329862445591832
+direction-qualified 46,none,No XAI,lambda,Exemplar locality (λ),0.0,6.0,edit L1,Normalized edit distance (L1),7,-0.028073093931993896,-0.034436766283129014,-0.021418988454471283
+direction-qualified 46,none,No XAI,lambda,Exemplar locality (λ),0.0,6.0,plausibility,Plausibility,7,-0.0005006379492282458,-0.002299430652373876,0.0012626492724831756
+direction-qualified 46,none,No XAI,lambda,Exemplar locality (λ),0.0,6.0,success,Counterfactual success rate,7,-0.07857142857142856,-0.16428571428571428,-0.014285714285714275
+direction-qualified 46,none,No XAI,lambda,Exemplar locality (λ),0.0,6.0,target confidence gain,Target-confidence gain,7,-0.05245548701537791,-0.08174660493926773,-0.02428431822529953
+direction-qualified 46,none,No XAI,rho,Additive change margin (ρ),0.0,0.3,actionability,Actionability rate,13,0.0,0.0,0.0
+direction-qualified 46,none,No XAI,rho,Additive change margin (ρ),0.0,0.3,boundary improvement,Boundary-distance improvement,13,-0.10785200957406721,-0.12292203362961299,-0.09326987303075514
+direction-qualified 46,none,No XAI,rho,Additive change margin (ρ),0.0,0.3,edit L1,Normalized edit distance (L1),13,0.6046159630057241,0.5033432892102107,0.7049424051498008
+direction-qualified 46,none,No XAI,rho,Additive change margin (ρ),0.0,0.3,plausibility,Plausibility,13,-0.034576398908404346,-0.03873868564747291,-0.030330501697144636
+direction-qualified 46,none,No XAI,rho,Additive change margin (ρ),0.0,0.3,success,Counterfactual success rate,13,0.24615384615384617,0.16153846153846158,0.3423076923076923
+direction-qualified 46,none,No XAI,rho,Additive change margin (ρ),0.0,0.3,target confidence gain,Target-confidence gain,13,0.23456707951863898,0.17703168735792943,0.2976505706078712
+all 62,attribution,Feature attribution,age actionable,Age actionable,0.0,1.0,actionability,Actionability rate,16,-0.278125,-0.3875,-0.178125
+all 62,attribution,Feature attribution,age actionable,Age actionable,0.0,1.0,boundary improvement,Boundary-distance improvement,16,0.005314802230984064,-0.00283832054971933,0.015312632240635869
+all 62,attribution,Feature attribution,age actionable,Age actionable,0.0,1.0,edit L1,Normalized edit distance (L1),16,0.009566250165197535,-0.008997193896015812,0.026926870577633037
+all 62,attribution,Feature attribution,age actionable,Age actionable,0.0,1.0,plausibility,Plausibility,16,0.0007799776673065653,-0.0017150913489063894,0.0032849025903045627
+all 62,attribution,Feature attribution,age actionable,Age actionable,0.0,1.0,success,Counterfactual success rate,16,-0.03601973684210526,-0.062499999999999986,-0.0125
+all 62,attribution,Feature attribution,age actionable,Age actionable,0.0,1.0,target confidence gain,Target-confidence gain,16,-0.022437607571245903,-0.036847967735488096,-0.008304934335373345
+all 62,attribution,Feature attribution,alpha,Global relevance reliance (α),0.0,1.0,actionability,Actionability rate,14,0.060714285714285714,0.0,0.13214285714285715
+all 62,attribution,Feature attribution,alpha,Global relevance reliance (α),0.0,1.0,boundary improvement,Boundary-distance improvement,14,-0.04805673083882371,-0.05938178582204107,-0.03728493345253869
+all 62,attribution,Feature attribution,alpha,Global relevance reliance (α),0.0,1.0,edit L1,Normalized edit distance (L1),14,-0.10676695070970076,-0.12187197112457797,-0.09116625929360568
+all 62,attribution,Feature attribution,alpha,Global relevance reliance (α),0.0,1.0,plausibility,Plausibility,14,-0.011588213334242203,-0.017067300358890022,-0.006542472123778621
+all 62,attribution,Feature attribution,alpha,Global relevance reliance (α),0.0,1.0,success,Counterfactual success rate,14,0.02142857142857143,-0.024999999999999984,0.06785714285714285
+all 62,attribution,Feature attribution,alpha,Global relevance reliance (α),0.0,1.0,target confidence gain,Target-confidence gain,14,0.024630934349684257,-0.011456926170134642,0.058603530846090046
+all 62,attribution,Feature attribution,eta,Explanation reliance (η),0.0,1.0,actionability,Actionability rate,16,0.165625,0.034375,0.31562500000000004
+all 62,attribution,Feature attribution,eta,Explanation reliance (η),0.0,1.0,boundary improvement,Boundary-distance improvement,16,0.03068568417874811,0.014426640464997875,0.04435878165372565
+all 62,attribution,Feature attribution,eta,Explanation reliance (η),0.0,1.0,edit L1,Normalized edit distance (L1),16,-0.08825164852935372,-0.11076242660330594,-0.06544373644039889
+all 62,attribution,Feature attribution,eta,Explanation reliance (η),0.0,1.0,plausibility,Plausibility,16,0.008953748084818566,0.0068196361703454405,0.011051732853533877
+all 62,attribution,Feature attribution,eta,Explanation reliance (η),0.0,1.0,success,Counterfactual success rate,16,-0.009374999999999994,-0.04687499999999999,0.031250000000000014
+all 62,attribution,Feature attribution,eta,Explanation reliance (η),0.0,1.0,target confidence gain,Target-confidence gain,16,-0.0019707532859067622,-0.035681797835585165,0.032535909338790636
+all 62,attribution,Feature attribution,lambda,Exemplar locality (λ),0.0,6.0,actionability,Actionability rate,2,0.0,0.0,0.0
+all 62,attribution,Feature attribution,lambda,Exemplar locality (λ),0.0,6.0,boundary improvement,Boundary-distance improvement,2,0.013364281608698955,0.011457596970072974,0.015270966247324935
+all 62,attribution,Feature attribution,lambda,Exemplar locality (λ),0.0,6.0,edit L1,Normalized edit distance (L1),2,-0.032647781820935584,-0.04873285934190835,-0.016562704299962816
+all 62,attribution,Feature attribution,lambda,Exemplar locality (λ),0.0,6.0,plausibility,Plausibility,2,0.0015357071964824387,0.00040934793328994967,0.0026620664596749277
+all 62,attribution,Feature attribution,lambda,Exemplar locality (λ),0.0,6.0,success,Counterfactual success rate,2,-0.050000000000000044,-0.050000000000000044,-0.050000000000000044
+all 62,attribution,Feature attribution,lambda,Exemplar locality (λ),0.0,6.0,target confidence gain,Target-confidence gain,2,-0.03700530985694081,-0.0442820071000668,-0.02972861261381482
+all 62,attribution,Feature attribution,rho,Additive change margin (ρ),0.0,0.3,actionability,Actionability rate,16,-0.006249999999999999,-0.018749999999999996,0.0
+all 62,attribution,Feature attribution,rho,Additive change margin (ρ),0.0,0.3,boundary improvement,Boundary-distance improvement,16,-0.10520429732120529,-0.11745677438102896,-0.09330154168888588
+all 62,attribution,Feature attribution,rho,Additive change margin (ρ),0.0,0.3,edit L1,Normalized edit distance (L1),16,0.4661415589426614,0.39338565036191125,0.5363088289154265
+all 62,attribution,Feature attribution,rho,Additive change margin (ρ),0.0,0.3,plausibility,Plausibility,16,-0.03550137129609043,-0.041607558278196115,-0.03045053705319744
+all 62,attribution,Feature attribution,rho,Additive change margin (ρ),0.0,0.3,success,Counterfactual success rate,16,0.29374999999999996,0.253125,0.3375
+all 62,attribution,Feature attribution,rho,Additive change margin (ρ),0.0,0.3,target confidence gain,Target-confidence gain,16,0.2601088114794379,0.21959607236002868,0.29872696197981913
+all 62,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,1.0,actionability,Actionability rate,27,-0.21296296296296297,-0.32037037037037036,-0.1111111111111111
+all 62,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,1.0,boundary improvement,Boundary-distance improvement,27,0.009566929998865523,0.0029166343752619274,0.01856698214018234
+all 62,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,1.0,edit L1,Normalized edit distance (L1),27,0.0026582638200078087,-0.010341825580411848,0.013400100864763941
+all 62,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,1.0,plausibility,Plausibility,27,0.0008063941115445497,-0.00045833489949599805,0.002445485850446731
+all 62,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,1.0,success,Counterfactual success rate,27,-0.008089668615984409,-0.03840155945419104,0.019300682261208554
+all 62,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,1.0,target confidence gain,Target-confidence gain,27,-0.00199494257801024,-0.025702065336379393,0.020279423461897345
+all 62,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.0,1.0,actionability,Actionability rate,19,0.1789473684210526,0.07625000000000003,0.2947368421052632
+all 62,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.0,1.0,boundary improvement,Boundary-distance improvement,19,-0.044303374331715335,-0.056499844203488546,-0.033172962637075636
+all 62,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.0,1.0,edit L1,Normalized edit distance (L1),19,-0.07730217355958979,-0.09319057045507904,-0.06257010910430343
+all 62,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.0,1.0,plausibility,Plausibility,19,-0.009652487470690316,-0.013691643335396212,-0.0059534574580184
+all 62,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.0,1.0,success,Counterfactual success rate,19,0.015789473684210534,-0.02894736842105262,0.05526315789473688
+all 62,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.0,1.0,target confidence gain,Target-confidence gain,19,-0.000586576366079089,-0.03267995033341373,0.032612511591214366
+all 62,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.0,1.0,actionability,Actionability rate,8,0.425,0.20625,0.6375
+all 62,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.0,1.0,boundary improvement,Boundary-distance improvement,8,-0.036265697912215754,-0.04815911609884084,-0.02288866172813964
+all 62,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.0,1.0,edit L1,Normalized edit distance (L1),8,-0.19528027854404806,-0.2182472092550122,-0.16990879329299602
+all 62,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.0,1.0,plausibility,Plausibility,8,0.003539536071962751,-0.0008165411454382487,0.007736907157311675
+all 62,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.0,1.0,success,Counterfactual success rate,8,-0.05624999999999999,-0.14375,0.0375
+all 62,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.0,1.0,target confidence gain,Target-confidence gain,8,-0.01995230483307122,-0.10993127246813057,0.05946396199771409
+all 62,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,1.0,actionability,Actionability rate,27,0.2351851851851852,0.10925925925925926,0.37407407407407406
+all 62,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,1.0,boundary improvement,Boundary-distance improvement,27,0.03212132059759698,0.0196334403379147,0.04553056974522327
+all 62,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,1.0,edit L1,Normalized edit distance (L1),27,-0.04851913018916108,-0.0661398937520067,-0.032058068976080926
+all 62,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,1.0,plausibility,Plausibility,27,0.007976018231072734,0.005516226025057047,0.010663241934073026
+all 62,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,1.0,success,Counterfactual success rate,27,-0.016666666666666677,-0.07222222222222223,0.03703703703703703
+all 62,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,1.0,target confidence gain,Target-confidence gain,27,-0.008838931981346318,-0.05415201206418496,0.034746690023795414
+all 62,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),0.0,6.0,actionability,Actionability rate,8,0.0,0.0,0.0
+all 62,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),0.0,6.0,boundary improvement,Boundary-distance improvement,8,0.00923226555894364,-0.0018456267038571583,0.020691510992014845
+all 62,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),0.0,6.0,edit L1,Normalized edit distance (L1),8,-0.02559195459483254,-0.029748236241445677,-0.02183881115132155
+all 62,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),0.0,6.0,plausibility,Plausibility,8,0.0038539780280246877,0.0013579826420382496,0.006178735221918596
+all 62,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),0.0,6.0,success,Counterfactual success rate,8,0.050000000000000024,-0.04374999999999997,0.15000000000000002
+all 62,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),0.0,6.0,target confidence gain,Target-confidence gain,8,0.07856836717172141,0.0036179965540307987,0.15466717442454725
+all 62,counterfactual,Counterfactual example,rho,Additive change margin (ρ),0.0,0.3,actionability,Actionability rate,27,0.0,0.0,0.0
+all 62,counterfactual,Counterfactual example,rho,Additive change margin (ρ),0.0,0.3,boundary improvement,Boundary-distance improvement,27,-0.11616554253716681,-0.13685664412284215,-0.09603636183572639
+all 62,counterfactual,Counterfactual example,rho,Additive change margin (ρ),0.0,0.3,edit L1,Normalized edit distance (L1),27,0.580449530004307,0.505047925722881,0.6558744035584667
+all 62,counterfactual,Counterfactual example,rho,Additive change margin (ρ),0.0,0.3,plausibility,Plausibility,27,-0.04086557344916564,-0.04485951931510805,-0.03719329405244623
+all 62,counterfactual,Counterfactual example,rho,Additive change margin (ρ),0.0,0.3,success,Counterfactual success rate,27,0.32777777777777783,0.24444444444444446,0.4037037037037038
+all 62,counterfactual,Counterfactual example,rho,Additive change margin (ρ),0.0,0.3,target confidence gain,Target-confidence gain,27,0.32528311145933775,0.2500212598682126,0.3936079352896496
+all 62,none,No XAI,age actionable,Age actionable,0.0,1.0,actionability,Actionability rate,19,-0.618421052631579,-0.6894736842105263,-0.531578947368421
+all 62,none,No XAI,age actionable,Age actionable,0.0,1.0,boundary improvement,Boundary-distance improvement,19,0.021798941002117964,0.005577735849533863,0.03852334802464815
+all 62,none,No XAI,age actionable,Age actionable,0.0,1.0,edit L1,Normalized edit distance (L1),19,0.020945803750568835,-0.023816018708239572,0.06768526902924012
+all 62,none,No XAI,age actionable,Age actionable,0.0,1.0,plausibility,Plausibility,19,0.003292166446278967,-3.161355245438492e-05,0.006700345691095992
+all 62,none,No XAI,age actionable,Age actionable,0.0,1.0,success,Counterfactual success rate,19,-0.028393351800554,-0.08628808864265926,0.03060941828254849
+all 62,none,No XAI,age actionable,Age actionable,0.0,1.0,target confidence gain,Target-confidence gain,19,-0.029624589770648347,-0.07404430712758547,0.01661884788129173
+all 62,none,No XAI,alpha,Global relevance reliance (α),0.0,1.0,actionability,Actionability rate,10,0.05499999999999999,0.0,0.16499999999999998
+all 62,none,No XAI,alpha,Global relevance reliance (α),0.0,1.0,boundary improvement,Boundary-distance improvement,10,-0.0218845462067208,-0.03206197762928382,-0.010689841302183896
+all 62,none,No XAI,alpha,Global relevance reliance (α),0.0,1.0,edit L1,Normalized edit distance (L1),10,-0.1118609616118281,-0.13483110986245211,-0.08852186299841609
+all 62,none,No XAI,alpha,Global relevance reliance (α),0.0,1.0,plausibility,Plausibility,10,-0.004285875896677505,-0.009455554923143079,0.0005821294461172078
+all 62,none,No XAI,alpha,Global relevance reliance (α),0.0,1.0,success,Counterfactual success rate,10,-0.03000000000000002,-0.07500000000000002,0.014999999999999975
+all 62,none,No XAI,alpha,Global relevance reliance (α),0.0,1.0,target confidence gain,Target-confidence gain,10,-0.012899426383666816,-0.0384667754769914,0.01845219879769607
+all 62,none,No XAI,lambda,Exemplar locality (λ),0.0,6.0,actionability,Actionability rate,9,0.011111111111111112,0.0,0.027777777777777776
+all 62,none,No XAI,lambda,Exemplar locality (λ),0.0,6.0,boundary improvement,Boundary-distance improvement,9,0.016488768476713482,0.01191782818243447,0.02148146245498984
+all 62,none,No XAI,lambda,Exemplar locality (λ),0.0,6.0,edit L1,Normalized edit distance (L1),9,-0.025242847844093235,-0.031402465033867795,-0.0192683940027711
+all 62,none,No XAI,lambda,Exemplar locality (λ),0.0,6.0,plausibility,Plausibility,9,-0.0004082144709945575,-0.0018571805425402035,0.0009438151000580761
+all 62,none,No XAI,lambda,Exemplar locality (λ),0.0,6.0,success,Counterfactual success rate,9,-0.061111111111111116,-0.1333333333333333,-0.00555555555555556
+all 62,none,No XAI,lambda,Exemplar locality (λ),0.0,6.0,target confidence gain,Target-confidence gain,9,-0.042028672194918314,-0.06897698860037174,-0.017477572681775178
+all 62,none,No XAI,rho,Additive change margin (ρ),0.0,0.3,actionability,Actionability rate,19,0.0,0.0,0.0
+all 62,none,No XAI,rho,Additive change margin (ρ),0.0,0.3,boundary improvement,Boundary-distance improvement,19,-0.09466749633762943,-0.10986926637042345,-0.07908886395337393
+all 62,none,No XAI,rho,Additive change margin (ρ),0.0,0.3,edit L1,Normalized edit distance (L1),19,0.5077743073556465,0.4138161001089367,0.6040446463484987
+all 62,none,No XAI,rho,Additive change margin (ρ),0.0,0.3,plausibility,Plausibility,19,-0.03366048420421844,-0.03731434037602825,-0.030117038483491725
+all 62,none,No XAI,rho,Additive change margin (ρ),0.0,0.3,success,Counterfactual success rate,19,0.22894736842105265,0.1710526315789474,0.2947368421052632
+all 62,none,No XAI,rho,Additive change margin (ρ),0.0,0.3,target confidence gain,Target-confidence gain,19,0.21152775744593097,0.16742145855927307,0.2618889192589227

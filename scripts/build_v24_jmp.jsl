@@ -1,0 +1,22 @@
+Names Default To Here( 1 );
+
+rootPath = "C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/";
+csvPath = Convert File Path( rootPath || "qualtrics/qualtrics_results_v2.4.csv", Windows );
+jmpPath = Convert File Path( rootPath || "qualtrics/qualtrics_results_v2.4.jmp", Windows );
+roundtripPath = Convert File Path( rootPath || "qualtrics/qualtrics_results_v2.4.roundtrip.csv", Windows );
+reportPath = Convert File Path( rootPath || "qualtrics/qualtrics_results_v2.4.jmp-build.txt", Windows );
+
+dt = Open( csvPath, Invisible );
+If( Is Empty( dt ),
+	Save Text File( reportPath, "status=error\!Nmessage=CSV could not be opened\!N" );
+	Quit();
+);
+
+dt << Save As( jmpPath );
+dt << Save As( roundtripPath );
+Save Text File(
+	reportPath,
+	"status=ok\!Nrows=" || Char( N Rows( dt ) ) || "\!Ncolumns=" || Char( N Cols( dt ) ) || "\!N"
+);
+Close( dt, NoSave );
+Quit();

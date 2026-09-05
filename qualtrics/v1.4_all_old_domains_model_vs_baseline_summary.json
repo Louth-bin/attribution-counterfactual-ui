@@ -1,0 +1,368 @@
+{
+  "participants": 104,
+  "domains": {
+    "housing": 34,
+    "safelimit": 12,
+    "diabetes": 58
+  },
+  "baseline": "observed K and fitted actionability; uniformly random eligible feature subset; fixed 0.10 normalized target-direction change",
+  "model_prediction": "maximum-probability attribute subset under each participant's full-data fitted probabilistic model",
+  "selection": {
+    "model F1": 0.6236385836385836,
+    "baseline F1": 0.44325740231990224,
+    "model amount MAE": 0.24923201592178737,
+    "baseline amount MAE": 0.26578475545216984
+  },
+  "model": {
+    "validity": {
+      "pearson r": 0.44908468078012304,
+      "MAE": 0.18557692307692306,
+      "observed mean": 0.46682692307692303,
+      "predicted mean": 0.4475961538461538
+    },
+    "boundary distance": {
+      "pearson r": 0.5789096538478917,
+      "MAE": 0.060721352176223535,
+      "observed mean": 0.18260392218028845,
+      "predicted mean": 0.1297594445385384
+    },
+    "plausibility": {
+      "pearson r": 0.8967136263675615,
+      "MAE": 0.010705774461796439,
+      "observed mean": 0.952225260825577,
+      "predicted mean": 0.9474833792724854
+    }
+  },
+  "baseline downstream": {
+    "validity": {
+      "pearson r": 0.35346238011558456,
+      "MAE": 0.2293269230769231,
+      "observed mean": 0.46682692307692303,
+      "predicted mean": 0.2605769230769231
+    },
+    "boundary distance": {
+      "pearson r": 0.6668413045205002,
+      "MAE": 0.047466167493309896,
+      "observed mean": 0.18260392218028845,
+      "predicted mean": 0.16321153211373
+    },
+    "plausibility": {
+      "pearson r": 0.8998217371634064,
+      "MAE": 0.011553063025682734,
+      "observed mean": 0.952225260825577,
+      "predicted mean": 0.9448471028562839
+    }
+  },
+  "model by domain": {
+    "housing": {
+      "validity": {
+        "pearson r": 0.6006240946669376,
+        "MAE": 0.16617647058823531,
+        "observed mean": 0.511764705882353,
+        "predicted mean": 0.6102941176470588
+      },
+      "boundary distance": {
+        "pearson r": 0.42195896112549514,
+        "MAE": 0.07037508050247768,
+        "observed mean": 0.1988908148864706,
+        "predicted mean": 0.13570180425669828
+      },
+      "plausibility": {
+        "pearson r": -0.37807982581426497,
+        "MAE": 0.020348632054757926,
+        "observed mean": 0.987247526737353,
+        "predicted mean": 0.9690403235896393
+      }
+    },
+    "safelimit": {
+      "validity": {
+        "pearson r": 0.015824594429622283,
+        "MAE": 0.21666666666666667,
+        "observed mean": 0.3416666666666666,
+        "predicted mean": 0.20833333333333334
+      },
+      "boundary distance": {
+        "pearson r": 0.3937095611731297,
+        "MAE": 0.14648801489573923,
+        "observed mean": 0.3170615355433333,
+        "predicted mean": 0.1833265550367422
+      },
+      "plausibility": {
+        "pearson r": 0.4681103325575944,
+        "MAE": 0.0023248039414018873,
+        "observed mean": 0.9783039240725001,
+        "predicted mean": 0.9794162412278357
+      }
+    },
+    "diabetes": {
+      "validity": {
+        "pearson r": 0.33787106080269624,
+        "MAE": 0.19051724137931034,
+        "observed mean": 0.4663793103448276,
+        "predicted mean": 0.40172413793103445
+      },
+      "boundary distance": {
+        "pearson r": 0.506912631469828,
+        "MAE": 0.03731744328438165,
+        "observed mean": 0.1452376167946552,
+        "predicted mean": 0.11519314184205777
+      },
+      "plausibility": {
+        "pearson r": 0.5868030135167461,
+        "MAE": 0.006787058739107545,
+        "observed mean": 0.926299381515862,
+        "predicted mean": 0.9282397508199435
+      }
+    }
+  },
+  "model by condition": {
+    "none": {
+      "validity": {
+        "pearson r": 0.4306298066083896,
+        "MAE": 0.21515151515151515,
+        "observed mean": 0.5136363636363637,
+        "predicted mean": 0.49242424242424243
+      },
+      "boundary distance": {
+        "pearson r": 0.6427279537397036,
+        "MAE": 0.058042876702337216,
+        "observed mean": 0.17855812695863635,
+        "predicted mean": 0.12634808724761373
+      },
+      "plausibility": {
+        "pearson r": 0.8894275190813429,
+        "MAE": 0.012302862448785548,
+        "observed mean": 0.9543687033218182,
+        "predicted mean": 0.9469649778645801
+      }
+    },
+    "attribution": {
+      "validity": {
+        "pearson r": 0.46554312342380955,
+        "MAE": 0.17714285714285713,
+        "observed mean": 0.4514285714285714,
+        "predicted mean": 0.45428571428571424
+      },
+      "boundary distance": {
+        "pearson r": 0.2933727939525251,
+        "MAE": 0.06389505028446157,
+        "observed mean": 0.1826646215562857,
+        "predicted mean": 0.12651784806817382
+      },
+      "plausibility": {
+        "pearson r": 0.8946820642682315,
+        "MAE": 0.010229360772619473,
+        "observed mean": 0.9497304355147143,
+        "predicted mean": 0.9477149862175436
+      }
+    },
+    "counterfactual": {
+      "validity": {
+        "pearson r": 0.41788970488032334,
+        "MAE": 0.16666666666666666,
+        "observed mean": 0.43888888888888894,
+        "predicted mean": 0.4
+      },
+      "boundary distance": {
+        "pearson r": 0.6713683477452054,
+        "MAE": 0.06009108153316567,
+        "observed mean": 0.18625355451791667,
+        "predicted mean": 0.136038074179185
+      },
+      "plausibility": {
+        "pearson r": 0.9140387183395633,
+        "MAE": 0.009704957115978472,
+        "observed mean": 0.9526859631451386,
+        "predicted mean": 0.9477334071442587
+      }
+    }
+  },
+  "model by domain and condition": {
+    "housing": {
+      "none": {
+        "validity": {
+          "pearson r": 0.3914384567984292,
+          "MAE": 0.17500000000000002,
+          "observed mean": 0.5958333333333333,
+          "predicted mean": 0.6958333333333332
+        },
+        "boundary distance": {
+          "pearson r": 0.5045722115712038,
+          "MAE": 0.0664290290524049,
+          "observed mean": 0.18497503529583334,
+          "predicted mean": 0.11854600624342843
+        },
+        "plausibility": {
+          "pearson r": -0.5512141301734695,
+          "MAE": 0.022767263457438208,
+          "observed mean": 0.9896066445683332,
+          "predicted mean": 0.9678644487928394
+        }
+      },
+      "attribution": {
+        "validity": {
+          "pearson r": 0.5920467725157862,
+          "MAE": 0.14583333333333334,
+          "observed mean": 0.4875,
+          "predicted mean": 0.5333333333333333
+        },
+        "boundary distance": {
+          "pearson r": 0.07754260963113543,
+          "MAE": 0.08856654617086533,
+          "observed mean": 0.20791274424333336,
+          "predicted mean": 0.1291923043393397
+        },
+        "plausibility": {
+          "pearson r": -0.4368922927175629,
+          "MAE": 0.017869412238766275,
+          "observed mean": 0.9826487689416666,
+          "predicted mean": 0.9698216709242481
+        }
+      },
+      "counterfactual": {
+        "validity": {
+          "pearson r": 0.8568827034546065,
+          "MAE": 0.18,
+          "observed mean": 0.44000000000000006,
+          "predicted mean": 0.6
+        },
+        "boundary distance": {
+          "pearson r": 0.7477557279723643,
+          "MAE": 0.053280583440499796,
+          "observed mean": 0.20476343516700002,
+          "predicted mean": 0.16410016177345227
+        },
+        "plausibility": {
+          "pearson r": -0.012464769840609976,
+          "MAE": 0.02042133815073156,
+          "observed mean": 0.989935094695,
+          "predicted mean": 0.9695137565442685
+        }
+      }
+    },
+    "safelimit": {
+      "none": {
+        "validity": {
+          "pearson r": -1.0,
+          "MAE": 0.26666666666666666,
+          "observed mean": 0.3333333333333333,
+          "predicted mean": 0.06666666666666667
+        },
+        "boundary distance": {
+          "pearson r": 0.9896252693838272,
+          "MAE": 0.1494898706760243,
+          "observed mean": 0.3465996832566667,
+          "predicted mean": 0.1971098125806423
+        },
+        "plausibility": {
+          "pearson r": -0.9824878464687906,
+          "MAE": 0.0033559982768699057,
+          "observed mean": 0.97654320309,
+          "predicted mean": 0.97989920136687
+        }
+      },
+      "attribution": {
+        "validity": {
+          "pearson r": 0.23570226039551587,
+          "MAE": 0.2,
+          "observed mean": 0.25,
+          "predicted mean": 0.3
+        },
+        "boundary distance": {
+          "pearson r": -0.6399743508743801,
+          "MAE": 0.10803479245025191,
+          "observed mean": 0.241429849345,
+          "predicted mean": 0.17165416006219242
+        },
+        "plausibility": {
+          "pearson r": 0.9064900283492466,
+          "MAE": 0.0015072184401814792,
+          "observed mean": 0.9783805871775001,
+          "predicted mean": 0.9787149282827832
+        }
+      },
+      "counterfactual": {
+        "validity": {
+          "pearson r": -0.21821789023599225,
+          "MAE": 0.2,
+          "observed mean": 0.42000000000000004,
+          "predicted mean": 0.22000000000000003
+        },
+        "boundary distance": {
+          "pearson r": 0.23061126761762352,
+          "MAE": 0.17544947938395805,
+          "observed mean": 0.359843995874,
+          "predicted mean": 0.18439451649004196
+        },
+        "plausibility": {
+          "pearson r": 0.31264193382638106,
+          "MAE": 0.0023601557410974027,
+          "observed mean": 0.979299026178,
+          "predicted mean": 0.9796875155004571
+        }
+      }
+    },
+    "diabetes": {
+      "none": {
+        "validity": {
+          "pearson r": 0.18031777449250877,
+          "MAE": 0.23333333333333328,
+          "observed mean": 0.4888888888888888,
+          "predicted mean": 0.4277777777777778
+        },
+        "boundary distance": {
+          "pearson r": 0.4203677773848206,
+          "MAE": 0.03721094280667758,
+          "observed mean": 0.1462732620175,
+          "predicted mean": 0.11975585369489918
+        },
+        "plausibility": {
+          "pearson r": 0.6422683476400854,
+          "MAE": 0.006817739138336381,
+          "observed mean": 0.9271809925294444,
+          "predicted mean": 0.9275429599953591
+        }
+      },
+      "attribution": {
+        "validity": {
+          "pearson r": 0.36839201503245544,
+          "MAE": 0.1921052631578947,
+          "observed mean": 0.47105263157894744,
+          "predicted mean": 0.4368421052631579
+        },
+        "boundary distance": {
+          "pearson r": 0.5275347310832101,
+          "MAE": 0.0390204755844612,
+          "observed mean": 0.1543468119036842,
+          "predicted mean": 0.11532633631922301
+        },
+        "plausibility": {
+          "pearson r": 0.47233813659992585,
+          "MAE": 0.007240305600829491,
+          "observed mean": 0.9229082982634211,
+          "predicted mean": 0.9272265659679952
+        }
+      },
+      "counterfactual": {
+        "validity": {
+          "pearson r": 0.454809718407644,
+          "MAE": 0.15238095238095237,
+          "observed mean": 0.4428571428571429,
+          "predicted mean": 0.3476190476190476
+        },
+        "boundary distance": {
+          "pearson r": 0.5769416403860135,
+          "MAE": 0.03586789066043697,
+          "observed mean": 0.13610826817166663,
+          "predicted mean": 0.1111617366793299
+        },
+        "plausibility": {
+          "pearson r": 0.6432455446288208,
+          "MAE": 0.006350680760115352,
+          "observed mean": 0.9286118378754761,
+          "predicted mean": 0.9297536911546833
+        }
+      }
+    }
+  }
+}

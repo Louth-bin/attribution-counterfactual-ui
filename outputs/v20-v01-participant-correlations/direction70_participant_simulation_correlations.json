@@ -1,0 +1,73 @@
+{
+  "model": "cognitive model v0.1; participant correct-direction rate >= 0.70",
+  "participants": 46,
+  "excluded participants": [],
+  "metrics": {
+    "success": {
+      "label": "Counterfactual success rate",
+      "n": 46,
+      "observed mean": 0.575,
+      "simulated mean": 0.5619565217391306,
+      "pearson r": 0.6987051439209128,
+      "pearson p": 6.675068933181909e-08,
+      "spearman rho": 0.6719230809746733,
+      "spearman p": 3.1755984741745926e-07,
+      "MAE": 0.10652173913043476
+    },
+    "target confidence gain": {
+      "label": "Target-confidence gain",
+      "n": 46,
+      "observed mean": 0.5587560581497406,
+      "simulated mean": 0.5520965366237387,
+      "pearson r": 0.7197052459205049,
+      "pearson p": 1.736646499194817e-08,
+      "spearman rho": 0.7104135191018338,
+      "spearman p": 3.197023709257397e-08,
+      "MAE": 0.09702279348623195
+    },
+    "boundary improvement": {
+      "label": "Boundary-distance improvement",
+      "n": 46,
+      "observed mean": 0.0013733456602548874,
+      "simulated mean": 0.011121135071278517,
+      "pearson r": 0.551232548524878,
+      "pearson p": 7.18223171226157e-05,
+      "spearman rho": 0.6267229951482624,
+      "spearman p": 3.1672347780781274e-06,
+      "MAE": 0.028758974228142612
+    },
+    "plausibility": {
+      "label": "Plausibility",
+      "n": 46,
+      "observed mean": 0.940269596211588,
+      "simulated mean": 0.9409044573012533,
+      "pearson r": 0.7474670235971043,
+      "pearson p": 2.4042298093109013e-09,
+      "spearman rho": 0.6370224185087978,
+      "spearman p": 1.9375109065265623e-06,
+      "MAE": 0.007298984302301026
+    },
+    "actionability": {
+      "label": "Actionability rate",
+      "n": 46,
+      "observed mean": 0.917391304347826,
+      "simulated mean": 0.8891304347826088,
+      "pearson r": 0.7591580224750849,
+      "pearson p": 9.67240686873307e-10,
+      "spearman rho": 0.7880254999484618,
+      "spearman p": 8.055202561503382e-11,
+      "MAE": 0.06521739130434782
+    },
+    "edit L1": {
+      "label": "Normalized edit distance (L1)",
+      "n": 46,
+      "observed mean": 0.5298574262059272,
+      "simulated mean": 0.5372801600971716,
+      "pearson r": 0.8319629791512896,
+      "pearson p": 7.8815662201549e-13,
+      "spearman rho": 0.7415972864631514,
+      "spearman p": 3.72856078478353e-09,
+      "MAE": 0.10061232587209333
+    }
+  }
+}

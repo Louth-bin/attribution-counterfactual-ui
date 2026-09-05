@@ -1,0 +1,16 @@
+{
+  "rows": 256,
+  "columns": 56,
+  "participants": 8,
+  "training_rows": 96,
+  "testing_rows": 160,
+  "xai_participants": {
+    "attribution": 2,
+    "counterfactual": 4,
+    "none": 2
+  },
+  "valid_counterfactuals": 79,
+  "training_correct": 60,
+  "subset_reference_profiles": 12,
+  "reasoning_strategy_counts": {}
+}

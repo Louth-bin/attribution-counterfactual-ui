@@ -9,6 +9,8 @@ import re
 from pathlib import Path
 from typing import Any
 
+from update_recourse_v10_post_task import apply_post_task_and_crt2
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SOURCE_QSF = REPO_ROOT / "qualtrics" / "Recourse_v09.qsf"
@@ -73,7 +75,7 @@ def update_scenario(payload: dict[str, Any]) -> None:
     <p class="scenario-lead">Imagine that you are reviewing health profiles. An AI uses five details to decide whether to issue a <b>Diabetes</b> or <b>No Diabetes</b> warning.</p>
     <h2>Information available to the AI</h2>
     <table class="domain-table"><tr><th>Attribute</th><th>Description</th><th>Typical range</th></tr>
-      <tr><td>Blood Glucose</td><td>Blood glucose concentration</td><td>74–192 mg/dL</td></tr>
+      <tr><td>Glucose</td><td>Blood glucose concentration</td><td>74–192 mg/dL</td></tr>
       <tr><td>Blood Pressure</td><td>Blood pressure</td><td>48–94 mmHg</td></tr>
       <tr><td>Insulin</td><td>Insulin measurement</td><td>36–521 µU/mL</td></tr>
       <tr><td>BMI</td><td>Body mass index</td><td>20.4–48.9 kg/m²</td></tr>
@@ -93,7 +95,7 @@ def update_basic_tutorial(payload: dict[str, Any], ids: dict[str, Any]) -> None:
   <ol class="tutorial-bullets">
     <li>The five <b>attributes</b> describing the person.</li>
     <li>The <b>values</b> of each attribute.</li>
-    <li>Bars indicating how <b>low/high</b> the value is for that attribute (for example, Blood Glucose is shown relative to the range from about 74 to 192 mg/dL).</li>
+    <li>Bars indicating how <b>low/high</b> the value is for that attribute (for example, Glucose is shown relative to the range from about 74 to 192 mg/dL).</li>
     <li>The selected box shows whether the AI issues a <b>Diabetes</b> or <b>No Diabetes</b> warning.</li>
   </ol>
 </section>"""
@@ -436,6 +438,7 @@ def main() -> None:
         questions[question_id]["QuestionJS"] = frame_js
 
     update_attempt_two(document, elements)
+    apply_post_task_and_crt2(document)
     update_question_count(document)
     document["SurveyEntry"]["SurveyName"] = "Recourse v0.10"
     document["SurveyEntry"]["SurveyDescription"] = (

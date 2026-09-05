@@ -1,0 +1,14 @@
+{
+  "script": "quick_design_copy_vs_linear_prototype.py",
+  "candidate_file": "analysis\\diabetes_hierarchical_oriented_q90_anchor_search_candidate_shortlist.csv",
+  "searched_training_designs": 81,
+  "copy_lambda": 2.0,
+  "objective_score": 3.002258011605284,
+  "heuristics": [
+    "two non-age feature clusters only",
+    "training counterfactuals moderate size and close to the boundary",
+    "training edits internally consistent within pair+target",
+    "testing cases where broad copy-template lands close to boundary",
+    "testing cases where linear/prototype strategies require larger edits or end farther from boundary"
+  ]
+}

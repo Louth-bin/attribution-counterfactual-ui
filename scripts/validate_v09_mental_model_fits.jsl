@@ -1,0 +1,74 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+inputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.mental-model-staging.jmp", Windows);
+fitPath = Convert File Path(rootPath || "v0.9_participant_mental_model_fits.csv", Windows);
+outputPath = Convert File Path(rootPath || "v0.9_mental_model_jmp_validation.txt", Windows);
+
+bestName = "best forward mental model";
+supportedName = "supported forward mental models (delta BIC < 2)";
+conclusionName = "forward mental model fit conclusion";
+gapName = "forward mental model delta BIC to second";
+exemplarName = "exemplar forward NLL";
+attributionName = "attribution forward NLL";
+prototypeName = "prototype forward NLL";
+
+dataTable = Open(inputPath, Invisible);
+fitTable = Open(fitPath, Invisible);
+columnNames = dataTable << Get Column Names("String");
+scriptNames = dataTable << Get Table Script Names;
+
+bestMap = Associative Array();
+supportedMap = Associative Array();
+conclusionMap = Associative Array();
+gapMap = Associative Array();
+exemplarMap = Associative Array();
+attributionMap = Associative Array();
+prototypeMap = Associative Array();
+For(rowIndex = 1, rowIndex <= N Rows(fitTable), rowIndex++,
+	participantValue = Char(Column(fitTable, "participant")[rowIndex]);
+	bestMap[participantValue] = Char(Column(fitTable, "best_forward_mental_model")[rowIndex]);
+	supportedMap[participantValue] = Char(Column(fitTable, "supported_forward_mental_models_delta_bic_lt_2")[rowIndex]);
+	conclusionMap[participantValue] = Char(Column(fitTable, "forward_mental_model_fit_conclusion")[rowIndex]);
+	gapMap[participantValue] = Num(Column(fitTable, "delta_bic_to_second_best")[rowIndex]);
+	exemplarMap[participantValue] = Num(Column(fitTable, "exemplar_nll")[rowIndex]);
+	attributionMap[participantValue] = Num(Column(fitTable, "attribution_nll")[rowIndex]);
+	prototypeMap[participantValue] = Num(Column(fitTable, "prototype_nll")[rowIndex]);
+);
+
+mappingMismatches = 0;
+negativeNll = 0;
+negativeGap = 0;
+For(rowIndex = 1, rowIndex <= N Rows(dataTable), rowIndex++,
+	participantValue = Char(Column(dataTable, "participant")[rowIndex]);
+	If(!Contains(bestMap << Get Keys, participantValue),
+		mappingMismatches++,
+		If(Char(Column(dataTable, bestName)[rowIndex]) != bestMap[participantValue], mappingMismatches++);
+		If(Char(Column(dataTable, supportedName)[rowIndex]) != supportedMap[participantValue], mappingMismatches++);
+		If(Char(Column(dataTable, conclusionName)[rowIndex]) != conclusionMap[participantValue], mappingMismatches++);
+		If(Abs(Column(dataTable, gapName)[rowIndex] - gapMap[participantValue]) > 1e-9, mappingMismatches++);
+		If(Abs(Column(dataTable, exemplarName)[rowIndex] - exemplarMap[participantValue]) > 1e-9, mappingMismatches++);
+		If(Abs(Column(dataTable, attributionName)[rowIndex] - attributionMap[participantValue]) > 1e-9, mappingMismatches++);
+		If(Abs(Column(dataTable, prototypeName)[rowIndex] - prototypeMap[participantValue]) > 1e-9, mappingMismatches++);
+	);
+	If(Column(dataTable, gapName)[rowIndex] < 0, negativeGap++);
+	If(Column(dataTable, exemplarName)[rowIndex] < 0 | Column(dataTable, attributionName)[rowIndex] < 0 | Column(dataTable, prototypeName)[rowIndex] < 0, negativeNll++);
+);
+
+summaryText = "rows=" || Char(N Rows(dataTable)) || " columns=" || Char(N Cols(dataTable)) || "\!N";
+summaryText ||= "all_columns_present=" || Char(
+	Contains(columnNames, bestName) > 0 & Contains(columnNames, supportedName) > 0 &
+	Contains(columnNames, conclusionName) > 0 & Contains(columnNames, gapName) > 0 &
+	Contains(columnNames, exemplarName) > 0 & Contains(columnNames, attributionName) > 0 &
+	Contains(columnNames, prototypeName) > 0
+) || "\!N";
+summaryText ||= "mapping_mismatches=" || Char(mappingMismatches) || "\!N";
+summaryText ||= "negative_nll=" || Char(negativeNll) || " negative_gap=" || Char(negativeGap) || "\!N";
+summaryText ||= "script_count=" || Char(N Items(scriptNames)) || "\!N";
+summaryText ||= "scripts=" || Char(scriptNames) || "\!N";
+summaryText ||= "best_notes=" || Char(Column(dataTable, bestName) << Get Property("Notes")) || "\!N";
+Save Text File(outputPath, summaryText);
+
+Close(fitTable, No Save);
+Close(dataTable, No Save);
+Exit();

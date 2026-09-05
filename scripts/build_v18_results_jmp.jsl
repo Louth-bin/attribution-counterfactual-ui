@@ -1,0 +1,161 @@
+Names Default To Here(1);
+
+rootPath = "C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/";
+referencePath = Convert File Path(rootPath || "qualtrics/qualtrics_results_v1.5.jmp", Windows);
+sourcePath = Convert File Path(rootPath || "qualtrics/qualtrics_results_v1.8.csv", Windows);
+outputPath = Convert File Path(rootPath || "qualtrics/qualtrics_results_v1.8.jmp", Windows);
+reportPath = Convert File Path(rootPath || "qualtrics/v1.8_results_jmp_validation.txt", Windows);
+
+dt = Open(referencePath, Invisible);
+source = Open(sourcePath, Invisible);
+originalScripts = dt << Get Table Script Names;
+targetNames = dt << Get Column Names("String");
+sourceNames = source << Get Column Names("String");
+schemaMatch = N Items(targetNames) == N Items(sourceNames) + 2
+	& Contains(targetNames, "participant level correct direction change") > 0
+	& Contains(targetNames, "% x4_changed > 50") > 0;
+
+If(!schemaMatch | N Rows(source) != 1576,
+	Save Text File(reportPath,
+		"build_aborted=1\!Ncolumn_match=" || Char(schemaMatch)
+		|| "\!Nsource_rows=" || Char(N Rows(source))
+		|| "\!Ntarget_columns=" || Char(N Items(targetNames))
+		|| "\!Nsource_columns=" || Char(N Items(sourceNames))
+		|| "\!Ntarget_names=" || Char(targetNames)
+		|| "\!Nsource_names=" || Char(sourceNames) || "\!N"
+	);
+	Close(source, No Save);
+	Close(dt, No Save);
+	Exit();
+);
+
+dt << Save As(outputPath);
+dt << Select All Rows;
+dt << Delete Rows;
+dt << Add Rows(N Rows(source));
+
+formulaColumns = {
+	"close to boundary old",
+	"distance to boundary",
+	"confidence of counterfactual - 50%",
+	"participant training accuracy",
+	"CRT binarized"
+};
+
+For(columnIndex = 1, columnIndex <= N Items(sourceNames), columnIndex++,
+	columnName = sourceNames[columnIndex];
+	If(!Contains(formulaColumns, columnName),
+		Column(dt, columnName) << Set Values(Column(source, columnName) << Get Values)
+	);
+);
+
+dt << Recalculate;
+dt << Save;
+
+participants = Associative Array();
+trainingRows = 0;
+testingRows = 0;
+attributionParticipants = Associative Array();
+counterfactualParticipants = Associative Array();
+noneParticipants = Associative Array();
+oldRemappedIds = {"140200", "140206", "140307", "140308"};
+newWaveIds = {
+	"160200", "160201", "160202", "160203", "160204",
+	"160205", "160206", "160207", "160208", "160209",
+	"160210", "160211", "160212", "160213", "160214",
+	"160215", "160216", "160217", "160218", "160219"
+};
+oldRemappedCounts = Associative Array();
+newWaveCounts = Associative Array();
+For(idIndex = 1, idIndex <= N Items(oldRemappedIds), idIndex++,
+	oldRemappedCounts[oldRemappedIds[idIndex]] = 0
+);
+For(idIndex = 1, idIndex <= N Items(newWaveIds), idIndex++,
+	newWaveCounts[newWaveIds[idIndex]] = 0
+);
+trainingMetricNonmissing = 0;
+testingMetricMissing = 0;
+sparsityMismatch = 0;
+actionabilityMismatch = 0;
+formulaMismatch = 0;
+domainMismatch = 0;
+
+For(rowIndex = 1, rowIndex <= N Rows(dt), rowIndex++,
+	participant = Char(Column(dt, "participant")[rowIndex]);
+	participants[participant] = 1;
+	phase = Lowercase(Char(Column(dt, "phase")[rowIndex]));
+	xai = Lowercase(Char(Column(dt, "xai")[rowIndex]));
+	instanceId = Char(Column(dt, "instance id")[rowIndex]);
+	If(Contains(oldRemappedIds, instanceId),
+		oldRemappedCounts[instanceId] = oldRemappedCounts[instanceId] + 1
+	);
+	If(Contains(newWaveIds, instanceId),
+		newWaveCounts[instanceId] = newWaveCounts[instanceId] + 1
+	);
+	If(Lowercase(Char(Column(dt, "domain")[rowIndex])) != "diabetes", domainMismatch++);
+	If(xai == "attribution", attributionParticipants[participant] = 1);
+	If(xai == "counterfactual", counterfactualParticipants[participant] = 1);
+	If(xai == "none", noneParticipants[participant] = 1);
+
+	If(phase == "training",
+		trainingRows++;
+		If(
+			!Is Missing(Column(dt, "sparsity")[rowIndex])
+			| !Is Missing(Column(dt, "proximity")[rowIndex])
+			| !Is Missing(Column(dt, "plausibility")[rowIndex])
+			| !Is Missing(Column(dt, "plausibility (subset)")[rowIndex])
+			| !Is Missing(Column(dt, "actionability (0/1)")[rowIndex])
+			| !Is Missing(Column(dt, "boundary distance original")[rowIndex]),
+			trainingMetricNonmissing++
+		),
+		testingRows++;
+		If(
+			Is Missing(Column(dt, "sparsity")[rowIndex])
+			| Is Missing(Column(dt, "proximity")[rowIndex])
+			| Is Missing(Column(dt, "plausibility")[rowIndex])
+			| Is Missing(Column(dt, "plausibility (subset)")[rowIndex])
+			| Is Missing(Column(dt, "actionability (0/1)")[rowIndex])
+			| Is Missing(Column(dt, "boundary distance original")[rowIndex]),
+			testingMetricMissing++
+		);
+		changed = 0;
+		For(featureIndex = 1, featureIndex <= 5, featureIndex++,
+			changed += Column(dt, "x_" || Char(featureIndex) || "_changed")[rowIndex]
+		);
+		If(Abs(Column(dt, "sparsity")[rowIndex] - (1 - changed / 5)) > 1e-9, sparsityMismatch++);
+		expectedActionability = Column(dt, "x_5_changed")[rowIndex] == 0;
+		If(Column(dt, "actionability (0/1)")[rowIndex] != expectedActionability, actionabilityMismatch++);
+	);
+	expectedCrtBinary = Column(dt, "CRT-2 score (0-4)")[rowIndex] > 2;
+	If(Column(dt, "CRT binarized")[rowIndex] != expectedCrtBinary, formulaMismatch++);
+);
+
+updatedScripts = dt << Get Table Script Names;
+scriptNamesMatch = Char(originalScripts) == Char(updatedScripts);
+oldRemapMismatch = 0;
+newWaveMismatch = 0;
+For(idIndex = 1, idIndex <= N Items(oldRemappedIds), idIndex++,
+	If(oldRemappedCounts[oldRemappedIds[idIndex]] != 15, oldRemapMismatch++)
+);
+For(idIndex = 1, idIndex <= N Items(newWaveIds), idIndex++,
+	If(newWaveCounts[newWaveIds[idIndex]] != 8, newWaveMismatch++)
+);
+text = "build_aborted=0\!N";
+text ||= "rows=" || Char(N Rows(dt)) || " columns=" || Char(N Cols(dt)) || " participants=" || Char(N Items(participants)) || "\!N";
+text ||= "training_rows=" || Char(trainingRows) || " testing_rows=" || Char(testingRows) || "\!N";
+text ||= "xai_participants=attribution:" || Char(N Items(attributionParticipants))
+	|| ",counterfactual:" || Char(N Items(counterfactualParticipants))
+	|| ",none:" || Char(N Items(noneParticipants)) || "\!N";
+text ||= "old_remapped_ids=" || Char(oldRemappedCounts) || " mismatch=" || Char(oldRemapMismatch) || "\!N";
+text ||= "new_wave_ids=" || Char(newWaveCounts) || " mismatch=" || Char(newWaveMismatch) || "\!N";
+text ||= "domain_mismatch=" || Char(domainMismatch) || "\!N";
+text ||= "training_metric_nonmissing=" || Char(trainingMetricNonmissing) || " testing_metric_missing=" || Char(testingMetricMissing) || "\!N";
+text ||= "sparsity_mismatch=" || Char(sparsityMismatch) || " actionability_mismatch=" || Char(actionabilityMismatch) || " formula_mismatch=" || Char(formulaMismatch) || "\!N";
+text ||= "original_scripts=" || Char(N Items(originalScripts)) || " updated_scripts=" || Char(N Items(updatedScripts)) || "\!N";
+text ||= "script_names_match=" || Char(scriptNamesMatch) || "\!N";
+Save Text File(reportPath, text);
+
+Close(source, No Save);
+Close(dt, No Save);
+Exit();
+

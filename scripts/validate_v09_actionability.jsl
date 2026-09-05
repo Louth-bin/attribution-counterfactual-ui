@@ -1,0 +1,41 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+inputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.actionability-updated.jmp", Windows);
+outputPath = Convert File Path(rootPath || "v0.9_actionability_validation.txt", Windows);
+columnName = "plausible and actionable (0/1)";
+
+dataTable = Open(inputPath, Invisible);
+columnNames = dataTable << Get Column Names("String");
+scriptNames = dataTable << Get Table Script Names;
+nonbinary = 0;
+mismatches = 0;
+
+For(rowIndex = 1, rowIndex <= N Rows(dataTable), rowIndex++,
+	domainValue = Lowercase(Char(Column(dataTable, "domain")[rowIndex]));
+	x2Changed = Num(Char(Column(dataTable, "x_2_changed")[rowIndex]));
+	x4Changed = Num(Char(Column(dataTable, "x_4_changed")[rowIndex]));
+	x5Changed = Num(Char(Column(dataTable, "x_5_changed")[rowIndex]));
+	If(Is Missing(x2Changed), x2Changed = 0);
+	If(Is Missing(x4Changed), x4Changed = 0);
+	If(Is Missing(x5Changed), x5Changed = 0);
+	actualScore = Column(dataTable, columnName)[rowIndex];
+	expectedScore = 1;
+	If(domainValue == "diabetes" & x5Changed != 0, expectedScore = 0);
+	If(domainValue == "safelimit" & (x2Changed != 0 | x4Changed != 0), expectedScore = 0);
+	If(actualScore != 0 & actualScore != 1, nonbinary++);
+	If(actualScore != expectedScore, mismatches++);
+);
+
+summaryText = "rows=" || Char(N Rows(dataTable)) || "\!N";
+summaryText ||= "columns=" || Char(N Cols(dataTable)) || "\!N";
+summaryText ||= "column_present=" || Char(Contains(columnNames, columnName)) || "\!N";
+summaryText ||= "nonbinary=" || Char(nonbinary) || "\!N";
+summaryText ||= "rule_mismatches=" || Char(mismatches) || "\!N";
+summaryText ||= "script_count=" || Char(N Items(scriptNames)) || "\!N";
+summaryText ||= "scripts=" || Char(scriptNames) || "\!N";
+summaryText ||= "notes=" || Char(Column(dataTable, columnName) << Get Property("Notes")) || "\!N";
+
+Save Text File(outputPath, summaryText);
+Close(dataTable, No Save);
+Exit();

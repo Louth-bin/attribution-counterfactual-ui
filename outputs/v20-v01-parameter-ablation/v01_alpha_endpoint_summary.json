@@ -1,0 +1,30 @@
+[
+  {
+    "cohort": "direction-qualified 46",
+    "applicable feature-contribution participants": 30,
+    "mean alpha=0 CV selection NLL": 1.7289595215890297,
+    "mean alpha=1 CV selection NLL": 2.0434732256002235,
+    "mean delta NLL (alpha=1 - alpha=0; positive favors alpha=0)": 0.31451370401119344,
+    "mean delta 95% bootstrap CI low": 0.046072143590499035,
+    "mean delta 95% bootstrap CI high": 0.5610384871967221,
+    "participants favoring alpha=0": 24,
+    "participants tied": 0,
+    "participants favoring alpha=1": 6,
+    "one-sided paired Wilcoxon statistic": 360.0,
+    "one-sided paired Wilcoxon p (alpha=0 better)": 0.0038060685619711876
+  },
+  {
+    "cohort": "all 62",
+    "applicable feature-contribution participants": 43,
+    "mean alpha=0 CV selection NLL": 1.8557083079766896,
+    "mean alpha=1 CV selection NLL": 1.9330767770276585,
+    "mean delta NLL (alpha=1 - alpha=0; positive favors alpha=0)": 0.07736846905096884,
+    "mean delta 95% bootstrap CI low": -0.16087346374787947,
+    "mean delta 95% bootstrap CI high": 0.30592918595079927,
+    "participants favoring alpha=0": 27,
+    "participants tied": 0,
+    "participants favoring alpha=1": 16,
+    "one-sided paired Wilcoxon statistic": 557.0,
+    "one-sided paired Wilcoxon p (alpha=0 better)": 0.15835635157941397
+  }
+]

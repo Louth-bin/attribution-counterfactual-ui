@@ -1,0 +1,83 @@
+{
+  "definition": "minimum summed range-normalized L1 distance to an opposite-prediction profile",
+  "boundary": "browser-model probability 0.5 (logit 0)",
+  "feature_constraint": "all five features free",
+  "actionability_constraint": "none",
+  "numeric_features": "continuous within configured experiment ranges",
+  "categorical_features": "enumerated configured levels with normalized mismatch distance",
+  "solver": "Wachter-style multi-start optimization with range-normalized L1; exact LP within each discovered ReLU region",
+  "input_rows": 360,
+  "testing_scored": 180,
+  "unique_profiles_solved": 190,
+  "by_domain": {
+    "housing": {
+      "original": {
+        "count": 0,
+        "min": null,
+        "median": null,
+        "mean": null,
+        "max": null
+      },
+      "new": {
+        "count": 0,
+        "min": null,
+        "median": null,
+        "mean": null,
+        "max": null
+      },
+      "delta": {
+        "count": 0,
+        "min": null,
+        "median": null,
+        "mean": null,
+        "max": null
+      }
+    },
+    "safelimit": {
+      "original": {
+        "count": 0,
+        "min": null,
+        "median": null,
+        "mean": null,
+        "max": null
+      },
+      "new": {
+        "count": 0,
+        "min": null,
+        "median": null,
+        "mean": null,
+        "max": null
+      },
+      "delta": {
+        "count": 0,
+        "min": null,
+        "median": null,
+        "mean": null,
+        "max": null
+      }
+    },
+    "diabetes": {
+      "original": {
+        "count": 180,
+        "min": 0.03128514320372544,
+        "median": 0.07708012066764838,
+        "mean": 0.0783290982373336,
+        "max": 0.13062416436861787
+      },
+      "new": {
+        "count": 180,
+        "min": 0.00028160359757856135,
+        "median": 0.07530389814997801,
+        "mean": 0.10401330262851774,
+        "max": 0.762304922786025
+      },
+      "delta": {
+        "count": 180,
+        "min": -0.12048496296197733,
+        "median": 0.00016367541012386744,
+        "mean": 0.025684204391184136,
+        "max": 0.6682759114333992
+      }
+    }
+  }
+}

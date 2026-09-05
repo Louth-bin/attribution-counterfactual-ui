@@ -1,0 +1,45 @@
+Names Default To Here( 1 );
+
+rootPath = "C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/";
+
+changeColumns = {
+	"x_1_change",
+	"x_2_change",
+	"x_3_change",
+	"x_4_change",
+	"x_5_change"
+};
+
+BlankZeros = Function( {jmpPath, checkCsvPath},
+	{dt, colName, r, i},
+
+	dt = Open( jmpPath, Invisible );
+
+	For( i = 1, i <= N Items( changeColumns ), i++,
+		colName = changeColumns[i];
+		If( Contains( dt << Get Column Names( "String" ), colName ) == 0,
+			Close( dt, NoSave );
+			Throw( "Missing column: " || colName || " in " || jmpPath );
+		);
+
+		For( r = 1, r <= N Rows( dt ), r++,
+			If( !Is Missing( Column( dt, colName )[r] ) & Column( dt, colName )[r] == 0,
+				Column( dt, colName )[r] = .
+			);
+		);
+	);
+
+	dt << Save( jmpPath );
+	dt << Save As( checkCsvPath );
+	Close( dt, NoSave );
+);
+
+BlankZeros(
+	rootPath || "qualtrics/qualtrics_results_v2.0.jmp",
+	rootPath || "qualtrics/qualtrics_results_v2.0.blank_zero_user_changes_roundtrip.csv"
+);
+
+BlankZeros(
+	rootPath || "qualtrics/qualtrics_results_v1.4.jmp",
+	rootPath || "qualtrics/qualtrics_results_v1.4.blank_zero_user_changes_roundtrip.csv"
+);

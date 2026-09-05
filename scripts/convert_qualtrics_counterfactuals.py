@@ -37,6 +37,16 @@ OUTPUT_COLUMNS = (
     "instance id",
     "response time (seconds)",
     "attribute values before and after",
+    "x_1_change",
+    "x_2_change",
+    "x_3_change",
+    "x_4_change",
+    "x_5_change",
+    "x_1_changed",
+    "x_2_changed",
+    "x_3_changed",
+    "x_4_changed",
+    "x_5_changed",
     "explanation",
     "num attributes changed",
     "distance of counterfactual to original",
@@ -49,6 +59,18 @@ OUTPUT_COLUMNS = (
     "training response",
     "training correct (0/1)",
 )
+
+
+def normalize_xai(value: Any) -> str:
+    """Return the canonical condition label used in the results tables."""
+    normalized = str(value or "").strip().casefold()
+    aliases = {
+        "counterfactuals": "counterfactual",
+        "counterfactual": "counterfactual",
+        "attribution": "attribution",
+        "none": "none",
+    }
+    return aliases.get(normalized, normalized)
 
 
 def load_qualtrics_rows(path: Path) -> list[dict[str, str]]:
@@ -177,6 +199,42 @@ def values_differ(first: Any, second: Any, feature_type: str) -> bool:
     return abs(float(first) - float(second)) > 1e-9
 
 
+def normalized_feature_change_columns(
+    original: list[Any],
+    changed: list[Any],
+    feature_types: list[str],
+    feature_ranges: list[list[Any]],
+) -> dict[str, float | int]:
+    """Return signed normalized changes and raw-value selection indicators."""
+    if not (
+        len(original)
+        == len(changed)
+        == len(feature_types)
+        == len(feature_ranges)
+        == 5
+    ):
+        raise ValueError("Expected exactly five aligned experiment attributes")
+
+    columns: dict[str, float | int] = {}
+    for index, (before, after, feature_type, feature_range) in enumerate(
+        zip(original, changed, feature_types, feature_ranges), start=1
+    ):
+        columns[f"x_{index}_change"] = normalized_value(
+            after, feature_type, feature_range
+        ) - normalized_value(before, feature_type, feature_range)
+        columns[f"x_{index}_changed"] = int(
+            values_differ(before, after, feature_type)
+        )
+    return columns
+
+
+def missing_feature_change_columns() -> dict[str, str]:
+    return {
+        **{f"x_{index}_change": "" for index in range(1, 6)},
+        **{f"x_{index}_changed": "" for index in range(1, 6)},
+    }
+
+
 def format_scalar(value: Any) -> str:
     if isinstance(value, bool):
         return "1" if value else "0"
@@ -187,6 +245,11 @@ def format_scalar(value: Any) -> str:
             raise ValueError(f"Cannot write non-finite number {value}")
         return f"{value:.12g}"
     return str(value)
+
+
+def participant_facing_feature_name(name: str) -> str:
+    """Return the label shown in the current participant-facing interface."""
+    return "Glucose" if name == "Blood Glucose" else name
 
 
 def display_value(
@@ -226,7 +289,7 @@ def format_attributes(
             )
         else:
             value_text = before_text
-        lines.append(f'"{name}" - {value_text}')
+        lines.append(f'"{participant_facing_feature_name(name)}" - {value_text}')
     return "\n".join(lines)
 
 
@@ -245,7 +308,7 @@ def format_attribution_explanation(case: dict[str, Any]) -> str:
             direction_labels["right"] if value >= 0 else direction_labels["left"]
         )
         lines.append(
-            f'"{case["feature_names"][index]}" - '
+            f'"{participant_facing_feature_name(case["feature_names"][index])}" - '
             f"{sign}{percentage}% toward {direction}"
         )
     return "\n".join(lines)
@@ -321,9 +384,10 @@ def convert(
             if not training_logs and not testing_logs:
                 skipped_response_count += 1
                 continue
-            if training_logs and len(training_logs) != 10:
+            if training_logs and len(training_logs) not in {10, 12}:
                 raise ValueError(
-                    f"Response {response['ResponseId']} has {len(training_logs)} training cases"
+                    f"Response {response['ResponseId']} has an unsupported number of "
+                    f"training cases: {len(training_logs)}"
                 )
 
             seen_training_numbers: set[int] = set()
@@ -356,7 +420,7 @@ def convert(
                     )
                 original_raw = list(case["raw_feature_values"])
                 labels = case["prediction_labels"]
-                xai = str(log.get("explanation") or response["xaiType"])
+                xai = normalize_xai(log.get("explanation") or response["xaiType"])
                 output_rows.append(
                     {
                         "_source_index": source_index,
@@ -375,6 +439,7 @@ def convert(
                         "attribute values before and after": format_attributes(
                             case, original_raw, original_raw
                         ),
+                        **missing_feature_change_columns(),
                         "num attributes changed": "",
                         "distance of counterfactual to original": "",
                         "counterfactual label": "",
@@ -397,7 +462,7 @@ def convert(
                     f"Response {response['ResponseId']} has an odd number of testing cases"
                 )
             direction_size = len(testing_logs) // 2
-            if direction_size not in {5, 10}:
+            if direction_size not in {5, 6, 9, 10}:
                 raise ValueError(
                     f"Response {response['ResponseId']} has unexpected direction size "
                     f"{direction_size}"
@@ -467,7 +532,7 @@ def convert(
                 counterfactual_target_confidence = counterfactual_probabilities[
                     target_value
                 ]
-                xai = str(log.get("explanation") or response["xaiType"])
+                xai = normalize_xai(log.get("explanation") or response["xaiType"])
                 output_rows.append(
                     {
                         "_source_index": source_index,
@@ -485,6 +550,12 @@ def convert(
                         "response time (seconds)": float(log["responseMs"]) / 1000.0,
                         "attribute values before and after": format_attributes(
                             case, original_raw, changed_raw
+                        ),
+                        **normalized_feature_change_columns(
+                            original_raw,
+                            changed_raw,
+                            case["feature_types"],
+                            case["raw_feature_ranges"],
                         ),
                         "num attributes changed": changed_count,
                         "distance of counterfactual to original": normalized_l1(

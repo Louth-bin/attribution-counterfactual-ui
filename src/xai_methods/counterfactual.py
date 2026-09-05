@@ -7,9 +7,11 @@ import numpy as np
 import pandas as pd
 
 
-PROPORTIONAL_SEARCH_GRID_SIZE = 257
-PROPORTIONAL_BINARY_SEARCH_STEPS = 36
+INDEPENDENT_SEARCH_GRID_SIZE = 65
+INDEPENDENT_REFINEMENT_GRID_SIZE = 33
+INDEPENDENT_REFINEMENT_STEPS = 3
 CHANGE_TOLERANCE = 1e-9
+TARGET_IMPROVEMENT_TOLERANCE = 1e-10
 
 
 def generate_counterfactual(
@@ -27,7 +29,7 @@ def generate_counterfactual(
 ) -> dict[str, Any] | None:
     normalized_generation_mode = _normalize_generation_mode(generation_mode)
     if normalized_generation_mode == "minimal":
-        return _generate_proportional_counterfactual(
+        return _generate_independent_counterfactual(
             estimator=estimator,
             reference_frame=reference_frame,
             target_distribution_frame=target_distribution_frame,
@@ -211,7 +213,7 @@ def _generate_scaled_counterfactual(
     }
 
 
-def _generate_proportional_counterfactual(
+def _generate_independent_counterfactual(
     estimator: Any,
     reference_frame: pd.DataFrame,
     target_distribution_frame: pd.DataFrame,
@@ -230,20 +232,15 @@ def _generate_proportional_counterfactual(
         top_k=top_k,
         selected_feature_indices=selected_feature_indices,
     )
-    if not selected_indices:
+    # The experiment explanation is defined by exactly the two regularized
+    # Kernel SHAP features.  We do not substitute another feature when either
+    # selected feature cannot contribute toward the target prediction.
+    if len(selected_indices) != 2:
         return None
 
-    shap_magnitudes = {
-        index: abs(float(shap_values[index])) for index in selected_indices
-    }
-    max_magnitude = max(shap_magnitudes.values(), default=0.0)
-    if max_magnitude <= 0:
-        return None
-    attribution_weights = {
-        index: magnitude / max_magnitude
-        for index, magnitude in shap_magnitudes.items()
-    }
-    reference_series = reference_frame.iloc[0].copy()
+    base_target_probability = _predict_target_probability(
+        estimator, reference_frame, target_prediction
+    )
     numeric_resolutions = {
         index: _numeric_resolution(
             reference_frame,
@@ -253,151 +250,88 @@ def _generate_proportional_counterfactual(
         for index in selected_indices
         if feature_types[index] != "categorical"
     }
-    direction_choices = _direction_choices(
-        reference_series=reference_series,
+
+    candidate_axes: dict[int, list[Any]] = {}
+    for index in selected_indices:
+        raw_candidates = _initial_independent_values(
+            reference_frame=reference_frame,
+            feature_index=index,
+            feature_names=feature_names,
+            feature_types=feature_types,
+            feature_ranges=feature_ranges,
+            numeric_resolution=numeric_resolutions.get(index, 0.0),
+        )
+        supporting_candidates = _target_supporting_values(
+            estimator=estimator,
+            reference_frame=reference_frame,
+            feature_index=index,
+            candidate_values=raw_candidates,
+            feature_names=feature_names,
+            target_prediction=target_prediction,
+            base_target_probability=base_target_probability,
+        )
+        if not supporting_candidates:
+            return None
+        candidate_axes[index] = supporting_candidates
+
+    chosen = _search_independent_product(
+        estimator=estimator,
+        reference_frame=reference_frame,
         selected_indices=selected_indices,
+        candidate_axes=candidate_axes,
+        feature_names=feature_names,
         feature_types=feature_types,
         feature_ranges=feature_ranges,
+        target_prediction=target_prediction,
     )
-    if any(not choices for choices in direction_choices):
+    if chosen is None:
         return None
 
-    successful_candidates: list[dict[str, Any]] = []
-    best_effort: dict[str, Any] | None = None
-    assignments_evaluated = 0
-
-    for assignment_values in itertools.product(*direction_choices):
-        assignment = dict(zip(selected_indices, assignment_values))
-        scale_limit = _assignment_scale_limit(
-            reference_series=reference_series,
-            selected_indices=selected_indices,
-            assignment=assignment,
-            attribution_weights=attribution_weights,
-            feature_names=feature_names,
-            feature_types=feature_types,
-            feature_ranges=feature_ranges,
-        )
-        if scale_limit is None:
-            continue
-        assignments_evaluated += 1
-
-        if scale_limit == 0.0:
-            candidate_frame = _build_proportional_candidate(
+    for _ in range(INDEPENDENT_REFINEMENT_STEPS):
+        refined_axes: dict[int, list[Any]] = {}
+        for index in selected_indices:
+            if feature_types[index] == "categorical":
+                refined_axes[index] = candidate_axes[index]
+                continue
+            local_values = _refined_independent_values(
                 reference_frame=reference_frame,
-                target_distribution_frame=target_distribution_frame,
-                selected_indices=selected_indices,
-                assignment=assignment,
-                attribution_weights=attribution_weights,
+                feature_index=index,
+                chosen_value=chosen["values"][index],
+                previous_values=candidate_axes[index],
                 feature_names=feature_names,
-                feature_types=feature_types,
                 feature_ranges=feature_ranges,
-                numeric_resolutions=numeric_resolutions,
-                scale=0.0,
+                numeric_resolution=numeric_resolutions.get(index, 0.0),
             )
-            frames = [candidate_frame] if _all_selected_features_changed(
-                reference_frame, candidate_frame, selected_indices, feature_names
-            ) else []
-            scales = [0.0] if frames else []
-        else:
-            scales = np.linspace(
-                scale_limit / PROPORTIONAL_SEARCH_GRID_SIZE,
-                scale_limit,
-                PROPORTIONAL_SEARCH_GRID_SIZE,
-            ).tolist()
-            frames = [
-                _build_proportional_candidate(
-                    reference_frame=reference_frame,
-                    target_distribution_frame=target_distribution_frame,
-                    selected_indices=selected_indices,
-                    assignment=assignment,
-                    attribution_weights=attribution_weights,
-                    feature_names=feature_names,
-                    feature_types=feature_types,
-                    feature_ranges=feature_ranges,
-                    numeric_resolutions=numeric_resolutions,
-                    scale=scale,
-                )
-                for scale in scales
-            ]
-
-        if not frames:
-            continue
-        batch = pd.concat(frames, ignore_index=True)
-        predictions = estimator.predict(batch).astype(int)
-        target_probabilities = _predict_target_probabilities(
-            estimator=estimator,
-            frame=batch,
-            target_prediction=target_prediction,
-        )
-
-        best_index = int(np.argmax(target_probabilities))
-        effort_record = _candidate_record(
-            reference_frame=reference_frame,
-            candidate_frame=frames[best_index],
-            selected_indices=selected_indices,
-            attribution_weights=attribution_weights,
-            assignment=assignment,
-            feature_names=feature_names,
-            feature_types=feature_types,
-            feature_ranges=feature_ranges,
-            scale=float(scales[best_index]),
-            target_probability=float(target_probabilities[best_index]),
-        )
-        if best_effort is None or effort_record["target_probability"] > best_effort["target_probability"]:
-            best_effort = effort_record
-
-        success_indices = np.flatnonzero(predictions == target_prediction)
-        if len(success_indices) == 0:
-            continue
-        first_success_index = int(success_indices[0])
-        lower_scale = 0.0 if first_success_index == 0 else float(scales[first_success_index - 1])
-        upper_scale = float(scales[first_success_index])
-        refined_frame, refined_scale = _refine_success_scale(
+            refined_axes[index] = _target_supporting_values(
+                estimator=estimator,
+                reference_frame=reference_frame,
+                feature_index=index,
+                candidate_values=local_values,
+                feature_names=feature_names,
+                target_prediction=target_prediction,
+                base_target_probability=base_target_probability,
+            )
+            if not refined_axes[index]:
+                refined_axes[index] = candidate_axes[index]
+        refined = _search_independent_product(
             estimator=estimator,
             reference_frame=reference_frame,
-            target_distribution_frame=target_distribution_frame,
             selected_indices=selected_indices,
-            assignment=assignment,
-            attribution_weights=attribution_weights,
+            candidate_axes=refined_axes,
             feature_names=feature_names,
             feature_types=feature_types,
             feature_ranges=feature_ranges,
-            numeric_resolutions=numeric_resolutions,
             target_prediction=target_prediction,
-            lower_scale=lower_scale,
-            upper_scale=upper_scale,
-            initial_success_frame=frames[first_success_index],
         )
-        successful_candidates.append(_candidate_record(
-            reference_frame=reference_frame,
-            candidate_frame=refined_frame,
-            selected_indices=selected_indices,
-            attribution_weights=attribution_weights,
-            assignment=assignment,
-            feature_names=feature_names,
-            feature_types=feature_types,
-            feature_ranges=feature_ranges,
-            scale=refined_scale,
-            target_probability=_predict_target_probability(
-                estimator, refined_frame, target_prediction
-            ),
-        ))
+        if refined is None or refined["objective"] >= chosen["objective"] - CHANGE_TOLERANCE:
+            break
+        chosen = refined
+        candidate_axes = refined_axes
 
-    found_opposing_prediction = bool(successful_candidates)
-    if found_opposing_prediction:
-        chosen = min(
-            successful_candidates,
-            key=lambda candidate: (
-                candidate["objective"],
-                candidate["proportionality_error"],
-                -candidate["target_probability"],
-            ),
-        )
-        prediction_value = target_prediction
-    elif best_effort is not None:
-        chosen = best_effort
-        prediction_value = int(estimator.predict(chosen["frame"])[0])
-    else:
+    prediction_value = int(estimator.predict(chosen["frame"])[0])
+    if prediction_value != target_prediction or not _all_selected_features_changed(
+        reference_frame, chosen["frame"], selected_indices, feature_names
+    ):
         return None
 
     return {
@@ -411,9 +345,7 @@ def _generate_proportional_counterfactual(
             if prediction_value < len(class_labels)
             else str(prediction_value),
         },
-        "source": "shap_proportional_direction_optimization"
-        if found_opposing_prediction
-        else "shap_proportional_best_effort",
+        "source": "regularized_shap_top2_independent_change_optimization",
         "generation_mode": "minimal",
         "target_prediction": {
             "value": target_prediction,
@@ -426,74 +358,249 @@ def _generate_proportional_counterfactual(
         "optimization": {
             "objective": "minimum_total_normalized_change",
             "objective_value": chosen["objective"],
-            "proportionality_error": chosen["proportionality_error"],
-            "scale": chosen["scale"],
             "directions": {
-                feature_names[index]: _format_assignment_direction(chosen["assignment"][index])
+                feature_names[index]: _change_direction(
+                    reference_frame.iloc[0][feature_names[index]],
+                    chosen["values"][index],
+                )
                 for index in selected_indices
             },
-            "attribution_weights": {
-                feature_names[index]: attribution_weights[index]
+            "selection_attribution_values": {
+                feature_names[index]: float(shap_values[index])
                 for index in selected_indices
             },
             "normalized_changes": {
                 feature_names[index]: chosen["normalized_changes"][index]
                 for index in selected_indices
             },
-            "direction_assignments_evaluated": assignments_evaluated,
+            "constraints": {
+                "exact_selected_feature_count": 2,
+                "all_selected_features_changed": True,
+                "each_change_individually_improves_target_probability": True,
+                "change_amounts_proportional_to_attribution": False,
+            },
+            "search_grid_size": INDEPENDENT_SEARCH_GRID_SIZE,
+            "refinement_steps": INDEPENDENT_REFINEMENT_STEPS,
         },
     }
 
 
-def _direction_choices(
-    reference_series: pd.Series,
-    selected_indices: list[int],
+def _initial_independent_values(
+    reference_frame: pd.DataFrame,
+    feature_index: int,
+    feature_names: list[str],
     feature_types: list[str],
     feature_ranges: list[list[Any]],
-) -> list[list[tuple[str, Any]]]:
-    choices: list[list[tuple[str, Any]]] = []
-    for index in selected_indices:
-        if feature_types[index] == "categorical":
-            original = reference_series.iloc[index]
-            choices.append([
-                ("categorical", category)
-                for category in feature_ranges[index]
-                if str(category) != str(original)
-            ])
+    numeric_resolution: float,
+) -> list[Any]:
+    feature_name = feature_names[feature_index]
+    original = reference_frame.iloc[0][feature_name]
+    if feature_types[feature_index] == "categorical":
+        return [
+            value
+            for value in feature_ranges[feature_index]
+            if str(value) != str(original)
+        ]
+
+    original_float = float(original)
+    lower, upper = _effective_numeric_bounds(
+        original_float, feature_ranges[feature_index]
+    )
+    values = np.linspace(lower, upper, INDEPENDENT_SEARCH_GRID_SIZE).tolist()
+    if numeric_resolution > CHANGE_TOLERANCE:
+        values.extend([
+            original_float - numeric_resolution,
+            original_float + numeric_resolution,
+        ])
+    return _normalize_numeric_candidates(
+        values=values,
+        original=original_float,
+        lower=lower,
+        upper=upper,
+        numeric_resolution=numeric_resolution,
+        integer_dtype=pd.api.types.is_integer_dtype(reference_frame[feature_name]),
+    )
+
+
+def _refined_independent_values(
+    reference_frame: pd.DataFrame,
+    feature_index: int,
+    chosen_value: Any,
+    previous_values: list[Any],
+    feature_names: list[str],
+    feature_ranges: list[list[Any]],
+    numeric_resolution: float,
+) -> list[Any]:
+    feature_name = feature_names[feature_index]
+    original = float(reference_frame.iloc[0][feature_name])
+    chosen = float(chosen_value)
+    lower, upper = _effective_numeric_bounds(original, feature_ranges[feature_index])
+    neighbouring_distances = sorted(
+        abs(float(value) - chosen)
+        for value in [*previous_values, original]
+        if abs(float(value) - chosen) > CHANGE_TOLERANCE
+    )
+    nominal_step = (upper - lower) / max(INDEPENDENT_SEARCH_GRID_SIZE - 1, 1)
+    radius = neighbouring_distances[0] if neighbouring_distances else nominal_step
+    radius = max(radius, numeric_resolution, CHANGE_TOLERANCE)
+    values = np.linspace(
+        max(lower, chosen - radius),
+        min(upper, chosen + radius),
+        INDEPENDENT_REFINEMENT_GRID_SIZE,
+    ).tolist()
+    values.append(chosen)
+    return _normalize_numeric_candidates(
+        values=values,
+        original=original,
+        lower=lower,
+        upper=upper,
+        numeric_resolution=numeric_resolution,
+        integer_dtype=pd.api.types.is_integer_dtype(reference_frame[feature_name]),
+    )
+
+
+def _normalize_numeric_candidates(
+    values: list[float],
+    original: float,
+    lower: float,
+    upper: float,
+    numeric_resolution: float,
+    integer_dtype: bool,
+) -> list[Any]:
+    normalized: list[Any] = []
+    seen: set[float] = set()
+    for value in values:
+        candidate = float(np.clip(float(value), lower, upper))
+        if numeric_resolution > CHANGE_TOLERANCE:
+            steps = round((candidate - original) / numeric_resolution)
+            candidate = float(np.clip(
+                original + steps * numeric_resolution, lower, upper
+            ))
+        if integer_dtype:
+            candidate = int(round(candidate))
         else:
-            choices.append([("numeric", -1), ("numeric", 1)])
-    return choices
+            candidate = round(candidate, 12)
+        if abs(float(candidate) - original) <= CHANGE_TOLERANCE:
+            continue
+        key = round(float(candidate), 12)
+        if key in seen:
+            continue
+        seen.add(key)
+        normalized.append(candidate)
+    return sorted(normalized, key=float)
+
+
+def _target_supporting_values(
+    estimator: Any,
+    reference_frame: pd.DataFrame,
+    feature_index: int,
+    candidate_values: list[Any],
+    feature_names: list[str],
+    target_prediction: int,
+    base_target_probability: float,
+) -> list[Any]:
+    if not candidate_values:
+        return []
+    feature_name = feature_names[feature_index]
+    rows = []
+    for value in candidate_values:
+        row = reference_frame.iloc[0].copy()
+        row[feature_name] = value
+        rows.append(row)
+    batch = pd.DataFrame(rows, columns=feature_names).astype(
+        reference_frame.dtypes.to_dict()
+    )
+    probabilities = _predict_target_probabilities(
+        estimator=estimator,
+        frame=batch,
+        target_prediction=target_prediction,
+    )
+    return [
+        value
+        for value, probability in zip(candidate_values, probabilities)
+        if float(probability) > base_target_probability + TARGET_IMPROVEMENT_TOLERANCE
+    ]
+
+
+def _search_independent_product(
+    estimator: Any,
+    reference_frame: pd.DataFrame,
+    selected_indices: list[int],
+    candidate_axes: dict[int, list[Any]],
+    feature_names: list[str],
+    feature_types: list[str],
+    feature_ranges: list[list[Any]],
+    target_prediction: int,
+) -> dict[str, Any] | None:
+    combinations = list(itertools.product(
+        *(candidate_axes[index] for index in selected_indices)
+    ))
+    if not combinations:
+        return None
+
+    rows = []
+    for combination in combinations:
+        row = reference_frame.iloc[0].copy()
+        for index, value in zip(selected_indices, combination):
+            row[feature_names[index]] = value
+        rows.append(row)
+    batch = pd.DataFrame(rows, columns=feature_names).astype(
+        reference_frame.dtypes.to_dict()
+    )
+    predictions = np.asarray(estimator.predict(batch), dtype=int)
+    probabilities = _predict_target_probabilities(
+        estimator=estimator,
+        frame=batch,
+        target_prediction=target_prediction,
+    )
+    valid_indices = np.flatnonzero(predictions == target_prediction)
+    if len(valid_indices) == 0:
+        return None
+
+    records: list[dict[str, Any]] = []
+    for batch_index in valid_indices.tolist():
+        values = {
+            index: combinations[batch_index][position]
+            for position, index in enumerate(selected_indices)
+        }
+        normalized_changes = {
+            index: _normalized_change(
+                reference_frame.iloc[0][feature_names[index]],
+                values[index],
+                feature_types[index],
+                feature_ranges[index],
+            )
+            for index in selected_indices
+        }
+        records.append({
+            "batch_index": batch_index,
+            "values": values,
+            "normalized_changes": normalized_changes,
+            "objective": float(sum(normalized_changes.values())),
+            "target_probability": float(probabilities[batch_index]),
+        })
+    chosen = min(
+        records,
+        key=lambda record: (
+            record["objective"],
+            -record["target_probability"],
+            tuple(str(record["values"][index]) for index in selected_indices),
+        ),
+    )
+    chosen["frame"] = batch.iloc[[chosen["batch_index"]]].copy()
+    chosen["frame"].index = reference_frame.index
+    return chosen
+
+
+def _change_direction(original: Any, updated: Any) -> str:
+    if isinstance(original, str) or isinstance(updated, str):
+        return f"set:{updated}"
+    return "increase" if float(updated) > float(original) else "decrease"
 
 
 def _effective_numeric_bounds(original_value: float, feature_range: list[Any]) -> tuple[float, float]:
     min_value, max_value = [float(value) for value in feature_range]
     return min(min_value, original_value), max(max_value, original_value)
-
-
-def _assignment_scale_limit(
-    reference_series: pd.Series,
-    selected_indices: list[int],
-    assignment: dict[int, tuple[str, Any]],
-    attribution_weights: dict[int, float],
-    feature_names: list[str],
-    feature_types: list[str],
-    feature_ranges: list[list[Any]],
-) -> float | None:
-    numeric_limits: list[float] = []
-    for index in selected_indices:
-        if feature_types[index] == "categorical":
-            continue
-        feature_name = feature_names[index]
-        original = float(reference_series[feature_name])
-        min_value, max_value = _effective_numeric_bounds(original, feature_ranges[index])
-        span = max(float(feature_ranges[index][1]) - float(feature_ranges[index][0]), CHANGE_TOLERANCE)
-        direction = int(assignment[index][1])
-        available = max_value - original if direction > 0 else original - min_value
-        weight = attribution_weights[index]
-        if available <= CHANGE_TOLERANCE or weight <= 0:
-            return None
-        numeric_limits.append(available / (span * weight))
-    return min(numeric_limits) if numeric_limits else 0.0
 
 
 def _numeric_resolution(
@@ -512,54 +619,6 @@ def _numeric_resolution(
     differences = np.diff(np.sort(values.astype(float)))
     positive_differences = differences[differences > CHANGE_TOLERANCE]
     return float(np.min(positive_differences)) if len(positive_differences) else 0.0
-
-
-def _round_outward_delta(delta: float, resolution: float) -> float:
-    if resolution <= 0 or delta == 0:
-        return delta
-    steps = np.ceil((abs(delta) / resolution) - 1e-12)
-    return float(np.sign(delta) * max(steps, 1.0) * resolution)
-
-
-def _build_proportional_candidate(
-    reference_frame: pd.DataFrame,
-    target_distribution_frame: pd.DataFrame,
-    selected_indices: list[int],
-    assignment: dict[int, tuple[str, Any]],
-    attribution_weights: dict[int, float],
-    feature_names: list[str],
-    feature_types: list[str],
-    feature_ranges: list[list[Any]],
-    numeric_resolutions: dict[int, float],
-    scale: float,
-) -> pd.DataFrame:
-    candidate = reference_frame.iloc[0].copy()
-    for index in selected_indices:
-        feature_name = feature_names[index]
-        assignment_type, assignment_value = assignment[index]
-        if assignment_type == "categorical":
-            candidate[feature_name] = assignment_value
-            continue
-
-        original = float(reference_frame.iloc[0][feature_name])
-        min_value, max_value = _effective_numeric_bounds(original, feature_ranges[index])
-        nominal_span = max(
-            float(feature_ranges[index][1]) - float(feature_ranges[index][0]),
-            CHANGE_TOLERANCE,
-        )
-        calculated_delta = (
-            int(assignment_value) * scale * attribution_weights[index] * nominal_span
-        )
-        resolution = numeric_resolutions[index]
-        outward_delta = _round_outward_delta(calculated_delta, resolution)
-        updated = float(np.clip(original + outward_delta, min_value, max_value))
-        if pd.api.types.is_integer_dtype(reference_frame[feature_name]):
-            updated = int(round(updated))
-        else:
-            updated = round(updated, 12)
-        candidate[feature_name] = updated
-    frame = pd.DataFrame([candidate], columns=feature_names)
-    return frame.astype(reference_frame.dtypes.to_dict())
 
 
 def _all_selected_features_changed(
@@ -593,51 +652,6 @@ def _predict_target_probabilities(
     return (predictions == target_prediction).astype(float)
 
 
-def _refine_success_scale(
-    estimator: Any,
-    reference_frame: pd.DataFrame,
-    target_distribution_frame: pd.DataFrame,
-    selected_indices: list[int],
-    assignment: dict[int, tuple[str, Any]],
-    attribution_weights: dict[int, float],
-    feature_names: list[str],
-    feature_types: list[str],
-    feature_ranges: list[list[Any]],
-    numeric_resolutions: dict[int, float],
-    target_prediction: int,
-    lower_scale: float,
-    upper_scale: float,
-    initial_success_frame: pd.DataFrame,
-) -> tuple[pd.DataFrame, float]:
-    best_frame = initial_success_frame
-    best_scale = upper_scale
-    for _ in range(PROPORTIONAL_BINARY_SEARCH_STEPS):
-        midpoint = (lower_scale + upper_scale) / 2.0
-        candidate = _build_proportional_candidate(
-            reference_frame=reference_frame,
-            target_distribution_frame=target_distribution_frame,
-            selected_indices=selected_indices,
-            assignment=assignment,
-            attribution_weights=attribution_weights,
-            feature_names=feature_names,
-            feature_types=feature_types,
-            feature_ranges=feature_ranges,
-            numeric_resolutions=numeric_resolutions,
-            scale=midpoint,
-        )
-        is_valid = _all_selected_features_changed(
-            reference_frame, candidate, selected_indices, feature_names
-        )
-        prediction = int(estimator.predict(candidate)[0]) if is_valid else -1
-        if prediction == target_prediction:
-            upper_scale = midpoint
-            best_scale = midpoint
-            best_frame = candidate
-        else:
-            lower_scale = midpoint
-    return best_frame, best_scale
-
-
 def _normalized_change(
     original: Any,
     candidate: Any,
@@ -656,55 +670,6 @@ def _normalized_change(
         return abs(candidate_index - original_index) / (len(categories) - 1)
     span = max(float(feature_range[1]) - float(feature_range[0]), CHANGE_TOLERANCE)
     return abs(float(candidate) - float(original)) / span
-
-
-def _candidate_record(
-    reference_frame: pd.DataFrame,
-    candidate_frame: pd.DataFrame,
-    selected_indices: list[int],
-    attribution_weights: dict[int, float],
-    assignment: dict[int, tuple[str, Any]],
-    feature_names: list[str],
-    feature_types: list[str],
-    feature_ranges: list[list[Any]],
-    scale: float,
-    target_probability: float,
-) -> dict[str, Any]:
-    normalized_changes = {
-        index: _normalized_change(
-            reference_frame.iloc[0][feature_names[index]],
-            candidate_frame.iloc[0][feature_names[index]],
-            feature_types[index],
-            feature_ranges[index],
-        )
-        for index in selected_indices
-    }
-    numeric_ratios = [
-        normalized_changes[index] / attribution_weights[index]
-        for index in selected_indices
-        if feature_types[index] != "categorical" and attribution_weights[index] > 0
-    ]
-    proportionality_error = (
-        max(numeric_ratios) - min(numeric_ratios)
-        if len(numeric_ratios) > 1
-        else 0.0
-    )
-    return {
-        "frame": candidate_frame,
-        "assignment": assignment,
-        "scale": float(scale),
-        "target_probability": float(target_probability),
-        "normalized_changes": normalized_changes,
-        "objective": float(sum(normalized_changes.values())),
-        "proportionality_error": float(proportionality_error),
-    }
-
-
-def _format_assignment_direction(assignment: tuple[str, Any]) -> str:
-    assignment_type, value = assignment
-    if assignment_type == "categorical":
-        return f"set:{value}"
-    return "increase" if int(value) > 0 else "decrease"
 
 
 def _top_k_indices(values: list[float], top_k: int) -> list[int]:

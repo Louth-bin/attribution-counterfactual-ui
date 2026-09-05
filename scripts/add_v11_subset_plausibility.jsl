@@ -1,0 +1,60 @@
+Names Default To Here(1);
+
+inputPath = Convert File Path("C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/qualtrics/qualtrics_results_v1.1.jmp", Windows);
+scorePath = Convert File Path("C:/Users/Louth/AppData/Local/Temp/v1.1_subset_plausibility.csv", Windows);
+outputPath = Convert File Path("C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/qualtrics/qualtrics_results_v1.1.subset-plausibility-staging.jmp", Windows);
+reportPath = Convert File Path("C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/qualtrics/v1.1_subset_plausibility_validation.txt", Windows);
+columnName = "plausibility (subset)";
+
+dt = Open(inputPath, Invisible);
+scores = Open(scorePath, Invisible);
+scriptsBefore = dt << Get Table Script Names;
+
+If(Contains(dt << Get Column Names("String"), columnName), dt << Delete Columns(columnName));
+dt << New Column(columnName, Numeric, Continuous, Format("Best", 12));
+
+If(N Rows(dt) != N Rows(scores),
+	Throw("Score rows do not match JMP rows")
+);
+
+participantMismatch = 0;
+phaseMismatch = 0;
+trainingNonmissing = 0;
+testingMissing = 0;
+minimumValue = .;
+maximumValue = .;
+For(rowIndex = 1, rowIndex <= N Rows(dt), rowIndex++,
+	If(Char(Column(dt, "participant")[rowIndex]) != Char(Column(scores, "participant")[rowIndex]), participantMismatch++);
+	If(Char(Column(dt, "phase")[rowIndex]) != Char(Column(scores, "phase")[rowIndex]), phaseMismatch++);
+	value = Column(scores, columnName)[rowIndex];
+	Column(dt, columnName)[rowIndex] = value;
+	phase = Lowercase(Char(Column(dt, "phase")[rowIndex]));
+	If(phase == "training",
+		If(!Is Missing(value), trainingNonmissing++),
+		If(Is Missing(value), testingMissing++);
+		If(!Is Missing(value),
+			If(Is Missing(minimumValue) | value < minimumValue, minimumValue = value);
+			If(Is Missing(maximumValue) | value > maximumValue, maximumValue = value);
+		);
+	);
+);
+
+Column(dt, columnName) << Set Property(
+	"Notes",
+	"Testing rows only. Gower similarity to the nearest of the 10 domain-specific training profiles displayed in the experiment: 1 - minimum five-attribute Gower distance (k=1). Numeric dissimilarities are absolute range-normalized differences and categorical dissimilarities are 0/1, averaged across five attributes. Range 0 to 1; higher values mean the submitted profile is more similar to one of the displayed training profiles. Training rows are missing."
+);
+
+dt << Save As(outputPath);
+scriptsAfter = dt << Get Table Script Names;
+
+text = "rows=" || Char(N Rows(dt)) || " columns=" || Char(N Cols(dt)) || "\!N";
+text ||= "participant_mismatch=" || Char(participantMismatch) || " phase_mismatch=" || Char(phaseMismatch) || "\!N";
+text ||= "training_nonmissing=" || Char(trainingNonmissing) || " testing_missing=" || Char(testingMissing) || "\!N";
+text ||= "testing_range=" || Char(minimumValue) || "," || Char(maximumValue) || "\!N";
+text ||= "scripts_before=" || Char(scriptsBefore) || "\!N";
+text ||= "scripts_after=" || Char(scriptsAfter) || "\!N";
+Save Text File(reportPath, text);
+
+Close(scores, No Save);
+Close(dt, No Save);
+Exit();

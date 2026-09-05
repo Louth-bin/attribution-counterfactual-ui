@@ -1,0 +1,22 @@
+{
+  "input": "outputs\\v20-normalized-original-final-values\\qualtrics_results_v2.0.roundtrip.csv",
+  "participants": 52,
+  "testing_rows": 1040,
+  "changed_feature_endpoints": 2017,
+  "near_exact_threshold_participants": 0,
+  "strong_threshold_like_participants": 13,
+  "near_exact_definition": {
+    "minimum_evaluable_edits": 15,
+    "minimum_evaluable_coverage": 0.6,
+    "maximum_threshold_cv_mae": 0.05,
+    "minimum_relative_gain_over_fixed_delta": 0.2,
+    "minimum_rate_within_0.05": 0.75
+  },
+  "strong_threshold_like_definition": {
+    "minimum_evaluable_edits": 15,
+    "minimum_evaluable_coverage": 0.6,
+    "maximum_threshold_cv_mae": 0.075,
+    "minimum_relative_gain_over_fixed_delta": 0.2,
+    "maximum_absolute_endpoint_on_original_slope": 0.25
+  }
+}

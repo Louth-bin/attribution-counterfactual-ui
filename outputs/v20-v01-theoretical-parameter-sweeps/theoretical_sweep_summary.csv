@@ -1,0 +1,523 @@
+﻿model family,model family label,xai,xai label,parameter,parameter label,parameter value,metric,metric label,factorial case-evaluations,mean,10th percentile,90th percentile
+feature contribution,Feature-contribution family,attribution,Feature attribution,age actionable,Age actionable,0.0,actionability,Actionability rate,1260,1.0,1.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,age actionable,Age actionable,0.0,boundary improvement,Boundary-distance improvement,1260,-0.017983066614647464,-0.20170061144288073,0.115176855091702
+feature contribution,Feature-contribution family,attribution,Feature attribution,age actionable,Age actionable,0.0,edit L1,Normalized edit distance (L1),1260,0.35391880666630054,0.0,0.854039958374164
+feature contribution,Feature-contribution family,attribution,Feature attribution,age actionable,Age actionable,0.0,plausibility,Plausibility,1260,0.9480497816380505,0.901816553038322,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,age actionable,Age actionable,0.0,success,Counterfactual success rate,1260,0.3531746031746032,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,age actionable,Age actionable,0.0,target confidence gain,Target-confidence gain,1260,0.34093520306106223,-1.8806226577439132e-05,0.9921900541916929
+feature contribution,Feature-contribution family,attribution,Feature attribution,age actionable,Age actionable,1.0,actionability,Actionability rate,1260,0.6753968253968254,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,age actionable,Age actionable,1.0,boundary improvement,Boundary-distance improvement,1260,0.006863994948917172,-0.10748935820178099,0.11686447110162393
+feature contribution,Feature-contribution family,attribution,Feature attribution,age actionable,Age actionable,1.0,edit L1,Normalized edit distance (L1),1260,0.3496206829488072,0.0,0.8440949380011336
+feature contribution,Feature-contribution family,attribution,Feature attribution,age actionable,Age actionable,1.0,plausibility,Plausibility,1260,0.9500736842251627,0.904351204856759,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,age actionable,Age actionable,1.0,success,Counterfactual success rate,1260,0.3404761904761905,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,age actionable,Age actionable,1.0,target confidence gain,Target-confidence gain,1260,0.32341586097630565,-1.8626770940355365e-05,0.9844647828250997
+feature contribution,Feature-contribution family,attribution,Feature attribution,alpha,Global relevance reliance (α),0.0,actionability,Actionability rate,840,0.8,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,alpha,Global relevance reliance (α),0.0,boundary improvement,Boundary-distance improvement,840,0.011440262402209496,-0.11789327856660027,0.14871530864778218
+feature contribution,Feature-contribution family,attribution,Feature attribution,alpha,Global relevance reliance (α),0.0,edit L1,Normalized edit distance (L1),840,0.39439211071158303,0.0,0.9174081810257143
+feature contribution,Feature-contribution family,attribution,Feature attribution,alpha,Global relevance reliance (α),0.0,plausibility,Plausibility,840,0.9537728532651297,0.9164768019239742,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,alpha,Global relevance reliance (α),0.0,success,Counterfactual success rate,840,0.3464285714285714,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,alpha,Global relevance reliance (α),0.0,target confidence gain,Target-confidence gain,840,0.33328890450613485,0.0,0.984594588910996
+feature contribution,Feature-contribution family,attribution,Feature attribution,alpha,Global relevance reliance (α),0.5,actionability,Actionability rate,840,0.8297619047619048,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,alpha,Global relevance reliance (α),0.5,boundary improvement,Boundary-distance improvement,840,-0.0021040987745082704,-0.1549001450095619,0.12456704939240396
+feature contribution,Feature-contribution family,attribution,Feature attribution,alpha,Global relevance reliance (α),0.5,edit L1,Normalized edit distance (L1),840,0.347241610775484,0.0,0.8435340340119817
+feature contribution,Feature-contribution family,attribution,Feature attribution,alpha,Global relevance reliance (α),0.5,plausibility,Plausibility,840,0.9517865289826795,0.9070333180066523,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,alpha,Global relevance reliance (α),0.5,success,Counterfactual success rate,840,0.35119047619047616,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,alpha,Global relevance reliance (α),0.5,target confidence gain,Target-confidence gain,840,0.32976155884238284,-1.2513343694564583e-10,0.985477631613788
+feature contribution,Feature-contribution family,attribution,Feature attribution,alpha,Global relevance reliance (α),1.0,actionability,Actionability rate,840,0.8833333333333333,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,alpha,Global relevance reliance (α),1.0,boundary improvement,Boundary-distance improvement,840,-0.02601477112629666,-0.18897826433040957,0.07773826449571009
+feature contribution,Feature-contribution family,attribution,Feature attribution,alpha,Global relevance reliance (α),1.0,edit L1,Normalized edit distance (L1),840,0.31367551293559454,0.0,0.7604958788116486
+feature contribution,Feature-contribution family,attribution,Feature attribution,alpha,Global relevance reliance (α),1.0,plausibility,Plausibility,840,0.9416258165470105,0.8750980649819659,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,alpha,Global relevance reliance (α),1.0,success,Counterfactual success rate,840,0.34285714285714286,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,alpha,Global relevance reliance (α),1.0,target confidence gain,Target-confidence gain,840,0.333476132707534,-0.0045850779295592,0.9923966489124988
+feature contribution,Feature-contribution family,attribution,Feature attribution,eta,Explanation reliance (η),0.0,actionability,Actionability rate,840,0.6726190476190477,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,eta,Explanation reliance (η),0.0,boundary improvement,Boundary-distance improvement,840,-0.0043301113503200215,-0.15552572482426089,0.10936581321796603
+feature contribution,Feature-contribution family,attribution,Feature attribution,eta,Explanation reliance (η),0.0,edit L1,Normalized edit distance (L1),840,0.38406638950300287,0.0,0.8833164835828212
+feature contribution,Feature-contribution family,attribution,Feature attribution,eta,Explanation reliance (η),0.0,plausibility,Plausibility,840,0.9455185021253052,0.8934635734178595,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,eta,Explanation reliance (η),0.0,success,Counterfactual success rate,840,0.37023809523809526,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,eta,Explanation reliance (η),0.0,target confidence gain,Target-confidence gain,840,0.35015849315903746,-1.880527463209436e-05,0.9854774533498315
+feature contribution,Feature-contribution family,attribution,Feature attribution,eta,Explanation reliance (η),0.5,actionability,Actionability rate,840,0.8690476190476191,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,eta,Explanation reliance (η),0.5,boundary improvement,Boundary-distance improvement,840,-0.0066792479960395305,-0.15882638438907531,0.12469814215519784
+feature contribution,Feature-contribution family,attribution,Feature attribution,eta,Explanation reliance (η),0.5,edit L1,Normalized edit distance (L1),840,0.36268558506918247,0.0,0.864715895625715
+feature contribution,Feature-contribution family,attribution,Feature attribution,eta,Explanation reliance (η),0.5,plausibility,Plausibility,840,0.9487729076191599,0.9041375009019937,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,eta,Explanation reliance (η),0.5,success,Counterfactual success rate,840,0.3464285714285714,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,eta,Explanation reliance (η),0.5,target confidence gain,Target-confidence gain,840,0.33296139543988496,-1.879736356293904e-05,0.9858764538629363
+feature contribution,Feature-contribution family,attribution,Feature attribution,eta,Explanation reliance (η),1.0,actionability,Actionability rate,840,0.9714285714285714,1.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,eta,Explanation reliance (η),1.0,boundary improvement,Boundary-distance improvement,840,-0.005669248152235888,-0.1492488070172899,0.11354214846675591
+feature contribution,Feature-contribution family,attribution,Feature attribution,eta,Explanation reliance (η),1.0,edit L1,Normalized edit distance (L1),840,0.3085572598504762,0.0,0.7847863916103147
+feature contribution,Feature-contribution family,attribution,Feature attribution,eta,Explanation reliance (η),1.0,plausibility,Plausibility,840,0.9528937890503547,0.9090323993711725,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,eta,Explanation reliance (η),1.0,success,Counterfactual success rate,840,0.3238095238095238,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,eta,Explanation reliance (η),1.0,target confidence gain,Target-confidence gain,840,0.3134067074571292,-1.8015880019495165e-05,0.9906671544195136
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.3,actionability,Actionability rate,360,0.9555555555555556,1.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.3,boundary improvement,Boundary-distance improvement,360,0.0002525601703117821,-7.359399017353823e-06,0.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.3,edit L1,Normalized edit distance (L1),360,0.02177120418861263,0.0,0.07781575778861238
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.3,plausibility,Plausibility,360,0.9803117186012824,0.9339384191212899,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.3,success,Counterfactual success rate,360,0.008333333333333333,0.0,0.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.3,target confidence gain,Target-confidence gain,360,0.012563948081323578,0.0,0.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.2,actionability,Actionability rate,360,0.9166666666666666,1.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.2,boundary improvement,Boundary-distance improvement,360,0.008054393290487523,-0.004455924154659516,0.03714153772733564
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.2,edit L1,Normalized edit distance (L1),360,0.05567121116273212,0.0,0.20332480018792762
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.2,plausibility,Plausibility,360,0.9762100991186367,0.9326486293480933,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.2,success,Counterfactual success rate,360,0.058333333333333334,0.0,0.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.2,target confidence gain,Target-confidence gain,360,0.05575070852183119,-1.2614951305778277e-10,0.09962735807090588
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.1,actionability,Actionability rate,360,0.8805555555555555,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.1,boundary improvement,Boundary-distance improvement,360,0.026207034650654295,-0.022889503138322366,0.13567688937987935
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.1,edit L1,Normalized edit distance (L1),360,0.136794123357852,0.0,0.3721545720320909
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.1,plausibility,Plausibility,360,0.9680056708548999,0.931219510414102,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.1,success,Counterfactual success rate,360,0.1361111111111111,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.1,target confidence gain,Target-confidence gain,360,0.14713145843594533,-1.87771459913999e-05,0.7465089845883129
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.0,actionability,Actionability rate,360,0.7777777777777778,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.0,boundary improvement,Boundary-distance improvement,360,0.028552219179247516,-0.06161319870414937,0.17253664009210876
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.0,edit L1,Normalized edit distance (L1),360,0.2770018717799312,0.020567955961058537,0.5721545720320909
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.0,plausibility,Plausibility,360,0.9544660989842152,0.9206092264432733,0.9951683940171183
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.0,success,Counterfactual success rate,360,0.38055555555555554,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.0,target confidence gain,Target-confidence gain,360,0.3616344799761154,-0.002277242684972181,0.9858090528340642
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.1,actionability,Actionability rate,360,0.7777777777777778,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.1,boundary improvement,Boundary-distance improvement,360,0.010144632694328571,-0.15384086273587844,0.1919731389773638
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.1,edit L1,Normalized edit distance (L1),360,0.4761643962451956,0.22056795596105852,0.7721545720320909
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.1,plausibility,Plausibility,360,0.9345110920042852,0.9041077655039823,0.9576725357559348
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.1,success,Counterfactual success rate,360,0.5916666666666667,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.1,target confidence gain,Target-confidence gain,360,0.5636785258139537,-1.8805427630042004e-05,0.9958519876379556
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.2,actionability,Actionability rate,360,0.7777777777777778,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.2,boundary improvement,Boundary-distance improvement,360,-0.03699827082382965,-0.23478518281677255,0.14557818934097527
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.2,edit L1,Normalized edit distance (L1),360,0.6649324659066747,0.4134048026780683,0.972154572032091
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.2,plausibility,Plausibility,360,0.9220019767471339,0.8790909573264966,0.9540848155874939
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.2,success,Counterfactual success rate,360,0.6361111111111111,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.2,target confidence gain,Target-confidence gain,360,0.5954768358092206,-1.880622657870479e-05,0.9979351787744529
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.3,actionability,Actionability rate,360,0.7777777777777778,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.3,boundary improvement,Boundary-distance improvement,360,-0.07512931999125606,-0.2873519701454965,0.11834135196761046
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.3,edit L1,Normalized edit distance (L1),360,0.8300529410118789,0.5189080830547977,1.1543630488992513
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.3,plausibility,Plausibility,360,0.9079254742107932,0.858778824837782,0.9533087721730912
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.3,success,Counterfactual success rate,360,0.6166666666666667,0.0,1.0
+feature contribution,Feature-contribution family,attribution,Feature attribution,rho,Signed change margin (ρ),0.3,target confidence gain,Target-confidence gain,360,0.5889927674923974,-0.012799558189128877,0.9979351825905393
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,actionability,Actionability rate,1260,1.0,1.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,boundary improvement,Boundary-distance improvement,1260,-0.004198180014196816,-0.18458083236230344,0.16081483392384577
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,edit L1,Normalized edit distance (L1),1260,0.3872943737009372,0.0,0.9092273857508093
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,plausibility,Plausibility,1260,0.9473374291162048,0.9023276421175661,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,success,Counterfactual success rate,1260,0.3896825396825397,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,target confidence gain,Target-confidence gain,1260,0.3785532867545784,-1.261515336636876e-10,0.9878126279708948
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,age actionable,Age actionable,1.0,actionability,Actionability rate,1260,0.6738095238095239,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,age actionable,Age actionable,1.0,boundary improvement,Boundary-distance improvement,1260,0.020127750789493002,-0.09628504815462495,0.17026937338339518
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,age actionable,Age actionable,1.0,edit L1,Normalized edit distance (L1),1260,0.3797314299745315,0.0,0.905226730074228
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,age actionable,Age actionable,1.0,plausibility,Plausibility,1260,0.9495368407313365,0.9062008751024777,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,age actionable,Age actionable,1.0,success,Counterfactual success rate,1260,0.3738095238095238,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,age actionable,Age actionable,1.0,target confidence gain,Target-confidence gain,1260,0.3599087126371556,0.0,0.9819264187972632
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.0,actionability,Actionability rate,840,0.8,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.0,boundary improvement,Boundary-distance improvement,840,0.02464355647334411,-0.1091612132664313,0.1987130157947171
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.0,edit L1,Normalized edit distance (L1),840,0.4175964982270983,0.0,0.9756934351508244
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.0,plausibility,Plausibility,840,0.9530636063543583,0.9149959414348916,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.0,success,Counterfactual success rate,840,0.3904761904761905,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.0,target confidence gain,Target-confidence gain,840,0.377032030921903,0.0,0.9844640865310629
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.5,actionability,Actionability rate,840,0.8273809523809523,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.5,boundary improvement,Boundary-distance improvement,840,0.014148169909150392,-0.11811045088106613,0.1758786441150405
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.5,edit L1,Normalized edit distance (L1),840,0.38666255413466477,0.0,0.92975037806726
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.5,plausibility,Plausibility,840,0.9519056851903058,0.9101053079826684,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.5,success,Counterfactual success rate,840,0.38333333333333336,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),0.5,target confidence gain,Target-confidence gain,840,0.37272745195721635,0.0,0.9854776316137485
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),1.0,actionability,Actionability rate,840,0.8833333333333333,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),1.0,boundary improvement,Boundary-distance improvement,840,-0.014897370219550218,-0.16547331787006914,0.10952310353095687
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),1.0,edit L1,Normalized edit distance (L1),840,0.3462796531514401,0.0,0.8390130688293608
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),1.0,plausibility,Plausibility,840,0.940342113226648,0.8763544665216857,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),1.0,success,Counterfactual success rate,840,0.37142857142857144,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,alpha,Global relevance reliance (α),1.0,target confidence gain,Target-confidence gain,840,0.3579335162084817,-1.880622656587061e-05,0.9894924770486746
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,actionability,Actionability rate,840,0.6726190476190477,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,boundary improvement,Boundary-distance improvement,840,-0.0043301113503200215,-0.15552572482426089,0.10936581321796603
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,edit L1,Normalized edit distance (L1),840,0.38406638950300287,0.0,0.8833164835828212
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,plausibility,Plausibility,840,0.9455185021253052,0.8934635734178595,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,success,Counterfactual success rate,840,0.37023809523809526,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,target confidence gain,Target-confidence gain,840,0.35015849315903746,-1.880527463209436e-05,0.9854774533498315
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.5,actionability,Actionability rate,840,0.8714285714285714,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.5,boundary improvement,Boundary-distance improvement,840,0.002146776288907171,-0.16418504590465782,0.15691291660169054
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.5,edit L1,Normalized edit distance (L1),840,0.4240162473813709,0.0,0.9766579613096096
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.5,plausibility,Plausibility,840,0.9465199964257462,0.9021764731655438,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.5,success,Counterfactual success rate,840,0.3523809523809524,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.5,target confidence gain,Target-confidence gain,840,0.34861928989838936,-1.8806222399869733e-05,0.985477631631805
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,eta,Explanation reliance (η),1.0,actionability,Actionability rate,840,0.9666666666666667,1.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,eta,Explanation reliance (η),1.0,boundary improvement,Boundary-distance improvement,840,0.026077691224357134,-0.09969623983857662,0.19510850790843576
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,eta,Explanation reliance (η),1.0,edit L1,Normalized edit distance (L1),840,0.3424560686288293,0.0,0.8795677663505387
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,eta,Explanation reliance (η),1.0,plausibility,Plausibility,840,0.9532729062202605,0.9108435342038799,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,eta,Explanation reliance (η),1.0,success,Counterfactual success rate,840,0.4226190476190476,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,eta,Explanation reliance (η),1.0,target confidence gain,Target-confidence gain,840,0.40891521603017417,0.0,0.9854769204976138
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.3,actionability,Actionability rate,360,0.95,1.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.3,boundary improvement,Boundary-distance improvement,360,0.009888715421515022,0.0,0.034998699060397744
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.3,edit L1,Normalized edit distance (L1),360,0.033663484050804854,0.0,0.14326846663197793
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.3,plausibility,Plausibility,360,0.9795712403417307,0.9326486293480933,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.3,success,Counterfactual success rate,360,0.013888888888888888,0.0,0.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.3,target confidence gain,Target-confidence gain,360,0.01563939026929425,0.0,0.003388513933534318
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.2,actionability,Actionability rate,360,0.9166666666666666,1.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.2,boundary improvement,Boundary-distance improvement,360,0.02479563544108129,-0.007932333613402055,0.11070259395765467
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.2,edit L1,Normalized edit distance (L1),360,0.08179988839270104,0.0,0.26392440404995055
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.2,plausibility,Plausibility,360,0.9746536569607893,0.9339384191212899,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.2,success,Counterfactual success rate,360,0.075,0.0,0.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.2,target confidence gain,Target-confidence gain,360,0.07174186867610123,0.0,0.1953277997145393
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.1,actionability,Actionability rate,360,0.8805555555555555,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.1,boundary improvement,Boundary-distance improvement,360,0.041208576135004615,-0.030093713627222574,0.19485050057153905
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.1,edit L1,Normalized edit distance (L1),360,0.17133284690339348,0.0,0.4181503229191212
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.1,plausibility,Plausibility,360,0.9664274038438789,0.9312003765202503,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.1,success,Counterfactual success rate,360,0.15555555555555556,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.1,target confidence gain,Target-confidence gain,360,0.1738920322514802,-1.8376292770794483e-06,0.790158993476693
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.0,actionability,Actionability rate,360,0.7777777777777778,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.0,boundary improvement,Boundary-distance improvement,360,0.04119430366842533,-0.0627967041780246,0.2049053275781504
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.0,edit L1,Normalized edit distance (L1),360,0.3119782985019037,0.022627350979344776,0.6181503229191212
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.0,plausibility,Plausibility,360,0.9520766003240286,0.9200114352515268,0.9945917504083811
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.0,success,Counterfactual success rate,360,0.37777777777777777,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.0,target confidence gain,Target-confidence gain,360,0.34546600938140787,-5.803821254110955e-05,0.9641701715706897
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.1,actionability,Actionability rate,360,0.7777777777777778,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.1,boundary improvement,Boundary-distance improvement,360,0.02366457012158227,-0.12262607776281367,0.19943860827975796
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.1,edit L1,Normalized edit distance (L1),360,0.5112216738386045,0.22262735097934477,0.8181503229191212
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.1,plausibility,Plausibility,360,0.9371567929802198,0.9071187930025845,0.9584803526870579
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.1,success,Counterfactual success rate,360,0.6138888888888889,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.1,target confidence gain,Target-confidence gain,360,0.6056179396282014,1.1060388958705744e-06,0.9957855025518421
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.2,actionability,Actionability rate,360,0.7777777777777778,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.2,boundary improvement,Boundary-distance improvement,360,-0.025105259698193376,-0.23312182872074758,0.170276685046691
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.2,edit L1,Normalized edit distance (L1),360,0.7024185114040316,0.4203919298806558,1.009417654685435
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.2,plausibility,Plausibility,360,0.9216967952350199,0.8868276678093434,0.9521880531588556
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.2,success,Counterfactual success rate,360,0.7166666666666667,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.2,target confidence gain,Target-confidence gain,360,0.6804072650118135,3.4735438969590794e-10,0.9974022838459454
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.3,actionability,Actionability rate,360,0.7777777777777778,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.3,boundary improvement,Boundary-distance improvement,360,-0.05989304337587848,-0.27814169890919077,0.14883170306946208
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.3,edit L1,Normalized edit distance (L1),360,0.8721756097727016,0.5613720728286373,1.180919816845641
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.3,plausibility,Plausibility,360,0.9074774547807275,0.8666812395879766,0.9458909039225448
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.3,success,Counterfactual success rate,360,0.7194444444444444,0.0,1.0
+feature contribution,Feature-contribution family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.3,target confidence gain,Target-confidence gain,360,0.6918524926527705,-1.878831149557669e-05,0.9979351837476539
+feature contribution,Feature-contribution family,none,No XAI,age actionable,Age actionable,0.0,actionability,Actionability rate,420,1.0,1.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,age actionable,Age actionable,0.0,boundary improvement,Boundary-distance improvement,420,-0.031969487487655004,-0.26242397950017465,0.10657034442131882
+feature contribution,Feature-contribution family,none,No XAI,age actionable,Age actionable,0.0,edit L1,Normalized edit distance (L1),420,0.4032840580649781,0.0,0.9046929477283152
+feature contribution,Feature-contribution family,none,No XAI,age actionable,Age actionable,0.0,plausibility,Plausibility,420,0.9424596959344079,0.8869494546062339,1.0
+feature contribution,Feature-contribution family,none,No XAI,age actionable,Age actionable,0.0,success,Counterfactual success rate,420,0.39285714285714285,0.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,age actionable,Age actionable,0.0,target confidence gain,Target-confidence gain,420,0.3773822261576946,-0.006291027078177993,0.9923972791509109
+feature contribution,Feature-contribution family,none,No XAI,age actionable,Age actionable,1.0,actionability,Actionability rate,420,0.34523809523809523,0.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,age actionable,Age actionable,1.0,boundary improvement,Boundary-distance improvement,420,0.02330926478701496,-0.05551380850074685,0.11063721378025008
+feature contribution,Feature-contribution family,none,No XAI,age actionable,Age actionable,1.0,edit L1,Normalized edit distance (L1),420,0.36484872094102755,0.0,0.8625567850876799
+feature contribution,Feature-contribution family,none,No XAI,age actionable,Age actionable,1.0,plausibility,Plausibility,420,0.9485773083162025,0.9004856889032237,1.0
+feature contribution,Feature-contribution family,none,No XAI,age actionable,Age actionable,1.0,success,Counterfactual success rate,420,0.3476190476190476,0.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,age actionable,Age actionable,1.0,target confidence gain,Target-confidence gain,420,0.3229347601603805,-1.8631643941002807e-05,0.9387134749324803
+feature contribution,Feature-contribution family,none,No XAI,alpha,Global relevance reliance (α),0.0,actionability,Actionability rate,280,0.7,0.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,alpha,Global relevance reliance (α),0.0,boundary improvement,Boundary-distance improvement,280,0.006017161076725102,-0.14343874751124427,0.14986548217595114
+feature contribution,Feature-contribution family,none,No XAI,alpha,Global relevance reliance (α),0.0,edit L1,Normalized edit distance (L1),280,0.42968026310327473,0.0,0.977718944098296
+feature contribution,Feature-contribution family,none,No XAI,alpha,Global relevance reliance (α),0.0,plausibility,Plausibility,280,0.9487999173069137,0.9105387376357879,1.0
+feature contribution,Feature-contribution family,none,No XAI,alpha,Global relevance reliance (α),0.0,success,Counterfactual success rate,280,0.3821428571428571,0.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,alpha,Global relevance reliance (α),0.0,target confidence gain,Target-confidence gain,280,0.36011055732059544,-1.871690356479716e-05,0.9828764741550774
+feature contribution,Feature-contribution family,none,No XAI,alpha,Global relevance reliance (α),0.5,actionability,Actionability rate,280,0.6678571428571428,0.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,alpha,Global relevance reliance (α),0.5,boundary improvement,Boundary-distance improvement,280,4.865348082935103e-05,-0.13441992639996403,0.11859574499630954
+feature contribution,Feature-contribution family,none,No XAI,alpha,Global relevance reliance (α),0.5,edit L1,Normalized edit distance (L1),280,0.3753712200187632,0.0,0.8819044849071942
+feature contribution,Feature-contribution family,none,No XAI,alpha,Global relevance reliance (α),0.5,plausibility,Plausibility,280,0.9475036678910497,0.8958853617492546,1.0
+feature contribution,Feature-contribution family,none,No XAI,alpha,Global relevance reliance (α),0.5,success,Counterfactual success rate,280,0.37857142857142856,0.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,alpha,Global relevance reliance (α),0.5,target confidence gain,Target-confidence gain,280,0.3517388822598906,-1.406918722477445e-05,0.9854774549485686
+feature contribution,Feature-contribution family,none,No XAI,alpha,Global relevance reliance (α),1.0,actionability,Actionability rate,280,0.65,0.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,alpha,Global relevance reliance (α),1.0,boundary improvement,Boundary-distance improvement,280,-0.01905614860851451,-0.17197078138700192,0.08731890567589323
+feature contribution,Feature-contribution family,none,No XAI,alpha,Global relevance reliance (α),1.0,edit L1,Normalized edit distance (L1),280,0.3471476853869706,0.0,0.8339233995578158
+feature contribution,Feature-contribution family,none,No XAI,alpha,Global relevance reliance (α),1.0,plausibility,Plausibility,280,0.940251921177952,0.8804815682156324,1.0
+feature contribution,Feature-contribution family,none,No XAI,alpha,Global relevance reliance (α),1.0,success,Counterfactual success rate,280,0.35,0.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,alpha,Global relevance reliance (α),1.0,target confidence gain,Target-confidence gain,280,0.33862603989662665,-0.001111844416842853,0.9855139403693323
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),-0.3,actionability,Actionability rate,120,0.9166666666666666,1.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),-0.3,boundary improvement,Boundary-distance improvement,120,0.003416140800717897,-0.0020493756744445813,0.019688416094212634
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),-0.3,edit L1,Normalized edit distance (L1),120,0.03551623146446882,0.0,0.11070886804131724
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),-0.3,plausibility,Plausibility,120,0.9779944380517683,0.9326486293480933,1.0
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),-0.3,success,Counterfactual success rate,120,0.025,0.0,0.0
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),-0.3,target confidence gain,Target-confidence gain,120,0.024377631401927887,-1.0509247125090012e-06,0.011416171741756206
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),-0.2,actionability,Actionability rate,120,0.825,0.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),-0.2,boundary improvement,Boundary-distance improvement,120,0.006804524919639477,-0.022235258509027855,0.02970274100333472
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),-0.2,edit L1,Normalized edit distance (L1),120,0.08196393332421151,0.0,0.2465655528558529
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),-0.2,plausibility,Plausibility,120,0.9725485236185569,0.9284948791649524,1.0
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),-0.2,success,Counterfactual success rate,120,0.09166666666666666,0.0,0.0
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),-0.2,target confidence gain,Target-confidence gain,120,0.09713594299989058,-1.7404357695227633e-05,0.3647242871827607
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),-0.1,actionability,Actionability rate,120,0.7333333333333333,0.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),-0.1,boundary improvement,Boundary-distance improvement,120,0.013175741081553642,-0.054591524757345786,0.08744614535680002
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),-0.1,edit L1,Normalized edit distance (L1),120,0.1675599350000375,0.0,0.43624452094048843
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),-0.1,plausibility,Plausibility,120,0.96362211126482,0.9208368428664911,1.0
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),-0.1,success,Counterfactual success rate,120,0.16666666666666666,0.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),-0.1,target confidence gain,Target-confidence gain,120,0.17648434730292148,-1.8417526258707185e-05,0.9184972884256355
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.0,actionability,Actionability rate,120,0.5583333333333333,0.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.0,boundary improvement,Boundary-distance improvement,120,0.02656140928856547,-0.10475611000523907,0.20297949034255744
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.0,edit L1,Normalized edit distance (L1),120,0.31919320059886275,0.034051000830538414,0.635449504255084
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.0,plausibility,Plausibility,120,0.9494123314575372,0.9160836167945051,0.9845210975613296
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.0,success,Counterfactual success rate,120,0.35833333333333334,0.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.0,target confidence gain,Target-confidence gain,120,0.340475627888632,-0.003952666666425147,0.9845580316001225
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.1,actionability,Actionability rate,120,0.5583333333333333,0.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.1,boundary improvement,Boundary-distance improvement,120,0.0012914565009014814,-0.18473523588283264,0.1842094458719593
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.1,edit L1,Normalized edit distance (L1),120,0.5169233266089652,0.23405100083053837,0.835449504255084
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.1,plausibility,Plausibility,120,0.9330552032581161,0.9055509281326203,0.9583426422881414
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.1,success,Counterfactual success rate,120,0.625,0.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.1,target confidence gain,Target-confidence gain,120,0.5899916651309783,-1.8805254283171813e-05,0.9972598886623485
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.2,actionability,Actionability rate,120,0.5583333333333333,0.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.2,boundary improvement,Boundary-distance improvement,120,-0.02620486114678972,-0.27152924088280933,0.17027668504669097
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.2,edit L1,Normalized edit distance (L1),120,0.7021010006296564,0.43111583400791315,1.0277400516597506
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.2,plausibility,Plausibility,120,0.9186138271973481,0.8849936922762408,0.9515984659135656
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.2,success,Counterfactual success rate,120,0.6666666666666666,0.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.2,target confidence gain,Target-confidence gain,120,0.6097673000261561,-0.0006394362184934921,0.9979351667164282
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.3,actionability,Actionability rate,120,0.5583333333333333,0.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.3,boundary improvement,Boundary-distance improvement,120,-0.055355190896828395,-0.2819719019060522,0.1198704777756807
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.3,edit L1,Normalized edit distance (L1),120,0.865207098894818,0.5774419248737499,1.2112246388458652
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.3,plausibility,Plausibility,120,0.9033830800289901,0.8608444384376778,0.9501667057527458
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.3,success,Counterfactual success rate,120,0.6583333333333333,0.0,1.0
+feature contribution,Feature-contribution family,none,No XAI,rho,Signed change margin (ρ),0.3,target confidence gain,Target-confidence gain,120,0.6128769373627565,-0.01492014228966698,0.9979351837476539
+weighted examples,Weighted-example family,attribution,Feature attribution,age actionable,Age actionable,0.0,actionability,Actionability rate,1260,1.0,1.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,age actionable,Age actionable,0.0,boundary improvement,Boundary-distance improvement,1260,0.019991689617852672,-0.1319341484171769,0.2000788389271208
+weighted examples,Weighted-example family,attribution,Feature attribution,age actionable,Age actionable,0.0,edit L1,Normalized edit distance (L1),1260,0.5216010667354439,0.0,1.0733113955929587
+weighted examples,Weighted-example family,attribution,Feature attribution,age actionable,Age actionable,0.0,plausibility,Plausibility,1260,0.9459201586630902,0.9067732897249865,0.9980472281114245
+weighted examples,Weighted-example family,attribution,Feature attribution,age actionable,Age actionable,0.0,success,Counterfactual success rate,1260,0.403968253968254,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,age actionable,Age actionable,0.0,target confidence gain,Target-confidence gain,1260,0.39423969989826685,-0.0009242101358060849,0.985477631631805
+weighted examples,Weighted-example family,attribution,Feature attribution,age actionable,Age actionable,1.0,actionability,Actionability rate,1260,0.3896825396825397,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,age actionable,Age actionable,1.0,boundary improvement,Boundary-distance improvement,1260,0.021150954912305977,-0.12003630075962737,0.17056302915941718
+weighted examples,Weighted-example family,attribution,Feature attribution,age actionable,Age actionable,1.0,edit L1,Normalized edit distance (L1),1260,0.6319020251270853,0.0848610765771421,1.2271716136699269
+weighted examples,Weighted-example family,attribution,Feature attribution,age actionable,Age actionable,1.0,plausibility,Plausibility,1260,0.9426355275989314,0.9106233528386001,0.9764866054442527
+weighted examples,Weighted-example family,attribution,Feature attribution,age actionable,Age actionable,1.0,success,Counterfactual success rate,1260,0.44285714285714284,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,age actionable,Age actionable,1.0,target confidence gain,Target-confidence gain,1260,0.41638249342596634,-1.8806226576462137e-05,0.9845924809796046
+weighted examples,Weighted-example family,attribution,Feature attribution,eta,Explanation reliance (η),0.0,actionability,Actionability rate,840,0.6952380952380952,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,eta,Explanation reliance (η),0.0,boundary improvement,Boundary-distance improvement,840,0.02346947394100552,-0.1241404989348821,0.1968288496622595
+weighted examples,Weighted-example family,attribution,Feature attribution,eta,Explanation reliance (η),0.0,edit L1,Normalized edit distance (L1),840,0.5853121041854319,0.03131965908026563,1.1693562072289652
+weighted examples,Weighted-example family,attribution,Feature attribution,eta,Explanation reliance (η),0.0,plausibility,Plausibility,840,0.9435803181754294,0.9067862788662704,0.9810619007376673
+weighted examples,Weighted-example family,attribution,Feature attribution,eta,Explanation reliance (η),0.0,success,Counterfactual success rate,840,0.4452380952380952,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,eta,Explanation reliance (η),0.0,target confidence gain,Target-confidence gain,840,0.4270273217608821,-7.1743979045583644e-06,0.9854776316315775
+weighted examples,Weighted-example family,attribution,Feature attribution,eta,Explanation reliance (η),0.5,actionability,Actionability rate,840,0.6952380952380952,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,eta,Explanation reliance (η),0.5,boundary improvement,Boundary-distance improvement,840,0.019652271898396637,-0.12542984806222882,0.18550806535780912
+weighted examples,Weighted-example family,attribution,Feature attribution,eta,Explanation reliance (η),0.5,edit L1,Normalized edit distance (L1),840,0.5760546131331727,0.026133112832909717,1.1611497609876777
+weighted examples,Weighted-example family,attribution,Feature attribution,eta,Explanation reliance (η),0.5,plausibility,Plausibility,840,0.9444044776832995,0.9080600562725837,0.9837233799344174
+weighted examples,Weighted-example family,attribution,Feature attribution,eta,Explanation reliance (η),0.5,success,Counterfactual success rate,840,0.4238095238095238,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,eta,Explanation reliance (η),0.5,target confidence gain,Target-confidence gain,840,0.40250040633985706,-3.650413098211413e-05,0.9854776316315738
+weighted examples,Weighted-example family,attribution,Feature attribution,eta,Explanation reliance (η),1.0,actionability,Actionability rate,840,0.694047619047619,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,eta,Explanation reliance (η),1.0,boundary improvement,Boundary-distance improvement,840,0.01859222095583582,-0.12419667796319045,0.18278418114247308
+weighted examples,Weighted-example family,attribution,Feature attribution,eta,Explanation reliance (η),1.0,edit L1,Normalized edit distance (L1),840,0.5688879204751892,0.018402281666995198,1.1532577305670395
+weighted examples,Weighted-example family,attribution,Feature attribution,eta,Explanation reliance (η),1.0,plausibility,Plausibility,840,0.9448487335343034,0.9103362813764484,0.9881734536929142
+weighted examples,Weighted-example family,attribution,Feature attribution,eta,Explanation reliance (η),1.0,success,Counterfactual success rate,840,0.4011904761904762,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,eta,Explanation reliance (η),1.0,target confidence gain,Target-confidence gain,840,0.3864055618856106,-0.0010140129024754593,0.9854775963356244
+weighted examples,Weighted-example family,attribution,Feature attribution,lambda,Exemplar locality (λ),0.0,actionability,Actionability rate,840,0.675,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,lambda,Exemplar locality (λ),0.0,boundary improvement,Boundary-distance improvement,840,0.022020398703854,-0.12419667796319045,0.2000788389271208
+weighted examples,Weighted-example family,attribution,Feature attribution,lambda,Exemplar locality (λ),0.0,edit L1,Normalized edit distance (L1),840,0.595459402878276,0.03985507246376814,1.1808867671454417
+weighted examples,Weighted-example family,attribution,Feature attribution,lambda,Exemplar locality (λ),0.0,plausibility,Plausibility,840,0.9431136356160612,0.906735367089452,0.9769776926570068
+weighted examples,Weighted-example family,attribution,Feature attribution,lambda,Exemplar locality (λ),0.0,success,Counterfactual success rate,840,0.4714285714285714,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,lambda,Exemplar locality (λ),0.0,target confidence gain,Target-confidence gain,840,0.44483236716199837,-9.868039718696203e-12,0.9854776316300885
+weighted examples,Weighted-example family,attribution,Feature attribution,lambda,Exemplar locality (λ),2.0,actionability,Actionability rate,840,0.6869047619047619,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,lambda,Exemplar locality (λ),2.0,boundary improvement,Boundary-distance improvement,840,0.021239800378978806,-0.125878688952258,0.18164555637318622
+weighted examples,Weighted-example family,attribution,Feature attribution,lambda,Exemplar locality (λ),2.0,edit L1,Normalized edit distance (L1),840,0.5805997136583116,0.02524502066156976,1.1677967710538673
+weighted examples,Weighted-example family,attribution,Feature attribution,lambda,Exemplar locality (λ),2.0,plausibility,Plausibility,840,0.9440955825019277,0.9083520406752319,0.9837694061537476
+weighted examples,Weighted-example family,attribution,Feature attribution,lambda,Exemplar locality (λ),2.0,success,Counterfactual success rate,840,0.4238095238095238,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,lambda,Exemplar locality (λ),2.0,target confidence gain,Target-confidence gain,840,0.40133865234504734,-0.0005479299225226542,0.9854776316296266
+weighted examples,Weighted-example family,attribution,Feature attribution,lambda,Exemplar locality (λ),6.0,actionability,Actionability rate,840,0.7226190476190476,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,lambda,Exemplar locality (λ),6.0,boundary improvement,Boundary-distance improvement,840,0.018453767712405176,-0.1232219675976887,0.17679928965716307
+weighted examples,Weighted-example family,attribution,Feature attribution,lambda,Exemplar locality (λ),6.0,edit L1,Normalized edit distance (L1),840,0.554195521257206,0.005912511071574297,1.1219326337748634
+weighted examples,Weighted-example family,attribution,Feature attribution,lambda,Exemplar locality (λ),6.0,plausibility,Plausibility,840,0.9456243112750433,0.9106522539447146,0.9913709205389036
+weighted examples,Weighted-example family,attribution,Feature attribution,lambda,Exemplar locality (λ),6.0,success,Counterfactual success rate,840,0.375,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,lambda,Exemplar locality (λ),6.0,target confidence gain,Target-confidence gain,840,0.3697622704793041,-0.0012542099242718366,0.9854776316290959
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.3,actionability,Actionability rate,360,0.775,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.3,boundary improvement,Boundary-distance improvement,360,0.03963692442490722,-0.019408191612307005,0.14072973956545318
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.3,edit L1,Normalized edit distance (L1),360,0.08415623005977266,0.0,0.21977415877826534
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.3,plausibility,Plausibility,360,0.974045385060092,0.9359478015496385,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.3,success,Counterfactual success rate,360,0.04722222222222222,0.0,0.0
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.3,target confidence gain,Target-confidence gain,360,0.06334005109622225,-0.0009956252905899826,0.2087079717404228
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.2,actionability,Actionability rate,360,0.7138888888888889,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.2,boundary improvement,Boundary-distance improvement,360,0.05491388760543303,-0.02823167348227329,0.17764154227674192
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.2,edit L1,Normalized edit distance (L1),360,0.19545741799128322,0.0,0.41471220870958997
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.2,plausibility,Plausibility,360,0.9633232830771669,0.937361872424037,0.9983099979711745
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.2,success,Counterfactual success rate,360,0.26666666666666666,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.2,target confidence gain,Target-confidence gain,360,0.2326467174722423,-0.001966067694839926,0.8537741890679561
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.1,actionability,Actionability rate,360,0.675,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.1,boundary improvement,Boundary-distance improvement,360,0.049400553593325416,-0.07209638762331258,0.23377110595204997
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.1,edit L1,Normalized edit distance (L1),360,0.36496411065045514,0.10414969738497959,0.61471220870959
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.1,plausibility,Plausibility,360,0.9515990207742553,0.930682033440099,0.9729635106137163
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.1,success,Counterfactual success rate,360,0.39166666666666666,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),-0.1,target confidence gain,Target-confidence gain,360,0.3759740191587979,-1.694937682843456e-05,0.9413328785212922
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.0,actionability,Actionability rate,360,0.675,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.0,boundary improvement,Boundary-distance improvement,360,0.05777164628420709,-0.053902132779184146,0.21336498641829083
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.0,edit L1,Normalized edit distance (L1),360,0.560176339378078,0.2913106253597009,0.8147122087095899
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.0,plausibility,Plausibility,360,0.9459025908941356,0.923071524604552,0.9653322642813388
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.0,success,Counterfactual success rate,360,0.4027777777777778,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.0,target confidence gain,Target-confidence gain,360,0.4216142426424793,0.004252041620461246,0.9419554191462098
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.1,actionability,Actionability rate,360,0.675,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.1,boundary improvement,Boundary-distance improvement,360,0.0234443109412664,-0.11867964658771948,0.20872139051144237
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.1,edit L1,Normalized edit distance (L1),360,0.7601624825773954,0.49131062535970094,1.01471220870959
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.1,plausibility,Plausibility,360,0.9334414078121431,0.911347970930707,0.9565135252142823
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.1,success,Counterfactual success rate,360,0.5388888888888889,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.1,target confidence gain,Target-confidence gain,360,0.5110550841897807,1.194522236680484e-09,0.9909672092697905
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.2,actionability,Actionability rate,360,0.675,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.2,boundary improvement,Boundary-distance improvement,360,-0.016087600953213838,-0.26666124298243843,0.19889504702556834
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.2,edit L1,Normalized edit distance (L1),360,0.9447813970812302,0.6741823111273024,1.21471220870959
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.2,plausibility,Plausibility,360,0.9274869518355053,0.9067862788662704,0.9502098657127297
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.2,success,Counterfactual success rate,360,0.6361111111111111,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.2,target confidence gain,Target-confidence gain,360,0.586939289028039,-0.002731597234267671,0.9921951490560736
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.3,actionability,Actionability rate,360,0.675,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.3,boundary improvement,Boundary-distance improvement,360,-0.06508046604037003,-0.3847593177867119,0.15083289416942317
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.3,edit L1,Normalized edit distance (L1),360,1.1275628437806378,0.8042075423046122,1.4147122087095898
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.3,plausibility,Plausibility,360,0.9141462624637774,0.8897168604169585,0.9473825211056969
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.3,success,Counterfactual success rate,360,0.6805555555555556,0.0,1.0
+weighted examples,Weighted-example family,attribution,Feature attribution,rho,Signed change margin (ρ),0.3,target confidence gain,Target-confidence gain,360,0.6456082730472544,-0.0070248891891782055,0.9979351838406388
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,actionability,Actionability rate,3780,1.0,1.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,boundary improvement,Boundary-distance improvement,3780,0.015556204578298066,-0.10998208805941401,0.1792313767782897
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,edit L1,Normalized edit distance (L1),3780,0.36276096023108634,0.0,0.8482395252626004
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,plausibility,Plausibility,3780,0.9519760481645513,0.9125432803637585,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,success,Counterfactual success rate,3780,0.394973544973545,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,age actionable,Age actionable,0.0,target confidence gain,Target-confidence gain,3780,0.37568428499149886,0.0,0.984594176317176
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,age actionable,Age actionable,1.0,actionability,Actionability rate,3780,0.8420634920634921,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,age actionable,Age actionable,1.0,boundary improvement,Boundary-distance improvement,3780,0.01950723872276557,-0.1012597483249612,0.18151537807855003
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,age actionable,Age actionable,1.0,edit L1,Normalized edit distance (L1),3780,0.37287154502528275,0.0,0.8604908978625821
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,age actionable,Age actionable,1.0,plausibility,Plausibility,3780,0.9524921121955043,0.915976612167594,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,age actionable,Age actionable,1.0,success,Counterfactual success rate,3780,0.394973544973545,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,age actionable,Age actionable,1.0,target confidence gain,Target-confidence gain,3780,0.3812565445344773,0.0,0.9844982646588033
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.0,actionability,Actionability rate,2520,0.8285714285714286,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.0,boundary improvement,Boundary-distance improvement,2520,0.03780239216810628,-0.09566627056570114,0.21902006442690963
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.0,edit L1,Normalized edit distance (L1),2520,0.46623052809107995,0.0,0.9848897955962568
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.0,plausibility,Plausibility,2520,0.9474734718477681,0.9124347482148215,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.0,success,Counterfactual success rate,2520,0.4126984126984127,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.0,target confidence gain,Target-confidence gain,2520,0.39863076479583653,0.0,0.9826203798754982
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.5,actionability,Actionability rate,2520,0.9345238095238095,1.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.5,boundary improvement,Boundary-distance improvement,2520,0.024767886352696163,-0.09297749846422992,0.19549842734028305
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.5,edit L1,Normalized edit distance (L1),2520,0.34560071108873275,0.0,0.8324259787926751
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.5,plausibility,Plausibility,2520,0.9556490206357694,0.9182820267291423,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.5,success,Counterfactual success rate,2520,0.4015873015873016,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),0.5,target confidence gain,Target-confidence gain,2520,0.3819235890715151,0.0,0.9840937247610385
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),1.0,actionability,Actionability rate,2520,1.0,1.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),1.0,boundary improvement,Boundary-distance improvement,2520,-0.009975113569206991,-0.15956180711483578,0.11475429440695843
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),1.0,edit L1,Normalized edit distance (L1),2520,0.2916175187047409,0.0,0.723367876057561
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),1.0,plausibility,Plausibility,2520,0.9535797480565458,0.9090066378851475,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),1.0,success,Counterfactual success rate,2520,0.37063492063492065,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,beta,Remembered-change reliance (β),1.0,target confidence gain,Target-confidence gain,2520,0.3548568904216126,0.0,0.9846156412632773
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,actionability,Actionability rate,2520,0.9285714285714286,1.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,boundary improvement,Boundary-distance improvement,2520,0.01895086983355424,-0.10098618083171745,0.1792313767782897
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,edit L1,Normalized edit distance (L1),2520,0.3719352584462806,0.0,0.8594387637761804
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,plausibility,Plausibility,2520,0.9522494578811239,0.9145449105754131,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,success,Counterfactual success rate,2520,0.3888888888888889,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.0,target confidence gain,Target-confidence gain,2520,0.3714522578783813,0.0,0.9840169596868658
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.5,actionability,Actionability rate,2520,0.9194444444444444,1.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.5,boundary improvement,Boundary-distance improvement,2520,0.017513425438430857,-0.1052525517317281,0.17976037872858722
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.5,edit L1,Normalized edit distance (L1),2520,0.3674361718365671,0.0,0.8530163194391973
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.5,plausibility,Plausibility,2520,0.9521604286379847,0.9142336647489185,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.5,success,Counterfactual success rate,2520,0.39325396825396824,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,eta,Explanation reliance (η),0.5,target confidence gain,Target-confidence gain,2520,0.37649847044598156,0.0,0.9845907097513464
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,eta,Explanation reliance (η),1.0,actionability,Actionability rate,2520,0.915079365079365,1.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,eta,Explanation reliance (η),1.0,boundary improvement,Boundary-distance improvement,2520,0.016130869679610353,-0.11323228918399192,0.1826566920632107
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,eta,Explanation reliance (η),1.0,edit L1,Normalized edit distance (L1),2520,0.3640773276017059,0.0,0.8507660681940021
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,eta,Explanation reliance (η),1.0,plausibility,Plausibility,2520,0.9522923540209745,0.9139752784524783,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,eta,Explanation reliance (η),1.0,success,Counterfactual success rate,2520,0.4027777777777778,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,eta,Explanation reliance (η),1.0,target confidence gain,Target-confidence gain,2520,0.38746051596460135,0.0,0.984594297810783
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),0.0,actionability,Actionability rate,2520,0.9297619047619048,1.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),0.0,boundary improvement,Boundary-distance improvement,2520,0.018207828843397493,-0.08911458589810409,0.17621407018667173
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),0.0,edit L1,Normalized edit distance (L1),2520,0.380142178749626,0.0,0.881923726204023
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),0.0,plausibility,Plausibility,2520,0.9515292281115452,0.9139798728417959,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),0.0,success,Counterfactual success rate,2520,0.3678571428571429,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),0.0,target confidence gain,Target-confidence gain,2520,0.3534508389826664,0.0,0.981857354119903
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),2.0,actionability,Actionability rate,2520,0.9242063492063493,1.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),2.0,boundary improvement,Boundary-distance improvement,2520,0.019157009817546304,-0.09953113331627428,0.17973926144194638
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),2.0,edit L1,Normalized edit distance (L1),2520,0.3686728098498497,0.0,0.8530163194391973
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),2.0,plausibility,Plausibility,2520,0.9520403263316705,0.9139339289486188,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),2.0,success,Counterfactual success rate,2520,0.39880952380952384,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),2.0,target confidence gain,Target-confidence gain,2520,0.3799723379283371,0.0,0.9844400400233911
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),6.0,actionability,Actionability rate,2520,0.9091269841269841,1.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),6.0,boundary improvement,Boundary-distance improvement,2520,0.015230326290651656,-0.12242761757381936,0.19081330108461247
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),6.0,edit L1,Normalized edit distance (L1),2520,0.3546337692850779,0.0,0.8445119034217354
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),6.0,plausibility,Plausibility,2520,0.9531326860968676,0.9149108290961143,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),6.0,success,Counterfactual success rate,2520,0.41825396825396827,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,lambda,Exemplar locality (λ),6.0,target confidence gain,Target-confidence gain,2520,0.40198806737796067,0.0,0.9854360206092675
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.3,actionability,Actionability rate,1080,0.9907407407407407,1.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.3,boundary improvement,Boundary-distance improvement,1080,0.009559655128343532,0.0,0.009648993171726655
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.3,edit L1,Normalized edit distance (L1),1080,0.012843365108458222,0.0,0.055237884637030055
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.3,plausibility,Plausibility,1080,0.9819917651226661,0.9338094401439703,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.3,success,Counterfactual success rate,1080,0.014814814814814815,0.0,0.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.3,target confidence gain,Target-confidence gain,1080,0.010714267671335344,0.0,6.563731816577878e-05
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.2,actionability,Actionability rate,1080,0.9888888888888889,1.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.2,boundary improvement,Boundary-distance improvement,1080,0.025205965868713886,0.0,0.09530113413058017
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.2,edit L1,Normalized edit distance (L1),1080,0.04339714543582051,0.0,0.17092138415306488
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.2,plausibility,Plausibility,1080,0.97834069021859,0.9326486293480933,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.2,success,Counterfactual success rate,1080,0.05555555555555555,0.0,0.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.2,target confidence gain,Target-confidence gain,1080,0.056309733316003044,0.0,0.18584172437379684
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.1,actionability,Actionability rate,1080,0.9231481481481482,1.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.1,boundary improvement,Boundary-distance improvement,1080,0.04268827859648368,-0.03011118515988378,0.18495908615094314
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.1,edit L1,Normalized edit distance (L1),1080,0.1265868641624599,0.0,0.33523930769866234
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.1,plausibility,Plausibility,1080,0.9684103004171153,0.9339384191212899,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.1,success,Counterfactual success rate,1080,0.16666666666666666,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),-0.1,target confidence gain,Target-confidence gain,1080,0.16887107848893626,-1.9213725362783365e-05,0.6180628693058852
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.0,actionability,Actionability rate,1080,0.8861111111111111,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.0,boundary improvement,Boundary-distance improvement,1080,0.049094416878597724,-0.05168063099145742,0.21625695023938216
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.0,edit L1,Normalized edit distance (L1),1080,0.30441645155518143,0.14443416177291574,0.5251757453763914
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.0,plausibility,Plausibility,1080,0.9506811696060079,0.931072193295246,0.971110437970249
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.0,success,Counterfactual success rate,1080,0.5101851851851852,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.0,target confidence gain,Target-confidence gain,1080,0.4778701508341852,-1.2620077331826351e-05,0.9410398777323024
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.1,actionability,Actionability rate,1080,0.8861111111111111,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.1,boundary improvement,Boundary-distance improvement,1080,0.03355755452672642,-0.10852759044021304,0.20839965215018566
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.1,edit L1,Normalized edit distance (L1),1080,0.5044033932462892,0.34443416177291575,0.7251757453763914
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.1,plausibility,Plausibility,1080,0.9395742394287112,0.9199416806500557,0.9595043690477232
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.1,success,Counterfactual success rate,1080,0.6129629629629629,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.1,target confidence gain,Target-confidence gain,1080,0.5813014637784153,0.0006148885238046399,0.9854752245058125
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.2,actionability,Actionability rate,1080,0.8861111111111111,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.2,boundary improvement,Boundary-distance improvement,1080,0.003852645482759471,-0.18769134761759984,0.21796697508822085
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.2,edit L1,Normalized edit distance (L1),1080,0.6993289989082473,0.5320804579062063,0.9251757453763914
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.2,plausibility,Plausibility,1080,0.9294604462185715,0.8975077951930192,0.9548730598852819
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.2,success,Counterfactual success rate,1080,0.6851851851851852,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.2,target confidence gain,Target-confidence gain,1080,0.6560944597452238,0.013604959872893665,0.9880382834281867
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.3,actionability,Actionability rate,1080,0.8861111111111111,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.3,boundary improvement,Boundary-distance improvement,1080,-0.04123646492790199,-0.25797867898361676,0.20609574671068542
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.3,edit L1,Normalized edit distance (L1),1080,0.8837375499808353,0.6824274453691898,1.1251757453763915
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.3,plausibility,Plausibility,1080,0.9171799502485323,0.8872796924459023,0.9479164251282578
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.3,success,Counterfactual success rate,1080,0.7194444444444444,0.0,1.0
+weighted examples,Weighted-example family,counterfactual,Counterfactual example,rho,Signed change margin (ρ),0.3,target confidence gain,Target-confidence gain,1080,0.6981317495068176,2.5666512692979045e-09,0.9978842312574059
+weighted examples,Weighted-example family,none,No XAI,age actionable,Age actionable,0.0,actionability,Actionability rate,420,1.0,1.0,1.0
+weighted examples,Weighted-example family,none,No XAI,age actionable,Age actionable,0.0,boundary improvement,Boundary-distance improvement,420,0.02255355877344598,-0.13269077593176257,0.20264300204494368
+weighted examples,Weighted-example family,none,No XAI,age actionable,Age actionable,0.0,edit L1,Normalized edit distance (L1),420,0.5321736023232427,0.0,1.0917841802298727
+weighted examples,Weighted-example family,none,No XAI,age actionable,Age actionable,0.0,plausibility,Plausibility,420,0.9445459048476411,0.9061222122722298,0.9947118818599191
+weighted examples,Weighted-example family,none,No XAI,age actionable,Age actionable,0.0,success,Counterfactual success rate,420,0.44047619047619047,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,age actionable,Age actionable,0.0,target confidence gain,Target-confidence gain,420,0.4317695473618179,0.0,0.987551893352967
+weighted examples,Weighted-example family,none,No XAI,age actionable,Age actionable,1.0,actionability,Actionability rate,420,0.3904761904761905,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,age actionable,Age actionable,1.0,boundary improvement,Boundary-distance improvement,420,0.02438538910856507,-0.11555582280323907,0.1684505628266851
+weighted examples,Weighted-example family,none,No XAI,age actionable,Age actionable,1.0,edit L1,Normalized edit distance (L1),420,0.6384506060476209,0.09722628899314043,1.235750322158446
+weighted examples,Weighted-example family,none,No XAI,age actionable,Age actionable,1.0,plausibility,Plausibility,420,0.9426147315032178,0.9098348188440841,0.9754757244357922
+weighted examples,Weighted-example family,none,No XAI,age actionable,Age actionable,1.0,success,Counterfactual success rate,420,0.45,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,age actionable,Age actionable,1.0,target confidence gain,Target-confidence gain,420,0.4222850961599463,-1.8806226437817487e-05,0.9845188689516371
+weighted examples,Weighted-example family,none,No XAI,lambda,Exemplar locality (λ),0.0,actionability,Actionability rate,280,0.675,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,lambda,Exemplar locality (λ),0.0,boundary improvement,Boundary-distance improvement,280,0.022020398703853993,-0.12419667796319045,0.2000788389271208
+weighted examples,Weighted-example family,none,No XAI,lambda,Exemplar locality (λ),0.0,edit L1,Normalized edit distance (L1),280,0.5954594028782761,0.03985507246376811,1.1808867671454415
+weighted examples,Weighted-example family,none,No XAI,lambda,Exemplar locality (λ),0.0,plausibility,Plausibility,280,0.9431136356160613,0.906735367089452,0.9769776926570068
+weighted examples,Weighted-example family,none,No XAI,lambda,Exemplar locality (λ),0.0,success,Counterfactual success rate,280,0.4714285714285714,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,lambda,Exemplar locality (λ),0.0,target confidence gain,Target-confidence gain,280,0.4448323671619983,-9.868039718696553e-12,0.9854776316300885
+weighted examples,Weighted-example family,none,No XAI,lambda,Exemplar locality (λ),2.0,actionability,Actionability rate,280,0.675,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,lambda,Exemplar locality (λ),2.0,boundary improvement,Boundary-distance improvement,280,0.023910459936627226,-0.11998671971519367,0.19897079732325765
+weighted examples,Weighted-example family,none,No XAI,lambda,Exemplar locality (λ),2.0,edit L1,Normalized edit distance (L1),280,0.5872069457501323,0.03645944822985906,1.1741829430857518
+weighted examples,Weighted-example family,none,No XAI,lambda,Exemplar locality (λ),2.0,plausibility,Plausibility,280,0.943959701028397,0.9079313037606639,0.9792851644489372
+weighted examples,Weighted-example family,none,No XAI,lambda,Exemplar locality (λ),2.0,success,Counterfactual success rate,280,0.45357142857142857,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,lambda,Exemplar locality (λ),2.0,target confidence gain,Target-confidence gain,280,0.424826575806759,-1.639537596950235e-05,0.985477631629784
+weighted examples,Weighted-example family,none,No XAI,lambda,Exemplar locality (λ),6.0,actionability,Actionability rate,280,0.7357142857142858,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,lambda,Exemplar locality (λ),6.0,boundary improvement,Boundary-distance improvement,280,0.024477563182535342,-0.11959775257058966,0.1723696866220901
+weighted examples,Weighted-example family,none,No XAI,lambda,Exemplar locality (λ),6.0,edit L1,Normalized edit distance (L1),280,0.5732699639278872,0.027245926645492875,1.167716679835658
+weighted examples,Weighted-example family,none,No XAI,lambda,Exemplar locality (λ),6.0,plausibility,Plausibility,280,0.9436676178818301,0.9071704969881691,0.98143636403937
+weighted examples,Weighted-example family,none,No XAI,lambda,Exemplar locality (λ),6.0,success,Counterfactual success rate,280,0.4107142857142857,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,lambda,Exemplar locality (λ),6.0,target confidence gain,Target-confidence gain,280,0.411423022313889,-1.576098953905979e-05,0.9854776316317609
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),-0.3,actionability,Actionability rate,120,0.775,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),-0.3,boundary improvement,Boundary-distance improvement,120,0.04100942175927428,-0.01938255758247398,0.14072973956545315
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),-0.3,edit L1,Normalized edit distance (L1),120,0.08788036906688763,0.0,0.21897646348876965
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),-0.3,plausibility,Plausibility,120,0.9732360451569521,0.9359478015496385,1.0
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),-0.3,success,Counterfactual success rate,120,0.05,0.0,0.0
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),-0.3,target confidence gain,Target-confidence gain,120,0.06720037849625758,-0.000900528265077639,0.215176188862393
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),-0.2,actionability,Actionability rate,120,0.7166666666666667,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),-0.2,boundary improvement,Boundary-distance improvement,120,0.05531228352770371,-0.030936582890645953,0.1790010744493575
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),-0.2,edit L1,Normalized edit distance (L1),120,0.20276479269513883,0.0002738846520753847,0.41602131887677246
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),-0.2,plausibility,Plausibility,120,0.9621659368259768,0.9328883728347602,0.9976191814180013
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),-0.2,success,Counterfactual success rate,120,0.2916666666666667,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),-0.2,target confidence gain,Target-confidence gain,120,0.26084353443778824,-0.0020303043745345155,0.8672851332518353
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),-0.1,actionability,Actionability rate,120,0.675,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),-0.1,boundary improvement,Boundary-distance improvement,120,0.05388645575180743,-0.0722713489809981,0.24325276481799554
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),-0.1,edit L1,Normalized edit distance (L1),120,0.3737058882331488,0.11397690147823612,0.6160213188767725
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),-0.1,plausibility,Plausibility,120,0.9508682511750753,0.9298387690238591,0.9719452245923338
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),-0.1,success,Counterfactual success rate,120,0.4083333333333333,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),-0.1,target confidence gain,Target-confidence gain,120,0.3934497656061413,-6.257924610034311e-07,0.9410966158036864
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.0,actionability,Actionability rate,120,0.675,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.0,boundary improvement,Boundary-distance improvement,120,0.05898068985875349,-0.03750965448852953,0.20196762554866587
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.0,edit L1,Normalized edit distance (L1),120,0.5688029671716532,0.29246673767076653,0.8160213188767724
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.0,plausibility,Plausibility,120,0.9450883616584483,0.923071524604552,0.9651720974877182
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.0,success,Counterfactual success rate,120,0.4083333333333333,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.0,target confidence gain,Target-confidence gain,120,0.4321527518338739,0.01833237782221553,0.9419554191462098
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.1,actionability,Actionability rate,120,0.675,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.1,boundary improvement,Boundary-distance improvement,120,0.026879290804836604,-0.10697820125830722,0.20872139051144237
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.1,edit L1,Normalized edit distance (L1),120,0.7688029671716533,0.49246673767076654,1.0160213188767724
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.1,plausibility,Plausibility,120,0.9333930547823168,0.9095758553372928,0.957464444835078
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.1,success,Counterfactual success rate,120,0.5583333333333333,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.1,target confidence gain,Target-confidence gain,120,0.5277598324104258,2.0392121991008595e-09,0.9902255517919405
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.2,actionability,Actionability rate,120,0.675,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.2,boundary improvement,Boundary-distance improvement,120,-0.008602258597459438,-0.17866338804000478,0.2120437284148752
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.2,edit L1,Normalized edit distance (L1),120,0.9551153170309203,0.6813948865646083,1.2160213188767726
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.2,plausibility,Plausibility,120,0.9273427318226859,0.9064932302208503,0.9503501554162435
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.2,success,Counterfactual success rate,120,0.6833333333333333,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.2,target confidence gain,Target-confidence gain,120,0.6231817113609347,-1.8806226576506545e-05,0.9922320400206355
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.3,actionability,Actionability rate,120,0.675,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.3,boundary improvement,Boundary-distance improvement,120,-0.06317956551787744,-0.2897193748910366,0.13701593178446492
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.3,edit L1,Normalized edit distance (L1),120,1.1401124279286212,0.809720431592995,1.4160213188767723
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.3,plausibility,Plausibility,120,0.9129678458065503,0.8890990271890972,0.9465693362874472
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.3,success,Counterfactual success rate,120,0.7166666666666667,0.0,1.0
+weighted examples,Weighted-example family,none,No XAI,rho,Signed change margin (ρ),0.3,target confidence gain,Target-confidence gain,120,0.6846032781807533,-0.001825372117698791,0.9979360959770693

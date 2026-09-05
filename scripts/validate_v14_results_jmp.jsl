@@ -1,0 +1,63 @@
+Names Default To Here(1);
+
+rootPath = "C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/";
+referencePath = Convert File Path(rootPath || "qualtrics/qualtrics_results_v1.3.jmp", Windows);
+outputPath = Convert File Path(rootPath || "qualtrics/qualtrics_results_v1.4.jmp", Windows);
+reportPath = Convert File Path(rootPath || "qualtrics/v1.4_results_jmp_validation.txt", Windows);
+
+reference = Open(referencePath, Invisible);
+dt = Open(outputPath, Invisible);
+referenceNames = reference << Get Column Names("String");
+outputNames = dt << Get Column Names("String");
+referenceScripts = reference << Get Table Script Names;
+outputScripts = dt << Get Table Script Names;
+
+trainingRows = 0;
+testingRows = 0;
+trainingMetricNonmissing = 0;
+testingMetricMissing = 0;
+sparsityMismatch = 0;
+actionabilityMismatch = 0;
+formulaMismatch = 0;
+For(rowIndex = 1, rowIndex <= N Rows(dt), rowIndex++,
+	phase = Lowercase(Char(Column(dt, "phase")[rowIndex]));
+	If(phase == "training",
+		trainingRows++;
+		If(
+			!Is Missing(Column(dt, "sparsity")[rowIndex])
+			| !Is Missing(Column(dt, "plausibility")[rowIndex])
+			| !Is Missing(Column(dt, "boundary distance original")[rowIndex]),
+			trainingMetricNonmissing++
+		),
+		testingRows++;
+		If(
+			Is Missing(Column(dt, "sparsity")[rowIndex])
+			| Is Missing(Column(dt, "plausibility")[rowIndex])
+			| Is Missing(Column(dt, "boundary distance original")[rowIndex]),
+			testingMetricMissing++
+		);
+		changed = 0;
+		For(featureIndex = 1, featureIndex <= 5, featureIndex++,
+			changed += Column(dt, "x_" || Char(featureIndex) || "_changed")[rowIndex]
+		);
+		If(Abs(Column(dt, "sparsity")[rowIndex] - (1 - changed / 5)) > 1e-9, sparsityMismatch++);
+		If(Column(dt, "actionability (0/1)")[rowIndex] != (Column(dt, "x_5_changed")[rowIndex] == 0), actionabilityMismatch++);
+	);
+	If(Column(dt, "CRT binarized")[rowIndex] != (Column(dt, "CRT-2 score (0-4)")[rowIndex] > 2), formulaMismatch++);
+	expectedStrategyXai = Char(Column(dt, "attribute selection method")[rowIndex]) || " : " || Char(Column(dt, "xai")[rowIndex]);
+	If(Char(Column(dt, "strategy: xai")[rowIndex]) != expectedStrategyXai, formulaMismatch++);
+);
+
+text = "validation_completed=1\!N";
+text ||= "rows=" || Char(N Rows(dt)) || " columns=" || Char(N Cols(dt)) || "\!N";
+text ||= "column_names_match=" || Char(Char(referenceNames) == Char(outputNames)) || "\!N";
+text ||= "reference_scripts=" || Char(N Items(referenceScripts)) || " output_scripts=" || Char(N Items(outputScripts)) || "\!N";
+text ||= "script_names_match=" || Char(Char(referenceScripts) == Char(outputScripts)) || "\!N";
+text ||= "training_rows=" || Char(trainingRows) || " testing_rows=" || Char(testingRows) || "\!N";
+text ||= "training_metric_nonmissing=" || Char(trainingMetricNonmissing) || " testing_metric_missing=" || Char(testingMetricMissing) || "\!N";
+text ||= "sparsity_mismatch=" || Char(sparsityMismatch) || " actionability_mismatch=" || Char(actionabilityMismatch) || " formula_mismatch=" || Char(formulaMismatch) || "\!N";
+Save Text File(reportPath, text);
+
+Close(dt, No Save);
+Close(reference, No Save);
+Exit();

@@ -1,0 +1,118 @@
+Names Default To Here(1);
+
+inputPath = Convert File Path("C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/qualtrics/qualtrics_results_v1.0.jmp", Windows);
+mergedPath = Convert File Path("C:/Users/Louth/AppData/Local/Temp/qualtrics_results_v1.0_merged.csv", Windows);
+outputPath = Convert File Path("C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/qualtrics/qualtrics_results_v1.0.updated-staging.jmp", Windows);
+summaryPath = Convert File Path("C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/qualtrics/v1.0_jmp_update_validation.txt", Windows);
+
+dataTable = Open(inputPath, Invisible);
+mergedTable = Open(mergedPath, Invisible);
+originalScripts = dataTable << Get Table Script Names;
+originalRows = N Rows(dataTable);
+crtName = "CRT-2 score (0-4)";
+
+If(N Rows(mergedTable) != 2820,
+	Save Text File(summaryPath, "update_aborted=1\!Nunexpected_merged_rows=" || Char(N Rows(mergedTable)) || "\!N");
+	Close(mergedTable, No Save);
+	Close(dataTable, No Save);
+	Exit();
+);
+
+columnNames = dataTable << Get Column Names("String");
+If(!Contains(columnNames, crtName),
+	dataTable << New Column(crtName, Numeric, Ordinal);
+	Column(dataTable, crtName) << Set Selected(1);
+	dataTable << Move Selected Columns(After(Column(dataTable, "participant training accuracy")));
+);
+
+targetNames = dataTable << Get Column Names("String");
+sourceNames = mergedTable << Get Column Names("String");
+If(targetNames != sourceNames,
+	Save Text File(
+		summaryPath,
+		"update_aborted=1\!Ncolumn_order_mismatch=1\!Ntarget=" || Char(targetNames) || "\!Nsource=" || Char(sourceNames) || "\!N"
+	);
+	Close(mergedTable, No Save);
+	Close(dataTable, No Save);
+	Exit();
+);
+
+dataTable << Add Rows(N Rows(mergedTable) - N Rows(dataTable));
+For(columnIndex = 1, columnIndex <= N Cols(dataTable), columnIndex++,
+	columnName = targetNames[columnIndex];
+	Column(dataTable, columnName) << Set Values(Column(mergedTable, columnName) << Get Values);
+);
+
+Column(dataTable, "sparsity") << Set Property(
+	"Notes",
+	"Testing rows only. Fraction of the five attributes left unchanged: 1 - (number of attributes changed / 5). Range 0 to 1; higher values mean a sparser counterfactual with fewer attributes changed. Training rows are missing."
+);
+Column(dataTable, "plausibility") << Set Property(
+	"Notes",
+	"Testing rows only. Gower similarity to the single nearest record in the domain's model-training split: 1 - minimum five-attribute Gower distance (k=1). Numeric dissimilarities are absolute range-normalized differences and categorical dissimilarities are 0/1, averaged across five attributes. Range 0 to 1; higher values mean the submitted profile is more similar to an observed training profile and therefore more plausible under this nearest-neighbor operationalization. Training rows are missing."
+);
+Column(dataTable, crtName) << Set Property(
+	"Notes",
+	"Participant-level count of correct answers across the four CRT-2 items (race, sheep, Emily, and hole), repeated on that participant's training and testing rows. Range 0 to 4. Missing for participants collected before CRT-2 was added."
+);
+
+dataTable << Save As(outputPath);
+updatedScripts = dataTable << Get Table Script Names;
+
+oldCrtNonmissing = 0;
+newCrtMissing = 0;
+trainingSparsityNonmissing = 0;
+trainingPlausibilityNonmissing = 0;
+testingSparsityMissing = 0;
+testingPlausibilityMissing = 0;
+sparsityMismatch = 0;
+sparsityMinimum = .;
+sparsityMaximum = .;
+plausibilityMinimum = .;
+plausibilityMaximum = .;
+newParticipants = Associative Array();
+
+For(rowIndex = 1, rowIndex <= N Rows(dataTable), rowIndex++,
+	phaseValue = Lowercase(Char(Column(dataTable, "phase")[rowIndex]));
+	crtValue = Column(dataTable, crtName)[rowIndex];
+	sparsityValue = Column(dataTable, "sparsity")[rowIndex];
+	plausibilityValue = Column(dataTable, "plausibility")[rowIndex];
+	If(rowIndex <= originalRows & !Is Missing(crtValue), oldCrtNonmissing++);
+	If(rowIndex > originalRows,
+		newParticipants[Char(Column(dataTable, "participant")[rowIndex])] = 1;
+		If(Is Missing(crtValue), newCrtMissing++);
+	);
+	If(phaseValue == "training",
+		If(!Is Missing(sparsityValue), trainingSparsityNonmissing++);
+		If(!Is Missing(plausibilityValue), trainingPlausibilityNonmissing++),
+		If(Is Missing(sparsityValue), testingSparsityMissing++);
+		If(Is Missing(plausibilityValue), testingPlausibilityMissing++);
+		changedCount = 0;
+		For(featureIndex = 1, featureIndex <= 5, featureIndex++,
+			changedValue = Column(dataTable, "x_" || Char(featureIndex) || "_changed")[rowIndex];
+			If(!Is Missing(changedValue), changedCount += changedValue);
+		);
+		If(Abs(sparsityValue - (1 - changedCount / 5)) > 1e-9, sparsityMismatch++);
+		If(Is Missing(sparsityMinimum) | sparsityValue < sparsityMinimum, sparsityMinimum = sparsityValue);
+		If(Is Missing(sparsityMaximum) | sparsityValue > sparsityMaximum, sparsityMaximum = sparsityValue);
+		If(Is Missing(plausibilityMinimum) | plausibilityValue < plausibilityMinimum, plausibilityMinimum = plausibilityValue);
+		If(Is Missing(plausibilityMaximum) | plausibilityValue > plausibilityMaximum, plausibilityMaximum = plausibilityValue);
+	);
+);
+
+summaryText = "update_aborted=0\!N";
+summaryText ||= "rows=" || Char(N Rows(dataTable)) || " columns=" || Char(N Cols(dataTable)) || "\!N";
+summaryText ||= "original_rows=" || Char(originalRows) || " appended_rows=" || Char(N Rows(dataTable) - originalRows) || "\!N";
+summaryText ||= "new_participants=" || Char(N Items(newParticipants)) || "\!N";
+summaryText ||= "old_crt_nonmissing=" || Char(oldCrtNonmissing) || " new_crt_missing=" || Char(newCrtMissing) || "\!N";
+summaryText ||= "training_sparsity_nonmissing=" || Char(trainingSparsityNonmissing) || " training_plausibility_nonmissing=" || Char(trainingPlausibilityNonmissing) || "\!N";
+summaryText ||= "testing_sparsity_missing=" || Char(testingSparsityMissing) || " testing_plausibility_missing=" || Char(testingPlausibilityMissing) || "\!N";
+summaryText ||= "sparsity_mismatches=" || Char(sparsityMismatch) || " sparsity_range=" || Char(sparsityMinimum) || "," || Char(sparsityMaximum) || "\!N";
+summaryText ||= "plausibility_range=" || Char(plausibilityMinimum) || "," || Char(plausibilityMaximum) || "\!N";
+summaryText ||= "original_scripts=" || Char(originalScripts) || "\!N";
+summaryText ||= "updated_scripts=" || Char(updatedScripts) || "\!N";
+Save Text File(summaryPath, summaryText);
+
+Close(mergedTable, No Save);
+Close(dataTable, No Save);
+Exit();

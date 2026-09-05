@@ -1,0 +1,10 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+inputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.jmp", Windows);
+outputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.for-plausibility.csv", Windows);
+
+dataTable = Open(inputPath, Invisible);
+dataTable << Save As(outputPath);
+Close(dataTable, No Save);
+Exit();

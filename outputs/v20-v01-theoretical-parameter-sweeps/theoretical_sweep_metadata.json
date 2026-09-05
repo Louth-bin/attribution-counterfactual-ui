@@ -1,0 +1,57 @@
+{
+  "analysis": "theory-only factorial cognitive-model v0.1 parameter sweep",
+  "participant data used": false,
+  "participant fitted parameters used": false,
+  "XAI conditions": [
+    "none",
+    "attribution",
+    "counterfactual"
+  ],
+  "model families": [
+    "feature contribution",
+    "weighted examples"
+  ],
+  "testing stimuli": 20,
+  "K": 2,
+  "prediction rule": "maximum-probability feature subset",
+  "other-parameter treatment": "uniform marginalization over the full factorial grid within family and XAI condition",
+  "rho interpretation": "signed additive magnitude correction with truncation at zero, so negative rho shrinks changes without reversing direction",
+  "parameter grids": {
+    "eta": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "alpha": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "rho": [
+      -0.3,
+      -0.2,
+      -0.1,
+      0.0,
+      0.1,
+      0.2,
+      0.3
+    ],
+    "lambda": [
+      0.0,
+      2.0,
+      6.0
+    ],
+    "beta": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "age actionable": [
+      0,
+      1
+    ]
+  },
+  "factorial configurations": 840,
+  "case-level simulations": 16800,
+  "boundary profiles": 16820
+}

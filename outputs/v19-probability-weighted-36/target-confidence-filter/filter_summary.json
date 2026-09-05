@@ -1,0 +1,54 @@
+{
+  "exclusion rule": "exclude when observed target-confidence gain is <= 0 on at least 8 of 20 testing trials",
+  "full participants": 36,
+  "retained participants": 30,
+  "excluded participants": 6,
+  "retained trials": 600,
+  "retained condition counts": {
+    "attribution": 10,
+    "counterfactual": 10,
+    "none": 10
+  },
+  "excluded condition counts": {
+    "counterfactual": 5,
+    "none": 1
+  },
+  "excluded participant details": [
+    {
+      "participant": "R_12myev0XH9WOz3H",
+      "xai": "counterfactual",
+      "non-increase trials": 9,
+      "increase rate": 0.55
+    },
+    {
+      "participant": "R_3Fo0QmOVx6lcU4W",
+      "xai": "counterfactual",
+      "non-increase trials": 9,
+      "increase rate": 0.55
+    },
+    {
+      "participant": "R_5L0xQQar3o8Bvr3",
+      "xai": "counterfactual",
+      "non-increase trials": 9,
+      "increase rate": 0.55
+    },
+    {
+      "participant": "R_7DtIw0Gr58M4CAa",
+      "xai": "counterfactual",
+      "non-increase trials": 8,
+      "increase rate": 0.6
+    },
+    {
+      "participant": "R_7IXNpixLXSjItSq",
+      "xai": "none",
+      "non-increase trials": 8,
+      "increase rate": 0.6
+    },
+    {
+      "participant": "R_7L78tZJ3cQDgpFH",
+      "xai": "counterfactual",
+      "non-increase trials": 13,
+      "increase rate": 0.35
+    }
+  ]
+}

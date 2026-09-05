@@ -1,0 +1,35 @@
+{
+  "production_assets_modified": false,
+  "training_cases": 12,
+  "testing_cases": 20,
+  "training_pair_counts": {
+    "glucose|bmi": 6,
+    "blood_pressure|insulin": 6
+  },
+  "training_feature_counts": {
+    "glucose": 6,
+    "bmi": 6,
+    "blood_pressure": 6,
+    "insulin": 6
+  },
+  "testing_solution_feature_counts": {
+    "bmi": 19,
+    "insulin": 1
+  },
+  "training_label_counts": {
+    "Diabetes": 6,
+    "No Diabetes": 6
+  },
+  "testing_label_counts": {
+    "Diabetes": 10,
+    "No Diabetes": 10
+  },
+  "maximum_testing_profile_distance_to_training": 0.18977750099622215,
+  "testing_copy_transfer_flip_rate": 0.7,
+  "testing_copy_transfer_mean_capped_boundary_progress": 0.7781457929106154,
+  "objective": "actionability-weighted normalized L1 + 0.35 \u00d7 target-class 3-nearest-neighbour Gower distance",
+  "minimum_testing_normalized_change_per_edited_feature": 0.1,
+  "minimum_training_normalized_change_per_edited_feature": 0.15,
+  "maximum_training_normalized_change_per_edited_feature": 0.25,
+  "direction_reference": "difference between opposing ground-truth class medians in the real training split"
+}

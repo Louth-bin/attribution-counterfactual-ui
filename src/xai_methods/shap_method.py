@@ -8,6 +8,7 @@ import shap
 
 
 MAX_EXACT_KERNEL_SHAP_FEATURES = 10
+REGULARIZED_FEATURE_COUNT = 2
 
 
 class ShapXAI:
@@ -49,7 +50,7 @@ class ShapXAI:
             shap_values = explainer.shap_values(
                 encoded_instance.to_numpy(dtype=float),
                 nsamples=_kernel_shap_sample_count(encoded_background.shape[1]),
-                l1_reg=0.0,
+                l1_reg=f"num_features({REGULARIZED_FEATURE_COUNT})",
                 silent=True,
             )
         finally:
@@ -83,6 +84,10 @@ class ShapXAI:
 
         return {
             "method": self.name,
+            "feature_selection": {
+                "method": "kernel_shap_l1_regularization",
+                "num_features": REGULARIZED_FEATURE_COUNT,
+            },
             "values": [float(value) for value in instance_values.tolist()],
             "class_values": [
                 [float(value) for value in class_instance_values.tolist()]

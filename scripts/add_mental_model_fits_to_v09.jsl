@@ -1,0 +1,127 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+inputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.jmp", Windows);
+fitPath = Convert File Path(rootPath || "v0.9_participant_mental_model_fits.csv", Windows);
+outputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.mental-model-staging.jmp", Windows);
+summaryPath = Convert File Path(rootPath || "v0.9_mental_model_jmp_update_summary.txt", Windows);
+
+bestName = "best forward mental model";
+supportedName = "supported forward mental models (delta BIC < 2)";
+conclusionName = "forward mental model fit conclusion";
+gapName = "forward mental model delta BIC to second";
+exemplarName = "exemplar forward NLL";
+attributionName = "attribution forward NLL";
+prototypeName = "prototype forward NLL";
+
+dataTable = Open(inputPath, Invisible);
+fitTable = Open(fitPath, Invisible);
+originalScriptNames = dataTable << Get Table Script Names;
+
+bestMap = Associative Array();
+supportedMap = Associative Array();
+conclusionMap = Associative Array();
+gapMap = Associative Array();
+exemplarMap = Associative Array();
+attributionMap = Associative Array();
+prototypeMap = Associative Array();
+domainMap = Associative Array();
+xaiMap = Associative Array();
+duplicateAssignments = 0;
+
+For(rowIndex = 1, rowIndex <= N Rows(fitTable), rowIndex++,
+	participantValue = Char(Column(fitTable, "participant")[rowIndex]);
+	If(Contains(bestMap << Get Keys, participantValue), duplicateAssignments++);
+	bestMap[participantValue] = Char(Column(fitTable, "best_forward_mental_model")[rowIndex]);
+	supportedMap[participantValue] = Char(Column(fitTable, "supported_forward_mental_models_delta_bic_lt_2")[rowIndex]);
+	conclusionMap[participantValue] = Char(Column(fitTable, "forward_mental_model_fit_conclusion")[rowIndex]);
+	gapMap[participantValue] = Num(Column(fitTable, "delta_bic_to_second_best")[rowIndex]);
+	exemplarMap[participantValue] = Num(Column(fitTable, "exemplar_nll")[rowIndex]);
+	attributionMap[participantValue] = Num(Column(fitTable, "attribution_nll")[rowIndex]);
+	prototypeMap[participantValue] = Num(Column(fitTable, "prototype_nll")[rowIndex]);
+	domainMap[participantValue] = Char(Column(fitTable, "domain")[rowIndex]);
+	xaiMap[participantValue] = Char(Column(fitTable, "xai")[rowIndex]);
+);
+
+bestValues = {};
+supportedValues = {};
+conclusionValues = {};
+gapValues = J(N Rows(dataTable), 1, .);
+exemplarValues = J(N Rows(dataTable), 1, .);
+attributionValues = J(N Rows(dataTable), 1, .);
+prototypeValues = J(N Rows(dataTable), 1, .);
+missingAssignments = 0;
+conditionMismatches = 0;
+
+For(rowIndex = 1, rowIndex <= N Rows(dataTable), rowIndex++,
+	participantValue = Char(Column(dataTable, "participant")[rowIndex]);
+	domainValue = Char(Column(dataTable, "domain")[rowIndex]);
+	xaiValue = Char(Column(dataTable, "xai")[rowIndex]);
+	If(!Contains(bestMap << Get Keys, participantValue),
+		missingAssignments++;
+		Insert Into(bestValues, "");
+		Insert Into(supportedValues, "");
+		Insert Into(conclusionValues, ""),
+		Insert Into(bestValues, bestMap[participantValue]);
+		Insert Into(supportedValues, supportedMap[participantValue]);
+		Insert Into(conclusionValues, conclusionMap[participantValue]);
+		gapValues[rowIndex] = gapMap[participantValue];
+		exemplarValues[rowIndex] = exemplarMap[participantValue];
+		attributionValues[rowIndex] = attributionMap[participantValue];
+		prototypeValues[rowIndex] = prototypeMap[participantValue];
+		If(domainMap[participantValue] != domainValue | xaiMap[participantValue] != xaiValue,
+			conditionMismatches++
+		);
+	);
+);
+
+If(duplicateAssignments > 0 | missingAssignments > 0 | conditionMismatches > 0,
+	summaryText = "update_aborted=1\!N";
+	summaryText ||= "duplicate_assignments=" || Char(duplicateAssignments) || "\!N";
+	summaryText ||= "missing_assignments=" || Char(missingAssignments) || "\!N";
+	summaryText ||= "condition_mismatches=" || Char(conditionMismatches) || "\!N";
+	Save Text File(summaryPath, summaryText);
+	Close(fitTable, No Save);
+	Close(dataTable, No Save);
+	Exit();
+);
+
+newColumnNames = {bestName, supportedName, conclusionName, gapName, exemplarName, attributionName, prototypeName};
+columnNames = dataTable << Get Column Names("String");
+For Each({columnName}, newColumnNames,
+	If(Contains(columnNames, columnName), dataTable << Delete Columns(columnName))
+);
+
+dataTable << New Column(bestName, Character, Nominal, Set Values(bestValues));
+dataTable << New Column(supportedName, Character, Nominal, Set Values(supportedValues));
+dataTable << New Column(conclusionName, Character, Nominal, Set Values(conclusionValues));
+dataTable << New Column(gapName, Numeric, Continuous, Set Values(gapValues));
+dataTable << New Column(exemplarName, Numeric, Continuous, Set Values(exemplarValues));
+dataTable << New Column(attributionName, Numeric, Continuous, Set Values(attributionValues));
+dataTable << New Column(prototypeName, Numeric, Continuous, Set Values(prototypeValues));
+
+fitNote = "Participant-level fit to the 10 training-phase forward-simulation responses. Predictions are prequential: each response is scored using only earlier trials, then the current correct AI label and assigned explanation are learned. The fitted baseline has perfect memory, shared range-normalized relevance, and zero fitted continuous parameters. Values repeat across all rows for a participant; testing-phase edits are not fitting inputs.";
+Column(dataTable, bestName) << Set Property("Notes", fitNote || " This is the strict minimum-NLL model and should be interpreted together with the supported-model and delta-BIC columns.");
+Column(dataTable, supportedName) << Set Property("Notes", fitNote || " Lists every mental model within delta BIC < 2 of the strict minimum; these models are treated as empirically indistinguishable.");
+Column(dataTable, conclusionName) << Set Property("Notes", fitNote || " Reports either one best-supported model or the set of empirically indistinguishable models.");
+Column(dataTable, gapName) << Set Property("Notes", fitNote || " Difference in BIC between the strict best and second-best models. With zero fitted parameters for every model, BIC = 2*NLL. Values below 2 indicate weak separation.");
+Column(dataTable, exemplarName) << Set Property("Notes", fitNote || " Negative log likelihood of the participant's chosen forward responses under the exemplar model; lower is better.");
+Column(dataTable, attributionName) << Set Property("Notes", fitNote || " Negative log likelihood of the participant's chosen forward responses under the attribution model; lower is better.");
+Column(dataTable, prototypeName) << Set Property("Notes", fitNote || " Negative log likelihood of the participant's chosen forward responses under the prototype model; lower is better.");
+
+dataTable << Save As(outputPath);
+updatedScriptNames = dataTable << Get Table Script Names;
+
+summaryText = "update_aborted=0\!N";
+summaryText ||= "rows=" || Char(N Rows(dataTable)) || " columns=" || Char(N Cols(dataTable)) || "\!N";
+summaryText ||= "fit_rows=" || Char(N Rows(fitTable)) || "\!N";
+summaryText ||= "duplicate_assignments=" || Char(duplicateAssignments) || "\!N";
+summaryText ||= "missing_assignments=" || Char(missingAssignments) || "\!N";
+summaryText ||= "condition_mismatches=" || Char(conditionMismatches) || "\!N";
+summaryText ||= "original_scripts=" || Char(originalScriptNames) || "\!N";
+summaryText ||= "updated_scripts=" || Char(updatedScriptNames) || "\!N";
+Save Text File(summaryPath, summaryText);
+
+Close(fitTable, No Save);
+Close(dataTable, No Save);
+Exit();

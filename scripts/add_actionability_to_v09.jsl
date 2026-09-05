@@ -1,0 +1,79 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+inputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.jmp", Windows);
+outputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.actionability-updated.jmp", Windows);
+summaryPath = Convert File Path(rootPath || "v0.9_actionability_update_summary.txt", Windows);
+columnName = "plausible and actionable (0/1)";
+
+dataTable = Open(inputPath, Invisible);
+columnNames = dataTable << Get Column Names("String");
+originalScriptNames = dataTable << Get Table Script Names;
+
+If(Contains(columnNames, columnName),
+	dataTable << Delete Columns(columnName)
+);
+
+scores = J(N Rows(dataTable), 1, 1);
+
+For(rowIndex = 1, rowIndex <= N Rows(dataTable), rowIndex++,
+	domainValue = Lowercase(Char(Column(dataTable, "domain")[rowIndex]));
+	x2Changed = Num(Char(Column(dataTable, "x_2_changed")[rowIndex]));
+	x4Changed = Num(Char(Column(dataTable, "x_4_changed")[rowIndex]));
+	x5Changed = Num(Char(Column(dataTable, "x_5_changed")[rowIndex]));
+	If(Is Missing(x2Changed), x2Changed = 0);
+	If(Is Missing(x4Changed), x4Changed = 0);
+	If(Is Missing(x5Changed), x5Changed = 0);
+
+	If(domainValue == "diabetes" & x5Changed != 0,
+		scores[rowIndex] = 0,
+		domainValue == "safelimit" & (x2Changed != 0 | x4Changed != 0),
+		scores[rowIndex] = 0,
+		scores[rowIndex] = 1
+	);
+);
+
+dataTable << New Column(
+	columnName,
+	Numeric,
+	Nominal,
+	Set Values(scores)
+);
+
+Column(dataTable, columnName) << Set Property(
+	"Notes",
+	"1 = no non-controllable attribute was changed; 0 = a non-controllable attribute was changed. Housing: all five attributes are controllable. Diabetes: Age (x_5) is non-controllable. SafeLimit: Weight (x_2) and Gender (x_4) are non-controllable for the immediate scenario."
+);
+
+dataTable << Save As(outputPath);
+updatedScriptNames = dataTable << Get Table Script Names;
+
+housingOne = 0;
+housingZero = 0;
+diabetesOne = 0;
+diabetesZero = 0;
+safelimitOne = 0;
+safelimitZero = 0;
+
+For(rowIndex = 1, rowIndex <= N Rows(dataTable), rowIndex++,
+	domainValue = Lowercase(Char(Column(dataTable, "domain")[rowIndex]));
+	currentScore = Column(dataTable, columnName)[rowIndex];
+	If(domainValue == "housing" & currentScore == 1, housingOne++);
+	If(domainValue == "housing" & currentScore == 0, housingZero++);
+	If(domainValue == "diabetes" & currentScore == 1, diabetesOne++);
+	If(domainValue == "diabetes" & currentScore == 0, diabetesZero++);
+	If(domainValue == "safelimit" & currentScore == 1, safelimitOne++);
+	If(domainValue == "safelimit" & currentScore == 0, safelimitZero++);
+);
+
+summaryText = "rows=" || Char(N Rows(dataTable)) || "\!N";
+summaryText ||= "columns=" || Char(N Cols(dataTable)) || "\!N";
+summaryText ||= "housing_1=" || Char(housingOne) || " housing_0=" || Char(housingZero) || "\!N";
+summaryText ||= "diabetes_1=" || Char(diabetesOne) || " diabetes_0=" || Char(diabetesZero) || "\!N";
+summaryText ||= "safelimit_1=" || Char(safelimitOne) || " safelimit_0=" || Char(safelimitZero) || "\!N";
+summaryText ||= "original_scripts=" || Char(originalScriptNames) || "\!N";
+summaryText ||= "updated_scripts=" || Char(updatedScriptNames) || "\!N";
+
+Save Text File(summaryPath, summaryText);
+Close(dataTable, No Save);
+Exit();

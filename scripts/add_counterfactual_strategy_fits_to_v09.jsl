@@ -1,0 +1,175 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+inputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.jmp", Windows);
+fitPath = Convert File Path(rootPath || "v0.9_participant_counterfactual_strategy_fits.csv", Windows);
+outputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.counterfactual-strategy-staging.jmp", Windows);
+summaryPath = Convert File Path(rootPath || "v0.9_counterfactual_strategy_jmp_update_summary.txt", Windows);
+
+bestName = "best counterfactual strategy";
+minimumLossName = "minimum-loss counterfactual strategy";
+parameterCountName = "selected strategy fitted parameter count";
+supportedName = "supported counterfactual strategies (one SE)";
+conclusionName = "counterfactual strategy fit conclusion";
+mentalName = "counterfactual-implied mental model";
+supportedMentalName = "supported counterfactual-implied mental models";
+lossName = "counterfactual strategy CV normalized L1";
+f1Name = "counterfactual strategy feature-selection F1";
+directionName = "counterfactual strategy direction accuracy";
+gapName = "counterfactual strategy gap to second";
+kName = "counterfactual strategy fitted k";
+amountName = "counterfactual strategy fixed amount";
+
+dataTable = Open(inputPath, Invisible);
+fitTable = Open(fitPath, Invisible);
+originalScriptNames = dataTable << Get Table Script Names;
+
+bestMap = Associative Array();
+minimumLossMap = Associative Array();
+parameterCountMap = Associative Array();
+supportedMap = Associative Array();
+conclusionMap = Associative Array();
+mentalMap = Associative Array();
+supportedMentalMap = Associative Array();
+lossMap = Associative Array();
+f1Map = Associative Array();
+directionMap = Associative Array();
+gapMap = Associative Array();
+kMap = Associative Array();
+amountMap = Associative Array();
+domainMap = Associative Array();
+xaiMap = Associative Array();
+duplicateAssignments = 0;
+
+For(rowIndex = 1, rowIndex <= N Rows(fitTable), rowIndex++,
+	participantValue = Char(Column(fitTable, "participant")[rowIndex]);
+	If(Contains(bestMap << Get Keys, participantValue), duplicateAssignments++);
+	bestMap[participantValue] = Char(Column(fitTable, "best_counterfactual_strategy")[rowIndex]);
+	minimumLossMap[participantValue] = Char(Column(fitTable, "minimum_loss_counterfactual_strategy")[rowIndex]);
+	parameterCountMap[participantValue] = Num(Column(fitTable, "selected_strategy_fitted_parameter_count")[rowIndex]);
+	supportedMap[participantValue] = Char(Column(fitTable, "supported_counterfactual_strategies_one_se")[rowIndex]);
+	conclusionMap[participantValue] = Char(Column(fitTable, "counterfactual_strategy_fit_conclusion")[rowIndex]);
+	mentalMap[participantValue] = Char(Column(fitTable, "counterfactual_implied_mental_model")[rowIndex]);
+	supportedMentalMap[participantValue] = Char(Column(fitTable, "supported_counterfactual_implied_mental_models")[rowIndex]);
+	lossMap[participantValue] = Num(Column(fitTable, "best_strategy_cv_mean_normalized_l1")[rowIndex]);
+	f1Map[participantValue] = Num(Column(fitTable, "best_strategy_cv_feature_selection_f1")[rowIndex]);
+	directionMap[participantValue] = Num(Column(fitTable, "best_strategy_cv_direction_accuracy")[rowIndex]);
+	gapMap[participantValue] = Num(Column(fitTable, "counterfactual_strategy_gap_to_second_best")[rowIndex]);
+	kMap[participantValue] = Num(Column(fitTable, "best_strategy_full_data_k")[rowIndex]);
+	amountMap[participantValue] = Num(Column(fitTable, "best_strategy_full_data_fixed_amount")[rowIndex]);
+	domainMap[participantValue] = Char(Column(fitTable, "domain")[rowIndex]);
+	xaiMap[participantValue] = Char(Column(fitTable, "xai")[rowIndex]);
+);
+
+bestValues = {};
+minimumLossValues = {};
+parameterCountValues = J(N Rows(dataTable), 1, .);
+supportedValues = {};
+conclusionValues = {};
+mentalValues = {};
+supportedMentalValues = {};
+lossValues = J(N Rows(dataTable), 1, .);
+f1Values = J(N Rows(dataTable), 1, .);
+directionValues = J(N Rows(dataTable), 1, .);
+gapValues = J(N Rows(dataTable), 1, .);
+kValues = J(N Rows(dataTable), 1, .);
+amountValues = J(N Rows(dataTable), 1, .);
+missingAssignments = 0;
+conditionMismatches = 0;
+
+For(rowIndex = 1, rowIndex <= N Rows(dataTable), rowIndex++,
+	participantValue = Char(Column(dataTable, "participant")[rowIndex]);
+	domainValue = Char(Column(dataTable, "domain")[rowIndex]);
+	xaiValue = Char(Column(dataTable, "xai")[rowIndex]);
+	If(!Contains(bestMap << Get Keys, participantValue),
+		missingAssignments++;
+		Insert Into(bestValues, "");
+		Insert Into(minimumLossValues, "");
+		Insert Into(supportedValues, "");
+		Insert Into(conclusionValues, "");
+		Insert Into(mentalValues, "");
+		Insert Into(supportedMentalValues, ""),
+		Insert Into(bestValues, bestMap[participantValue]);
+		Insert Into(minimumLossValues, minimumLossMap[participantValue]);
+		parameterCountValues[rowIndex] = parameterCountMap[participantValue];
+		Insert Into(supportedValues, supportedMap[participantValue]);
+		Insert Into(conclusionValues, conclusionMap[participantValue]);
+		Insert Into(mentalValues, mentalMap[participantValue]);
+		Insert Into(supportedMentalValues, supportedMentalMap[participantValue]);
+		lossValues[rowIndex] = lossMap[participantValue];
+		f1Values[rowIndex] = f1Map[participantValue];
+		directionValues[rowIndex] = directionMap[participantValue];
+		gapValues[rowIndex] = gapMap[participantValue];
+		kValues[rowIndex] = kMap[participantValue];
+		amountValues[rowIndex] = amountMap[participantValue];
+		If(domainMap[participantValue] != domainValue | xaiMap[participantValue] != xaiValue,
+			conditionMismatches++
+		);
+	);
+);
+
+If(duplicateAssignments > 0 | missingAssignments > 0 | conditionMismatches > 0,
+	summaryText = "update_aborted=1\!N";
+	summaryText ||= "duplicate_assignments=" || Char(duplicateAssignments) || "\!N";
+	summaryText ||= "missing_assignments=" || Char(missingAssignments) || "\!N";
+	summaryText ||= "condition_mismatches=" || Char(conditionMismatches) || "\!N";
+	Save Text File(summaryPath, summaryText);
+	Close(fitTable, No Save);
+	Close(dataTable, No Save);
+	Exit();
+);
+
+newColumnNames = {
+	bestName, minimumLossName, parameterCountName, supportedName, conclusionName, mentalName, supportedMentalName,
+	lossName, f1Name, directionName, gapName, kName, amountName
+};
+columnNames = dataTable << Get Column Names("String");
+For Each({columnName}, newColumnNames,
+	If(Contains(columnNames, columnName), dataTable << Delete Columns(columnName))
+);
+
+dataTable << New Column(bestName, Character, Nominal, Set Values(bestValues));
+dataTable << New Column(minimumLossName, Character, Nominal, Set Values(minimumLossValues));
+dataTable << New Column(parameterCountName, Numeric, Ordinal, Set Values(parameterCountValues));
+dataTable << New Column(supportedName, Character, Nominal, Set Values(supportedValues));
+dataTable << New Column(conclusionName, Character, Nominal, Set Values(conclusionValues));
+dataTable << New Column(mentalName, Character, Nominal, Set Values(mentalValues));
+dataTable << New Column(supportedMentalName, Character, Nominal, Set Values(supportedMentalValues));
+dataTable << New Column(lossName, Numeric, Continuous, Set Values(lossValues));
+dataTable << New Column(f1Name, Numeric, Continuous, Set Values(f1Values));
+dataTable << New Column(directionName, Numeric, Continuous, Set Values(directionValues));
+dataTable << New Column(gapName, Numeric, Continuous, Set Values(gapValues));
+dataTable << New Column(kName, Numeric, Ordinal, Set Values(kValues));
+dataTable << New Column(amountName, Numeric, Continuous, Set Values(amountValues));
+
+fitNote = "Participant-level fit to testing-phase counterfactual edits. Training trials supply only the labeled instances and assigned explanations available to the participant; training responses are not used for mental-model or strategy assignment. Candidate edits are compared with observed signed edit vectors using mean range-normalized L1 across five features. Strategy k and fixed amount are selected by leave-one-instance-out cross-validation. Values repeat on every row for a participant.";
+Column(dataTable, bestName) << Set Property("Notes", fitNote || " Selected by the conservative one-standard-error rule: choose the supported strategy with the fewest participant-fitted parameters, then use cross-validated loss to break complexity ties.");
+Column(dataTable, minimumLossName) << Set Property("Notes", fitNote || " Strategy with the strict minimum cross-validated edit loss before applying the conservative one-standard-error complexity rule.");
+Column(dataTable, parameterCountName) << Set Property("Notes", fitNote || " Number of participant-fitted action settings for the selected strategy: zero for all target-profile mismatches, one for k-only strategies, and two for the fixed-amount strategy (k plus amount).");
+Column(dataTable, supportedName) << Set Property("Notes", fitNote || " Strategies whose mean loss is within one paired standard error of the strict best.");
+Column(dataTable, conclusionName) << Set Property("Notes", fitNote || " Reports the simplest one-SE selection and the full support set.");
+Column(dataTable, mentalName) << Set Property("Notes", fitNote || " Mental representation directly implied by the simplest strategy inside the one-standard-error support set. Remembered-change reuse is shared memory and does not uniquely determine the forward mental model.");
+Column(dataTable, supportedMentalName) << Set Property("Notes", fitNote || " Union of mental representations implied by all strategies in the one-standard-error support set.");
+Column(dataTable, lossName) << Set Property("Notes", fitNote || " Cross-validated mean absolute difference between observed and predicted normalized signed feature changes; lower is better.");
+Column(dataTable, f1Name) << Set Property("Notes", fitNote || " Cross-validated F1 score for selecting the same changed features as the participant; higher is better.");
+Column(dataTable, directionName) << Set Property("Notes", fitNote || " Direction agreement on features changed by both the participant and predicted strategy; missing when no comparable changed feature exists.");
+Column(dataTable, gapName) << Set Property("Notes", fitNote || " Cross-validated normalized-L1 loss difference between the strict best and second-best strategy.");
+Column(dataTable, kName) << Set Property("Notes", fitNote || " Full-testing-data descriptive estimate of the strategy's number of selected features. The cross-validated loss uses settings learned without each held-out response.");
+Column(dataTable, amountName) << Set Property("Notes", fitNote || " Full-testing-data descriptive estimate of a common normalized edit amount; populated only when the fixed-amount strategy is selected by the one-standard-error rule.");
+
+dataTable << Save As(outputPath);
+updatedScriptNames = dataTable << Get Table Script Names;
+
+summaryText = "update_aborted=0\!N";
+summaryText ||= "rows=" || Char(N Rows(dataTable)) || " columns=" || Char(N Cols(dataTable)) || "\!N";
+summaryText ||= "fit_rows=" || Char(N Rows(fitTable)) || "\!N";
+summaryText ||= "duplicate_assignments=" || Char(duplicateAssignments) || "\!N";
+summaryText ||= "missing_assignments=" || Char(missingAssignments) || "\!N";
+summaryText ||= "condition_mismatches=" || Char(conditionMismatches) || "\!N";
+summaryText ||= "original_scripts=" || Char(originalScriptNames) || "\!N";
+summaryText ||= "updated_scripts=" || Char(updatedScriptNames) || "\!N";
+Save Text File(summaryPath, summaryText);
+
+Close(fitTable, No Save);
+Close(dataTable, No Save);
+Exit();

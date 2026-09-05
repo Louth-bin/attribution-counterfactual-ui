@@ -1,0 +1,87 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+inputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.counterfactual-strategy-staging.jmp", Windows);
+fitPath = Convert File Path(rootPath || "v0.9_participant_counterfactual_strategy_fits.csv", Windows);
+outputPath = Convert File Path(rootPath || "v0.9_counterfactual_strategy_jmp_validation.txt", Windows);
+
+bestName = "best counterfactual strategy";
+minimumLossName = "minimum-loss counterfactual strategy";
+parameterCountName = "selected strategy fitted parameter count";
+supportedName = "supported counterfactual strategies (one SE)";
+conclusionName = "counterfactual strategy fit conclusion";
+mentalName = "counterfactual-implied mental model";
+supportedMentalName = "supported counterfactual-implied mental models";
+lossName = "counterfactual strategy CV normalized L1";
+f1Name = "counterfactual strategy feature-selection F1";
+directionName = "counterfactual strategy direction accuracy";
+gapName = "counterfactual strategy gap to second";
+kName = "counterfactual strategy fitted k";
+amountName = "counterfactual strategy fixed amount";
+
+dataTable = Open(inputPath, Invisible);
+fitTable = Open(fitPath, Invisible);
+columnNames = dataTable << Get Column Names("String");
+scriptNames = dataTable << Get Table Script Names;
+
+bestMap = Associative Array();
+minimumLossMap = Associative Array();
+parameterCountMap = Associative Array();
+supportedMap = Associative Array();
+mentalMap = Associative Array();
+lossMap = Associative Array();
+f1Map = Associative Array();
+gapMap = Associative Array();
+For(rowIndex = 1, rowIndex <= N Rows(fitTable), rowIndex++,
+	participantValue = Char(Column(fitTable, "participant")[rowIndex]);
+	bestMap[participantValue] = Char(Column(fitTable, "best_counterfactual_strategy")[rowIndex]);
+	minimumLossMap[participantValue] = Char(Column(fitTable, "minimum_loss_counterfactual_strategy")[rowIndex]);
+	parameterCountMap[participantValue] = Num(Column(fitTable, "selected_strategy_fitted_parameter_count")[rowIndex]);
+	supportedMap[participantValue] = Char(Column(fitTable, "supported_counterfactual_strategies_one_se")[rowIndex]);
+	mentalMap[participantValue] = Char(Column(fitTable, "counterfactual_implied_mental_model")[rowIndex]);
+	lossMap[participantValue] = Num(Column(fitTable, "best_strategy_cv_mean_normalized_l1")[rowIndex]);
+	f1Map[participantValue] = Num(Column(fitTable, "best_strategy_cv_feature_selection_f1")[rowIndex]);
+	gapMap[participantValue] = Num(Column(fitTable, "counterfactual_strategy_gap_to_second_best")[rowIndex]);
+);
+
+mappingMismatches = 0;
+invalidMetrics = 0;
+For(rowIndex = 1, rowIndex <= N Rows(dataTable), rowIndex++,
+	participantValue = Char(Column(dataTable, "participant")[rowIndex]);
+	If(!Contains(bestMap << Get Keys, participantValue),
+		mappingMismatches++,
+		If(Char(Column(dataTable, bestName)[rowIndex]) != bestMap[participantValue], mappingMismatches++);
+		If(Char(Column(dataTable, minimumLossName)[rowIndex]) != minimumLossMap[participantValue], mappingMismatches++);
+		If(Column(dataTable, parameterCountName)[rowIndex] != parameterCountMap[participantValue], mappingMismatches++);
+		If(Char(Column(dataTable, supportedName)[rowIndex]) != supportedMap[participantValue], mappingMismatches++);
+		If(Char(Column(dataTable, mentalName)[rowIndex]) != mentalMap[participantValue], mappingMismatches++);
+		If(Abs(Column(dataTable, lossName)[rowIndex] - lossMap[participantValue]) > 1e-9, mappingMismatches++);
+		If(Abs(Column(dataTable, f1Name)[rowIndex] - f1Map[participantValue]) > 1e-9, mappingMismatches++);
+		If(Abs(Column(dataTable, gapName)[rowIndex] - gapMap[participantValue]) > 1e-9, mappingMismatches++);
+	);
+	If(Column(dataTable, lossName)[rowIndex] < 0 | Column(dataTable, f1Name)[rowIndex] < 0 | Column(dataTable, f1Name)[rowIndex] > 1 | Column(dataTable, gapName)[rowIndex] < 0,
+		invalidMetrics++
+	);
+);
+
+requiredNames = {
+	bestName, minimumLossName, parameterCountName, supportedName, conclusionName, mentalName, supportedMentalName,
+	lossName, f1Name, directionName, gapName, kName, amountName
+};
+allPresent = 1;
+For Each({columnName}, requiredNames,
+	If(!Contains(columnNames, columnName), allPresent = 0)
+);
+
+summaryText = "rows=" || Char(N Rows(dataTable)) || " columns=" || Char(N Cols(dataTable)) || "\!N";
+summaryText ||= "all_columns_present=" || Char(allPresent) || "\!N";
+summaryText ||= "mapping_mismatches=" || Char(mappingMismatches) || "\!N";
+summaryText ||= "invalid_metrics=" || Char(invalidMetrics) || "\!N";
+summaryText ||= "script_count=" || Char(N Items(scriptNames)) || "\!N";
+summaryText ||= "scripts=" || Char(scriptNames) || "\!N";
+summaryText ||= "best_notes=" || Char(Column(dataTable, bestName) << Get Property("Notes")) || "\!N";
+Save Text File(outputPath, summaryText);
+
+Close(fitTable, No Save);
+Close(dataTable, No Save);
+Exit();

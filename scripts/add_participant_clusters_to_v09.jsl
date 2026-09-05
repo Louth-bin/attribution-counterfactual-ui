@@ -1,0 +1,102 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+inputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.jmp", Windows);
+assignmentPath = Convert File Path(rootPath || "v0.9_participant_change_clusters.csv", Windows);
+outputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.clustered-staging.jmp", Windows);
+summaryPath = Convert File Path(rootPath || "v0.9_participant_cluster_jmp_update_summary.txt", Windows);
+
+clusterName = "participant change cluster";
+strategyName = "participant change strategy";
+
+dataTable = Open(inputPath, Invisible);
+assignmentTable = Open(assignmentPath, Invisible);
+originalScriptNames = dataTable << Get Table Script Names;
+
+clusterMap = Associative Array();
+strategyMap = Associative Array();
+domainMap = Associative Array();
+duplicateAssignments = 0;
+
+For(rowIndex = 1, rowIndex <= N Rows(assignmentTable), rowIndex++,
+	participantValue = Char(Column(assignmentTable, "participant")[rowIndex]);
+	domainValue = Char(Column(assignmentTable, "domain")[rowIndex]);
+	clusterValue = Num(Column(assignmentTable, clusterName)[rowIndex]);
+	strategyValue = Char(Column(assignmentTable, strategyName)[rowIndex]);
+	If(Contains(clusterMap << Get Keys, participantValue), duplicateAssignments++);
+	clusterMap[participantValue] = clusterValue;
+	strategyMap[participantValue] = strategyValue;
+	domainMap[participantValue] = domainValue;
+);
+
+clusterValues = J(N Rows(dataTable), 1, .);
+strategyValues = {};
+missingAssignments = 0;
+domainMismatches = 0;
+
+For(rowIndex = 1, rowIndex <= N Rows(dataTable), rowIndex++,
+	participantValue = Char(Column(dataTable, "participant")[rowIndex]);
+	domainValue = Char(Column(dataTable, "domain")[rowIndex]);
+	If(!Contains(clusterMap << Get Keys, participantValue),
+		missingAssignments++;
+		Insert Into(strategyValues, ""),
+		clusterValues[rowIndex] = clusterMap[participantValue];
+		Insert Into(strategyValues, strategyMap[participantValue]);
+		If(domainMap[participantValue] != domainValue, domainMismatches++);
+	);
+);
+
+If(duplicateAssignments > 0 | missingAssignments > 0 | domainMismatches > 0,
+	summaryText = "update_aborted=1\!N";
+	summaryText ||= "duplicate_assignments=" || Char(duplicateAssignments) || "\!N";
+	summaryText ||= "missing_assignments=" || Char(missingAssignments) || "\!N";
+	summaryText ||= "domain_mismatches=" || Char(domainMismatches) || "\!N";
+	Save Text File(summaryPath, summaryText);
+	Close(assignmentTable, No Save);
+	Close(dataTable, No Save);
+	Exit();
+);
+
+columnNames = dataTable << Get Column Names("String");
+If(Contains(columnNames, clusterName), dataTable << Delete Columns(clusterName));
+If(Contains(columnNames, strategyName), dataTable << Delete Columns(strategyName));
+
+dataTable << New Column(
+	clusterName,
+	Numeric,
+	Nominal,
+	Set Values(clusterValues)
+);
+dataTable << New Column(
+	strategyName,
+	Character,
+	Nominal,
+	Set Values(strategyValues)
+);
+
+Column(dataTable, clusterName) << Set Property(
+	"Notes",
+	"Participant-level, domain-specific unsupervised cluster derived from testing responses. Within each domain, k-means used each participant's number of attributes changed (sparsity) and summed absolute range-normalized change (proximity) on instances answered by every participant. Each instance-metric was standardized across participants. Candidate k=2..6 solutions were checked using silhouette, Ward agreement, minimum size, and 80% instance-subsample stability; k=2 was selected in all domains. Values are repeated on training rows because the cluster describes the participant, but training responses were not clustering inputs."
+);
+Column(dataTable, strategyName) << Set Property(
+	"Notes",
+	"General interpretation of participant change cluster: cluster 1 = Focused / smaller changes; cluster 2 = Broad / larger changes. These describe editing magnitude and breadth, not counterfactual success, quality, treatment condition, or a confirmed psychological type. Cluster assignments are domain-specific."
+);
+
+dataTable << Save As(outputPath);
+updatedScriptNames = dataTable << Get Table Script Names;
+
+summaryText = "update_aborted=0\!N";
+summaryText ||= "rows=" || Char(N Rows(dataTable)) || " columns=" || Char(N Cols(dataTable)) || "\!N";
+summaryText ||= "assignment_rows=" || Char(N Rows(assignmentTable)) || "\!N";
+summaryText ||= "duplicate_assignments=" || Char(duplicateAssignments) || "\!N";
+summaryText ||= "missing_assignments=" || Char(missingAssignments) || "\!N";
+summaryText ||= "domain_mismatches=" || Char(domainMismatches) || "\!N";
+summaryText ||= "original_scripts=" || Char(originalScriptNames) || "\!N";
+summaryText ||= "updated_scripts=" || Char(updatedScriptNames) || "\!N";
+Save Text File(summaryPath, summaryText);
+
+Close(assignmentTable, No Save);
+Close(dataTable, No Save);
+Exit();
+

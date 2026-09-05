@@ -1,0 +1,139 @@
+Names Default To Here(1);
+
+rootPath = "C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/";
+referencePath = Convert File Path(rootPath || "qualtrics/qualtrics_results_v1.2 (diabetes clustering).jmp", Windows);
+sourcePath = Convert File Path(rootPath || "qualtrics/qualtrics_results_v1.3.csv", Windows);
+outputPath = Convert File Path(rootPath || "qualtrics/qualtrics_results_v1.3.jmp", Windows);
+reportPath = Convert File Path(rootPath || "qualtrics/v1.3_results_jmp_validation.txt", Windows);
+
+dt = Open(referencePath, Invisible);
+source = Open(sourcePath, Invisible);
+originalScripts = dt << Get Table Script Names;
+targetNames = dt << Get Column Names("String");
+sourceNames = source << Get Column Names("String");
+
+If(targetNames != sourceNames,
+	Save Text File(
+		reportPath,
+		"build_aborted=1\!Ncolumn_order_mismatch=1\!Ntarget=" || Char(targetNames)
+		|| "\!Nsource=" || Char(sourceNames) || "\!N"
+	);
+	Close(source, No Save);
+	Close(dt, No Save);
+	Exit();
+);
+
+If(N Rows(source) != 360,
+	Save Text File(reportPath, "build_aborted=1\!Nunexpected_source_rows=" || Char(N Rows(source)) || "\!N");
+	Close(source, No Save);
+	Close(dt, No Save);
+	Exit();
+);
+
+// Save to a new path first, leaving the v1.2 reference untouched.
+dt << Save As(outputPath);
+dt << Select All Rows;
+dt << Delete Rows;
+dt << Add Rows(N Rows(source));
+
+formulaColumns = {
+	"close to boundary old",
+	"distance to boundary",
+	"confidence of counterfactual - 50%",
+	"participant training accuracy",
+	"CRT binarized",
+	"strategy: xai"
+};
+
+For(columnIndex = 1, columnIndex <= N Items(targetNames), columnIndex++,
+	columnName = targetNames[columnIndex];
+	If(!Contains(formulaColumns, columnName),
+		Column(dt, columnName) << Set Values(Column(source, columnName) << Get Values)
+	);
+);
+
+Column(dt, "plausibility (subset)") << Set Property(
+	"Notes",
+	"Testing rows only. Gower similarity to the nearest of the 12 clustered diabetes training profiles displayed in this experiment: 1 - minimum five-attribute Gower distance (k=1). Numeric dissimilarities are absolute range-normalized differences, averaged across five attributes. Range 0 to 1; higher values mean the submitted profile is more similar to one of the displayed training profiles. Training rows are missing."
+);
+
+dt << Recalculate;
+dt << Save;
+
+participants = Associative Array();
+trainingRows = 0;
+testingRows = 0;
+attributionParticipants = Associative Array();
+counterfactualParticipants = Associative Array();
+noneParticipants = Associative Array();
+trainingMetricNonmissing = 0;
+testingMetricMissing = 0;
+sparsityMismatch = 0;
+actionabilityMismatch = 0;
+formulaMismatch = 0;
+domainMismatch = 0;
+
+For(rowIndex = 1, rowIndex <= N Rows(dt), rowIndex++,
+	participant = Char(Column(dt, "participant")[rowIndex]);
+	participants[participant] = 1;
+	phase = Lowercase(Char(Column(dt, "phase")[rowIndex]));
+	xai = Lowercase(Char(Column(dt, "xai")[rowIndex]));
+	If(Lowercase(Char(Column(dt, "domain")[rowIndex])) != "diabetes", domainMismatch++);
+	If(xai == "attribution", attributionParticipants[participant] = 1);
+	If(xai == "counterfactual", counterfactualParticipants[participant] = 1);
+	If(xai == "none", noneParticipants[participant] = 1);
+
+	If(phase == "training",
+		trainingRows++;
+		If(
+			!Is Missing(Column(dt, "sparsity")[rowIndex])
+			| !Is Missing(Column(dt, "proximity")[rowIndex])
+			| !Is Missing(Column(dt, "plausibility")[rowIndex])
+			| !Is Missing(Column(dt, "plausibility (subset)")[rowIndex])
+			| !Is Missing(Column(dt, "actionability (0/1)")[rowIndex])
+			| !Is Missing(Column(dt, "boundary distance original")[rowIndex]),
+			trainingMetricNonmissing++
+		),
+		testingRows++;
+		If(
+			Is Missing(Column(dt, "sparsity")[rowIndex])
+			| Is Missing(Column(dt, "proximity")[rowIndex])
+			| Is Missing(Column(dt, "plausibility")[rowIndex])
+			| Is Missing(Column(dt, "plausibility (subset)")[rowIndex])
+			| Is Missing(Column(dt, "actionability (0/1)")[rowIndex])
+			| Is Missing(Column(dt, "boundary distance original")[rowIndex]),
+			testingMetricMissing++
+		);
+		changed = 0;
+		For(featureIndex = 1, featureIndex <= 5, featureIndex++,
+			changed += Column(dt, "x_" || Char(featureIndex) || "_changed")[rowIndex]
+		);
+		If(Abs(Column(dt, "sparsity")[rowIndex] - (1 - changed / 5)) > 1e-9, sparsityMismatch++);
+		expectedActionability = Column(dt, "x_5_changed")[rowIndex] == 0;
+		If(Column(dt, "actionability (0/1)")[rowIndex] != expectedActionability, actionabilityMismatch++);
+	);
+
+	expectedCrtBinary = Column(dt, "CRT-2 score (0-4)")[rowIndex] > 2;
+	If(Column(dt, "CRT binarized")[rowIndex] != expectedCrtBinary, formulaMismatch++);
+	expectedStrategyXai = Char(Column(dt, "attribute selection method")[rowIndex]) || " : " || Char(Column(dt, "xai")[rowIndex]);
+	If(Char(Column(dt, "strategy: xai")[rowIndex]) != expectedStrategyXai, formulaMismatch++);
+);
+
+updatedScripts = dt << Get Table Script Names;
+scriptNamesMatch = Char(originalScripts) == Char(updatedScripts);
+text = "build_aborted=0\!N";
+text ||= "rows=" || Char(N Rows(dt)) || " columns=" || Char(N Cols(dt)) || " participants=" || Char(N Items(participants)) || "\!N";
+text ||= "training_rows=" || Char(trainingRows) || " testing_rows=" || Char(testingRows) || "\!N";
+text ||= "xai_participants=attribution:" || Char(N Items(attributionParticipants))
+	|| ",counterfactual:" || Char(N Items(counterfactualParticipants))
+	|| ",none:" || Char(N Items(noneParticipants)) || "\!N";
+text ||= "domain_mismatch=" || Char(domainMismatch) || "\!N";
+text ||= "training_metric_nonmissing=" || Char(trainingMetricNonmissing) || " testing_metric_missing=" || Char(testingMetricMissing) || "\!N";
+text ||= "sparsity_mismatch=" || Char(sparsityMismatch) || " actionability_mismatch=" || Char(actionabilityMismatch) || " formula_mismatch=" || Char(formulaMismatch) || "\!N";
+text ||= "original_scripts=" || Char(N Items(originalScripts)) || " updated_scripts=" || Char(N Items(updatedScripts)) || "\!N";
+text ||= "script_names_match=" || Char(scriptNamesMatch) || "\!N";
+Save Text File(reportPath, text);
+
+Close(source, No Save);
+Close(dt, No Save);
+Exit();

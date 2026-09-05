@@ -1,0 +1,36 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+versions = {"v0.4", "v0.7"};
+
+For(versionIndex = 1, versionIndex <= N Items(versions), versionIndex++,
+	version = versions[versionIndex];
+	dataTable = Open(
+		Convert File Path(rootPath || "qualtrics_results_" || version || ".jmp", Windows),
+		Invisible
+	);
+	sourceTable = Open(
+		Convert File Path(rootPath || "qualtrics_results_" || version || ".csv", Windows),
+		Invisible
+	);
+	If(N Rows(dataTable) != N Rows(sourceTable),
+		Throw(version || " row-count mismatch between JMP and CSV")
+	);
+	strategyValues = Column(sourceTable, "reasoning strategy") << Get Values;
+	dataTable << New Column(
+		"reasoning strategy",
+		Character,
+		Nominal,
+		Set Values(strategyValues)
+	);
+	dataTable << Save As(
+		Convert File Path(
+			rootPath || "qualtrics_results_" || version || ".strategy-updated.jmp",
+			Windows
+		)
+	);
+	Close(sourceTable, No Save);
+	Close(dataTable, No Save);
+);
+
+Exit();

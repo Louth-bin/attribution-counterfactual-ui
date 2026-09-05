@@ -1,0 +1,42 @@
+Names Default To Here( 1 );
+
+rootPath = "C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/";
+jmpPath = rootPath || "qualtrics/qualtrics_results_v2.0.jmp";
+sourceCsvPath = rootPath || "qualtrics/qualtrics_results_v2.0_with_shap_changes.csv";
+checkCsvPath = rootPath || "qualtrics/qualtrics_results_v2.0.shap_change_roundtrip_check.csv";
+
+shapColumns = {
+	"x_1 Glucose SHAP change Δφ",
+	"x_2 Blood Pressure SHAP change Δφ",
+	"x_3 Insulin SHAP change Δφ",
+	"x_4 BMI SHAP change Δφ",
+	"x_5 Age SHAP change Δφ"
+};
+
+dt = Open( jmpPath, Invisible );
+source = Open( sourceCsvPath, Invisible );
+
+If( N Rows( dt ) != N Rows( source ),
+	Close( source, NoSave );
+	Close( dt, NoSave );
+	Throw( "Row count mismatch between JMP and SHAP-change source CSV" );
+);
+
+For( i = 1, i <= N Items( shapColumns ), i++,
+	columnName = shapColumns[i];
+	If( Contains( source << Get Column Names( "String" ), columnName ) == 0,
+		Close( source, NoSave );
+		Close( dt, NoSave );
+		Throw( "Missing source column: " || columnName );
+	);
+	values = Column( source, columnName ) << Get Values;
+	If( Contains( dt << Get Column Names( "String" ), columnName ) == 0,
+		dt << New Column( columnName, Numeric, Continuous, Format( "Best", 12 ), Set Values( values ) ),
+		Column( dt, columnName ) << Set Values( values )
+	);
+);
+
+Close( source, NoSave );
+dt << Save( jmpPath );
+dt << Save As( checkCsvPath );
+Close( dt, NoSave );

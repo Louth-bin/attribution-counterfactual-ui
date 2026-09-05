@@ -1,0 +1,35 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+inputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.jmp", Windows);
+outputPath = Convert File Path(rootPath || "v0.9_actionability_inspection.txt", Windows);
+
+dataTable = Open(inputPath, Invisible);
+columnNames = dataTable << Get Column Names("String");
+scriptNames = dataTable << Get Table Script Names;
+
+outputText = "rows=" || Char(N Rows(dataTable)) || "\!N";
+outputText ||= "columns=" || Char(N Cols(dataTable)) || "\!N";
+outputText ||= "column_names=" || Char(columnNames) || "\!N";
+outputText ||= "table_scripts=" || Char(scriptNames) || "\!N";
+
+If(Contains(columnNames, "domain"),
+	domainCounts = Associative Array();
+	For(rowIndex = 1, rowIndex <= N Rows(dataTable), rowIndex++,
+		domainValue = Char(Column(dataTable, "domain")[rowIndex]);
+		If(!Contains(domainCounts, domainValue), domainCounts[domainValue] = 0);
+		domainCounts[domainValue]++;
+	);
+	outputText ||= "domain_counts=" || Char(domainCounts) || "\!N";
+);
+
+For(columnIndex = 1, columnIndex <= N Items(columnNames), columnIndex++,
+	currentName = columnNames[columnIndex];
+	If(Contains(Lowercase(currentName), "change") | Contains(Lowercase(currentName), "attribute"),
+		outputText ||= "candidate_column=" || currentName || "\!N";
+	);
+);
+
+Save Text File(outputPath, outputText);
+Close(dataTable, No Save);
+Exit();

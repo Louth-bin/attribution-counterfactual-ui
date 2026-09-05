@@ -1,0 +1,22 @@
+{
+  "rows": 448,
+  "columns": 56,
+  "participants": 14,
+  "training_rows": 168,
+  "testing_rows": 280,
+  "xai_participants": {
+    "attribution": 2,
+    "counterfactual": 5,
+    "none": 7
+  },
+  "valid_counterfactuals": 123,
+  "training_correct": 93,
+  "subset_reference_profiles": 12,
+  "reasoning_strategy_counts": {
+    "Always change the same attributes regardless of the case": 4,
+    "Change all mismatching attributes toward a target profile": 3,
+    "Change the most influential attributes for the case": 5,
+    "Change the most out-of-range attributes for the case": 1,
+    "No consistent rule or guessed changes": 1
+  }
+}

@@ -1,0 +1,58 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+dataTable = Open(
+	Convert File Path(rootPath || "qualtrics_results_v0.7.jmp", Windows),
+	Invisible
+);
+sourceTable = Open(
+	Convert File Path(rootPath || "qualtrics_results_v0.7.csv", Windows),
+	Invisible
+);
+
+If(N Rows(dataTable) != N Rows(sourceTable),
+	Throw("v0.7 row-count mismatch between JMP and CSV")
+);
+
+columnNames = dataTable << Get Column Names("String");
+If(Contains(columnNames, "reasoning strategy"),
+	dataTable << Delete Columns("reasoning strategy")
+);
+
+strategyMap = Associative Array();
+For(rowIndex = 1, rowIndex <= N Rows(sourceTable), rowIndex++,
+	participant = Column(sourceTable, "participant")[rowIndex];
+	strategy = Column(sourceTable, "reasoning strategy")[rowIndex];
+	If(Contains(strategyMap << Get Keys, participant),
+		If(strategyMap[participant] != strategy,
+			Throw("Conflicting strategy values for participant " || participant)
+		)
+	);
+	strategyMap[participant] = strategy;
+);
+
+strategyValues = {};
+For(rowIndex = 1, rowIndex <= N Rows(dataTable), rowIndex++,
+	participant = Column(dataTable, "participant")[rowIndex];
+	If(!Contains(strategyMap << Get Keys, participant),
+		Throw("No CSV strategy for participant " || participant)
+	);
+	Insert Into(strategyValues, strategyMap[participant]);
+);
+dataTable << New Column(
+	"reasoning strategy",
+	Character,
+	Nominal,
+	Set Values(strategyValues)
+);
+
+dataTable << Save As(
+	Convert File Path(
+		rootPath || "qualtrics_results_v0.7.strategy-strict.jmp",
+		Windows
+	)
+);
+
+Close(sourceTable, No Save);
+Close(dataTable, No Save);
+Exit();

@@ -1,0 +1,56 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+versions = {"v0.4", "v0.7"};
+changeColumns = {
+	"x_1_change", "x_2_change", "x_3_change", "x_4_change", "x_5_change",
+	"x_1_changed", "x_2_changed", "x_3_changed", "x_4_changed", "x_5_changed"
+};
+
+For(versionIndex = 1, versionIndex <= N Items(versions), versionIndex++,
+	version = versions[versionIndex];
+	dataTable = Open(
+		Convert File Path(rootPath || "qualtrics_results_" || version || ".jmp", Windows),
+		Invisible
+	);
+	sourceTable = Open(
+		Convert File Path(rootPath || "qualtrics_results_" || version || ".csv", Windows),
+		Invisible
+	);
+
+	If(N Rows(dataTable) != N Rows(sourceTable),
+		Throw(version || " row-count mismatch between JMP and CSV")
+	);
+	For(rowIndex = 1, rowIndex <= N Rows(dataTable), rowIndex++,
+		If(
+			Column(dataTable, "participant")[rowIndex]
+				!= Column(sourceTable, "participant")[rowIndex]
+			| Column(dataTable, "phase")[rowIndex]
+				!= Column(sourceTable, "phase")[rowIndex]
+			| Column(dataTable, "case")[rowIndex]
+				!= Column(sourceTable, "case")[rowIndex]
+			| Column(dataTable, "instance id")[rowIndex]
+				!= Column(sourceTable, "instance id")[rowIndex],
+			Throw(version || " row-order/key mismatch at row " || Char(rowIndex))
+		)
+	);
+
+	existingColumns = dataTable << Get Column Names("String");
+	For(columnIndex = 1, columnIndex <= N Items(changeColumns), columnIndex++,
+		columnName = changeColumns[columnIndex];
+		If(Contains(existingColumns, columnName),
+			Throw(version || " already contains " || columnName)
+		);
+		newColumn = dataTable << New Column(columnName, Numeric, Continuous);
+		newColumn << Set Values(Column(sourceTable, columnName) << Get Values);
+		If(Ends With(columnName, "_changed"),
+			newColumn << Set Modeling Type("Nominal")
+		);
+	);
+
+	dataTable << Save;
+	Close(sourceTable, No Save);
+	Close(dataTable, No Save);
+);
+
+Exit();

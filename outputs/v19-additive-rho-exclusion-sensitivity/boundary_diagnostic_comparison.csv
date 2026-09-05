@@ -1,0 +1,19 @@
+sample,diagnostic,n,pearson r,pearson p,spearman rho,spearman p,value
+full sample,participant observed versus simulated,25.0,0.22581297995104288,0.2777637796030021,0.4107692307692308,0.04137725673275663,
+full sample,trial observed versus simulated,500.0,0.5709122133355136,1.3822263149272924e-44,0.5190472196172762,7.768385568702333e-36,
+full sample,case-average observed versus simulated,20.0,0.8372420318454182,4.14901114054645e-06,0.7969924812030074,2.591747429404541e-05,
+full sample,within-participant centered observed versus simulated,500.0,0.6203784147715534,1.629081743210394e-54,0.562058440233761,5.5553454434550016e-43,
+full sample,within-case centered observed versus simulated,500.0,0.549611986769497,8.311985706829986e-41,0.5274760552230721,3.713979448850945e-37,
+full sample,participant observed boundary improvement versus observed edit L1,25.0,-0.7740540009206612,5.633462989514693e-06,-0.5107692307692308,0.009078735844871143,
+full sample,participant model-minus-observed boundary error versus edit-size error,25.0,-0.7936143351976751,2.2066597599487894e-06,-0.33076923076923076,0.10630845408160393,
+full sample,observed participant boundary SD,,,,,,0.05921033648068034
+full sample,mean within-participant trial boundary SD,,,,,,0.1397927724086174
+excluding flagged participant,participant observed versus simulated,24.0,0.46011698372552584,0.023674953609224766,0.48956521739130426,0.015176284460359705,
+excluding flagged participant,trial observed versus simulated,480.0,0.6324089966224273,5.597379660063389e-55,0.5585800449959666,9.881375869829466e-41,
+excluding flagged participant,case-average observed versus simulated,20.0,0.8033821298418742,1.992872319579502e-05,0.7503759398496239,0.00013841163311276012,
+excluding flagged participant,within-participant centered observed versus simulated,480.0,0.6508540279312807,3.616991602079414e-59,0.5791871926527458,2.400479783791606e-44,
+excluding flagged participant,within-case centered observed versus simulated,480.0,0.6178379765700441,7.282848456093272e-52,0.5697933568392969,1.147106257560179e-42,
+excluding flagged participant,participant observed boundary improvement versus observed edit L1,24.0,-0.5757774013327535,0.003238177323215622,-0.44695652173913036,0.028546284582444417,
+excluding flagged participant,participant model-minus-observed boundary error versus edit-size error,24.0,-0.4991060628669348,0.013032802054002807,-0.2434782608695652,0.25159816184284284,
+excluding flagged participant,observed participant boundary SD,,,,,,0.04425282962723403
+excluding flagged participant,mean within-participant trial boundary SD,,,,,,0.13603924897805683

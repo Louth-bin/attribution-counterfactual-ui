@@ -175,7 +175,7 @@ def index_training_candidates_by_pair(
             raw_values = explainer.shap_values(
                 batch.to_numpy(dtype=float),
                 nsamples=2 ** len(feature_names),
-                l1_reg=0.0,
+                l1_reg="num_features(2)",
                 silent=True,
             )
         finally:

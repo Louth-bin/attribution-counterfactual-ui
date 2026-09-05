@@ -1,0 +1,85 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+inputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.jmp", Windows);
+outputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.plausibility-updated.jmp", Windows);
+summaryPath = Convert File Path(rootPath || "v0.9_plausibility_update_summary.txt", Windows);
+scorePath = Convert File Path("C:/Users/Louth/AppData/Local/Temp/plausibility_v09_values_calculated.csv", Windows);
+columnName = "plausibility";
+
+dataTable = Open(inputPath, Invisible);
+scoreTable = Open(scorePath, Invisible);
+originalScriptNames = dataTable << Get Table Script Names;
+mappingMismatches = 0;
+
+If(N Rows(dataTable) != N Rows(scoreTable),
+	mappingMismatches = Abs(N Rows(dataTable) - N Rows(scoreTable)) + 1
+);
+
+scoreValues = J(N Rows(dataTable), 1, .);
+For(rowIndex = 1, rowIndex <= Min(N Rows(dataTable), N Rows(scoreTable)), rowIndex++,
+	If(Num(Column(scoreTable, "row_number")[rowIndex]) != rowIndex, mappingMismatches++);
+	If(Char(Column(scoreTable, "participant")[rowIndex]) != Char(Column(dataTable, "participant")[rowIndex]), mappingMismatches++);
+	If(Char(Column(scoreTable, "domain")[rowIndex]) != Char(Column(dataTable, "domain")[rowIndex]), mappingMismatches++);
+	If(Char(Column(scoreTable, "phase")[rowIndex]) != Char(Column(dataTable, "phase")[rowIndex]), mappingMismatches++);
+	scoreValues[rowIndex] = Column(scoreTable, "plausibility")[rowIndex];
+);
+
+If(mappingMismatches > 0,
+	Save Text File(summaryPath, "mapping_mismatches=" || Char(mappingMismatches) || "\!Nupdate_aborted=1\!N");
+	Close(scoreTable, No Save);
+	Close(dataTable, No Save);
+	Exit();
+);
+
+columnNames = dataTable << Get Column Names("String");
+If(Contains(columnNames, columnName), dataTable << Delete Columns(columnName));
+
+dataTable << New Column(
+	columnName,
+	Numeric,
+	Continuous,
+	Set Values(scoreValues)
+);
+
+Column(dataTable, columnName) << Set Property(
+	"Notes",
+	"Testing rows only. Normalized L1/Gower-style distance to the single nearest record in the domain's training split (k=1), following Aryal and Keane's nearest-training-instance operationalization of plausibility. Lower values indicate greater plausibility. Training rows are missing."
+);
+
+dataTable << Save As(outputPath);
+updatedScriptNames = dataTable << Get Table Script Names;
+
+nonmissing = 0;
+missingScores = 0;
+trainingNonmissing = 0;
+testingMissing = 0;
+minimumScore = .;
+maximumScore = .;
+
+For(rowIndex = 1, rowIndex <= N Rows(dataTable), rowIndex++,
+	phaseValue = Lowercase(Char(Column(dataTable, "phase")[rowIndex]));
+	currentScore = Column(dataTable, columnName)[rowIndex];
+	If(Is Missing(currentScore),
+		missingScores++;
+		If(phaseValue == "testing", testingMissing++),
+		nonmissing++;
+		If(phaseValue == "training", trainingNonmissing++);
+		If(Is Missing(minimumScore) | currentScore < minimumScore, minimumScore = currentScore);
+		If(Is Missing(maximumScore) | currentScore > maximumScore, maximumScore = currentScore);
+	);
+);
+
+summaryText = "rows=" || Char(N Rows(dataTable)) || "\!N";
+summaryText ||= "columns=" || Char(N Cols(dataTable)) || "\!N";
+summaryText ||= "mapping_mismatches=" || Char(mappingMismatches) || "\!N";
+summaryText ||= "nonmissing=" || Char(nonmissing) || " missing=" || Char(missingScores) || "\!N";
+summaryText ||= "training_nonmissing=" || Char(trainingNonmissing) || " testing_missing=" || Char(testingMissing) || "\!N";
+summaryText ||= "minimum=" || Char(minimumScore) || " maximum=" || Char(maximumScore) || "\!N";
+summaryText ||= "original_scripts=" || Char(originalScriptNames) || "\!N";
+summaryText ||= "updated_scripts=" || Char(updatedScriptNames) || "\!N";
+
+Save Text File(summaryPath, summaryText);
+Close(scoreTable, No Save);
+Close(dataTable, No Save);
+Exit();

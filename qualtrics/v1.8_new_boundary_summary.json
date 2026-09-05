@@ -1,0 +1,37 @@
+{
+  "definition": "minimum summed range-normalized L1 distance to an opposite-prediction profile",
+  "boundary": "browser-model probability 0.5 (logit 0)",
+  "feature_constraint": "all five features free",
+  "actionability_constraint": "none",
+  "numeric_features": "continuous within configured experiment ranges",
+  "categorical_features": "enumerated configured levels with normalized mismatch distance",
+  "solver": "Wachter-style multi-start optimization with range-normalized L1; exact LP within each discovered ReLU region",
+  "input_rows": 256,
+  "testing_scored": 160,
+  "unique_profiles_solved": 180,
+  "by_domain": {
+    "diabetes": {
+      "original": {
+        "count": 160,
+        "min": 0.030760691058028533,
+        "median": 0.07059017716557864,
+        "mean": 0.1228775455983155,
+        "max": 0.5589463978930183
+      },
+      "new": {
+        "count": 160,
+        "min": 0.0012534661994195728,
+        "median": 0.09773707713411298,
+        "mean": 0.12169467341990607,
+        "max": 0.5895847107902309
+      },
+      "delta": {
+        "count": 160,
+        "min": -0.44885839368303593,
+        "median": 0.005513944415732899,
+        "mean": -0.0011828721784094011,
+        "max": 0.2509189549346778
+      }
+    }
+  }
+}

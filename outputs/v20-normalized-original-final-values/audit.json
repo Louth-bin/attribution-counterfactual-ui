@@ -1,0 +1,37 @@
+{
+  "rows": 1664,
+  "training_rows": 624,
+  "testing_rows": 1040,
+  "training_counterfactual_rows": 240,
+  "original_nonmissing_by_feature": {
+    "Glucose": 1664,
+    "Blood Pressure": 1664,
+    "Insulin": 1664,
+    "BMI": 1664,
+    "Age": 1664
+  },
+  "final_nonmissing_by_feature": {
+    "Glucose": 655,
+    "Blood Pressure": 604,
+    "Insulin": 524,
+    "BMI": 629,
+    "Age": 85
+  },
+  "final_nonmissing_by_source": {
+    "training_counterfactual": 480,
+    "testing_user": 2017
+  },
+  "added_columns": [
+    "x_1 Glucose original normalized value",
+    "x_1 Glucose final changed normalized value",
+    "x_2 Blood Pressure original normalized value",
+    "x_2 Blood Pressure final changed normalized value",
+    "x_3 Insulin original normalized value",
+    "x_3 Insulin final changed normalized value",
+    "x_4 BMI original normalized value",
+    "x_4 BMI final changed normalized value",
+    "x_5 Age original normalized value",
+    "x_5 Age final changed normalized value"
+  ],
+  "jmp_columns_after": 117
+}

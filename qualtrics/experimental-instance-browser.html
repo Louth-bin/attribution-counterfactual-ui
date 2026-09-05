@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Experimental actionable recourse preview</title>
+  <style>
+    :root{font-family:Arial,sans-serif;color:#1d2733}*{box-sizing:border-box}body{margin:0;background:#f3f6f9}
+    header{padding:18px 24px;background:#243447;color:#fff}h1{margin:0 0 7px;font-size:24px}header p{margin:0;color:#dce6ef;max-width:1100px;line-height:1.45}
+    .toolbar{display:flex;flex-wrap:wrap;gap:12px;padding:14px 24px;background:#fff;border-bottom:1px solid #d8e0e8;align-items:end}
+    label{display:grid;gap:5px;font-size:13px;font-weight:700}select,button,a.button{min-height:38px;padding:7px 11px;border:1px solid #aeb9c5;border-radius:5px;background:#fff;color:#1d2733;font:inherit}button,a.button{cursor:pointer;text-decoration:none}
+    main{display:grid;grid-template-columns:minmax(440px,520px) minmax(560px,1fr);gap:18px;padding:18px 24px}.panel{background:#fff;border:1px solid #d8e0e8;border-radius:8px;overflow:hidden}
+    .summary{padding:14px 16px;border-bottom:1px solid #d8e0e8;line-height:1.55}.summary strong{display:inline-block;min-width:145px}.constraint{margin-top:7px;padding:8px 10px;background:#eef6fc;border-left:3px solid #2374ab}
+    .table-scroll{max-height:650px;overflow:auto}table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:8px 9px;border-bottom:1px solid #edf0f3}th{position:sticky;top:0;background:#f7f9fb;z-index:1}tbody tr{cursor:pointer}tbody tr:hover{background:#eef5fb}tbody tr.selected{background:#dfeefb;font-weight:700}
+    iframe{display:block;width:100%;height:720px;border:0;background:#fff}.badge{display:inline-block;padding:2px 7px;border-radius:10px;background:#e7edf4}.muted{color:#667481}@media(max-width:1000px){main{grid-template-columns:1fr;padding:12px}}
+  </style>
+  <script src="experimental-actionable-preview-data.js?v=6-transfer-consistent" defer></script>
+  <script src="experimental-instance-browser.js?v=6-transfer-consistent" defer></script>
+</head>
+<body>
+  <header>
+    <h1>Experimental actionable and plausible recourse</h1>
+    <p>Local-only candidate set using the smaller early-stopped 8×4 MLP (alpha 1.0). Training shows diverse exact-two-feature counterfactuals. Testing shows no explanation, keeps Glucose fixed, and locks the other controls after one attribute is changed.</p>
+  </header>
+  <section class="toolbar">
+    <label>Phase<select id="phase"><option value="training">Training (12)</option><option value="testing">Testing (20)</option></select></label>
+    <label>Training explanation<select id="explanation"><option value="counterfactual">Counterfactual</option><option value="attribution">Attribution</option><option value="none">None</option></select></label>
+    <button id="previous" type="button">Previous</button><button id="next" type="button">Next</button>
+    <a id="open-case" class="button" target="_blank" rel="noopener">Open case</a>
+  </section>
+  <main>
+    <section class="panel"><div id="summary" class="summary"></div><div class="table-scroll"><table><thead><tr><th>#</th><th>ID</th><th>Cluster</th><th>AI label</th><th>Optimized change</th><th>Score</th></tr></thead><tbody id="cases"></tbody></table></div></section>
+    <section class="panel"><iframe id="preview" title="Selected experimental case"></iframe></section>
+  </main>
+</body>
+</html>

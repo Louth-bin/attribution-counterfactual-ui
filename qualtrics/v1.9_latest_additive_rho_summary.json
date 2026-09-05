@@ -1,0 +1,102 @@
+{
+  "model_version": "latest additive-rho probabilistic attribute-selection model",
+  "participants": 36,
+  "training_cases": 12,
+  "testing_cases_per_participant": 20,
+  "model_families": [
+    "feature contribution",
+    "weighted examples"
+  ],
+  "selection_distribution": "P(S|x,K) proportional to exp(sum of standardized feature scores in S), over all K-subsets; fixed temperature 1",
+  "amount_fitting": "two-stage: select feature-choice parameters by selection NLL, then fit rho as an additive normalized margin per selected feature using amount MAE after forcing each participant's observed feature subset, independent of subset eligibility/probability",
+  "fitting_algorithm": "separable staged search: feature-selection parameters are evaluated once; rho is searched only after identifying selection-NLL-optimal candidates",
+  "rho_grid": [
+    0.0,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3
+  ],
+  "k": "observed per participant-instance",
+  "age_actionable": "binary fitted parameter; 0 removes Age from eligible subsets",
+  "winner_counts": {
+    "weighted examples": 11,
+    "feature contribution": 25
+  },
+  "winner_metrics": {
+    "mean 5-fold CV selection NLL": 1.5045130321409634,
+    "mean 5-fold CV selection F1": 0.5531527913854507,
+    "mean 5-fold CV conditional amount MAE": 0.19652072339523083,
+    "mean 5-fold CV direction accuracy": 0.7658101851851852
+  },
+  "winner_parameter_counts": {
+    "eta": {
+      "0.0": 14,
+      "0.5": 6,
+      "1.0": 16
+    },
+    "alpha": {
+      "0.0": 14,
+      "0.5": 2,
+      "1.0": 9
+    },
+    "rho": {
+      "0.0": 9,
+      "0.05": 9,
+      "0.1": 9,
+      "0.15": 3,
+      "0.2": 3,
+      "0.25": 3
+    },
+    "lambda": {
+      "0.0": 2,
+      "2.0": 4,
+      "6.0": 5
+    },
+    "beta": {
+      "0.0": 8,
+      "1.0": 3
+    },
+    "age actionable": {
+      "0": 23,
+      "1": 13
+    }
+  },
+  "groups": {
+    "none": {
+      "participants": 11,
+      "families": {
+        "feature contribution": 5,
+        "weighted examples": 6
+      },
+      "mean winner 5-fold CV selection NLL": 1.577777108132659,
+      "mean winner 5-fold CV selection F1": 0.584103932590483,
+      "mean winner 5-fold CV conditional amount MAE": 0.171110172413635,
+      "mean winner 5-fold CV direction accuracy": 0.8780303030303028
+    },
+    "attribution": {
+      "participants": 10,
+      "families": {
+        "feature contribution": 9,
+        "weighted examples": 1
+      },
+      "mean winner 5-fold CV selection NLL": 1.4580474522746338,
+      "mean winner 5-fold CV selection F1": 0.49588508802871034,
+      "mean winner 5-fold CV conditional amount MAE": 0.1766946794273076,
+      "mean winner 5-fold CV direction accuracy": 0.8229166666666666
+    },
+    "counterfactual": {
+      "participants": 15,
+      "families": {
+        "weighted examples": 4,
+        "feature contribution": 11
+      },
+      "mean winner 5-fold CV selection NLL": 1.481763096324606,
+      "mean winner 5-fold CV selection F1": 0.568633756739587,
+      "mean winner 5-fold CV conditional amount MAE": 0.22837249009368318,
+      "mean winner 5-fold CV direction accuracy": 0.6454444444444444
+    }
+  }
+}

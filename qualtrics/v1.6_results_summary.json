@@ -1,0 +1,16 @@
+{
+  "rows": 1320,
+  "columns": 56,
+  "participants": 45,
+  "new_participants": 1,
+  "new_rows": 32,
+  "participant_row_counts": {
+    "24": 15,
+    "32": 30
+  },
+  "xai_participants": {
+    "attribution": 11,
+    "counterfactual": 18,
+    "none": 16
+  }
+}

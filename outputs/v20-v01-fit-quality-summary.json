@@ -1,0 +1,154 @@
+{
+  "selection baseline": "Uniform random selection among all subsets of the participant's observed size K from five features; per-trial NLL = log(C(5,K)).",
+  "amount baseline": "Predict zero change on every feature the participant actually selected; per-trial MAE is the participant's mean absolute normalized change on those features.",
+  "summaries": [
+    {
+      "cohort": "direction-qualified 46",
+      "participants": 46,
+      "metrics": {
+        "in-sample selection NLL": {
+          "mean": 1.5337924620998802,
+          "median": 1.4742542552035638,
+          "25th percentile": 1.1613034039538894,
+          "75th percentile": 1.8758228937488084,
+          "minimum": 0.6491003309924287,
+          "maximum": 2.6120810615774643
+        },
+        "CV selection NLL": {
+          "mean": 1.679322895573641,
+          "median": 1.539506820604064,
+          "25th percentile": 1.1929667062519531,
+          "75th percentile": 2.0622118034624575,
+          "minimum": 0.6942874947954651,
+          "maximum": 3.5696660124376445
+        },
+        "uniform-random selection NLL": {
+          "mean": 2.015314981235311,
+          "median": 2.0599835797980655,
+          "25th percentile": 1.921354143686076,
+          "75th percentile": 2.1639556568820564,
+          "minimum": 1.6094379124341003,
+          "maximum": 2.3025850929940455
+        },
+        "in-sample amount MAE": {
+          "mean": 0.17354424831602153,
+          "median": 0.15593516245724381,
+          "25th percentile": 0.12213627101237981,
+          "75th percentile": 0.19340213601818843,
+          "minimum": 0.08269336588967845,
+          "maximum": 0.41205333104737807
+        },
+        "CV amount MAE": {
+          "mean": 0.17791302315993374,
+          "median": 0.15998278988140202,
+          "25th percentile": 0.12823096230254394,
+          "75th percentile": 0.19595751948884418,
+          "minimum": 0.0850918126267431,
+          "maximum": 0.4238642246664671
+        },
+        "zero-change amount MAE": {
+          "mean": 0.26564393282679033,
+          "median": 0.27169931869137254,
+          "25th percentile": 0.23221185199711047,
+          "75th percentile": 0.30640069420370997,
+          "minimum": 0.0876713345719825,
+          "maximum": 0.43588206424964504
+        }
+      },
+      "selection comparison": {
+        "mean improvement (baseline - model; positive favors model)": 0.33599208566166994,
+        "mean improvement 95% bootstrap CI low": 0.11964335716194269,
+        "mean improvement 95% bootstrap CI high": 0.5344212951500068,
+        "participants model better": 32,
+        "participants tied": 0,
+        "participants model worse": 14,
+        "one-sided paired Wilcoxon p": 0.0008043715338033053
+      },
+      "amount comparison": {
+        "mean improvement (baseline - model; positive favors model)": 0.08773090966685658,
+        "mean improvement 95% bootstrap CI low": 0.06288643951845937,
+        "mean improvement 95% bootstrap CI high": 0.11266786328633148,
+        "participants model better": 37,
+        "participants tied": 0,
+        "participants model worse": 9,
+        "one-sided paired Wilcoxon p": 2.6523068186179444e-08
+      },
+      "mean exact-subset probability implied by mean CV NLL": 0.1865002134166648,
+      "mean exact-subset probability implied by mean chance NLL": 0.1332784165534812
+    },
+    {
+      "cohort": "all 62",
+      "participants": 62,
+      "metrics": {
+        "in-sample selection NLL": {
+          "mean": 1.5475532575950521,
+          "median": 1.51466846142509,
+          "25th percentile": 1.2001748569489548,
+          "75th percentile": 1.8839340535249325,
+          "minimum": 0.5366969011523526,
+          "maximum": 2.6120810615774643
+        },
+        "CV selection NLL": {
+          "mean": 1.6723524699482282,
+          "median": 1.5649396269979479,
+          "25th percentile": 1.2472732065229044,
+          "75th percentile": 2.074025104873656,
+          "minimum": 0.5756687312409857,
+          "maximum": 3.5696660124376445
+        },
+        "uniform-random selection NLL": {
+          "mean": 1.9661498215499988,
+          "median": 1.9906688617420714,
+          "25th percentile": 1.8866967846580789,
+          "75th percentile": 2.146923433950774,
+          "minimum": 1.1736069016284438,
+          "maximum": 2.3025850929940455
+        },
+        "in-sample amount MAE": {
+          "mean": 0.1960655286248206,
+          "median": 0.1679051758390814,
+          "25th percentile": 0.1288969829089515,
+          "75th percentile": 0.25244334754754816,
+          "minimum": 0.08269336588967845,
+          "maximum": 0.4828106422778865
+        },
+        "CV amount MAE": {
+          "mean": 0.2004263375369281,
+          "median": 0.1694316950947975,
+          "25th percentile": 0.14009667643405316,
+          "75th percentile": 0.25472430040426397,
+          "minimum": 0.0850918126267431,
+          "maximum": 0.4828106422778866
+        },
+        "zero-change amount MAE": {
+          "mean": 0.26213169688832866,
+          "median": 0.2565448509847552,
+          "25th percentile": 0.2259873794419056,
+          "75th percentile": 0.30225866196018314,
+          "minimum": 0.0876713345719825,
+          "maximum": 0.43588206424964504
+        }
+      },
+      "selection comparison": {
+        "mean improvement (baseline - model; positive favors model)": 0.2937973516017713,
+        "mean improvement 95% bootstrap CI low": 0.12238996255644491,
+        "mean improvement 95% bootstrap CI high": 0.460020142540635,
+        "participants model better": 40,
+        "participants tied": 0,
+        "participants model worse": 22,
+        "one-sided paired Wilcoxon p": 0.0003321845444330979
+      },
+      "amount comparison": {
+        "mean improvement (baseline - model; positive favors model)": 0.061705359351400535,
+        "mean improvement 95% bootstrap CI low": 0.035927144883154565,
+        "mean improvement 95% bootstrap CI high": 0.0867253842517362,
+        "participants model better": 43,
+        "participants tied": 0,
+        "participants model worse": 19,
+        "one-sided paired Wilcoxon p": 1.3575886987837399e-05
+      },
+      "mean exact-subset probability implied by mean CV NLL": 0.1878047405562113,
+      "mean exact-subset probability implied by mean chance NLL": 0.13999482497084528
+    }
+  ]
+}

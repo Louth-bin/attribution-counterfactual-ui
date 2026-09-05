@@ -1,0 +1,42 @@
+Names Default To Here(1);
+
+inputPath = Convert File Path("C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/qualtrics/qualtrics_results_v1.0.jmp", Windows);
+reportPath = Convert File Path("C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/qualtrics/v1.0_final_validation.txt", Windows);
+dt = Open(inputPath, Invisible);
+
+scripts = dt << Get Table Script Names;
+participants = Associative Array();
+oldCrtNonmissing = 0;
+newCrtMissing = 0;
+trainingMetricNonmissing = 0;
+testingMetricMissing = 0;
+sparsityMismatch = 0;
+
+For(rowIndex = 1, rowIndex <= N Rows(dt), rowIndex++,
+	participant = Char(Column(dt, "participant")[rowIndex]);
+	participants[participant] = 1;
+	phase = Lowercase(Char(Column(dt, "phase")[rowIndex]));
+	crt = Column(dt, "CRT-2 score (0-4)")[rowIndex];
+	sparsity = Column(dt, "sparsity")[rowIndex];
+	plausibility = Column(dt, "plausibility")[rowIndex];
+	If(rowIndex <= 2070 & !Is Missing(crt), oldCrtNonmissing++);
+	If(rowIndex > 2070 & Is Missing(crt), newCrtMissing++);
+	If(phase == "training",
+		If(!Is Missing(sparsity) | !Is Missing(plausibility), trainingMetricNonmissing++),
+		If(Is Missing(sparsity) | Is Missing(plausibility), testingMetricMissing++);
+		changed = 0;
+		For(featureIndex = 1, featureIndex <= 5, featureIndex++,
+			changed += Column(dt, "x_" || Char(featureIndex) || "_changed")[rowIndex];
+		);
+		If(Abs(sparsity - (1 - changed / 5)) > 1e-9, sparsityMismatch++);
+	);
+);
+
+text = "rows=" || Char(N Rows(dt)) || " columns=" || Char(N Cols(dt)) || " participants=" || Char(N Items(participants)) || "\!N";
+text ||= "scripts=" || Char(N Items(scripts)) || " " || Char(scripts) || "\!N";
+text ||= "old_crt_nonmissing=" || Char(oldCrtNonmissing) || " new_crt_missing=" || Char(newCrtMissing) || "\!N";
+text ||= "training_metric_nonmissing=" || Char(trainingMetricNonmissing) || " testing_metric_missing=" || Char(testingMetricMissing) || "\!N";
+text ||= "sparsity_mismatch=" || Char(sparsityMismatch) || "\!N";
+Save Text File(reportPath, text);
+Close(dt, No Save);
+Exit();

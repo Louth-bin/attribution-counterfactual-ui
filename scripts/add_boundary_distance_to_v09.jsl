@@ -1,0 +1,117 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+inputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.jmp", Windows);
+outputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.boundary-distance-updated.jmp", Windows);
+summaryPath = Convert File Path(rootPath || "v0.9_boundary_distance_update_summary.txt", Windows);
+scorePath = Convert File Path("C:/Users/Louth/AppData/Local/Temp/boundary_distance_v09_values.csv", Windows);
+
+originalName = "boundary distance original";
+newName = "boundary distance new";
+deltaName = "boundary distance change (new - original)";
+
+dataTable = Open(inputPath, Invisible);
+scoreTable = Open(scorePath, Invisible);
+originalScriptNames = dataTable << Get Table Script Names;
+mappingMismatches = 0;
+
+If(N Rows(dataTable) != N Rows(scoreTable),
+	mappingMismatches = Abs(N Rows(dataTable) - N Rows(scoreTable)) + 1
+);
+
+originalValues = J(N Rows(dataTable), 1, .);
+newValues = J(N Rows(dataTable), 1, .);
+deltaValues = J(N Rows(dataTable), 1, .);
+
+For(rowIndex = 1, rowIndex <= Min(N Rows(dataTable), N Rows(scoreTable)), rowIndex++,
+	If(Num(Column(scoreTable, "row_number")[rowIndex]) != rowIndex, mappingMismatches++);
+	If(Char(Column(scoreTable, "participant")[rowIndex]) != Char(Column(dataTable, "participant")[rowIndex]), mappingMismatches++);
+	If(Char(Column(scoreTable, "domain")[rowIndex]) != Char(Column(dataTable, "domain")[rowIndex]), mappingMismatches++);
+	If(Char(Column(scoreTable, "phase")[rowIndex]) != Char(Column(dataTable, "phase")[rowIndex]), mappingMismatches++);
+	originalValues[rowIndex] = Column(scoreTable, originalName)[rowIndex];
+	newValues[rowIndex] = Column(scoreTable, newName)[rowIndex];
+	deltaValues[rowIndex] = Column(scoreTable, deltaName)[rowIndex];
+);
+
+If(mappingMismatches > 0,
+	Save Text File(summaryPath, "mapping_mismatches=" || Char(mappingMismatches) || "\!Nupdate_aborted=1\!N");
+	Close(scoreTable, No Save);
+	Close(dataTable, No Save);
+	Exit();
+);
+
+columnNames = dataTable << Get Column Names("String");
+If(Contains(columnNames, originalName), dataTable << Delete Columns(originalName));
+If(Contains(columnNames, newName), dataTable << Delete Columns(newName));
+If(Contains(columnNames, deltaName), dataTable << Delete Columns(deltaName));
+
+dataTable << New Column(originalName, Numeric, Continuous, Set Values(originalValues));
+dataTable << New Column(newName, Numeric, Continuous, Set Values(newValues));
+dataTable << New Column(deltaName, Numeric, Continuous, Set Values(deltaValues));
+
+Column(dataTable, originalName) << Set Property(
+	"Notes",
+	"Testing rows only. Approximate minimum summed range-normalized L1 distance from the original profile to an opposite-prediction profile at the browser model's 0.5 boundary. All five attributes are free (no two-attribute or actionability constraint); numeric attributes are continuous within configured ranges and categorical attributes are enumerated. A Wachter-style loss with multiple deterministic starts directly searches for counterfactuals; the closest point is then solved exactly inside every discovered ReLU region. Lower means closer to the boundary."
+);
+Column(dataTable, newName) << Set Property(
+	"Notes",
+	"Testing rows only. Approximate minimum summed range-normalized L1 distance from the participant's new/edited profile to an opposite-prediction profile at the browser model's 0.5 boundary. All five attributes are free (no two-attribute or actionability constraint); numeric attributes are continuous within configured ranges and categorical attributes are enumerated. A Wachter-style loss with multiple deterministic starts directly searches for counterfactuals; the closest point is then solved exactly inside every discovered ReLU region. This is an unsigned distance on the edited profile's own side of the boundary; lower means closer."
+);
+Column(dataTable, deltaName) << Set Property(
+	"Notes",
+	"Boundary distance new minus boundary distance original. Negative values mean the edited profile is closer to its nearest decision boundary; positive values mean it is farther away. Because both component measures are unsigned and each searches for the opposite of that profile's current prediction, interpret this delta cautiously when the edit flips class. Training rows are missing."
+);
+
+dataTable << Save As(outputPath);
+updatedScriptNames = dataTable << Get Table Script Names;
+
+testingRows = 0;
+trainingRows = 0;
+testingMissing = 0;
+trainingNonmissing = 0;
+negativeDistances = 0;
+deltaMismatches = 0;
+minimumOriginal = .;
+maximumOriginal = .;
+minimumNew = .;
+maximumNew = .;
+
+For(rowIndex = 1, rowIndex <= N Rows(dataTable), rowIndex++,
+	phaseValue = Lowercase(Char(Column(dataTable, "phase")[rowIndex]));
+	originalValue = Column(dataTable, originalName)[rowIndex];
+	newValue = Column(dataTable, newName)[rowIndex];
+	deltaValue = Column(dataTable, deltaName)[rowIndex];
+	If(phaseValue == "testing",
+		testingRows++;
+		If(Is Missing(originalValue) | Is Missing(newValue) | Is Missing(deltaValue), testingMissing++),
+		trainingRows++;
+		If(!Is Missing(originalValue) | !Is Missing(newValue) | !Is Missing(deltaValue), trainingNonmissing++);
+	);
+	If(!Is Missing(originalValue) & originalValue < 0, negativeDistances++);
+	If(!Is Missing(newValue) & newValue < 0, negativeDistances++);
+	If(!Is Missing(deltaValue) & Abs(deltaValue - (newValue - originalValue)) > 1e-9, deltaMismatches++);
+	If(!Is Missing(originalValue),
+		If(Is Missing(minimumOriginal) | originalValue < minimumOriginal, minimumOriginal = originalValue);
+		If(Is Missing(maximumOriginal) | originalValue > maximumOriginal, maximumOriginal = originalValue);
+	);
+	If(!Is Missing(newValue),
+		If(Is Missing(minimumNew) | newValue < minimumNew, minimumNew = newValue);
+		If(Is Missing(maximumNew) | newValue > maximumNew, maximumNew = newValue);
+	);
+);
+
+summaryText = "rows=" || Char(N Rows(dataTable)) || "\!N";
+summaryText ||= "columns=" || Char(N Cols(dataTable)) || "\!N";
+summaryText ||= "mapping_mismatches=" || Char(mappingMismatches) || "\!N";
+summaryText ||= "testing_rows=" || Char(testingRows) || " training_rows=" || Char(trainingRows) || "\!N";
+summaryText ||= "testing_missing=" || Char(testingMissing) || " training_nonmissing=" || Char(trainingNonmissing) || "\!N";
+summaryText ||= "negative_distances=" || Char(negativeDistances) || " delta_mismatches=" || Char(deltaMismatches) || "\!N";
+summaryText ||= "original_min=" || Char(minimumOriginal) || " original_max=" || Char(maximumOriginal) || "\!N";
+summaryText ||= "new_min=" || Char(minimumNew) || " new_max=" || Char(maximumNew) || "\!N";
+summaryText ||= "original_scripts=" || Char(originalScriptNames) || "\!N";
+summaryText ||= "updated_scripts=" || Char(updatedScriptNames) || "\!N";
+
+Save Text File(summaryPath, summaryText);
+Close(scoreTable, No Save);
+Close(dataTable, No Save);
+Exit();

@@ -1,0 +1,71 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+inputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.jmp", Windows);
+assignmentPath = Convert File Path(rootPath || "v0.9_participant_change_clusters.csv", Windows);
+outputPath = Convert File Path(rootPath || "v0.9_clustered_validation.txt", Windows);
+
+clusterName = "participant change cluster";
+strategyName = "participant change strategy";
+originalDistanceName = "boundary distance original";
+newDistanceName = "boundary distance new";
+deltaDistanceName = "boundary distance change (new - original)";
+
+dataTable = Open(inputPath, Invisible);
+assignmentTable = Open(assignmentPath, Invisible);
+columnNames = dataTable << Get Column Names("String");
+scriptNames = dataTable << Get Table Script Names;
+
+clusterMap = Associative Array();
+strategyMap = Associative Array();
+For(rowIndex = 1, rowIndex <= N Rows(assignmentTable), rowIndex++,
+	participantValue = Char(Column(assignmentTable, "participant")[rowIndex]);
+	clusterMap[participantValue] = Num(Column(assignmentTable, clusterName)[rowIndex]);
+	strategyMap[participantValue] = Char(Column(assignmentTable, strategyName)[rowIndex]);
+);
+
+mappingMismatches = 0;
+testingMissingDistance = 0;
+trainingNonmissingDistance = 0;
+negativeDistances = 0;
+deltaMismatches = 0;
+
+For(rowIndex = 1, rowIndex <= N Rows(dataTable), rowIndex++,
+	participantValue = Char(Column(dataTable, "participant")[rowIndex]);
+	phaseValue = Lowercase(Char(Column(dataTable, "phase")[rowIndex]));
+	clusterValue = Column(dataTable, clusterName)[rowIndex];
+	strategyValue = Char(Column(dataTable, strategyName)[rowIndex]);
+	If(!Contains(clusterMap << Get Keys, participantValue),
+		mappingMismatches++,
+		If(clusterValue != clusterMap[participantValue], mappingMismatches++);
+		If(strategyValue != strategyMap[participantValue], mappingMismatches++);
+	);
+
+	originalValue = Column(dataTable, originalDistanceName)[rowIndex];
+	newValue = Column(dataTable, newDistanceName)[rowIndex];
+	deltaValue = Column(dataTable, deltaDistanceName)[rowIndex];
+	If(phaseValue == "testing",
+		If(Is Missing(originalValue) | Is Missing(newValue) | Is Missing(deltaValue), testingMissingDistance++),
+		If(!Is Missing(originalValue) | !Is Missing(newValue) | !Is Missing(deltaValue), trainingNonmissingDistance++);
+	);
+	If(!Is Missing(originalValue) & originalValue < 0, negativeDistances++);
+	If(!Is Missing(newValue) & newValue < 0, negativeDistances++);
+	If(!Is Missing(deltaValue) & Abs(deltaValue - (newValue - originalValue)) > 1e-9, deltaMismatches++);
+);
+
+summaryText = "rows=" || Char(N Rows(dataTable)) || " columns=" || Char(N Cols(dataTable)) || "\!N";
+summaryText ||= "cluster_present=" || Char(If(Contains(columnNames, clusterName) > 0, 1, 0)) || "\!N";
+summaryText ||= "strategy_present=" || Char(If(Contains(columnNames, strategyName) > 0, 1, 0)) || "\!N";
+summaryText ||= "mapping_mismatches=" || Char(mappingMismatches) || "\!N";
+summaryText ||= "testing_missing_distance=" || Char(testingMissingDistance) || "\!N";
+summaryText ||= "training_nonmissing_distance=" || Char(trainingNonmissingDistance) || "\!N";
+summaryText ||= "negative_distances=" || Char(negativeDistances) || " delta_mismatches=" || Char(deltaMismatches) || "\!N";
+summaryText ||= "script_count=" || Char(N Items(scriptNames)) || "\!N";
+summaryText ||= "scripts=" || Char(scriptNames) || "\!N";
+summaryText ||= "cluster_notes=" || Char(Column(dataTable, clusterName) << Get Property("Notes")) || "\!N";
+summaryText ||= "strategy_notes=" || Char(Column(dataTable, strategyName) << Get Property("Notes")) || "\!N";
+Save Text File(outputPath, summaryText);
+
+Close(assignmentTable, No Save);
+Close(dataTable, No Save);
+Exit();

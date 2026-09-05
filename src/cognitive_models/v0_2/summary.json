@@ -1,0 +1,33 @@
+{
+  "participants": 36,
+  "variants": {
+    "perfect memory": {
+      "selected families": {
+        "feature contribution": 31,
+        "weighted examples": 5
+      },
+      "mean selected-family CV selection_nll": 1.4421733249179207,
+      "mean selected-family CV selection_f1": 0.5508020188089112,
+      "mean selected-family CV amount_mae": 0.2207323673593887,
+      "mean selected-family CV loss": 0.3349651742752388
+    },
+    "memory variation": {
+      "selected families": {
+        "feature contribution": 24,
+        "weighted examples": 12
+      },
+      "mean selected-family CV selection_nll": 1.3926060677950058,
+      "mean selected-family CV selection_f1": 0.5603378473715008,
+      "mean selected-family CV amount_mae": 0.1982540821580603,
+      "mean selected-family CV loss": 0.3189581173932798
+    }
+  },
+  "paired variable minus perfect": {
+    "mean delta selection_nll": -0.04956725712291481,
+    "mean delta selection_f1": 0.00953582856258977,
+    "mean delta amount_mae": -0.022478285201328354,
+    "mean delta loss": -0.01600705688195908,
+    "participants with lower variable CV selection_nll": 16,
+    "participants with lower variable CV loss": 24
+  }
+}

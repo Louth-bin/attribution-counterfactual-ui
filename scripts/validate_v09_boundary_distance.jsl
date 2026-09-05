@@ -1,0 +1,52 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+inputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.boundary-distance-updated.jmp", Windows);
+outputPath = Convert File Path(rootPath || "v0.9_boundary_distance_validation.txt", Windows);
+originalName = "boundary distance original";
+newName = "boundary distance new";
+deltaName = "boundary distance change (new - original)";
+
+dataTable = Open(inputPath, Invisible);
+columnNames = dataTable << Get Column Names("String");
+scriptNames = dataTable << Get Table Script Names;
+testingRows = 0;
+trainingRows = 0;
+testingMissing = 0;
+trainingNonmissing = 0;
+negativeDistances = 0;
+deltaMismatches = 0;
+
+For(rowIndex = 1, rowIndex <= N Rows(dataTable), rowIndex++,
+	phaseValue = Lowercase(Char(Column(dataTable, "phase")[rowIndex]));
+	originalValue = Column(dataTable, originalName)[rowIndex];
+	newValue = Column(dataTable, newName)[rowIndex];
+	deltaValue = Column(dataTable, deltaName)[rowIndex];
+	If(phaseValue == "testing",
+		testingRows++;
+		If(Is Missing(originalValue) | Is Missing(newValue) | Is Missing(deltaValue), testingMissing++),
+		trainingRows++;
+		If(!Is Missing(originalValue) | !Is Missing(newValue) | !Is Missing(deltaValue), trainingNonmissing++);
+	);
+	If(!Is Missing(originalValue) & originalValue < 0, negativeDistances++);
+	If(!Is Missing(newValue) & newValue < 0, negativeDistances++);
+	If(!Is Missing(deltaValue) & Abs(deltaValue - (newValue - originalValue)) > 1e-9, deltaMismatches++);
+);
+
+summaryText = "rows=" || Char(N Rows(dataTable)) || "\!N";
+summaryText ||= "columns=" || Char(N Cols(dataTable)) || "\!N";
+summaryText ||= "original_present=" || Char(If(Contains(columnNames, originalName) > 0, 1, 0)) || "\!N";
+summaryText ||= "new_present=" || Char(If(Contains(columnNames, newName) > 0, 1, 0)) || "\!N";
+summaryText ||= "delta_present=" || Char(If(Contains(columnNames, deltaName) > 0, 1, 0)) || "\!N";
+summaryText ||= "testing_rows=" || Char(testingRows) || " training_rows=" || Char(trainingRows) || "\!N";
+summaryText ||= "testing_missing=" || Char(testingMissing) || " training_nonmissing=" || Char(trainingNonmissing) || "\!N";
+summaryText ||= "negative_distances=" || Char(negativeDistances) || " delta_mismatches=" || Char(deltaMismatches) || "\!N";
+summaryText ||= "script_count=" || Char(N Items(scriptNames)) || "\!N";
+summaryText ||= "scripts=" || Char(scriptNames) || "\!N";
+summaryText ||= "original_notes=" || Char(Column(dataTable, originalName) << Get Property("Notes")) || "\!N";
+summaryText ||= "new_notes=" || Char(Column(dataTable, newName) << Get Property("Notes")) || "\!N";
+summaryText ||= "delta_notes=" || Char(Column(dataTable, deltaName) << Get Property("Notes")) || "\!N";
+
+Save Text File(outputPath, summaryText);
+Close(dataTable, No Save);
+Exit();

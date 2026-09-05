@@ -1,0 +1,24 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+dataTable = Open(
+	Convert File Path(rootPath || "qualtrics_results_v0.4.jmp", Windows),
+	Invisible
+);
+sourceTable = Open(
+	Convert File Path(rootPath || "qualtrics_results_v0.4.csv", Windows),
+	Invisible
+);
+strategyValues = Column(sourceTable, "reasoning strategy") << Get Values;
+dataTable << New Column(
+	"reasoning strategy",
+	Character,
+	Nominal,
+	Set Values(strategyValues)
+);
+dataTable << Save As(
+	Convert File Path(rootPath || "qualtrics_results_v0.4.strategy-test.jmp", Windows)
+);
+Close(sourceTable, No Save);
+Close(dataTable, No Save);
+Exit();

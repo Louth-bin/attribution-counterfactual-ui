@@ -1,0 +1,134 @@
+Names Default To Here(1);
+
+inputPath = Convert File Path("C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/qualtrics/qualtrics_results_v1.1.jmp", Windows);
+scorePath = Convert File Path("C:/Users/Louth/AppData/Local/Temp/v1.1_strategy_components.csv", Windows);
+outputPath = Convert File Path("C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/qualtrics/qualtrics_results_v1.1.updated-staging.jmp", Windows);
+reportPath = Convert File Path("C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/qualtrics/v1.1_strategy_component_validation.txt", Windows);
+
+dt = Open(inputPath, Invisible);
+scores = Open(scorePath, Invisible);
+scriptsBefore = dt << Get Table Script Names;
+Save Text File(reportPath, "step=opened rows=" || Char(N Rows(dt)) || " score_rows=" || Char(N Rows(scores)) || "\!N");
+
+selectionName = "attribute selection method";
+selectionScoreName = "attribute selection ranking score";
+amountName = "change amount method";
+amountScoreName = "change amount normalized MAE";
+
+oldColumns = {
+	"best-fitting strategy group",
+	"strategy fit error (CV normalized L1)"
+};
+For(index = 1, index <= N Items(oldColumns), index++,
+	If(Contains(dt << Get Column Names("String"), oldColumns[index]),
+		dt << Delete Columns(oldColumns[index])
+	);
+);
+
+newColumns = {selectionName, selectionScoreName, amountName, amountScoreName};
+For(index = 1, index <= N Items(newColumns), index++,
+	If(Contains(dt << Get Column Names("String"), newColumns[index]),
+		dt << Delete Columns(newColumns[index])
+	);
+);
+Save Text File(reportPath, "step=columns_removed\!N");
+
+dt << New Column(selectionName, Character, Nominal);
+dt << New Column(selectionScoreName, Numeric, Continuous);
+dt << New Column(amountName, Character, Nominal);
+dt << New Column(amountScoreName, Numeric, Continuous);
+Save Text File(reportPath, "step=columns_added\!N");
+
+selectionMap = Associative Array();
+selectionScoreMap = Associative Array();
+amountMap = Associative Array();
+amountScoreMap = Associative Array();
+For(rowIndex = 1, rowIndex <= N Rows(scores), rowIndex++,
+	participant = Char(Column(scores, "participant")[rowIndex]);
+	selectionMap[participant] = Char(Column(scores, selectionName)[rowIndex]);
+	selectionScoreMap[participant] = Column(scores, selectionScoreName)[rowIndex];
+	amountMap[participant] = Char(Column(scores, amountName)[rowIndex]);
+	amountScoreMap[participant] = Column(scores, amountScoreName)[rowIndex];
+);
+Save Text File(reportPath, "step=maps_built\!N");
+
+missingMappings = 0;
+For(rowIndex = 1, rowIndex <= N Rows(dt), rowIndex++,
+	participant = Char(Column(dt, "participant")[rowIndex]);
+	If(!Contains(selectionMap, participant),
+		missingMappings++,
+		Column(dt, selectionName)[rowIndex] = selectionMap[participant];
+		Column(dt, selectionScoreName)[rowIndex] = selectionScoreMap[participant];
+		Column(dt, amountName)[rowIndex] = amountMap[participant];
+		Column(dt, amountScoreName)[rowIndex] = amountScoreMap[participant];
+	);
+);
+Save Text File(reportPath, "step=values_mapped missing=" || Char(missingMappings) || "\!N");
+
+Save Text File(reportPath, "step=values_ready\!N");
+
+Column(dt, selectionName) << Set Property(
+	"Notes",
+	"Participant-level attribute-ranking mechanism. For each testing case, m equals the participant's observed number of changed attributes. Each candidate ranks all five attributes, its top m are compared with the observed m, and scores are averaged across cases. The reported method must have mean ranking score >= 0.50 and a score advantage >= 0.05 over the next method; otherwise it is Unclear or overlapping. Amounts and change directions are ignored."
+);
+Column(dt, selectionScoreName) << Set Property(
+	"Notes",
+	"Mean top-m overlap/F1 for the raw best attribute-ranking method, where m is the observed number of attributes changed in each case. Because predicted and observed sets have equal size, this equals the proportion of the participant's selected attributes recovered by the method. Range 0 to 1; higher is better. Repeated on all rows for the participant."
+);
+Column(dt, amountName) << Set Property(
+	"Notes",
+	"Participant-level change-magnitude mechanism fitted independently of attribute selection. Errors are calculated only on attributes the participant actually changed. The method is selected using a paired one-standard-error rule: choose the simplest mechanism statistically difficult to distinguish from the minimum cross-validated normalized-magnitude MAE. Change direction is not part of this amount fit."
+);
+Column(dt, amountScoreName) << Set Property(
+	"Notes",
+	"Mean absolute error in absolute normalized change magnitude for the selected one-standard-error amount mechanism, evaluated only on attributes the participant actually changed. Range 0 to 1; lower is better. Repeated on all rows for the participant."
+);
+
+dt << Save As(outputPath);
+Save Text File(reportPath, "step=saved\!N");
+scriptsAfter = dt << Get Table Script Names;
+
+participantSelection = Associative Array();
+participantAmount = Associative Array();
+selectionMissing = 0;
+amountMissing = 0;
+For(rowIndex = 1, rowIndex <= N Rows(dt), rowIndex++,
+	participant = Char(Column(dt, "participant")[rowIndex]);
+	selection = Char(Column(dt, selectionName)[rowIndex]);
+	amount = Char(Column(dt, amountName)[rowIndex]);
+	If(selection == "", selectionMissing++);
+	If(amount == "", amountMissing++);
+	participantSelection[participant] = selection;
+	participantAmount[participant] = amount;
+);
+
+selectionCounts = Associative Array();
+amountCounts = Associative Array();
+participantKeys = participantSelection << Get Keys;
+For(index = 1, index <= N Items(participantKeys), index++,
+	selection = participantSelection[participantKeys[index]];
+	amount = participantAmount[participantKeys[index]];
+	If(!Contains(selectionCounts, selection), selectionCounts[selection] = 0);
+	If(!Contains(amountCounts, amount), amountCounts[amount] = 0);
+	selectionCounts[selection] = selectionCounts[selection] + 1;
+	amountCounts[amount] = amountCounts[amount] + 1;
+);
+
+remainingNames = dt << Get Column Names("String");
+oldColumnsRemaining = 0;
+For(index = 1, index <= N Items(oldColumns), index++,
+	If(Contains(remainingNames, oldColumns[index]), oldColumnsRemaining++);
+);
+
+text = "rows=" || Char(N Rows(dt)) || " columns=" || Char(N Cols(dt)) || " participants=" || Char(N Items(participantKeys)) || "\!N";
+text ||= "missing_mappings=" || Char(missingMappings) || " selection_missing=" || Char(selectionMissing) || " amount_missing=" || Char(amountMissing) || "\!N";
+text ||= "old_columns_remaining=" || Char(oldColumnsRemaining) || "\!N";
+text ||= "selection_counts=" || Char(selectionCounts) || "\!N";
+text ||= "amount_counts=" || Char(amountCounts) || "\!N";
+text ||= "scripts_before=" || Char(scriptsBefore) || "\!N";
+text ||= "scripts_after=" || Char(scriptsAfter) || "\!N";
+Save Text File(reportPath, text);
+
+Close(scores, No Save);
+Close(dt, No Save);
+Exit();

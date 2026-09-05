@@ -1,0 +1,191 @@
+{
+  "participants": 30,
+  "participants_by_condition": {
+    "none": 12,
+    "counterfactual": 11,
+    "attribution": 7
+  },
+  "fit_definition": "0.5*(1-case-level selection F1) + 0.5*normalized amount MAE over the union of predicted and observed changed features",
+  "model_winners_by_condition": {
+    "none": {
+      "weighted examples": 11,
+      "feature contribution": 1
+    },
+    "attribution": {
+      "feature contribution": 4,
+      "weighted examples": 3
+    },
+    "counterfactual": {
+      "feature contribution": 4,
+      "weighted examples": 7
+    }
+  },
+  "mean_cv_metrics": {
+    "none | feature contribution": {
+      "5-fold CV combined loss": 0.43706890161005457,
+      "5-fold CV selection F1": 0.31770833333333326,
+      "5-fold CV amount MAE": 0.1918461365534425,
+      "5-fold CV direction accuracy": 0.8583333333333333
+    },
+    "none | weighted examples": {
+      "5-fold CV combined loss": 0.3750315329302465,
+      "5-fold CV selection F1": 0.44375000000000003,
+      "5-fold CV amount MAE": 0.193813065860493,
+      "5-fold CV direction accuracy": 0.8766203703703703
+    },
+    "attribution | feature contribution": {
+      "5-fold CV combined loss": 0.3876186690534502,
+      "5-fold CV selection F1": 0.4450510204081632,
+      "5-fold CV amount MAE": 0.22028835851506376,
+      "5-fold CV direction accuracy": 0.730952380952381
+    },
+    "attribution | weighted examples": {
+      "5-fold CV combined loss": 0.37166624941840326,
+      "5-fold CV selection F1": 0.47797619047619044,
+      "5-fold CV amount MAE": 0.22130868931299696,
+      "5-fold CV direction accuracy": 0.8096825396825397
+    },
+    "counterfactual | feature contribution": {
+      "5-fold CV combined loss": 0.33558493012797136,
+      "5-fold CV selection F1": 0.522049062049062,
+      "5-fold CV amount MAE": 0.19321892230500473,
+      "5-fold CV direction accuracy": 0.8391414141414142
+    },
+    "counterfactual | weighted examples": {
+      "5-fold CV combined loss": 0.3224595997655136,
+      "5-fold CV selection F1": 0.5679797979797979,
+      "5-fold CV amount MAE": 0.21289899751082517,
+      "5-fold CV direction accuracy": 0.8171464646464647
+    }
+  },
+  "best_parameter_counts": {
+    "none | feature contribution": {
+      "eta": {
+        "0.0": 12
+      },
+      "alpha": {
+        "0.5": 1,
+        "0.0": 10,
+        "1.0": 1
+      },
+      "rho": {
+        "0.5": 11,
+        "1.0": 1
+      }
+    },
+    "none | weighted examples": {
+      "eta": {
+        "0.0": 12
+      },
+      "rho": {
+        "0.5": 12
+      },
+      "lambda": {
+        "2.0": 4,
+        "0.0": 4,
+        "6.0": 4
+      },
+      "beta": {
+        "0.0": 12
+      }
+    },
+    "attribution | feature contribution": {
+      "eta": {
+        "1.0": 4,
+        "0.0": 1,
+        "0.5": 2
+      },
+      "alpha": {
+        "1.0": 5,
+        "0.5": 2
+      },
+      "rho": {
+        "0.5": 6,
+        "1.0": 1
+      }
+    },
+    "attribution | weighted examples": {
+      "eta": {
+        "1.0": 2,
+        "0.5": 2,
+        "0.0": 3
+      },
+      "rho": {
+        "0.5": 7
+      },
+      "lambda": {
+        "6.0": 5,
+        "2.0": 1,
+        "0.0": 1
+      },
+      "beta": {
+        "0.0": 7
+      }
+    },
+    "counterfactual | feature contribution": {
+      "eta": {
+        "0.5": 3,
+        "1.0": 4,
+        "0.0": 4
+      },
+      "alpha": {
+        "1.0": 4,
+        "0.0": 4,
+        "0.5": 3
+      },
+      "rho": {
+        "0.5": 9,
+        "1.5": 2
+      }
+    },
+    "counterfactual | weighted examples": {
+      "eta": {
+        "0.0": 6,
+        "0.5": 1,
+        "1.0": 4
+      },
+      "rho": {
+        "0.5": 4,
+        "1.5": 4,
+        "1.0": 3
+      },
+      "lambda": {
+        "6.0": 7,
+        "2.0": 2,
+        "0.0": 2
+      },
+      "beta": {
+        "0.0": 3,
+        "0.5": 5,
+        "1.0": 3
+      }
+    }
+  },
+  "files": {
+    "fits": "C:\\Users\\Louth\\Desktop\\counterfactual\\attribution-counterfactual-ui\\qualtrics\\parsimonious_model_fits_v1.0.csv",
+    "recovery": "C:\\Users\\Louth\\Desktop\\counterfactual\\attribution-counterfactual-ui\\qualtrics\\parsimonious_parameter_recovery_v1.0.csv"
+  },
+  "k_definition": "Observed number of changed attributes for each participant-instance; not fitted or recovered",
+  "recovery_k_by_case": {
+    "130200": 3,
+    "130201": 2,
+    "130202": 1,
+    "130203": 2,
+    "130204": 2,
+    "130205": 2,
+    "130206": 2,
+    "130207": 1,
+    "130208": 1,
+    "130209": 2,
+    "130300": 2,
+    "130301": 2,
+    "130302": 1,
+    "130303": 2,
+    "130304": 2,
+    "130305": 3,
+    "130306": 2,
+    "130307": 2,
+    "130308": 2,
+    "130309": 1
+  }
+}

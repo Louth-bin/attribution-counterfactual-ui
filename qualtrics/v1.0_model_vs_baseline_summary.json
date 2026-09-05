@@ -1,0 +1,51 @@
+{
+  "participants": 58,
+  "baseline": "observed K and fitted Age-actionability; uniformly random feature subset; fixed 0.10 normalized target-direction change",
+  "model_prediction": "maximum-probability attribute subset under each participant's full-data fitted probabilistic model",
+  "selection": {
+    "model F1": 0.661137794198139,
+    "baseline F1": 0.4572092227695675,
+    "model amount MAE": 0.19484076822588947,
+    "baseline amount MAE": 0.21690990559380993
+  },
+  "model": {
+    "validity": {
+      "pearson r": 0.47500689669998064,
+      "MAE": 0.1620689655172414,
+      "observed mean": 0.4663793103448276,
+      "predicted mean": 0.3577586206896552
+    },
+    "boundary distance": {
+      "pearson r": 0.22822810651726558,
+      "MAE": 0.04385120845789948,
+      "observed mean": 0.1452376167946552,
+      "predicted mean": 0.10720241817032777
+    },
+    "plausibility": {
+      "pearson r": 0.5617002540533885,
+      "MAE": 0.007362745331626893,
+      "observed mean": 0.926299381515862,
+      "predicted mean": 0.9292405550833223
+    }
+  },
+  "baseline downstream": {
+    "validity": {
+      "pearson r": 0.22573670010774297,
+      "MAE": 0.20862068965517241,
+      "observed mean": 0.4663793103448276,
+      "predicted mean": 0.29224137931034483
+    },
+    "boundary distance": {
+      "pearson r": 0.11629140753589756,
+      "MAE": 0.033101156619240846,
+      "observed mean": 0.1452376167946552,
+      "predicted mean": 0.12125749365802109
+    },
+    "plausibility": {
+      "pearson r": -0.06511242034222478,
+      "MAE": 0.00786655606294501,
+      "observed mean": 0.926299381515862,
+      "predicted mean": 0.9245257585109775
+    }
+  }
+}

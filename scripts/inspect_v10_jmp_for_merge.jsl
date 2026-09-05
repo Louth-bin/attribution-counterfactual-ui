@@ -1,0 +1,41 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+inputPath = Convert File Path(rootPath || "qualtrics_results_v1.0.jmp", Windows);
+reportPath = Convert File Path(rootPath || "v1.0_premerge_inspection.txt", Windows);
+
+dt = Open(inputPath, Invisible);
+columnNames = dt << Get Column Names("String");
+scriptNames = dt << Get Table Script Names;
+
+text = "rows=" || Char(N Rows(dt)) || "\!N";
+text ||= "columns=" || Char(N Cols(dt)) || "\!N";
+text ||= "scripts=" || Char(scriptNames) || "\!N";
+text ||= "COLUMN DETAILS\!N";
+
+For(i = 1, i <= N Items(columnNames), i++,
+	col = Column(dt, columnNames[i]);
+	formula = col << Get Formula;
+	notes = col << Get Property("Notes");
+	text ||= Char(i) || "\t" || columnNames[i]
+		|| "\ttype=" || Char(col << Get Data Type)
+		|| "\tmodeling=" || Char(col << Get Modeling Type)
+		|| "\tformula=" || Char(formula)
+		|| "\tnotes=" || Char(notes)
+		|| "\!N";
+);
+
+participantCol = Column(dt, "participant");
+domainCol = Column(dt, "domain");
+phaseCol = Column(dt, "phase");
+xaiCol = Column(dt, "xai");
+
+text ||= "LAST ROWS\!N";
+For(i = Max(1, N Rows(dt) - 9), i <= N Rows(dt), i++,
+	text ||= Char(i) || "\t" || Char(participantCol[i]) || "\t" || Char(domainCol[i])
+		|| "\t" || Char(xaiCol[i]) || "\t" || Char(phaseCol[i]) || "\!N";
+);
+
+Save Text File(reportPath, text);
+Close(dt, No Save);
+Exit();

@@ -1,0 +1,68 @@
+{
+  "output_csv": "C:\\Users\\Louth\\Desktop\\counterfactual\\attribution-counterfactual-ui\\qualtrics\\qualtrics_results_v2.0_with_shap_changes.csv",
+  "unique_profiles_shap_evaluated": 1220,
+  "condition_summary": [
+    {
+      "xai": "none",
+      "n_rows": 380,
+      "n_participants": 19,
+      "mean_boundary": 0.1373240277455695,
+      "mean_success": 0.5473684210526316,
+      "mean_target_helpful_shap_delta": 0.5256414216632637,
+      "sd_target_helpful_shap_delta": 0.45467145282005894,
+      "mean_abs_total_shap_delta": 0.5325975311880727,
+      "mean_boundary_improvement": -0.01444648214722951
+    },
+    {
+      "xai": "attribution",
+      "n_rows": 320,
+      "n_participants": 16,
+      "mean_boundary": 0.11680481899322762,
+      "mean_success": 0.5375,
+      "mean_target_helpful_shap_delta": 0.5239757332965639,
+      "sd_target_helpful_shap_delta": 0.45360042519970634,
+      "mean_abs_total_shap_delta": 0.5297245641674406,
+      "mean_boundary_improvement": 0.0060727266051123895
+    },
+    {
+      "xai": "counterfactual",
+      "n_rows": 540,
+      "n_participants": 27,
+      "mean_boundary": 0.12758658941370873,
+      "mean_success": 0.4740740740740741,
+      "mean_target_helpful_shap_delta": 0.4626984602947562,
+      "sd_target_helpful_shap_delta": 0.45765029880901764,
+      "mean_abs_total_shap_delta": 0.47009273101212057,
+      "mean_boundary_improvement": -0.004709043815368732
+    }
+  ],
+  "compact_model_terms": {
+    "condition_predicts_target_helpful_shap_delta": {
+      "C(xai, Treatment(reference=\"none\"))[T.attribution]:coef": -0.001665688366700526,
+      "C(xai, Treatment(reference=\"none\"))[T.attribution]:p": 0.9808386223104598,
+      "C(xai, Treatment(reference=\"none\"))[T.counterfactual]:coef": -0.06294296136850758,
+      "C(xai, Treatment(reference=\"none\"))[T.counterfactual]:p": 0.31386955835658126
+    },
+    "target_helpful_shap_delta_predicts_boundary": {
+      "C(xai, Treatment(reference=\"none\"))[T.attribution]:coef": -0.020533466316059103,
+      "C(xai, Treatment(reference=\"none\"))[T.attribution]:p": 0.21270027371306954,
+      "C(xai, Treatment(reference=\"none\"))[T.counterfactual]:coef": -0.010276202545012334,
+      "C(xai, Treatment(reference=\"none\"))[T.counterfactual]:p": 0.5752354834289832,
+      "target_helpful_shap_delta:coef": -0.008559562521967169,
+      "target_helpful_shap_delta:p": 0.5161537610403654
+    },
+    "condition_predicts_boundary": {
+      "C(xai, Treatment(reference=\"none\"))[T.attribution]:coef": -0.020519208752342172,
+      "C(xai, Treatment(reference=\"none\"))[T.attribution]:p": 0.20720182040411905,
+      "C(xai, Treatment(reference=\"none\"))[T.counterfactual]:coef": -0.009737438331860856,
+      "C(xai, Treatment(reference=\"none\"))[T.counterfactual]:p": 0.6014238443338886
+    },
+    "condition_predicts_success_linear": {
+      "C(xai, Treatment(reference=\"none\"))[T.attribution]:coef": -0.0098684210526324,
+      "C(xai, Treatment(reference=\"none\"))[T.attribution]:p": 0.8894916167293401,
+      "C(xai, Treatment(reference=\"none\"))[T.counterfactual]:coef": -0.07329434697855786,
+      "C(xai, Treatment(reference=\"none\"))[T.counterfactual]:p": 0.2671610960021851
+    }
+  },
+  "note": "SHAP values are class-1 (No Diabetes) regularized KernelSHAP using l1_reg=num_features(2), matching UI attribution regularization."
+}

@@ -1,0 +1,73 @@
+Names Default To Here( 1 );
+
+rootPath = "C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/";
+
+v20JmpPath = rootPath || "qualtrics/qualtrics_results_v2.0.jmp";
+v20SourceCsvPath = rootPath || "qualtrics/v2.0_jmp_extra_columns_source.csv";
+v20CheckCsvPath = rootPath || "qualtrics/qualtrics_results_v2.0.extra_columns_roundtrip_check.csv";
+
+v14JmpPath = rootPath || "qualtrics/qualtrics_results_v1.4.jmp";
+v14SourceCsvPath = rootPath || "qualtrics/v1.4_jmp_train_change_columns_source.csv";
+v14CheckCsvPath = rootPath || "qualtrics/qualtrics_results_v1.4.train_change_roundtrip_check.csv";
+
+v20Columns = {
+	"x_1 Glucose SHAP change Δφ",
+	"x_2 Blood Pressure SHAP change Δφ",
+	"x_3 Insulin SHAP change Δφ",
+	"x_4 BMI SHAP change Δφ",
+	"x_5 Age SHAP change Δφ",
+	"x_1 Glucose target-helpful SHAP change",
+	"x_2 Blood Pressure target-helpful SHAP change",
+	"x_3 Insulin target-helpful SHAP change",
+	"x_4 BMI target-helpful SHAP change",
+	"x_5 Age target-helpful SHAP change",
+	"x_1_train_change",
+	"x_2_train_change",
+	"x_3_train_change",
+	"x_4_train_change",
+	"x_5_train_change"
+};
+
+v14Columns = {
+	"x_1_train_change",
+	"x_2_train_change",
+	"x_3_train_change",
+	"x_4_train_change",
+	"x_5_train_change"
+};
+
+AddOrUpdateColumns = Function( {jmpPath, sourceCsvPath, checkCsvPath, columns},
+	{dt, source, sourceColumns, columnName, values, i},
+
+	dt = Open( jmpPath, Invisible );
+	source = Open( sourceCsvPath, Invisible );
+
+	If( N Rows( dt ) != N Rows( source ),
+		Close( source, NoSave );
+		Close( dt, NoSave );
+		Throw( "Row count mismatch for " || jmpPath );
+	);
+
+	sourceColumns = source << Get Column Names( "String" );
+	For( i = 1, i <= N Items( columns ), i++,
+		columnName = columns[i];
+		If( Contains( sourceColumns, columnName ) == 0,
+			Close( source, NoSave );
+			Close( dt, NoSave );
+			Throw( "Missing source column: " || columnName );
+		);
+		values = Column( source, columnName ) << Get Values;
+		If( Contains( dt << Get Column Names( "String" ), columnName ) == 0,
+			dt << New Column( columnName, Numeric, Continuous, Format( "Best", 12 ), Set Values( values ) ),
+			Column( dt, columnName ) << Set Values( values )
+		);
+	);
+
+	Close( source, NoSave );
+	dt << Save( jmpPath );
+	dt << Save As( checkCsvPath );
+	Close( dt, NoSave );
+);
+
+AddOrUpdateColumns( v20JmpPath, v20SourceCsvPath, v20CheckCsvPath, v20Columns );
+AddOrUpdateColumns( v14JmpPath, v14SourceCsvPath, v14CheckCsvPath, v14Columns );

@@ -1,0 +1,38 @@
+{
+  "participants": 24,
+  "selection_measure": "mean top-m overlap/F1 where m is the participant's observed number changed; higher is better",
+  "amount_measure": "mean absolute error in absolute normalized magnitude on observed changed attributes; lower is better",
+  "identified_selection_counts": {
+    "Current-case contribution": 2,
+    "Global importance": 1,
+    "Target-profile mismatch": 2,
+    "Unclear or overlapping": 19
+  },
+  "raw_best_selection_counts": {
+    "Current-case contribution": 4,
+    "Global importance": 5,
+    "Nearest target example": 1,
+    "Similar remembered edit": 3,
+    "Target-profile mismatch": 11
+  },
+  "best_amount_counts": {
+    "Feature-specific fixed amount": 2,
+    "One fixed normalized amount": 4,
+    "Target-profile centre": 1,
+    "Target-specific endpoint": 17
+  },
+  "one_se_amount_counts": {
+    "Feature-specific fixed amount": 3,
+    "Nearest target-profile range edge": 1,
+    "One fixed normalized amount": 6,
+    "Target-profile centre": 3,
+    "Target-specific endpoint": 11
+  },
+  "selection_ambiguous": 19,
+  "amount_clear_gap_at_least_0.01": {
+    "Feature-specific fixed amount": 1,
+    "One fixed normalized amount": 2,
+    "Target-specific endpoint": 16
+  },
+  "amount_ambiguous_gap_below_0.01": 5
+}

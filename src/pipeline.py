@@ -25,7 +25,7 @@ from .xai_methods import generate_counterfactual, get_xai_method, list_xai_metho
 
 ATTRIBUTION_CACHE_LIMIT = 256
 ATTRIBUTION_RANKING_DECIMALS = 6
-ATTRIBUTION_CACHE_VERSION = "raw_shap_v3"
+ATTRIBUTION_CACHE_VERSION = "regularized_shap_top2_v1"
 LOGGER = logging.getLogger("counterfactual.pipeline")
 
 

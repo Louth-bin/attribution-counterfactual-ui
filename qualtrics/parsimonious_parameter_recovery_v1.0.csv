@@ -1,0 +1,79 @@
+﻿condition,model family,noise,simulations,eta exact recovery,eta mean absolute error,alpha exact recovery,alpha mean absolute error,rho exact recovery,rho mean absolute error,lambda exact recovery,lambda mean absolute error,beta exact recovery,beta mean absolute error,family exact recovery,mean true-vs-other loss margin
+none,feature contribution,none,9,1.0,0.0,1.0,0.0,1.0,0.0,,,,,,
+none,feature contribution,amount noise sd=.05,9,1.0,0.0,1.0,0.0,1.0,0.0,,,,,,
+none,feature contribution,selection swaps 10%,9,1.0,0.0,1.0,0.0,1.0,0.0,,,,,,
+none,feature contribution,selection swaps 20%,9,1.0,0.0,1.0,0.0,1.0,0.0,,,,,,
+none,feature contribution,selection swaps 40%,9,1.0,0.0,1.0,0.0,1.0,0.0,,,,,,
+none,feature contribution,amount sd=.05 + selection swaps 20%,9,1.0,0.0,1.0,0.0,1.0,0.0,,,,,,
+none,weighted examples,none,9,1.0,0.0,,,1.0,0.0,1.0,0.0,1.0,0.0,,
+none,weighted examples,amount noise sd=.05,9,1.0,0.0,,,1.0,0.0,1.0,0.0,1.0,0.0,,
+none,weighted examples,selection swaps 10%,9,1.0,0.0,,,1.0,0.0,1.0,0.0,1.0,0.0,,
+none,weighted examples,selection swaps 20%,9,1.0,0.0,,,1.0,0.0,1.0,0.0,1.0,0.0,,
+none,weighted examples,selection swaps 40%,9,1.0,0.0,,,1.0,0.0,1.0,0.0,1.0,0.0,,
+none,weighted examples,amount sd=.05 + selection swaps 20%,9,1.0,0.0,,,1.0,0.0,1.0,0.0,1.0,0.0,,
+none,feature contribution,none | family recovery,9,,,,,,,,,,,1.0,0.24123302546120884
+none,feature contribution,amount noise sd=.05 | family recovery,9,,,,,,,,,,,1.0,0.22489263294439496
+none,feature contribution,selection swaps 10% | family recovery,9,,,,,,,,,,,1.0,0.21193736486175854
+none,feature contribution,selection swaps 20% | family recovery,9,,,,,,,,,,,1.0,0.20318460618277018
+none,feature contribution,selection swaps 40% | family recovery,9,,,,,,,,,,,1.0,0.1369414990850069
+none,feature contribution,amount sd=.05 + selection swaps 10% | family recovery,9,,,,,,,,,,,1.0,0.20040570480508496
+none,feature contribution,amount sd=.05 + selection swaps 20% | family recovery,9,,,,,,,,,,,1.0,0.14390913556300125
+none,weighted examples,none | family recovery,9,,,,,,,,,,,1.0,0.2141262226268873
+none,weighted examples,amount noise sd=.05 | family recovery,9,,,,,,,,,,,1.0,0.19726058316669548
+none,weighted examples,selection swaps 10% | family recovery,9,,,,,,,,,,,1.0,0.1883105282340656
+none,weighted examples,selection swaps 20% | family recovery,9,,,,,,,,,,,1.0,0.1751333926668355
+none,weighted examples,selection swaps 40% | family recovery,9,,,,,,,,,,,1.0,0.15724728471864402
+none,weighted examples,amount sd=.05 + selection swaps 10% | family recovery,9,,,,,,,,,,,1.0,0.1832885230230351
+none,weighted examples,amount sd=.05 + selection swaps 20% | family recovery,9,,,,,,,,,,,1.0,0.16968713984790992
+attribution,feature contribution,none,27,1.0,0.0,1.0,0.0,1.0,0.0,,,,,,
+attribution,feature contribution,amount noise sd=.05,27,1.0,0.0,1.0,0.0,1.0,0.0,,,,,,
+attribution,feature contribution,selection swaps 10%,27,1.0,0.0,1.0,0.0,1.0,0.0,,,,,,
+attribution,feature contribution,selection swaps 20%,27,1.0,0.0,1.0,0.0,1.0,0.0,,,,,,
+attribution,feature contribution,selection swaps 40%,27,1.0,0.0,1.0,0.0,1.0,0.0,,,,,,
+attribution,feature contribution,amount sd=.05 + selection swaps 20%,27,1.0,0.0,1.0,0.0,1.0,0.0,,,,,,
+attribution,weighted examples,none,27,0.7777777777777778,0.16666666666666666,,,1.0,0.0,1.0,0.0,1.0,0.0,,
+attribution,weighted examples,amount noise sd=.05,27,0.6296296296296297,0.24074074074074073,,,1.0,0.0,1.0,0.0,1.0,0.0,,
+attribution,weighted examples,selection swaps 10%,27,0.7777777777777778,0.16666666666666666,,,1.0,0.0,1.0,0.0,1.0,0.0,,
+attribution,weighted examples,selection swaps 20%,27,0.7407407407407407,0.2037037037037037,,,1.0,0.0,0.9629629629629629,0.14814814814814814,1.0,0.0,,
+attribution,weighted examples,selection swaps 40%,27,0.7407407407407407,0.18518518518518517,,,1.0,0.0,0.9259259259259259,0.2962962962962963,1.0,0.0,,
+attribution,weighted examples,amount sd=.05 + selection swaps 20%,27,0.5925925925925926,0.2962962962962963,,,1.0,0.0,0.9629629629629629,0.14814814814814814,1.0,0.0,,
+attribution,feature contribution,none | family recovery,27,,,,,,,,,,,1.0,0.2528655080175664
+attribution,feature contribution,amount noise sd=.05 | family recovery,27,,,,,,,,,,,1.0,0.23517676546130148
+attribution,feature contribution,selection swaps 10% | family recovery,27,,,,,,,,,,,1.0,0.22758891407353718
+attribution,feature contribution,selection swaps 20% | family recovery,27,,,,,,,,,,,1.0,0.19596150363099557
+attribution,feature contribution,selection swaps 40% | family recovery,27,,,,,,,,,,,1.0,0.161711224824208
+attribution,feature contribution,amount sd=.05 + selection swaps 10% | family recovery,27,,,,,,,,,,,1.0,0.21084951099945956
+attribution,feature contribution,amount sd=.05 + selection swaps 20% | family recovery,27,,,,,,,,,,,1.0,0.19015180311639635
+attribution,weighted examples,none | family recovery,27,,,,,,,,,,,1.0,0.21746106796636389
+attribution,weighted examples,amount noise sd=.05 | family recovery,27,,,,,,,,,,,1.0,0.1997257615369776
+attribution,weighted examples,selection swaps 10% | family recovery,27,,,,,,,,,,,1.0,0.19821881856546847
+attribution,weighted examples,selection swaps 20% | family recovery,27,,,,,,,,,,,1.0,0.17569383830675303
+attribution,weighted examples,selection swaps 40% | family recovery,27,,,,,,,,,,,1.0,0.12441022309044064
+attribution,weighted examples,amount sd=.05 + selection swaps 10% | family recovery,27,,,,,,,,,,,1.0,0.18112520219031517
+attribution,weighted examples,amount sd=.05 + selection swaps 20% | family recovery,27,,,,,,,,,,,1.0,0.1475648941029694
+counterfactual,feature contribution,none,27,1.0,0.0,1.0,0.0,1.0,0.0,,,,,,
+counterfactual,feature contribution,amount noise sd=.05,27,1.0,0.0,1.0,0.0,1.0,0.0,,,,,,
+counterfactual,feature contribution,selection swaps 10%,27,1.0,0.0,1.0,0.0,1.0,0.0,,,,,,
+counterfactual,feature contribution,selection swaps 20%,27,1.0,0.0,1.0,0.0,1.0,0.0,,,,,,
+counterfactual,feature contribution,selection swaps 40%,27,1.0,0.0,1.0,0.0,1.0,0.0,,,,,,
+counterfactual,feature contribution,amount sd=.05 + selection swaps 20%,27,1.0,0.0,1.0,0.0,1.0,0.0,,,,,,
+counterfactual,weighted examples,none,40,0.85,0.1,,,1.0,0.0,1.0,0.0,1.0,0.0,,
+counterfactual,weighted examples,amount noise sd=.05,40,0.775,0.1375,,,0.925,0.0375,1.0,0.0,1.0,0.0,,
+counterfactual,weighted examples,selection swaps 10%,40,0.85,0.1,,,1.0,0.0,1.0,0.0,1.0,0.0,,
+counterfactual,weighted examples,selection swaps 20%,40,0.85,0.1,,,1.0,0.0,0.95,0.15,1.0,0.0,,
+counterfactual,weighted examples,selection swaps 40%,40,0.875,0.075,,,1.0,0.0,0.925,0.15,1.0,0.0,,
+counterfactual,weighted examples,amount sd=.05 + selection swaps 20%,40,0.75,0.1625,,,0.875,0.075,0.9,0.2,1.0,0.0,,
+counterfactual,feature contribution,none | family recovery,27,,,,,,,,,,,1.0,0.2711694401605752
+counterfactual,feature contribution,amount noise sd=.05 | family recovery,27,,,,,,,,,,,1.0,0.2530957442536994
+counterfactual,feature contribution,selection swaps 10% | family recovery,27,,,,,,,,,,,1.0,0.24597782237090338
+counterfactual,feature contribution,selection swaps 20% | family recovery,27,,,,,,,,,,,1.0,0.21195496686075607
+counterfactual,feature contribution,selection swaps 40% | family recovery,27,,,,,,,,,,,1.0,0.14759921804268838
+counterfactual,feature contribution,amount sd=.05 + selection swaps 10% | family recovery,27,,,,,,,,,,,1.0,0.21893896348129502
+counterfactual,feature contribution,amount sd=.05 + selection swaps 20% | family recovery,27,,,,,,,,,,,1.0,0.19826006246608796
+counterfactual,weighted examples,none | family recovery,40,,,,,,,,,,,1.0,0.24004239376593633
+counterfactual,weighted examples,amount noise sd=.05 | family recovery,40,,,,,,,,,,,1.0,0.2227834445360261
+counterfactual,weighted examples,selection swaps 10% | family recovery,40,,,,,,,,,,,1.0,0.21663507387646064
+counterfactual,weighted examples,selection swaps 20% | family recovery,40,,,,,,,,,,,1.0,0.20374221948649654
+counterfactual,weighted examples,selection swaps 40% | family recovery,40,,,,,,,,,,,1.0,0.1522321397031259
+counterfactual,weighted examples,amount sd=.05 + selection swaps 10% | family recovery,40,,,,,,,,,,,1.0,0.20382939784419118
+counterfactual,weighted examples,amount sd=.05 + selection swaps 20% | family recovery,40,,,,,,,,,,,1.0,0.1870784466718759

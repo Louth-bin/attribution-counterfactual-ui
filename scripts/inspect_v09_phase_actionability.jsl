@@ -1,0 +1,29 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+inputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.jmp", Windows);
+outputPath = Convert File Path(rootPath || "v0.9_phase_actionability_inspection.txt", Windows);
+
+dataTable = Open(inputPath, Invisible);
+phaseCounts = Associative Array();
+domainPhaseCounts = Associative Array();
+
+For(rowIndex = 1, rowIndex <= N Rows(dataTable), rowIndex++,
+	phaseValue = Lowercase(Char(Column(dataTable, "phase")[rowIndex]));
+	domainValue = Lowercase(Char(Column(dataTable, "domain")[rowIndex]));
+	If(!Contains(phaseCounts, phaseValue), phaseCounts[phaseValue] = 0);
+	phaseCounts[phaseValue]++;
+	keyValue = domainValue || ":" || phaseValue;
+	If(!Contains(domainPhaseCounts, keyValue), domainPhaseCounts[keyValue] = 0);
+	domainPhaseCounts[keyValue]++;
+);
+
+outputText = "rows=" || Char(N Rows(dataTable)) || "\!N";
+outputText ||= "columns=" || Char(dataTable << Get Column Names("String")) || "\!N";
+outputText ||= "phase_counts=" || Char(phaseCounts) || "\!N";
+outputText ||= "domain_phase_counts=" || Char(domainPhaseCounts) || "\!N";
+outputText ||= "scripts=" || Char(dataTable << Get Table Script Names) || "\!N";
+
+Save Text File(outputPath, outputText);
+Close(dataTable, No Save);
+Exit();

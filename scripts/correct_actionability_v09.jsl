@@ -1,0 +1,77 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+inputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.jmp", Windows);
+outputPath = Convert File Path(rootPath || "qualtrics_results_v0.9.actionability-corrected.jmp", Windows);
+summaryPath = Convert File Path(rootPath || "v0.9_actionability_correction_summary.txt", Windows);
+oldColumnName = "plausible and actionable (0/1)";
+columnName = "actionability (0/1)";
+
+dataTable = Open(inputPath, Invisible);
+columnNames = dataTable << Get Column Names("String");
+originalScriptNames = dataTable << Get Table Script Names;
+
+If(Contains(columnNames, oldColumnName), dataTable << Delete Columns(oldColumnName));
+columnNames = dataTable << Get Column Names("String");
+If(Contains(columnNames, columnName), dataTable << Delete Columns(columnName));
+
+scores = J(N Rows(dataTable), 1, .);
+
+For(rowIndex = 1, rowIndex <= N Rows(dataTable), rowIndex++,
+	phaseValue = Lowercase(Char(Column(dataTable, "phase")[rowIndex]));
+	domainValue = Lowercase(Char(Column(dataTable, "domain")[rowIndex]));
+	x2Changed = Num(Char(Column(dataTable, "x_2_changed")[rowIndex]));
+	x4Changed = Num(Char(Column(dataTable, "x_4_changed")[rowIndex]));
+	x5Changed = Num(Char(Column(dataTable, "x_5_changed")[rowIndex]));
+	If(Is Missing(x2Changed), x2Changed = 0);
+	If(Is Missing(x4Changed), x4Changed = 0);
+	If(Is Missing(x5Changed), x5Changed = 0);
+
+	If(phaseValue == "testing",
+		If(domainValue == "diabetes" & x5Changed != 0,
+			scores[rowIndex] = 0,
+			domainValue == "safelimit" & (x2Changed != 0 | x4Changed != 0),
+			scores[rowIndex] = 0,
+			scores[rowIndex] = 1
+		)
+	);
+);
+
+dataTable << New Column(
+	columnName,
+	Numeric,
+	Nominal,
+	Set Values(scores)
+);
+
+Column(dataTable, columnName) << Set Property(
+	"Notes",
+	"Testing rows only. 1 = no non-controllable attribute was changed; 0 = a non-controllable attribute was changed. Training rows are missing. Housing: all five attributes are controllable. Diabetes: Age (x_5) is non-controllable. SafeLimit: Weight (x_2) and Gender (x_4) are non-controllable for the immediate scenario."
+);
+
+dataTable << Save As(outputPath);
+updatedScriptNames = dataTable << Get Table Script Names;
+
+ones = 0;
+zeros = 0;
+missingScores = 0;
+trainingNonmissing = 0;
+For(rowIndex = 1, rowIndex <= N Rows(dataTable), rowIndex++,
+	currentScore = Column(dataTable, columnName)[rowIndex];
+	phaseValue = Lowercase(Char(Column(dataTable, "phase")[rowIndex]));
+	If(Is Missing(currentScore), missingScores++, currentScore == 1, ones++, zeros++);
+	If(phaseValue == "training" & !Is Missing(currentScore), trainingNonmissing++);
+);
+
+summaryText = "rows=" || Char(N Rows(dataTable)) || "\!N";
+summaryText ||= "columns=" || Char(N Cols(dataTable)) || "\!N";
+summaryText ||= "ones=" || Char(ones) || " zeros=" || Char(zeros) || " missing=" || Char(missingScores) || "\!N";
+summaryText ||= "training_nonmissing=" || Char(trainingNonmissing) || "\!N";
+summaryText ||= "old_column_present=" || Char(Contains(dataTable << Get Column Names("String"), oldColumnName)) || "\!N";
+summaryText ||= "new_column_position=" || Char(Contains(dataTable << Get Column Names("String"), columnName)) || "\!N";
+summaryText ||= "original_scripts=" || Char(originalScriptNames) || "\!N";
+summaryText ||= "updated_scripts=" || Char(updatedScriptNames) || "\!N";
+
+Save Text File(summaryPath, summaryText);
+Close(dataTable, No Save);
+Exit();

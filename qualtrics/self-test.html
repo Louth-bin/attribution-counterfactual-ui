@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Diabetes experiment self-test</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, Arial, sans-serif;
+      color: #172331;
+      background: #eef3f7;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    button, select { font: inherit; }
+    button { cursor: pointer; }
+    button:disabled { cursor: not-allowed; opacity: .48; }
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+      padding: 17px 24px;
+      color: white;
+      background: #173d6d;
+    }
+    header h1 { margin: 0 0 4px; font-size: 23px; }
+    header p { margin: 0; color: #dce9f6; font-size: 14px; }
+    .header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .header-actions button { color: white; background: #27588f; border: 1px solid #7297bf; }
+    .app {
+      display: grid;
+      grid-template-columns: 285px minmax(600px, 1fr);
+      gap: 16px;
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    .card { background: white; border: 1px solid #d3dde7; border-radius: 9px; box-shadow: 0 2px 7px #173d6d12; }
+    aside { overflow: hidden; align-self: start; position: sticky; top: 12px; max-height: calc(100vh - 24px); }
+    .side-head { padding: 14px 15px; border-bottom: 1px solid #dce4ec; }
+    .side-head strong { display: block; }
+    .side-head span { color: #617181; font-size: 13px; }
+    .case-list { max-height: calc(100vh - 92px); overflow: auto; }
+    .case-group-title {
+      padding: 9px 13px;
+      background: #f3f6f9;
+      border-bottom: 1px solid #e0e7ee;
+      color: #536474;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .case-item {
+      display: grid;
+      grid-template-columns: 38px 1fr auto;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 9px 12px;
+      border: 0;
+      border-bottom: 1px solid #edf1f5;
+      text-align: left;
+      background: white;
+      color: #263645;
+    }
+    .case-item.current { background: #dcecff; box-shadow: inset 4px 0 #1769aa; }
+    .case-item.complete .case-status { color: #167247; }
+    .case-number { color: #657585; font-weight: 700; }
+    .case-id { font-size: 13px; }
+    .case-status { font-size: 16px; color: #a5b0ba; }
+    main.card { min-height: 650px; overflow: hidden; }
+    .content-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 18px;
+      border-bottom: 1px solid #dce4ec;
+      background: #fbfcfd;
+    }
+    .content-head h2 { margin: 0 0 3px; font-size: 19px; }
+    .content-head p { margin: 0; color: #637383; font-size: 13px; }
+    .condition-pill { padding: 6px 10px; border-radius: 999px; background: #e3edf8; color: #234d78; font-weight: 800; font-size: 13px; }
+    .content { padding: 20px; }
+    .setup { max-width: 800px; margin: 32px auto; }
+    .setup h2 { margin: 0 0 8px; font-size: 27px; }
+    .setup > p { color: #4f6070; line-height: 1.55; }
+    .setup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 22px 0; }
+    .setup-box { padding: 16px; border: 1px solid #d7e1ea; border-radius: 8px; background: #f8fafc; }
+    .setup-box strong { display: block; margin-bottom: 5px; }
+    .setup-box p { margin: 0; color: #607080; font-size: 14px; line-height: 1.45; }
+    label.control { display: grid; gap: 7px; margin: 22px 0; font-weight: 800; }
+    select { max-width: 360px; padding: 10px 12px; border: 1px solid #aebdca; border-radius: 6px; background: white; }
+    .primary, .secondary, .answer-button {
+      min-height: 42px;
+      padding: 9px 15px;
+      border-radius: 6px;
+      border: 1px solid #1769aa;
+      font-weight: 800;
+    }
+    .primary { color: white; background: #1769aa; }
+    .secondary { color: #1f4c73; background: white; }
+    .case-frame { width: 100%; min-height: 500px; border: 0; display: block; }
+    .question-panel { margin-top: 14px; padding: 15px; border: 1px solid #cdd9e4; border-radius: 7px; background: #f8fafc; }
+    .question-panel p { margin: 0 0 12px; font-weight: 800; }
+    .answers, .case-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .answer-button { min-width: 155px; color: #173d6d; background: white; }
+    .answer-button.selected { color: white; background: #1769aa; }
+    .feedback { margin-top: 12px; padding: 10px 12px; border-radius: 5px; font-weight: 700; }
+    .feedback.correct { background: #e1f4e9; color: #17623f; }
+    .feedback.incorrect { background: #fde8e5; color: #90362b; }
+    .feedback.neutral { background: #e8f0f8; color: #285477; }
+    .case-actions { justify-content: flex-end; padding: 14px 20px 20px; }
+    .results h2 { margin-top: 0; }
+    .metrics { display: grid; grid-template-columns: repeat(3, minmax(150px, 1fr)); gap: 11px; margin: 16px 0 22px; }
+    .metric { padding: 15px; border: 1px solid #d6e0e9; border-radius: 7px; background: #f8fafc; }
+    .metric-value { font-size: 25px; font-weight: 850; color: #174f80; }
+    .metric-label { margin-top: 3px; color: #607181; font-size: 13px; }
+    .result-note { color: #5e6e7d; font-size: 13px; line-height: 1.5; }
+    .table-wrap { overflow: auto; border: 1px solid #d7e0e9; border-radius: 7px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 9px 10px; border-bottom: 1px solid #e6ecf1; text-align: left; white-space: nowrap; }
+    th { background: #f3f6f9; }
+    .good { color: #147143; font-weight: 800; }
+    .bad { color: #a43b32; font-weight: 800; }
+    .history { margin-top: 28px; }
+    .history h3 { margin-bottom: 8px; }
+    @media (max-width: 900px) {
+      .app { grid-template-columns: 1fr; padding: 8px; }
+      aside { position: static; max-height: 280px; }
+      .case-list { max-height: 220px; }
+      .setup-grid, .metrics { grid-template-columns: 1fr; }
+      header { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+  <script src="../static/experiment-data.js" defer></script>
+  <script src="hierarchical-preview-data.js?v=regularized-mlp-min10-2" defer></script>
+  <script src="../static-model.js" defer></script>
+  <script src="self-test.js" defer></script>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Diabetes experiment self-test</h1>
+      <p>Run the selected training and testing cases from the latest experimental design.</p>
+    </div>
+    <div class="header-actions">
+      <button id="download-json" type="button" hidden>Download JSON</button>
+      <button id="download-csv" type="button" hidden>Download test CSV</button>
+      <button id="new-run" type="button" hidden>Try another condition</button>
+    </div>
+  </header>
+  <div class="app">
+    <aside class="card">
+      <div class="side-head"><strong>Experiment instances</strong><span id="case-summary">Selected cases</span></div>
+      <div id="case-list" class="case-list"></div>
+    </aside>
+    <main class="card">
+      <div id="content-head" class="content-head" hidden>
+        <div><h2 id="case-title"></h2><p id="case-subtitle"></p></div>
+        <div id="condition-pill" class="condition-pill"></div>
+      </div>
+      <div id="content" class="content"></div>
+      <div id="case-actions" class="case-actions" hidden>
+        <button id="submit-test" class="primary" type="button" hidden>Submit changes</button>
+        <button id="next-case" class="primary" type="button" hidden>Next case</button>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

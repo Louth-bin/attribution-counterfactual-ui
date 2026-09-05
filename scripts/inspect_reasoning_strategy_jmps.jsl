@@ -1,0 +1,45 @@
+Names Default To Here(1);
+
+rootPath = "$DESKTOP/counterfactual/attribution-counterfactual-ui/qualtrics/";
+versions = {
+	"v0.4",
+	"v0.7",
+	"v0.4.strategy-updated",
+	"v0.7.strategy-updated",
+	"v0.7.strategy-revised",
+	"v0.7.strategy-revised-keyed",
+	"v0.7.strategy-strict"
+};
+columnName = "reasoning strategy";
+outputText = "";
+
+For(versionIndex = 1, versionIndex <= N Items(versions), versionIndex++,
+	version = versions[versionIndex];
+	dataTable = Open(
+		Convert File Path(rootPath || "qualtrics_results_" || version || ".jmp", Windows),
+		Invisible
+	);
+	columnNames = dataTable << Get Column Names("String");
+	hasStrategy = Contains(columnNames, columnName);
+	nonempty = 0;
+	If(hasStrategy,
+		For(rowIndex = 1, rowIndex <= N Rows(dataTable), rowIndex++,
+			If(!Is Missing(Column(dataTable, columnName)[rowIndex]), nonempty++)
+		)
+	);
+	outputText ||= version
+		|| " rows=" || Char(N Rows(dataTable))
+		|| " columns=" || Char(N Cols(dataTable))
+		|| " has_strategy=" || Char(hasStrategy)
+		|| " nonempty=" || Char(nonempty)
+		|| " scripts=" || Char(dataTable << Get Table Script Names)
+		|| " column_names=" || Char(columnNames)
+		|| "\!N";
+	Close(dataTable, No Save);
+);
+
+Save Text File(
+	Convert File Path(rootPath || "reasoning_strategy_jmp_inspection.txt", Windows),
+	outputText
+);
+Exit();

@@ -1,0 +1,66 @@
+Names Default To Here(1);
+
+inputPath = Convert File Path("C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/qualtrics/qualtrics_results_v1.1.jmp", Windows);
+scorePath = Convert File Path("C:/Users/Louth/AppData/Local/Temp/v1.1_strategy_components.csv", Windows);
+outputPath = Convert File Path("C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/qualtrics/qualtrics_results_v1.1.overlap-staging.jmp", Windows);
+reportPath = Convert File Path("C:/Users/Louth/Desktop/counterfactual/attribution-counterfactual-ui/qualtrics/v1.1_overlap_selection_validation.txt", Windows);
+
+oldColumnName = "attribute selection method including overlaps";
+columnName = "best-supported attribute selection method";
+
+dt = Open(inputPath, Invisible);
+scores = Open(scorePath, Invisible);
+scriptsBefore = dt << Get Table Script Names;
+
+If(Contains(dt << Get Column Names("String"), oldColumnName), dt << Delete Columns(oldColumnName));
+If(Contains(dt << Get Column Names("String"), columnName), dt << Delete Columns(columnName));
+dt << New Column(columnName, Character, Nominal);
+
+valueMap = Associative Array();
+For(rowIndex = 1, rowIndex <= N Rows(scores), rowIndex++,
+	participant = Char(Column(scores, "participant")[rowIndex]);
+	valueMap[participant] = Char(Column(scores, columnName)[rowIndex]);
+);
+
+missingMappings = 0;
+missingValues = 0;
+For(rowIndex = 1, rowIndex <= N Rows(dt), rowIndex++,
+	participant = Char(Column(dt, "participant")[rowIndex]);
+	If(!Contains(valueMap, participant),
+		missingMappings++,
+		Column(dt, columnName)[rowIndex] = valueMap[participant]
+	);
+	If(Char(Column(dt, columnName)[rowIndex]) == "", missingValues++);
+);
+
+Column(dt, columnName) << Set Property(
+	"Notes",
+	"Participant-level best-supported attribute-selection ranking method. Reports the highest-scoring method when its mean top-m overlap/F1 is >= 0.50, even when it is less than 0.05 ahead of another method. Therefore some assignments are best fits rather than uniquely distinguishable mechanisms. Unclear means the best candidate score is below 0.50. Amounts and change directions are ignored."
+);
+
+dt << Save As(outputPath);
+scriptsAfter = dt << Get Table Script Names;
+
+participantValues = Associative Array();
+For(rowIndex = 1, rowIndex <= N Rows(dt), rowIndex++,
+	participant = Char(Column(dt, "participant")[rowIndex]);
+	participantValues[participant] = Char(Column(dt, columnName)[rowIndex]);
+);
+participantKeys = participantValues << Get Keys;
+counts = Associative Array();
+For(index = 1, index <= N Items(participantKeys), index++,
+	value = participantValues[participantKeys[index]];
+	If(!Contains(counts, value), counts[value] = 0);
+	counts[value] = counts[value] + 1;
+);
+
+text = "rows=" || Char(N Rows(dt)) || " columns=" || Char(N Cols(dt)) || " participants=" || Char(N Items(participantKeys)) || "\!N";
+text ||= "missing_mappings=" || Char(missingMappings) || " missing_values=" || Char(missingValues) || "\!N";
+text ||= "counts=" || Char(counts) || "\!N";
+text ||= "scripts_before=" || Char(scriptsBefore) || "\!N";
+text ||= "scripts_after=" || Char(scriptsAfter) || "\!N";
+Save Text File(reportPath, text);
+
+Close(scores, No Save);
+Close(dt, No Save);
+Exit();

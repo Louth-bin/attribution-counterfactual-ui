@@ -1,0 +1,61 @@
+{
+  "raw_records": 41,
+  "preserved_participants": 45,
+  "unseen_records": 11,
+  "excluded_empty_log_records": 3,
+  "new_complete_participants": 8,
+  "xai_participants": {
+    "attribution": 2,
+    "counterfactuals": 4,
+    "none": 2
+  },
+  "source_bundle": "analysis\\diabetes-experiment-bundle-v1.6.json",
+  "analysis_id_range": [
+    160100,
+    160219
+  ],
+  "remapped_case_rows": {
+    "130100": 8,
+    "130101": 8,
+    "130102": 8,
+    "130103": 8,
+    "130104": 8,
+    "130105": 8,
+    "130106": 8,
+    "130107": 8,
+    "130108": 8,
+    "130109": 8,
+    "130110": 8,
+    "130111": 8,
+    "130200": 8,
+    "130201": 8,
+    "130202": 8,
+    "130203": 8,
+    "130204": 8,
+    "130205": 8,
+    "130206": 8,
+    "130207": 8,
+    "130208": 8,
+    "130209": 8,
+    "130300": 8,
+    "130301": 8,
+    "130302": 8,
+    "130303": 8,
+    "130304": 8,
+    "130305": 8,
+    "130306": 8,
+    "130307": 8,
+    "130308": 8,
+    "130309": 8
+  },
+  "participants": [
+    "R_6upJU84Jtf3Faf5",
+    "R_5L0xQQar3o8Bvr3",
+    "R_5ASRudX4WuOaMDD",
+    "R_3Qv0QTQ49yAIRot",
+    "R_7PsMTUjq8Wa1btt",
+    "R_61hCu6g2tcWoJo7",
+    "R_6KDvslaxG4W04I9",
+    "R_7IXNpixLXSjItSq"
+  ]
+}

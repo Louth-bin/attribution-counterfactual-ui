@@ -3009,7 +3009,7 @@ function buildNarrativeHtml() {
         if (datasetName === "safelimit") {
             const currentPrediction = strongHtml(shortenClassLabel(currentExplanation.prediction.label));
             const counterfactualPrediction = strongHtml(shortenClassLabel(counterfactual.prediction.label));
-            return `This driver is predicted as ${currentPrediction}. But, if their ${looseChanges}, then they would be predicted as ${counterfactualPrediction}.`;
+            return `This driver is predicted as ${currentPrediction}. But, if ${joinClauses(changes)}, then they would be predicted as ${counterfactualPrediction}.`;
         }
 
         return `Given this profile, if ${looseChanges}, the AI prediction would be ${strongHtml(shortenClassLabel(counterfactual.prediction.label))}.`;

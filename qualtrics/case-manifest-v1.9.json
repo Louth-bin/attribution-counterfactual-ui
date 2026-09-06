@@ -1,0 +1,249 @@
+{
+  "version": "1.9",
+  "domain": "safelimit",
+  "stimulus_set_version": "safelimit-v18-cf-advantage",
+  "training_stimulus_set_version": "safelimit-v17-training-fixed",
+  "testing_stimulus_set_version": "safelimit-v18-cf-advantage",
+  "labels": [
+    "Below Limit",
+    "Above Limit"
+  ],
+  "training": [
+    {
+      "instance_id": 190100,
+      "cluster": 1
+    },
+    {
+      "instance_id": 190101,
+      "cluster": 1
+    },
+    {
+      "instance_id": 190102,
+      "cluster": 1
+    },
+    {
+      "instance_id": 190103,
+      "cluster": 1
+    },
+    {
+      "instance_id": 190104,
+      "cluster": 2
+    },
+    {
+      "instance_id": 190105,
+      "cluster": 2
+    },
+    {
+      "instance_id": 190106,
+      "cluster": 2
+    },
+    {
+      "instance_id": 190107,
+      "cluster": 2
+    },
+    {
+      "instance_id": 190108,
+      "cluster": 3
+    },
+    {
+      "instance_id": 190109,
+      "cluster": 3
+    },
+    {
+      "instance_id": 190110,
+      "cluster": 3
+    },
+    {
+      "instance_id": 190111,
+      "cluster": 3
+    }
+  ],
+  "testing_by_prediction": {
+    "0": [
+      190200,
+      190201,
+      190202,
+      190203,
+      190204,
+      190205,
+      190206,
+      190207,
+      190208,
+      190209
+    ],
+    "1": [
+      190300,
+      190301,
+      190302,
+      190303,
+      190304,
+      190305,
+      190306,
+      190307,
+      190308,
+      190309
+    ]
+  },
+  "testing_source_instances": [
+    {
+      "instance_id": 190200,
+      "source_instance_id_global": 32963,
+      "source_split": "train",
+      "source_instance_id": 1721,
+      "prediction": 0,
+      "cluster": 1
+    },
+    {
+      "instance_id": 190201,
+      "source_instance_id_global": 28862,
+      "source_split": "dev",
+      "source_instance_id": 341,
+      "prediction": 0,
+      "cluster": 1
+    },
+    {
+      "instance_id": 190202,
+      "source_instance_id_global": 16819,
+      "source_split": "train",
+      "source_instance_id": 904,
+      "prediction": 0,
+      "cluster": 1
+    },
+    {
+      "instance_id": 190203,
+      "source_instance_id_global": 22591,
+      "source_split": "train",
+      "source_instance_id": 1895,
+      "prediction": 0,
+      "cluster": 1
+    },
+    {
+      "instance_id": 190204,
+      "source_instance_id_global": 35741,
+      "source_split": "train",
+      "source_instance_id": 362,
+      "prediction": 0,
+      "cluster": 2
+    },
+    {
+      "instance_id": 190205,
+      "source_instance_id_global": 37619,
+      "source_split": "dev",
+      "source_instance_id": 504,
+      "prediction": 0,
+      "cluster": 2
+    },
+    {
+      "instance_id": 190206,
+      "source_instance_id_global": 32972,
+      "source_split": "train",
+      "source_instance_id": 410,
+      "prediction": 0,
+      "cluster": 2
+    },
+    {
+      "instance_id": 190207,
+      "source_instance_id_global": 25245,
+      "source_split": "train",
+      "source_instance_id": 2237,
+      "prediction": 0,
+      "cluster": 3
+    },
+    {
+      "instance_id": 190208,
+      "source_instance_id_global": 5164,
+      "source_split": "train",
+      "source_instance_id": 515,
+      "prediction": 0,
+      "cluster": 3
+    },
+    {
+      "instance_id": 190209,
+      "source_instance_id_global": 5931,
+      "source_split": "dev",
+      "source_instance_id": 249,
+      "prediction": 0,
+      "cluster": 3
+    },
+    {
+      "instance_id": 190300,
+      "source_instance_id_global": 37572,
+      "source_split": "dev",
+      "source_instance_id": 112,
+      "prediction": 1,
+      "cluster": 1
+    },
+    {
+      "instance_id": 190301,
+      "source_instance_id_global": 7066,
+      "source_split": "train",
+      "source_instance_id": 805,
+      "prediction": 1,
+      "cluster": 1
+    },
+    {
+      "instance_id": 190302,
+      "source_instance_id_global": 4125,
+      "source_split": "test",
+      "source_instance_id": 441,
+      "prediction": 1,
+      "cluster": 1
+    },
+    {
+      "instance_id": 190303,
+      "source_instance_id_global": 5631,
+      "source_split": "train",
+      "source_instance_id": 827,
+      "prediction": 1,
+      "cluster": 1
+    },
+    {
+      "instance_id": 190304,
+      "source_instance_id_global": 13935,
+      "source_split": "test",
+      "source_instance_id": 323,
+      "prediction": 1,
+      "cluster": 2
+    },
+    {
+      "instance_id": 190305,
+      "source_instance_id_global": 38546,
+      "source_split": "test",
+      "source_instance_id": 424,
+      "prediction": 1,
+      "cluster": 2
+    },
+    {
+      "instance_id": 190306,
+      "source_instance_id_global": 16141,
+      "source_split": "train",
+      "source_instance_id": 1046,
+      "prediction": 1,
+      "cluster": 2
+    },
+    {
+      "instance_id": 190307,
+      "source_instance_id_global": 27258,
+      "source_split": "dev",
+      "source_instance_id": 19,
+      "prediction": 1,
+      "cluster": 3
+    },
+    {
+      "instance_id": 190308,
+      "source_instance_id_global": 25523,
+      "source_split": "train",
+      "source_instance_id": 330,
+      "prediction": 1,
+      "cluster": 3
+    },
+    {
+      "instance_id": 190309,
+      "source_instance_id_global": 556,
+      "source_split": "test",
+      "source_instance_id": 87,
+      "prediction": 1,
+      "cluster": 3
+    }
+  ]
+}

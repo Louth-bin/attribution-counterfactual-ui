@@ -169,7 +169,18 @@ function getDisplayedCounterfactualChanges() {
 }
 
 function getDisplayedPrediction(prediction = currentExplanation?.prediction) {
-    return prediction ? { value: prediction.value, label: prediction.label } : null;
+    if (!prediction) return null;
+    const displayed = { value: prediction.value, label: prediction.label };
+    if (currentExplanation?.stimulus_set_version) {
+        displayed.stimulusSetVersion = currentExplanation.stimulus_set_version;
+    }
+    if (currentExplanation?.source_instance_id_global !== undefined) {
+        displayed.sourceInstanceIdGlobal = currentExplanation.source_instance_id_global;
+    }
+    if (currentExplanation?.selection_cluster !== undefined) {
+        displayed.selectionCluster = currentExplanation.selection_cluster;
+    }
+    return displayed;
 }
 
 function postScreenState() {

@@ -23,6 +23,21 @@
 
     function preprocessValues(model, rawValues) {
         const preprocessing = model.preprocessing ?? {};
+        if (preprocessing.type === "standard-scaler-with-binary-categories") {
+            const mappings = preprocessing.binary_category_mappings ?? {};
+            return rawValues.map((value, index) => {
+                const featureName = model.feature_names[index];
+                const mapping = mappings[featureName];
+                const numericValue = mapping
+                    ? Number(mapping[String(value).toLowerCase()])
+                    : Number(value);
+                if (!Number.isFinite(numericValue)) {
+                    throw new Error(`Feature '${featureName}' cannot be encoded.`);
+                }
+                return (numericValue - Number(preprocessing.mean[index])) /
+                    Number(preprocessing.scale[index]);
+            });
+        }
         if (preprocessing.type === "standard-scaler") {
             return rawValues.map((value, index) => {
                 const numericValue = Number(value);
